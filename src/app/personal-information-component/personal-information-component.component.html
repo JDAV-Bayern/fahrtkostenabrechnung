@@ -1,0 +1,54 @@
+<form [formGroup]="personalInfoForm" (ngSubmit)="onSubmit()">
+    <div class='step-content'>
+        <div class="step-box">
+            <h1>Angaben zum Kurs und zur Person</h1>
+            <!-- Name Field -->
+            <div class="form-group">
+                <label for="name">Vorname und Nachname</label>
+                <input type="text" id="name" formControlName="name" class="form-control" required>
+                <div *ngIf="personalInfoForm.get('name')?.hasError('required') && personalInfoForm.get('name')?.touched"
+                    class="error-message">
+                    Bitte gib deinen Namen ein.
+                </div>
+            </div>
+
+            <!-- Street Field -->
+            <div class="form-group">
+                <label for="street">Straße und Hausnummer</label>
+                <input type="text" id="street" formControlName="street" class="form-control" required>
+                <div *ngIf="personalInfoForm.get('street')?.hasError('required') && personalInfoForm.get('street')?.touched"
+                    class="error-message">
+                    Bitte gib Straße und Hausnummer ein.
+                </div>
+            </div>
+
+            <!-- City Field -->
+            <div class="form-group">
+                <label for="city">PLZ und Wohnort</label>
+                <input type="text" id="city" formControlName="city" class="form-control" required>
+                <div *ngIf="personalInfoForm.get('city')?.hasError('required') && personalInfoForm.get('city')?.touched"
+                    class="error-message">
+                    Bitte gib deine Postleitzahl und Wohnort ein.
+                </div>
+            </div>
+
+            <!-- Course Name Field -->
+            <div class="form-group">
+                <label for="courseName">Kursnummer</label>
+                <input type="text" id="course" formControlName="course" class="form-control" required>
+                <div *ngIf="personalInfoForm.get('course')?.hasError('required') && personalInfoForm.get('course')?.touched"
+                    class="error-message">
+                    Bitte gib die Kursnummer ein.
+                </div>
+            </div>
+
+        </div>
+
+        <div class="button-container">
+            <div class="right-button-container">
+                <input type="submit" [class.green-button]="personalInfoForm.valid"
+                    [class.disabled-button]="!personalInfoForm.valid" value="Weiter" />
+            </div>
+        </div>
+    </div>
+</form>

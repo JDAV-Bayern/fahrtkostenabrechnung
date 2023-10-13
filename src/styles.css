@@ -1,1 +1,176 @@
 /* You can add global styles to this file, and also import other style files */
+/* Apply a modern font */
+body {
+    font-family: 'Helvetica Neue', sans-serif;
+}
+
+/* Set a background color and text color for the entire app */
+body {
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Style links */
+a {
+    text-decoration: none;
+    color: #007BFF;
+    transition: color 0.2s;
+}
+
+a:hover {
+    color: #0056b3;
+}
+
+/* personal-information.component.css */
+
+/* Center the content vertically and horizontally */
+.step-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto;
+    max-width: fit-content;
+}
+
+/* Create a box around the content */
+.step-box {
+    width: 100%;
+    background-color: #fff;
+    /* Background color for the box */
+    border: 1px solid #ccc;
+    /* Border for the box */
+    padding-left: 10px;
+    padding-top: 0px;
+    padding-bottom: 20px;
+    padding-right: 30px;
+    /* Spacing inside the box */
+    border-radius: 5px;
+    /* Rounded corners for the box */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.button-container {
+    display: flex;
+    margin-top: 20px;
+    /* Apply styles to your positive action button */
+    justify-content: space-between;
+    width: 100%;
+}
+
+.left-button-container {
+    text-align: left;
+    flex: 1;
+    margin-right: auto;
+}
+
+.right-button-container {
+    text-align: right;
+    flex: 1;
+    margin-left: auto;
+}
+
+.green-button {
+    background-color: #4CAF50;
+    /* Green background color */
+    color: #fff;
+    /* White text color */
+    padding: 10px 20px;
+    /* Padding inside the button */
+    border: none;
+    /* No border */
+    border-radius: 5px;
+    /* Rounded corners */
+    cursor: pointer;
+    /* Change the cursor to a pointer on hover */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* Shadow on hover */
+    transition: background-color 0.3s, box-shadow 0.3s;
+    /* Smooth transitions */
+
+    /* Hover effect */
+    &:hover {
+        background-color: #45A049;
+        /* Slightly darker green on hover */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        /* Increased shadow on hover */
+    }
+}
+
+.gray-button {
+    background-color: #e3e3e3;
+    /* Green background color */
+    color: #171717;
+    /* White text color */
+    padding: 10px 20px;
+    /* Padding inside the button */
+    border: none;
+    /* No border */
+    border-radius: 5px;
+    /* Rounded corners */
+    cursor: pointer;
+    /* Change the cursor to a pointer on hover */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    /* Shadow on hover */
+    transition: background-color 0.3s, box-shadow 0.3s;
+    /* Smooth transitions */
+
+    /* Hover effect */
+    &:hover {
+        background-color: #d8d8d8;
+        /* Slightly darker green on hover */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        /* Increased shadow on hover */
+    }
+}
+
+/* CSS class for a disabled button */
+.disabled-button {
+    background-color: #ccc;
+    /* Light gray background color for disabled state */
+    color: #fff;
+    /* White text color */
+    padding: 10px 20px;
+    /* Padding inside the button */
+    border: none;
+    /* No border */
+    border-radius: 5px;
+    /* Rounded corners */
+    cursor: not-allowed;
+    /* Disabled cursor style */
+    box-shadow: none;
+    /* No shadow for disabled state */
+}
+
+/* Style form labels */
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    margin-top: 20px;
+}
+
+/* Style form inputs */
+.form-control {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 3px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Add this to your component's CSS */
+.error-message {
+    color: #ff0000;
+    /* Red color for error messages */
+    font-size: 12px;
+    /* Adjust font size as needed */
+    margin-top: 5px;
+    margin-bottom: 20px;
+}
+
+/* Add more global styles as needed */
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

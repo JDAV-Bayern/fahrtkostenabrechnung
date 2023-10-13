@@ -1,0 +1,18 @@
+<div class='step-content'>
+    <div class="step-box">
+        <h1>Auslagen für Fahrtkosten</h1>
+        <button (click)="openAddExpenseDialog()" class="add-button green-button">Auslage hinzufügen</button>
+        <div [dragula]="'expenses'" [dragulaModel]="expenses">
+            <app-expense-list-row *ngFor="let expense of expenses" [expense]="expense"></app-expense-list-row>
+        </div>
+    </div>
+
+    <div class="button-container">
+        <div class="left-button-container">
+            <button (click)="back()" class="gray-button">Zurück</button>
+        </div>
+        <div class="right-button-container">
+            <button (click)="continue()" class="green-button">Weiter</button>
+        </div>
+    </div>
+</div>
