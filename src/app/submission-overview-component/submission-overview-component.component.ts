@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-submission-overview-component',
@@ -7,4 +8,11 @@ import { Component } from '@angular/core';
 })
 export class SubmissionOverviewComponentComponent {
 
+  constructor(private readonly router: Router) { }
+  continue() {
+
+  }
+  back() {
+    this.router.navigate(['auslagen']);
+  }
 }
