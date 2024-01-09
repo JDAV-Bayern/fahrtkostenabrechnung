@@ -1,1 +1,19 @@
-<p>{{expense.id}}</p>
+<div>
+    <table>
+        <tr>
+            <th style="text-align: left;">{{getTitle()}}</th>
+            <th></th>
+            <th style="text-align: right;">{{this.expense.totalReimbursement().toFixed(2)}}€</th>
+        </tr>
+        <tr>
+            <td>Von: {{this.expense.startLocation}}</td>
+            <td>Nach: {{this.expense.endLocation}}</td>
+            <td style="text-align: right;">
+                <span style="cursor: pointer;" (click)="editMe()" class="
+                    material-symbols-outlined">&#xe3c9;</span>
+                <span style="cursor: pointer;" (click)="deleteMe()" class="
+                    material-symbols-outlined">&#xe872;</span>
+            </td>
+        </tr>
+    </table>
+</div>

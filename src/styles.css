@@ -2,10 +2,6 @@
 /* Apply a modern font */
 body {
     font-family: 'Helvetica Neue', sans-serif;
-}
-
-/* Set a background color and text color for the entire app */
-body {
     background-color: #f4f4f4;
     color: #333;
     margin: 0;
@@ -23,12 +19,23 @@ a:hover {
     color: #0056b3;
 }
 
+.base-container {
+    display: flex;
+
+    flex-direction: column;
+
+    min-height: 100vh;
+}
+
+.content {
+    flex-grow: 1;
+
+}
+
 /* personal-information.component.css */
 
 /* Center the content vertically and horizontally */
 .step-content {
-    display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     margin: 20px auto;
@@ -37,6 +44,7 @@ a:hover {
 
 /* Create a box around the content */
 .step-box {
+    overflow: auto;
     width: 100%;
     background-color: #fff;
     /* Background color for the box */
@@ -99,7 +107,12 @@ a:hover {
     }
 }
 
+.mar {
+    margin: 10px;
+}
+
 .gray-button {
+    align-items: center;
     background-color: #e3e3e3;
     /* Green background color */
     color: #171717;
@@ -161,6 +174,10 @@ a:hover {
     border-radius: 5px;
 }
 
+input.form-control {
+    width: calc(100% - 20px);
+}
+
 /* Add this to your component's CSS */
 .error-message {
     color: #ff0000;
@@ -172,5 +189,134 @@ a:hover {
 }
 
 /* Add more global styles as needed */
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.light-theme-dialog {
+    background-color: #FFFFFF;
+    /* Set the background color to white or your desired light theme color */
+    color: #000;
+    /* Set text color to a dark color for good readability */
+}
+
+@font-face {
+    font-family: 'Material Symbols Outlined';
+    font-style: normal;
+    src: url(https://example.com/material-symbols.woff) format('woff');
+}
+
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    /* Preferred icon size */
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
+}
+
+/* Reset default styles */
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    cursor: pointer;
+    background-color: #fff;
+    /* Background color for the select box */
+    color: #333;
+    /* Text color */
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%23333'><polygon points='5,5 15,5 10,12'/></svg>") no-repeat right center;
+    background-size: 20px 20px;
+    /* Adjust the size of the icon */
+}
+
+/* Custom dropdown arrow */
+select::after {
+    content: "\25BC";
+    /* Downward arrow character */
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    color: #555;
+    /* Arrow color */
+}
+
+/* Hover effect */
+select:hover {
+    border-color: #999;
+    /* Border color on hover */
+}
+
+/* Focus effect */
+select:focus {
+    border-color: #007BFF;
+    /* Border color on focus */
+}
+
+/* Disabled style */
+select:disabled {
+    background-color: #f4f4f4;
+    /* Disabled background color */
+    color: #999;
+    /* Disabled text color */
+    cursor: not-allowed;
+}
+
+/* Optional: Style for option elements */
+select option {
+    background-color: #fff;
+    /* Background color for options */
+    color: #333;
+    /* Text color for options */
+}
+
+/* Optional: Hover effect for option elements */
+select option:hover {
+    background-color: #007BFF;
+    /* Background color on hover */
+    color: #fff;
+    /* Text color on hover */
+}
+
+
+/* FOR DRAGULA */
+/* in-flight clone */
+.gu-mirror {
+    position: fixed !important;
+    margin: 0 !important;
+    z-index: 9999 !important;
+    opacity: 0.8;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+    filter: alpha(opacity=80);
+    pointer-events: none;
+}
+
+/* high-performance display:none; helper */
+.gu-hide {
+    left: -9999px !important;
+}
+
+/* added to mirrorContainer (default = body) while dragging */
+.gu-unselectable {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
+/* added to the source element while its mirror is dragged */
+.gu-transit {
+    opacity: 0.2;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+    filter: alpha(opacity=20);
+}

@@ -1,0 +1,55 @@
+import { Component, Input } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { Direction, ICarExpense, IExpense, ITrainExpense, ITrainExpenseData, TrainExpense } from 'src/domain/expense';
+
+@Component({
+  selector: 'app-train-expense-form',
+  templateUrl: './train-expense-form.component.html',
+  styleUrls: ['./train-expense-form.component.css']
+})
+export class TrainExpenseFormComponent {
+  @Input({ required: true })
+  direction!: Direction;
+
+  @Input({ required: true })
+  expense!: IExpense;
+
+  formGroup: FormGroup
+  constructor(private formBuilder: FormBuilder,
+    public dialog: MatDialog) {
+    this.formGroup = this.formBuilder.group({
+      inputFrom: ['', Validators.required],
+      inputTo: ['', Validators.required],
+      inputPrice: ['', [Validators.required, Validators.min(0)]],
+      inputDiscountCard: ['', Validators.required],
+    })
+  }
+  ngOnInit() {
+    console.log("expense", this.expense)
+    const trainExpense = this.expense as ITrainExpense ?? {};
+    this.formGroup.setValue({
+      inputFrom: trainExpense.startLocation ?? '',
+      inputTo: trainExpense.endLocation ?? '',
+      inputPrice: trainExpense.priceWithDiscount ?? '',
+      inputDiscountCard: trainExpense.discountCard ?? ''
+    })
+  }
+  submitForm() {
+    if (!this.formGroup.valid) {
+      console.log("invalid form", this.formGroup)
+      return;
+    }
+    const passengers = !['', undefined].includes(this.formGroup.value.passengers) ? (this.formGroup.value.passengers as string).split(',').map(passenger => passenger.trim()) : [];
+    const data: ITrainExpenseData = {
+      direction: this.direction,
+      startLocation: this.formGroup.value.inputFrom,
+      endLocation: this.formGroup.value.inputTo,
+      priceWithDiscount: this.formGroup.value.inputPrice,
+      discountCard: this.formGroup.value.discountCard
+    }
+    const returnExpense = new TrainExpense(data);
+    this.dialog.getDialogById('add-expense-modal')?.close(returnExpense);
+  }
+}
+

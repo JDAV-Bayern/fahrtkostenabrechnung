@@ -1,1 +1,33 @@
-<p>add-expense-modal works!</p>
+<div class="model-content">
+    <h2>Auslage erfassen - {{
+        this.direction === 'to' ? 'Hinfahrt'
+        : this.direction === 'from' ? 'Rückfahrt'
+        : 'Vor Ort'}}
+    </h2>
+    <br>
+    <div *ngIf="expense?.type === undefined" class="means-of-travel-buttons-container">
+        <button (click)="chooseCarExpense()" class="gray-button">
+            <span class="material-symbols-outlined">&#xe531;</span> Autofahrt</button>
+        <button (click)="chooseTrainExpense()" class="gray-button"><span
+                class="material-symbols-outlined">&#xe570;</span> Zugfahrt</button>
+        <button (click)="choosePlanExpense()" class="gray-button"><span
+                class="material-symbols-outlined">&#xe8f8;</span> Öffis Abo</button>
+        <button (click)="chooseBikeExpense()" class="gray-button"><span
+                class="material-symbols-outlined">&#xeb29;</span> Fahrrad</button>
+    </div>
+
+    <div *ngIf="expense?.type === 'car'">
+        <app-car-expense-form [direction]="this.direction" [expense]="this.expense"></app-car-expense-form>
+
+    </div>
+    <div *ngIf="expense?.type === 'train'">
+        <app-train-expense-form [direction]="this.direction" [expense]="this.expense"></app-train-expense-form>
+
+    </div>
+    <div *ngIf="expense?.type === 'plan'">
+        <app-plan-expense-form [direction]="this.direction " [expense]="this.expense"></app-plan-expense-form>
+    </div>
+    <div *ngIf="expense?.type === 'bike'">
+        <app-bike-expense-form [direction]="this.direction" [expense]="this.expense"></app-bike-expense-form>
+    </div>
+</div>

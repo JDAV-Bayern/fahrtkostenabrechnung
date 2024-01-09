@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { IExpense } from 'src/domain/expense';
+import { Direction, IExpense, mapTripToReturn, mockCarExpense } from 'src/domain/expense';
 import { ReimbursementService } from '../reimbursement.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddExpenseModalComponent } from '../add-expense-modal/add-expense-modal.component';
@@ -11,39 +11,86 @@ import { AddExpenseModalComponent } from '../add-expense-modal/add-expense-modal
   styleUrls: ['./expenses-collection-component.component.css']
 })
 export class ExpensesCollectionComponentComponent {
-  expenses: IExpense[];
+  expensesTo: IExpense[] = [];
+  expensesFrom: IExpense[] = [];
+  expensesAt: IExpense[] = [];
   constructor(
     private readonly router: Router,
     public dialog: MatDialog,
     private readonly reimbursementService: ReimbursementService) {
-    this.expenses = reimbursementService.getReimbursment().expenses;
+    reimbursementService.getReimbursment().expenses.forEach(expense => this.addExpense(expense));
   }
-  openAddExpenseDialog() {
+  openAddExpenseDialog(direction: 'to' | 'from' | 'at') {
     const dialogRef = this.dialog.open(AddExpenseModalComponent, {
+      id: 'add-expense-modal',
       width: '80%',
-      data: {} // You can pass data to the modal if needed
     });
 
+    dialogRef.componentInstance.direction = direction;
+    dialogRef.componentInstance.expense = {} as IExpense;
+
     dialogRef.afterClosed().subscribe(result => {
-      // Handle the result after the modal is closed
       if (result) {
-        // Add the new expense to your list
+        this.addExpense(result);
+        this.storeExpenses();
       }
     });
-    const expense: IExpense = {
-      id: '',
-      totalReimbursement: function (): number {
-        throw new Error('Function not implemented.');
-      },
-      position: 0,
-      direction: 'to'
-    };
-    this.expenses.push(expense);
+  }
+  storeExpenses() {
+    this.reimbursementService.setExpenses([...this.expensesTo, ...this.expensesAt, ...this.expensesFrom]);
+  }
+  addExpense(expense: IExpense) {
+    switch (expense.direction) {
+      case 'from':
+        this.expensesFrom.push(expense);
+        return;
+      case 'to':
+        this.expensesTo.push(expense);
+        return;
+      case 'at':
+        this.expensesAt.push(expense);
+    }
+  }
+  editRow(expenseId: number) {
+    console.log("editRowl", expenseId);
+    const expense = [...this.expensesTo, ...this.expensesAt, ...this.expensesFrom].find(expense => expense.id === expenseId);
+    if (!expense) {
+      return;
+    }
+    console.log("found expense", expenseId);
+    const dialogRef = this.dialog.open(AddExpenseModalComponent, {
+      id: 'add-expense-modal',
+      width: '80%',
+    });
+    dialogRef.componentInstance.direction = expense.direction;
+    dialogRef.componentInstance.expense = expense;
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.deleteRow(expenseId);
+        this.addExpense(result);
+        this.storeExpenses();
+      }
+    });
+  }
+  getSum() {
+    const reduceSumTotalReimbursement = (list: IExpense[]) => list.reduce((sum: number, expense: IExpense) => sum + expense.totalReimbursement(), 0);
+    return reduceSumTotalReimbursement(this.expensesFrom) + reduceSumTotalReimbursement(this.expensesAt) + reduceSumTotalReimbursement(this.expensesTo);
+  }
+  deleteRow(expenseId: number) {
+    this.expensesTo = this.expensesTo.filter(expense => expense.id !== expenseId);
+    this.expensesFrom = this.expensesFrom.filter(expense => expense.id !== expenseId);
+    this.expensesAt = this.expensesAt.filter(expense => expense.id !== expenseId);
+    this.storeExpenses();
   }
   continue() {
     this.router.navigate(['zusammenfassen-und-abschicken']);
   }
   back() {
     this.router.navigate(['kurs-und-personen-infos']);
+  }
+  addReturnTrip() {
+    this.expensesFrom = this.expensesTo.map(mapTripToReturn).reverse();
+    this.storeExpenses();
   }
 }

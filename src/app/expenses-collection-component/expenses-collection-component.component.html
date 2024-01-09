@@ -1,9 +1,26 @@
 <div class='step-content'>
-    <div class="step-box">
+    <div class="step-box" *ngIf="expensesAt && expensesFrom && expensesTo">
         <h1>Auslagen für Fahrtkosten</h1>
-        <button (click)="openAddExpenseDialog()" class="add-button green-button">Auslage hinzufügen</button>
-        <div [dragula]="'expenses'" [dragulaModel]="expenses">
-            <app-expense-list-row *ngFor="let expense of expenses" [expense]="expense"></app-expense-list-row>
+        <b>Summe:</b> {{getSum()}}€
+        <h3>Auslagen Hinfahrt</h3>
+        <button (click)="openAddExpenseDialog('to')" class="add-button green-button mar">Auslage hinzufügen</button>
+        <div [dragula]="'expensesTo'" [(dragulaModel)]="expensesTo">
+            <app-expense-list-row (deleteRow)="deleteRow($event)" (editRow)="editRow($event)"
+                *ngFor="let expense of expensesTo" [expense]="expense"></app-expense-list-row>
+        </div>
+        <h3>Auslagen Während der Schulung</h3>
+        <button (click)="openAddExpenseDialog('at')" class="add-button green-button mar">Auslage hinzufügen</button>
+        <div [dragula]="'expensesAt'" [(dragulaModel)]="expensesAt">
+            <app-expense-list-row (deleteRow)="deleteRow($event)" (editRow)="editRow($event)"
+                *ngFor="let expense of expensesAt" [expense]="expense"></app-expense-list-row>
+        </div>
+        <h3>Auslagen Rückfahrt</h3>
+        <button (click)="openAddExpenseDialog('from')" class="add-button green-button mar">Auslage hinzufügen</button>
+        <button (click)="addReturnTrip()" class="add-button green-button mar">Rückfahrt wie
+            hinfahrt</button>
+        <div [dragula]="'expensesFrom'" [(dragulaModel)]="expensesFrom">
+            <app-expense-list-row (deleteRow)="deleteRow($event)" (editRow)="editRow($event)"
+                *ngFor="let expense of expensesFrom" [expense]="expense"></app-expense-list-row>
         </div>
     </div>
 
@@ -16,3 +33,11 @@
         </div>
     </div>
 </div>
+<!-- <div>
+    {{ expensesTo | json }}
+    <br>
+    {{ expensesAt | json }}
+    <br>
+    {{ expensesFrom | json }}
+    <br>
+</div> -->

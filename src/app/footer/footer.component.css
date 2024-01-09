@@ -4,11 +4,11 @@ footer {
     text-align: center;
     align-items: center;
     padding: 10px;
-    position: absolute;
-    bottom: 0;
     width: 100%;
     justify-content: space-between;
+    flex-basis: content;
 }
+
 
 .footer-content {
     display: inline-block;

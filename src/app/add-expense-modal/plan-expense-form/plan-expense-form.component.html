@@ -1,0 +1,48 @@
+<h1>Abonutzung hinzufügen</h1>
+<div class="form-group">
+    <form [formGroup]="formGroup" (ngSubmit)="submitForm()">
+        <div class="form-group">
+            <label for="planType">Art des Abos</label>
+            <select class="form-control" id="planType" formControlName="inputType">
+                <option value="dtFullPrice">Deutschlandticket (49,-€)</option>
+                <option value="dtStudents">Deutschlandticket für Studierende in Bayern (29,-€)</option>
+                <option value="other">Ein anderes Abo</option>
+            </select>
+        </div>
+        <div class="form-group" *ngIf="formGroup.value.inputType === 'other'">
+            <label for="planPrice">Preis</label>
+            <input type="text" class="form-control" formControlName="inputPrice" id="planPrice" placeholder="Preis">
+            <div *ngIf="formGroup.get('inputPrice')?.hasError('required') || formGroup.get('inputPrice')?.hasError('pattern') && formGroup.get('inputPrice')?.touched"
+                class="error-message">
+                Bitte gib einen Preis ein.
+            </div>
+            <div *ngIf="formGroup.get('inputPrice')?.hasError('max') && formGroup.get('inputPrice')?.touched"
+                class="error-message">
+                Es wird höchstens die höhe des Deutschlandtickets erstattet.
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="name">Von</label>
+            <input type="text" id="inputFrom" formControlName="inputFrom" class="form-control" required>
+            <div *ngIf="formGroup.get('inputFrom')?.hasError('required') && formGroup.get('inputFrom')?.touched"
+                class="error-message">
+                Bitte gib einen Startort ein.
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="name">Nach</label>
+            <input type="text" id="inputTo" formControlName="inputTo" class="form-control" required>
+            <div *ngIf="formGroup.get('inputTo')?.hasError('required') && formGroup.get('inputTo')?.touched"
+                class="error-message">
+                Bitte gib einen Zielort ein.
+            </div>
+        </div>
+        <br>
+        <div class="button-container">
+            <div class="right-button-container">
+                <input type="submit" [class.green-button]="formGroup.valid" [class.disabled-button]="!formGroup.valid"
+                    value="speichern" />
+            </div>
+        </div>
+    </form>
+</div>

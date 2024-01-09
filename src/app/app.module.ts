@@ -15,6 +15,10 @@ import { AddExpenseModalComponent } from './add-expense-modal/add-expense-modal.
 import { ExpenseListRowComponent } from './expense-list-row/expense-list-row.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
+import { PlanExpenseFormComponent } from './add-expense-modal/plan-expense-form/plan-expense-form.component';
+import { BikeExpenseFormComponent } from './add-expense-modal/bike-expense-form/bike-expense-form.component';
+import { CarExpenseFormComponent } from './add-expense-modal/car-expense-form/car-expense-form.component';
+import { TrainExpenseFormComponent } from './add-expense-modal/train-expense-form/train-expense-form.component';
 
 @NgModule({
   declarations: [
@@ -25,13 +29,17 @@ import { MatDialogModule } from '@angular/material/dialog';
     ExpensesCollectionComponentComponent,
     SubmissionOverviewComponentComponent,
     AddExpenseModalComponent,
-    ExpenseListRowComponent
+    ExpenseListRowComponent,
+    PlanExpenseFormComponent,
+    BikeExpenseFormComponent,
+    CarExpenseFormComponent,
+    TrainExpenseFormComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     ReactiveFormsModule,
-    DragulaModule,
+    DragulaModule.forRoot(),
     NoopAnimationsModule,
     MatDialogModule
   ],

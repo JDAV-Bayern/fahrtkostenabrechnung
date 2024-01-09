@@ -1,0 +1,47 @@
+<h1>Autofahrt hinzufügen</h1>
+<div class="form-group">
+    <form [formGroup]="formGroup" (ngSubmit)="submitForm()">
+        <div class="form-group">
+            <label>Von</label>
+            <input type="text" id="inputFrom" formControlName="inputFrom" class="form-control" required>
+            <div *ngIf="formGroup.get('inputFrom')?.hasError('required') && formGroup.get('inputFrom')?.touched"
+                class="error-message">
+                Bitte gib einen Startort ein.
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Nach</label>
+            <input type="text" id="inputTo" formControlName="inputTo" class="form-control" required>
+            <div *ngIf="formGroup.get('inputTo')?.hasError('required') && formGroup.get('inputTo')?.touched"
+                class="error-message">
+                Bitte gib einen Zielort ein.
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Preis <b>nach</b> Rabatten</label>
+            <input type="text" id="inputPrice" formControlName="inputPrice" class="form-control" required>
+            <div *ngIf="formGroup.get('inputPrice')?.hasError('required') && formGroup.get('inputPrice')?.touched"
+                class="error-message">
+                Bitte gib einen Preis ein.
+            </div>
+        </div>
+        <div class="form-group">
+            <label>BahnCard</label>
+            <select id="inputDiscountCard" formControlName="inputDiscountCard" class="form-control" required>
+                <option value="none">Keine BahnCard</option>
+                <option value="BC25">BahnCard 25</option>
+                <option value="BC50">BahnCard 50</option>
+            </select>
+            <div *ngIf="formGroup.get('inputDiscountCard')?.hasError('required') && formGroup.get('inputDiscountCard')?.touched"
+                class="error-message">
+                Bitte wähle eine Option aus.
+            </div>
+        </div>
+        <div class="button-container">
+            <div class="right-button-container">
+                <input type="submit" [class.green-button]="formGroup.valid" [class.disabled-button]="!formGroup.valid"
+                    value="speichern" />
+            </div>
+        </div>
+    </form>
+</div>

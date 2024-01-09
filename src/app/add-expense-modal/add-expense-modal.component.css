@@ -1,0 +1,13 @@
+.model-content {
+    padding: 20px;
+}
+
+.means-of-travel-buttons-container {
+    display: flex;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.means-of-travel-buttons-container button {
+    display: inline-flex;
+}
