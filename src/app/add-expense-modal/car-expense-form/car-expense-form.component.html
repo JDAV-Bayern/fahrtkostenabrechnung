@@ -39,13 +39,15 @@
             </div>
         </div>
         <div class="form-group">
-            <label>Anzahl Mitfahrer*innen</label>
+            <label>Mitfahrer*innen</label>
+            <p>Bitte gib die Namen der Mitfahrer*innen an. Z.B. "Kathi, Julia Fendt, Peter Zimmermann", oder lass das
+                Feld leer, wenn Du alleine gefahren bist.</p>
             <p><b>Achtung:</b> Bist Du Teile der Strecke mit unterschiedlicher Anzahl an Mitfahrer*innen gefahren?
-                Dann gib bitte jede Teilstrecke als einzelne Auslage an. Vielen Dank!</p>
+                Dann gib bitte jede Teilstrecke als einzelne Auslage an. </p>
             <input type="text" id="passengers" formControlName="passengers" class="form-control">
             <div *ngIf="formGroup.get('passengers')?.hasError('pattern') && formGroup.get('passengers')?.touched"
                 class="error-message">
-                Bitte gib die Anzahl der Mitfahrer*innen ein.
+                Bitte gib die Namen der Mitfahrer*innen ein.
             </div>
         </div>
         <br>
