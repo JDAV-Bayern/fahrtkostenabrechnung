@@ -2,19 +2,20 @@
     <div class="step-box" *ngIf="expensesAt && expensesFrom && expensesTo">
         <h1>Auslagen für Fahrtkosten</h1>
         <b>Summe:</b> {{getSum()}}€
-        <h3>Auslagen Hinfahrt</h3>
+        <b>Bitte die richtige Reihenfolge beachten und nötigenfalls per Drag-and-Drop richtigstellen.</b>
+        <h3>Hinfahrt</h3>
         <button (click)="openAddExpenseDialog('to')" class="add-button green-button mar">Auslage hinzufügen</button>
         <div [dragula]="'expensesTo'" [(dragulaModel)]="expensesTo">
             <app-expense-list-row (deleteRow)="deleteRow($event)" (editRow)="editRow($event)"
                 *ngFor="let expense of expensesTo" [expense]="expense"></app-expense-list-row>
         </div>
-        <h3>Auslagen Während der Schulung</h3>
+        <h3>Während der Schulung</h3>
         <button (click)="openAddExpenseDialog('at')" class="add-button green-button mar">Auslage hinzufügen</button>
         <div [dragula]="'expensesAt'" [(dragulaModel)]="expensesAt">
             <app-expense-list-row (deleteRow)="deleteRow($event)" (editRow)="editRow($event)"
                 *ngFor="let expense of expensesAt" [expense]="expense"></app-expense-list-row>
         </div>
-        <h3>Auslagen Rückfahrt</h3>
+        <h3>Rückfahrt</h3>
         <button (click)="openAddExpenseDialog('from')" class="add-button green-button mar">Auslage hinzufügen</button>
         <button (click)="addReturnTrip()" class="add-button green-button mar">Rückfahrt wie
             hinfahrt</button>

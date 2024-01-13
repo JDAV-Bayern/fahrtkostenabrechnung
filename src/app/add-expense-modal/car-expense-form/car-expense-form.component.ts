@@ -34,7 +34,7 @@ export class CarExpenseFormComponent {
       inputTo: carExpense.endLocation ?? '',
       inputDistance: carExpense.distance ?? '',
       carType: carExpense.carType ?? '',
-      passengers: carExpense.passengers.join(', ') ?? ''
+      passengers: (carExpense.passengers || []).join(', ')
     })
   }
   submitForm() {
@@ -42,7 +42,7 @@ export class CarExpenseFormComponent {
       console.log("invalid form", this.formGroup)
       return;
     }
-    const passengers = !['', undefined].includes(this.formGroup.value.passengers) ? (this.formGroup.value.passengers as string).split(',').map(passenger => passenger.trim()) : [];
+    const passengers = !['', undefined, null].includes(this.formGroup.value.passengers) ? (this.formGroup.value.passengers as string).split(',').map(passenger => passenger.trim()) : [];
     const data: ICarExpenseData = {
       distance: this.formGroup.value.inputDistance,
       direction: this.direction,

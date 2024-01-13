@@ -17,12 +17,10 @@ export class ExpenseListRowComponent {
   expense!: IExpense;
 
   editMe() {
-    console.log(`emmited edit event for ${this.expense.id}`)
     this.editRow.emit(this.expense.id);
   }
 
   deleteMe() {
-    console.log(`emmited delete event for ${this.expense.id}`)
     this.deleteRow.emit(this.expense.id)
   }
 

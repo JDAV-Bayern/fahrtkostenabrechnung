@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Direction, IExpense, mapTripToReturn, mockCarExpense } from 'src/domain/expense';
+import { Direction, ICarExpense, IExpense, mapTripToReturn, mockCarExpense } from 'src/domain/expense';
 import { ReimbursementService } from '../reimbursement.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddExpenseModalComponent } from '../add-expense-modal/add-expense-modal.component';
@@ -26,8 +26,12 @@ export class ExpensesCollectionComponentComponent {
       width: '80%',
     });
 
+    const lastExpense = this.getLastExpense(direction);
+    const startLocation = lastExpense?.endLocation;
+    const carType = this.getCarType();
+
     dialogRef.componentInstance.direction = direction;
-    dialogRef.componentInstance.expense = {} as IExpense;
+    dialogRef.componentInstance.expense = { startLocation, ...(carType ? { carType } : {}) } as IExpense;
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -36,8 +40,24 @@ export class ExpensesCollectionComponentComponent {
       }
     });
   }
+  getCarType() {
+    return (this.getAllExpenses().find(expense => 'carType' in expense) as ICarExpense)?.carType;
+  }
+  getLastExpense(direction: 'to' | 'from' | 'at') {
+    const lastToExpense = this.expensesTo[this.expensesTo.length - 1];
+    if (direction === 'to') {
+      return lastToExpense;
+    }
+    if (direction === 'at') {
+      return this.expensesAt[this.expensesAt.length - 1] || lastToExpense;
+    }
+    return this.expensesFrom[this.expensesFrom.length - 1] || lastToExpense;
+  }
+  getAllExpenses() {
+    return [...this.expensesTo, ...this.expensesAt, ...this.expensesFrom];
+  }
   storeExpenses() {
-    this.reimbursementService.setExpenses([...this.expensesTo, ...this.expensesAt, ...this.expensesFrom]);
+    this.reimbursementService.setExpenses(this.getAllExpenses());
   }
   addExpense(expense: IExpense) {
     switch (expense.direction) {
@@ -52,12 +72,10 @@ export class ExpensesCollectionComponentComponent {
     }
   }
   editRow(expenseId: number) {
-    console.log("editRowl", expenseId);
     const expense = [...this.expensesTo, ...this.expensesAt, ...this.expensesFrom].find(expense => expense.id === expenseId);
     if (!expense) {
       return;
     }
-    console.log("found expense", expenseId);
     const dialogRef = this.dialog.open(AddExpenseModalComponent, {
       id: 'add-expense-modal',
       width: '80%',

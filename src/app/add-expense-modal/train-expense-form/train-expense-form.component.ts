@@ -40,13 +40,12 @@ export class TrainExpenseFormComponent {
       console.log("invalid form", this.formGroup)
       return;
     }
-    const passengers = !['', undefined].includes(this.formGroup.value.passengers) ? (this.formGroup.value.passengers as string).split(',').map(passenger => passenger.trim()) : [];
     const data: ITrainExpenseData = {
       direction: this.direction,
       startLocation: this.formGroup.value.inputFrom,
       endLocation: this.formGroup.value.inputTo,
-      priceWithDiscount: this.formGroup.value.inputPrice,
-      discountCard: this.formGroup.value.discountCard
+      priceWithDiscount: Number(this.formGroup.value.inputPrice),
+      discountCard: this.formGroup.value.inputDiscountCard
     }
     const returnExpense = new TrainExpense(data);
     this.dialog.getDialogById('add-expense-modal')?.close(returnExpense);
