@@ -1,6 +1,29 @@
 <div class='step-content'>
     <div class="step-box">
-        <h1>Zusammenfassung</h1>
+        <h1>Kontodaten und Belege</h1>
+
+        <form [formGroup]="formGroup" (ngSubmit)="submitForm()">
+            <div class="form-group">
+                <label for="inputIBAN">IBAN</label>
+                <input type="text" class="form-control" formControlName="inputIBAN" id="inputIBAN" placeholder="IBAN">
+                <div *ngIf="(formGroup.get('inputIBAN')?.hasError('ibanInvalid'))&& formGroup.get('inputIBAN')?.touched"
+                    class="error-message">
+                    Bitte gib eine gültige IBAN ein.
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputBIC">BIC (nur bei ausländischen Kreditinstituten notwendig)</label>
+                <input type="text" class="form-control" formControlName="inputBIC" id="inputBIC" placeholder="BIC">
+            </div>
+        </form>
+
+        <h2>Belege hinzufügen</h2>
+        <p>Bitte füge Belege für deine Fahrtkosten hinzu. Wir benötigen belege für Zugfahrten und Fahrten mit einem
+            Öffis-Abo.</p>
+        <form [formGroup]="fileFormGroup" (ngSubmit)="selectFile()">
+            <input type="file" formControlName="file" id="file" name='file' />
+            <input type="submit" class="green-button" value="Beleg hinzufügen" />
+        </form>
     </div>
 
     <div class="button-container">
@@ -8,7 +31,69 @@
             <button (click)="back()" class="gray-button">Zurück</button>
         </div>
         <div class="right-button-container">
-            <button (click)="continue()" class="green-button">Weiter</button>
+            <button (click)="continue()" [class.green-button]="formGroup.valid"
+                [class.disabled-button]="!formGroup.valid">PDF herunterladen</button>
         </div>
     </div>
+</div>
+
+<div id="pdf-container">
+    <img class="logo" src="/assets/logo.jpg" />
+    <h1>Fahrtkostenabrechnung</h1>
+    <p><b>Datum: {{getDate()}}</b></p>
+    <p style="width: 312px">Diese Fahrtkostenabrechnung wurde automatisch erstellt. Bitte die generierte
+        PDF per E-Mail an
+        <a href="mailto:lgs@jdav-bayern.de">lgs@jdav-bayern.de</a> oder ausgedruckt in die Landesgeschäftsstelle,
+        Preysingstr. 71, 81667 München schicken.
+    </p>
+    <table style="width: 100%">
+        <tr>
+
+            <td style="width: 50%;">
+                <h2>Kursdaten</h2>
+                <table>
+                    <tr>
+                        <td>Kursname</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Kursnummer</td>
+                        <td>{{r().courseDetails.id}}</td>
+                    </tr>
+                    <tr>
+                        <td>Kursdatum</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Kursort</td>
+                        <td></td>
+                    </tr>
+                </table>
+
+            </td>
+            <td style="width: 50%">
+                <h2>Teilnehmer*innendaten</h2>
+                <table>
+                    <tr>
+                        <td>Name</td>
+                        <td>{{r().participantDetails.name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Anschrift</td>
+                        <td>{{r().participantDetails.street}}, {{r().participantDetails.city}}</td>
+                    </tr>
+                    <tr>
+                        <td>IBAN</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>BIC</td>
+                        <td></td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+    </table>
+    <h2>Abrechnungspositionen</h2>
 </div>

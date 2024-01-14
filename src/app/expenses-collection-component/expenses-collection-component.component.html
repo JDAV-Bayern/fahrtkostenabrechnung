@@ -1,8 +1,8 @@
 <div class='step-content'>
     <div class="step-box" *ngIf="expensesAt && expensesFrom && expensesTo">
         <h1>Auslagen für Fahrtkosten</h1>
-        <b>Summe:</b> {{getSum()}}€
-        <b>Bitte die richtige Reihenfolge beachten und nötigenfalls per Drag-and-Drop richtigstellen.</b>
+        <p><b>Summe:</b> {{getSum()}}€</p>
+        <p>Bitte die richtige Reihenfolge beachten und nötigenfalls per Drag-and-Drop richtigstellen.</p>
         <h3>Hinfahrt</h3>
         <button (click)="openAddExpenseDialog('to')" class="add-button green-button mar">Auslage hinzufügen</button>
         <div [dragula]="'expensesTo'" [(dragulaModel)]="expensesTo">
