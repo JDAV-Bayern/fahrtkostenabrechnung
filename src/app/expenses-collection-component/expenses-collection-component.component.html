@@ -1,7 +1,7 @@
 <div class='step-content'>
     <div class="step-box" *ngIf="expensesAt && expensesFrom && expensesTo">
         <h1>Auslagen für Fahrtkosten</h1>
-        <p><b>Summe:</b> {{getSum()}}€</p>
+        <p><b>Summe:</b> {{getSum().toFixed(2)}}€</p>
         <p>Bitte die richtige Reihenfolge beachten und nötigenfalls per Drag-and-Drop richtigstellen.</p>
         <h3>Hinfahrt</h3>
         <button (click)="openAddExpenseDialog('to')" class="add-button green-button mar">Auslage hinzufügen</button>

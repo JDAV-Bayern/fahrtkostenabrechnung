@@ -55,19 +55,16 @@
     width: 164px;
 }
 
-.title-list-left {
+.table-title {
     font-size: 8pt;
     font-family: Tahoma, Verdana, Geneva, sans-serif;
     font-weight: bold;
     margin-bottom: 0;
     text-align: left;
+    padding-top: 15px;
 }
 
 .sum {
-    font-size: 8pt;
-    font-family: Tahoma, Verdana, Geneva, sans-serif;
-    font-weight: bold;
-    margin-bottom: 0;
     text-align: right;
     float: right;
 }

@@ -62,23 +62,23 @@
         <tr>
 
             <td style="width: 50%;">
-                <h2>Kursdaten</h2>
+                <h2>Schulungsdaten</h2>
                 <table>
                     <tr>
-                        <td>Kursname</td>
-                        <td></td>
+                        <td>Schulung</td>
+                        <td>{{r().courseDetails.courseName}}</td>
                     </tr>
                     <tr>
-                        <td>Kursnummer</td>
+                        <td>Schulungsnummer</td>
                         <td>{{r().courseDetails.id}}</td>
                     </tr>
                     <tr>
-                        <td>Kursdatum</td>
-                        <td></td>
+                        <td>Schulungsdatum</td>
+                        <td>{{r().courseDetails.courseDate}}</td>
                     </tr>
                     <tr>
                         <td>Kursort</td>
-                        <td></td>
+                        <td>{{r().courseDetails.courseLocation}}</td>
                     </tr>
                 </table>
 
@@ -107,7 +107,10 @@
             </td>
         </tr>
     </table>
-    <span class="title-list-left">Abrechnungspositionen</span><span class="sum">Summe: {{getSum()}}€</span><br>
+    <div class="table-title">
+        <span>Abrechnungspositionen</span><span class="sum">Summe:
+            {{getSum().toFixed(2)}}€</span><br>
+    </div>
     <app-pdf-expense-line-item *ngFor="let expense of r().expenses; index as i" [expense]="expense"
         [index]="i"></app-pdf-expense-line-item>
 </div>

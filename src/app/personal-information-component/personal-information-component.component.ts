@@ -25,17 +25,23 @@ export class PersonalInformationComponentComponent {
       street: [reimbursement.participantDetails.street, Validators.required],
       city: [reimbursement.participantDetails.city, Validators.required],
       course: [reimbursement.courseDetails.id, Validators.required],
+      courseName: [reimbursement.courseDetails.courseName, Validators.required],
+      courseDate: [reimbursement.courseDetails.courseDate, Validators.required],
+      courseLocation: [reimbursement.courseDetails.courseLocation, Validators.required],
     });
   }
 
   // Define the onSubmit method to handle form submission
   onSubmit() {
     if (this.personalInfoForm.valid) {
-      this.reimbursementService.setPersonalInformation(
+      this.reimbursementService.setPersonalAndCourseInformation(
         this.personalInfoForm.value.name,
         this.personalInfoForm.value.street,
         this.personalInfoForm.value.city,
-        this.personalInfoForm.value.course
+        this.personalInfoForm.value.course,
+        this.personalInfoForm.value.courseName,
+        this.personalInfoForm.value.courseDate,
+        this.personalInfoForm.value.courseLocation,
       )
       this.router.navigate(['auslagen']);
     }

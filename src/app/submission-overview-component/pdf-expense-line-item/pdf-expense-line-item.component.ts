@@ -52,4 +52,15 @@ export class PdfExpenseLineItemComponent {
         return '';
     }
   }
+
+  getDirection() {
+    switch (this.expense.direction) {
+      case 'to':
+        return 'hin';
+      case 'from':
+        return 'heim';
+      case 'at':
+        return 'dort';
+    }
+  }
 }

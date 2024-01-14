@@ -2,7 +2,18 @@
     <hr *ngIf="index === 0">
     <table>
         <tr>
-            <th class="index">{{index + 1}}</th>
+            <td>
+                <table>
+                    <tr>
+                        <th class="index">{{index + 1}}</th>
+                    </tr>
+                    <tr>
+                        <td class="direction">
+                            {{getDirection()}}
+                        </td>
+                    </tr>
+                </table>
+            </td>
             <td style="vertical-align: bottom;">
                 <table>
                     <tr>

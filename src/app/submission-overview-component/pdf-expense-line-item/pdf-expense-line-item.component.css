@@ -1,14 +1,27 @@
 table {
     width: 100%;
-    margin-bottom: 1rem;
     background-color: transparent;
-    border: 1px solid #dee2e6;
+    margin: 0;
+    padding: 0;
+    border-collapse: collapse;
+    border: 0px;
+}
+
+.line-wrapper {
+    padding: 0;
     margin: 0;
 }
 
 
 .index {
-    font-size: large;
+    font-size: 6pt;
+    font-weight: bold;
+    text-align: center;
+    width: 20px;
+}
+
+.direction {
+    font-size: 5pt;
     text-align: center;
     width: 20px;
 }
@@ -17,9 +30,9 @@ table {
     width: 155px
 }
 
-.title {}
-
-.details {}
+.details {
+    font-size: 5pt;
+}
 
 .amount {
     width: 20px;

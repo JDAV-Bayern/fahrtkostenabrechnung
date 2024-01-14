@@ -31,7 +31,7 @@ export class TrainExpenseFormComponent {
     this.formGroup.setValue({
       inputFrom: trainExpense.startLocation ?? '',
       inputTo: trainExpense.endLocation ?? '',
-      inputPrice: trainExpense.priceWithDiscount ?? '',
+      inputPrice: trainExpense.priceWithDiscount.toFixed(2) ?? '',
       inputDiscountCard: trainExpense.discountCard ?? ''
     })
   }
@@ -44,7 +44,7 @@ export class TrainExpenseFormComponent {
       direction: this.direction,
       startLocation: this.formGroup.value.inputFrom,
       endLocation: this.formGroup.value.inputTo,
-      priceWithDiscount: Number(this.formGroup.value.inputPrice),
+      priceWithDiscount: Number(this.formGroup.value.inputPrice.replace(',', '.').trim()),
       discountCard: this.formGroup.value.inputDiscountCard
     }
     const returnExpense = new TrainExpense(data);

@@ -28,7 +28,9 @@ export class ReimbursementService {
       },
       courseDetails: {
         id: localStorage.getItem('courseId') || '',
-        courseName: ''
+        courseDate: localStorage.getItem('courseDate') || '',
+        courseLocation: localStorage.getItem('courseLocation') || '',
+        courseName: localStorage.getItem('courseName') || '',
       },
       expenses,
       formDate
@@ -42,16 +44,22 @@ export class ReimbursementService {
     localStorage.setItem('city', reimbursement.participantDetails.city);
     localStorage.setItem('iban', reimbursement.participantDetails.iban);
     localStorage.setItem('courseId', reimbursement.courseDetails.id);
+    localStorage.setItem('courseName', reimbursement.courseDetails.courseName);
+    localStorage.setItem('courseDate', reimbursement.courseDetails.courseDate);
+    localStorage.setItem('courseLocation', reimbursement.courseDetails.courseLocation);
     localStorage.setItem('formDate', reimbursement.formDate.toISOString());
     localStorage.setItem('expenses', JSON.stringify(reimbursement.expenses.map(expense => expense.serialize())));
   }
 
-  setPersonalInformation(name: string, street: string, city: string, course: string) {
+  setPersonalAndCourseInformation(name: string, street: string, city: string, course: string, courseName: string, courseDate: string, courseLocation: string) {
     const reimbursement = this.loadFromLocalStorage();
     reimbursement.participantDetails.name = name;
     reimbursement.participantDetails.street = street;
     reimbursement.participantDetails.city = city;
     reimbursement.courseDetails.id = course;
+    reimbursement.courseDetails.courseName = courseName;
+    reimbursement.courseDetails.courseDate = courseDate;
+    reimbursement.courseDetails.courseLocation = courseLocation;
     this.storeToLocalStorage(reimbursement);
   }
 
@@ -82,5 +90,8 @@ export class ReimbursementService {
     localStorage.removeItem('courseId');
     localStorage.removeItem('formDate');
     localStorage.removeItem('expenses');
+    localStorage.removeItem('courseName');
+    localStorage.removeItem('courseDate');
+    localStorage.removeItem('courseLocation');
   }
 }
