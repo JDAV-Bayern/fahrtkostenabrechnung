@@ -23,6 +23,7 @@
     "dragula": "^3.7.3",
     "jspdf": "^2.5.1",
     "ng2-dragula": "^5.0.1",
+    "ngx-file-drop": "^16.0.0",
     "ngx-iban-validator": "^1.1.8",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

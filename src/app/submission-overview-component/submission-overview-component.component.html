@@ -17,13 +17,24 @@
             </div>
         </form>
 
-        <h2>Belege hinzufügen</h2>
+        <h2>Belege</h2>
         <p>Bitte füge Belege für deine Fahrtkosten hinzu. Wir benötigen belege für Zugfahrten und Fahrten mit einem
             Öffis-Abo.</p>
-        <form [formGroup]="fileFormGroup" (ngSubmit)="selectFile()">
-            <input type="file" formControlName="file" id="file" name='file' />
-            <input type="submit" class="green-button" value="Beleg hinzufügen" />
-        </form>
+        <p>Belege kannst Du hier aus deinem Datei-Browser ablegen oder per klick hinzufügen.</p>
+        <ngx-file-drop (onFileDrop)="fileDropped($event)" [accept]="'.pdf,.jpg,.png'">
+            <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
+                <button type="button" class="fileupload" (click)="openFileSelector()">
+                    <span class="material-symbols-outlined">&#xe9fc;</span>
+                    Beleg hinzufügen</button>
+            </ng-template>
+        </ngx-file-drop>
+
+        <fieldset class="files-list">
+            <legend style="color: #999">Belege</legend>
+            <p class="file-list-entry" *ngFor="let file of files"><span style="cursor: pointer"
+                    class="material-symbols-outlined" (click)="removeFile(file.name)">&#xf74f;</span>{{file.name}}</p>
+        </fieldset>
+
     </div>
 
     <div class="button-container">

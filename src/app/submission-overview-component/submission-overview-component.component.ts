@@ -6,6 +6,7 @@ import jsPDF from 'jspdf';
 import { validateIBAN } from "ngx-iban-validator";
 import { IReimbursement } from 'src/domain/reimbursement';
 import { ReimbursementService } from '../reimbursement.service';
+import { NgxFileDropEntry } from 'ngx-file-drop';
 
 
 @Component({
@@ -19,6 +20,9 @@ export class SubmissionOverviewComponentComponent {
   fileFormGroup: FormGroup;
 
   reimbursement: IReimbursement | undefined
+
+  public files: File[] = [];
+
 
   constructor(private readonly router: Router, private formBuilder: FormBuilder, private readonly reimbursementService: ReimbursementService) {
     this.formGroup = this.formBuilder.group({
@@ -45,11 +49,26 @@ export class SubmissionOverviewComponentComponent {
   back() {
     this.router.navigate(['auslagen']);
   }
+
   submitForm() {
   }
-  selectFile() {
-    console.log(this.fileFormGroup);
+
+  fileDropped(files: NgxFileDropEntry[]) {
+    for (const droppedFile of files) {
+      // Is it a file?
+      if (droppedFile.fileEntry.isFile) {
+        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+        fileEntry.file((file: File) => {
+          this.files.push(file);
+        });
+      }
+    }
   }
+
+  removeFile(fileName: string) {
+    this.files = this.files.filter(f => f.name !== fileName);
+  }
+
   getDate() {
     //Get date in the format DD.MM.YYYY
     const date = new Date();

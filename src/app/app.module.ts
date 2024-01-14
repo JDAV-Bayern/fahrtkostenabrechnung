@@ -19,6 +19,7 @@ import { PlanExpenseFormComponent } from './add-expense-modal/plan-expense-form/
 import { BikeExpenseFormComponent } from './add-expense-modal/bike-expense-form/bike-expense-form.component';
 import { CarExpenseFormComponent } from './add-expense-modal/car-expense-form/car-expense-form.component';
 import { TrainExpenseFormComponent } from './add-expense-modal/train-expense-form/train-expense-form.component';
+import { NgxFileDropModule } from 'ngx-file-drop';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,7 @@ import { TrainExpenseFormComponent } from './add-expense-modal/train-expense-for
     PlanExpenseFormComponent,
     BikeExpenseFormComponent,
     CarExpenseFormComponent,
-    TrainExpenseFormComponent
+    TrainExpenseFormComponent,
   ],
   imports: [
     BrowserModule,
@@ -41,7 +42,8 @@ import { TrainExpenseFormComponent } from './add-expense-modal/train-expense-for
     ReactiveFormsModule,
     DragulaModule.forRoot(),
     NoopAnimationsModule,
-    MatDialogModule
+    MatDialogModule,
+    NgxFileDropModule
   ],
   providers: [],
   bootstrap: [AppComponent]

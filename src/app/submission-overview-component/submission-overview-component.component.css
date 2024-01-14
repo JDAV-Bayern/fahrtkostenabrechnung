@@ -1,3 +1,25 @@
+.files-list {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-top: 20px;
+}
+
+.file-list-entry {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.fileupload {
+    display: flex;
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+}
+
 #pdf-container {
     width: 595px;
     box-sizing: border-box;

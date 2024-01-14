@@ -5735,6 +5735,13 @@ ng2-dragula@^5.0.1:
   dependencies:
     tslib "^2.3.0"
 
+ngx-file-drop@^16.0.0:
+  version "16.0.0"
+  resolved "https://registry.yarnpkg.com/ngx-file-drop/-/ngx-file-drop-16.0.0.tgz#3f6cb74b5bfee0d7bcd76635c7120d36fa64ff62"
+  integrity sha512-33RPoZBAiMkV110Rzu3iOrzGcG5M20S4sAiwLzNylfJobu9qVw5XR83FhUelSeqJRoaDxXBRKAozYCSnUf2CNw==
+  dependencies:
+    tslib "^2.3.0"
+
 ngx-iban-validator@^1.1.8:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/ngx-iban-validator/-/ngx-iban-validator-1.1.8.tgz#9c0af88fed32f62acdb23e19d786f42573aee17f"
