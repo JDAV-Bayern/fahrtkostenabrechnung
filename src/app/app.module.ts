@@ -20,6 +20,7 @@ import { BikeExpenseFormComponent } from './add-expense-modal/bike-expense-form/
 import { CarExpenseFormComponent } from './add-expense-modal/car-expense-form/car-expense-form.component';
 import { TrainExpenseFormComponent } from './add-expense-modal/train-expense-form/train-expense-form.component';
 import { NgxFileDropModule } from 'ngx-file-drop';
+import { PdfExpenseLineItemComponent } from './submission-overview-component/pdf-expense-line-item/pdf-expense-line-item.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { NgxFileDropModule } from 'ngx-file-drop';
     BikeExpenseFormComponent,
     CarExpenseFormComponent,
     TrainExpenseFormComponent,
+    PdfExpenseLineItemComponent,
   ],
   imports: [
     BrowserModule,

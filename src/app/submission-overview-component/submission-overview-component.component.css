@@ -32,13 +32,13 @@
     font-size: 6pt;
 }
 
-#pdf-container>h1 {
+#pdf-container h1 {
     text-align: left;
     font-family: Tahoma, Verdana, Geneva, sans-serif;
     font-size: 11pt;
 }
 
-#pdf-container>h2 {
+#pdf-container h2 {
     text-align: left;
     font-family: Tahoma, Verdana, Geneva, sans-serif;
     font-size: 8pt;
@@ -53,4 +53,21 @@
     right: 57px;
     height: 85px;
     width: 164px;
+}
+
+.title-list-left {
+    font-size: 8pt;
+    font-family: Tahoma, Verdana, Geneva, sans-serif;
+    font-weight: bold;
+    margin-bottom: 0;
+    text-align: left;
+}
+
+.sum {
+    font-size: 8pt;
+    font-family: Tahoma, Verdana, Geneva, sans-serif;
+    font-weight: bold;
+    margin-bottom: 0;
+    text-align: right;
+    float: right;
 }

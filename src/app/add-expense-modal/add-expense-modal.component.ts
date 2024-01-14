@@ -13,6 +13,12 @@ export class AddExpenseModalComponent {
   @Input({ required: true })
   expense!: IExpense;
 
+  ngOnInit(): void {
+    if (this.expense.type === undefined && this.direction === 'at') {
+      this.chooseCarExpense();
+    }
+  }
+
   constructor() {
   }
   chooseCarExpense() {

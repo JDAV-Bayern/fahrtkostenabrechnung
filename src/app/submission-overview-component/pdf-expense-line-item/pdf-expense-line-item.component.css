@@ -1,0 +1,26 @@
+table {
+    width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent;
+    border: 1px solid #dee2e6;
+    margin: 0;
+}
+
+
+.index {
+    font-size: large;
+    text-align: center;
+    width: 20px;
+}
+
+.location {
+    width: 155px
+}
+
+.title {}
+
+.details {}
+
+.amount {
+    width: 20px;
+}

@@ -73,5 +73,14 @@ export class ReimbursementService {
     return this.loadFromLocalStorage();
   }
 
-
+  deleteStoredData(): void {
+    localStorage.removeItem('id');
+    localStorage.removeItem('name');
+    localStorage.removeItem('street');
+    localStorage.removeItem('city');
+    localStorage.removeItem('iban');
+    localStorage.removeItem('courseId');
+    localStorage.removeItem('formDate');
+    localStorage.removeItem('expenses');
+  }
 }

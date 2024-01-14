@@ -16,6 +16,9 @@ import { PDFDocument } from 'pdf-lib';
   styleUrls: ['./submission-overview-component.component.css']
 })
 export class SubmissionOverviewComponentComponent {
+  getSum() {
+    return this.r()?.expenses.reduce((sum, expense) => sum + expense.totalReimbursement(), 0);
+  }
 
   formGroup: FormGroup
   fileFormGroup: FormGroup;
@@ -119,16 +122,18 @@ export class SubmissionOverviewComponentComponent {
 
   async continue() {
     console.log("generating pdf...");
-    const htmlElement = document.getElementById("pdf-container");
-    if (!htmlElement) {
+    const htmlElement = document.getElementById("pdf-container")
+    if (!htmlElement || !this.formGroup.valid) {
       return;
     }
+    htmlElement.hidden = false;
     const doc = new jsPDF('p', 'pt', [595, 822], true);
     //add the first page
     await new Promise<void>(resolve => doc.html(htmlElement, {
       autoPaging: "text"
     }).finally(() => resolve()));
 
+    htmlElement.hidden = true;
 
     // go through files and add image attachments
     for (const file of this.files) {
@@ -160,7 +165,7 @@ export class SubmissionOverviewComponentComponent {
 
     const link = document.createElement('a');
     link.href = fileURL;
-    link.download = 'fahrtkostenabrechnung.pdf';
+    link.download = `fka_${this.reimbursement?.courseDetails.id}_${this.reimbursement?.participantDetails.name.split(' ').pop()?.trim()}.pdf`;
     link.click();
     link.remove();
   }

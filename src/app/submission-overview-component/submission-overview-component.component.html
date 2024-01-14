@@ -19,7 +19,7 @@
         </form>
 
         <h2>Belege</h2>
-        <p>Bitte füge Belege für deine Fahrtkosten hinzu. Wir benötigen belege für Zugfahrten und Fahrten mit einem
+        <p>Bitte füge Belege für deine Fahrtkosten hinzu. Wir benötigen Belege für Zugfahrten und Fahrten mit einem
             Öffis-Abo.</p>
         <p>Belege kannst Du hier aus deinem Datei-Browser ablegen oder per klick hinzufügen.</p>
         <ngx-file-drop (onFileDrop)="fileDropped($event)" [accept]="'.pdf,.jpg,.png'">
@@ -49,7 +49,7 @@
     </div>
 </div>
 
-<div id="pdf-container">
+<div id="pdf-container" hidden>
     <img class="logo" src="/assets/logo.jpg" />
     <h1>Fahrtkostenabrechnung</h1>
     <p><b>Datum: {{getDate()}}</b></p>
@@ -96,16 +96,18 @@
                     </tr>
                     <tr>
                         <td>IBAN</td>
-                        <td></td>
+                        <td>{{r().participantDetails.iban}}</td>
                     </tr>
                     <tr>
                         <td>BIC</td>
-                        <td></td>
+                        <td>{{r().participantDetails.bic}}</td>
                     </tr>
                 </table>
 
             </td>
         </tr>
     </table>
-    <h2>Abrechnungspositionen</h2>
+    <span class="title-list-left">Abrechnungspositionen</span><span class="sum">Summe: {{getSum()}}€</span><br>
+    <app-pdf-expense-line-item *ngFor="let expense of r().expenses; index as i" [expense]="expense"
+        [index]="i"></app-pdf-expense-line-item>
 </div>

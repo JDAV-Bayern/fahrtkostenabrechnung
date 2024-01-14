@@ -1,0 +1,32 @@
+<div class="line-wrapper">
+    <hr *ngIf="index === 0">
+    <table>
+        <tr>
+            <th class="index">{{index + 1}}</th>
+            <td style="vertical-align: bottom;">
+                <table>
+                    <tr>
+                        <td class="location">
+                            <b>{{expense.startLocation}}</b> nach
+                        </td>
+                        <th class="title">
+                            {{getTitle()}}
+                        </th>
+                        <td class="amount">
+                            {{expense.totalReimbursement().toFixed(2)}}€
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="location">
+                            <b>{{expense.endLocation}}</b>
+                        </td>
+                        <td colspan="2" class="details">
+                            {{getDetails()}}
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+    <hr>
+</div>
