@@ -5,7 +5,8 @@
         <form [formGroup]="formGroup" (ngSubmit)="submitForm()">
             <div class="form-group">
                 <label for="inputIBAN">IBAN</label>
-                <input type="text" class="form-control" formControlName="inputIBAN" id="inputIBAN" placeholder="IBAN">
+                <input type="text" (change)="saveForm()" class="form-control" formControlName="inputIBAN" id="inputIBAN"
+                    placeholder="IBAN">
                 <div *ngIf="(formGroup.get('inputIBAN')?.hasError('ibanInvalid'))&& formGroup.get('inputIBAN')?.touched"
                     class="error-message">
                     Bitte gib eine gültige IBAN ein.

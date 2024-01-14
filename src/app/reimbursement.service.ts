@@ -61,9 +61,10 @@ export class ReimbursementService {
     this.storeToLocalStorage(reimbursement);
   }
 
-  setSubmitInformation(iban: string) {
+  setSubmitInformation(iban: string, bic: string) {
     const reimbursement = this.loadFromLocalStorage();
     reimbursement.participantDetails.iban = iban;
+    reimbursement.participantDetails.bic = bic;
     reimbursement.formDate = new Date();
     this.storeToLocalStorage(reimbursement);
   }

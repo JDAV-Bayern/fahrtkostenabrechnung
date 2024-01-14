@@ -25,6 +25,7 @@
     "ng2-dragula": "^5.0.1",
     "ngx-file-drop": "^16.0.0",
     "ngx-iban-validator": "^1.1.8",
+    "pdf-lib": "^1.17.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"
