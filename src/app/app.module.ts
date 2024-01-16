@@ -49,7 +49,7 @@ import { APP_BASE_HREF } from '@angular/common';
     NgxFileDropModule
   ],
   providers: [
-    { provide: APP_BASE_HREF, useValue: '/my/app' }
+    { provide: APP_BASE_HREF, useValue: '/fahrtkostenabrechnung/' }
   ],
   bootstrap: [AppComponent]
 })
