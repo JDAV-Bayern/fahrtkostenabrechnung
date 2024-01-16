@@ -21,6 +21,7 @@ import { CarExpenseFormComponent } from './add-expense-modal/car-expense-form/ca
 import { TrainExpenseFormComponent } from './add-expense-modal/train-expense-form/train-expense-form.component';
 import { NgxFileDropModule } from 'ngx-file-drop';
 import { PdfExpenseLineItemComponent } from './submission-overview-component/pdf-expense-line-item/pdf-expense-line-item.component';
+import { APP_BASE_HREF } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,9 @@ import { PdfExpenseLineItemComponent } from './submission-overview-component/pdf
     MatDialogModule,
     NgxFileDropModule
   ],
-  providers: [],
+  providers: [
+    { provide: APP_BASE_HREF, useValue: '/my/app' }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
