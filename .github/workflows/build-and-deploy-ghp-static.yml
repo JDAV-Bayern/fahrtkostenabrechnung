@@ -36,7 +36,9 @@ jobs:
         with:
           node-version: '20.x'
       - name: Build Application
-        run: yarn build
+        run: |
+        yarn install
+        yarn build
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Upload artifact
