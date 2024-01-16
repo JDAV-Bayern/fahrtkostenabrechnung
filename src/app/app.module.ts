@@ -47,9 +47,7 @@ import { PdfExpenseLineItemComponent } from './submission-overview-component/pdf
     MatDialogModule,
     NgxFileDropModule
   ],
-  providers: [
-    { provide: 'APP_BASE_HREF', useValue: '/fahrtkostenabrechnung' }
-  ],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

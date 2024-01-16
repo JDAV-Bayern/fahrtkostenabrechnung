@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --prod --base-href /fahrtkostenarechnung/ --deploy-url /fahrtkostenarechnung/",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
