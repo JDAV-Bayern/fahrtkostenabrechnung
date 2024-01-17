@@ -1,9 +1,8 @@
 table {
     width: 100%;
     border-collapse: collapse;
-    border: 1px solid #ccc;
-    margin: 3px;
     cursor: grab;
+    margin-bottom: 3px;
 }
 
 table * {
@@ -22,4 +21,13 @@ table * {
 .tright {
     width: 20%;
     text-align: right;
+}
+
+.card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    margin-bottom: 10px;
 }

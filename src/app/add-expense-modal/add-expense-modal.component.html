@@ -7,13 +7,13 @@
     <br>
     <div *ngIf="expense?.type === undefined" class="means-of-travel-buttons-container">
         <button (click)="chooseCarExpense()" class="gray-button">
-            <span class="material-symbols-outlined">&#xe531;</span> Autofahrt</button>
+            <span class="material-symbols-outlined">&#xe531;</span>&nbsp;Autofahrt</button><br>
         <button (click)="chooseTrainExpense()" class="gray-button"><span
-                class="material-symbols-outlined">&#xe570;</span> Zugfahrt</button>
+                class="material-symbols-outlined">&#xe570;</span>&nbsp;Zugfahrt</button><br>
         <button (click)="choosePlanExpense()" class="gray-button"><span
-                class="material-symbols-outlined">&#xe8f8;</span> Öffis Abo</button>
+                class="material-symbols-outlined">&#xe8f8;</span>&nbsp;Öffis Abo</button><br>
         <button (click)="chooseBikeExpense()" class="gray-button"><span
-                class="material-symbols-outlined">&#xeb29;</span> Fahrrad</button>
+                class="material-symbols-outlined">&#xeb29;</span>&nbsp;Fahrrad</button>
     </div>
 
     <div *ngIf="expense?.type === 'car'">

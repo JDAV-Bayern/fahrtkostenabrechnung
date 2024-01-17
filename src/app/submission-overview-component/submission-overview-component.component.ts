@@ -16,9 +16,6 @@ import { PDFDocument } from 'pdf-lib';
   styleUrls: ['./submission-overview-component.component.css']
 })
 export class SubmissionOverviewComponentComponent {
-  getSum() {
-    return this.r()?.expenses.reduce((sum, expense) => sum + expense.totalReimbursement(), 0);
-  }
 
   formGroup: FormGroup
   fileFormGroup: FormGroup;
@@ -26,6 +23,14 @@ export class SubmissionOverviewComponentComponent {
   reimbursement: IReimbursement | undefined
 
   public files: File[] = [];
+
+  showPdf = false;
+
+
+  pdfFullyRendered = () => { console.error("pdfFullyRendered not set") };
+  pdfFullyRenderedPromise: Promise<void> = new Promise(resolve => {
+    this.pdfFullyRendered = resolve;
+  });
 
 
   constructor(private readonly router: Router, private formBuilder: FormBuilder, private readonly reimbursementService: ReimbursementService) {
@@ -122,18 +127,22 @@ export class SubmissionOverviewComponentComponent {
 
   async continue() {
     console.log("generating pdf...");
+    this.showPdf = true;
+    await new Promise(resolve => setTimeout(resolve, 0));
+    await this.pdfFullyRenderedPromise;
+
     const htmlElement = document.getElementById("pdf-container")
     if (!htmlElement || !this.formGroup.valid) {
       return;
     }
-    htmlElement.hidden = false;
+    await new Promise(resolve => setTimeout(resolve, 0));
     const doc = new jsPDF('p', 'pt', [595, 822], true);
     //add the first page
     await new Promise<void>(resolve => doc.html(htmlElement, {
       autoPaging: "text"
     }).finally(() => resolve()));
 
-    htmlElement.hidden = true;
+    this.showPdf = false;
 
     // go through files and add image attachments
     for (const file of this.files) {
@@ -191,15 +200,6 @@ export class SubmissionOverviewComponentComponent {
 
   removeFile(fileName: string) {
     this.files = this.files.filter(f => f.name !== fileName);
-  }
-
-  getDate() {
-    //Get date in the format DD.MM.YYYY
-    const date = new Date();
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    return `${day}.${month}.${year}`;
   }
 
   r(): IReimbursement {

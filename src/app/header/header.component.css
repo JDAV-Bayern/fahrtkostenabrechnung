@@ -4,13 +4,13 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
+    padding: 10px 10px;
     flex-basis: content;
 }
 
 .logo img {
-    height: 100px;
-    width: auto;
+    max-height: 100px;
+    max-width: 40vw;
 }
 
 nav ul {
@@ -24,4 +24,6 @@ nav li {
 
 .user-info {
     font-weight: bold;
+    padding-left: 10px;
+    padding-right: 10px;
 }

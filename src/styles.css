@@ -1,11 +1,14 @@
 /* You can add global styles to this file, and also import other style files */
 /* Apply a modern font */
-body {
+body,
+html {
     font-family: 'Helvetica Neue', sans-serif;
     background-color: #f4f4f4;
     color: #333;
     margin: 0;
     padding: 0;
+    max-width: 100vw;
+    overflow-x: hidden;
 }
 
 /* Style links */
@@ -29,7 +32,7 @@ a:hover {
 
 .content {
     flex-grow: 1;
-
+    display: inline;
 }
 
 /* personal-information.component.css */
@@ -38,14 +41,17 @@ a:hover {
 .step-content {
     align-items: center;
     justify-content: center;
-    margin: 20px auto;
-    max-width: fit-content;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    max-width: min(95vw, 600px);
+    min-width: 50%;
 }
 
 /* Create a box around the content */
 .step-box {
     overflow: auto;
-    width: 100%;
     background-color: #fff;
     /* Background color for the box */
     border: 1px solid #ccc;
@@ -53,7 +59,7 @@ a:hover {
     padding-left: 10px;
     padding-top: 0px;
     padding-bottom: 20px;
-    padding-right: 30px;
+    padding-right: 10px;
     /* Spacing inside the box */
     border-radius: 5px;
     /* Rounded corners for the box */
@@ -65,7 +71,6 @@ a:hover {
     margin-top: 20px;
     /* Apply styles to your positive action button */
     justify-content: space-between;
-    width: 100%;
 }
 
 .left-button-container {
@@ -167,7 +172,6 @@ a:hover {
 
 /* Style form inputs */
 .form-control {
-    width: 100%;
     padding: 10px;
     margin-bottom: 3px;
     border: 1px solid #ccc;
@@ -175,7 +179,7 @@ a:hover {
 }
 
 input.form-control {
-    width: calc(100% - 20px);
+    width: -webkit-fill-available;
 }
 
 /* Add this to your component's CSS */
