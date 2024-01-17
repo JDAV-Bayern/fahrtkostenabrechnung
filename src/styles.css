@@ -207,7 +207,7 @@ input.form-control {
     src: local('Material Icons'),
         local('MaterialIcons-Regular'),
         url(assets/mat.woff2) format('woff2'),
-        url(assets/mat.tff) format('truetype'),
+        url(assets/mat.ttf) format('truetype'),
 }
 
 .material-symbols-outlined {
