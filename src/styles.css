@@ -201,13 +201,17 @@ input.form-control {
 }
 
 @font-face {
-    font-family: 'Material Symbols Outlined';
+    font-family: 'Material Icons';
     font-style: normal;
-    src: url(https://example.com/material-symbols.woff) format('woff');
+    font-weight: 400;
+    src: local('Material Icons'),
+        local('MaterialIcons-Regular'),
+        url(assets/mat.woff2) format('woff2'),
+        url(assets/mat.tff) format('truetype'),
 }
 
 .material-symbols-outlined {
-    font-family: 'Material Symbols Outlined';
+    font-family: 'Material Icons';
     font-weight: normal;
     font-style: normal;
     font-size: 24px;

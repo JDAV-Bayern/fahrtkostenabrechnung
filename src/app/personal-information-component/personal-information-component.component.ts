@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReimbursementService } from '../reimbursement.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DataProtectionDialogComponent } from './data-protection-dialog/data-protection-dialog.component';
 
 @Component({
   selector: 'app-personal-information-component',
@@ -17,6 +19,7 @@ export class PersonalInformationComponentComponent {
 
   constructor(private formBuilder: FormBuilder,
     private readonly router: Router,
+    public dialog: MatDialog,
     private readonly reimbursementService: ReimbursementService) {
     // Initialize the form with FormBuilder
     const reimbursement = this.reimbursementService.getReimbursment()
@@ -45,5 +48,12 @@ export class PersonalInformationComponentComponent {
       )
       this.router.navigate(['auslagen']);
     }
+  }
+
+  openDataProtectionInfoDialog() {
+    const dialogRef = this.dialog.open(DataProtectionDialogComponent, {
+      id: 'add-expense-modal',
+      width: 'min(95vw, 500px)',
+    });
   }
 }

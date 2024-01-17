@@ -23,6 +23,7 @@ import { NgxFileDropModule } from 'ngx-file-drop';
 import { PdfExpenseLineItemComponent } from './submission-overview-component/pdf-expense-line-item/pdf-expense-line-item.component';
 import { APP_BASE_HREF } from '@angular/common';
 import { PdfViewComponent } from './submission-overview-component/pdf-view/pdf-view.component';
+import { DataProtectionDialogComponent } from './personal-information-component/data-protection-dialog/data-protection-dialog.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { PdfViewComponent } from './submission-overview-component/pdf-view/pdf-v
     TrainExpenseFormComponent,
     PdfExpenseLineItemComponent,
     PdfViewComponent,
+    DataProtectionDialogComponent,
   ],
   imports: [
     BrowserModule,
