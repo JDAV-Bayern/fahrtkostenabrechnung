@@ -22,6 +22,7 @@ import { TrainExpenseFormComponent } from './add-expense-modal/train-expense-for
 import { NgxFileDropModule } from 'ngx-file-drop';
 import { PdfExpenseLineItemComponent } from './submission-overview-component/pdf-expense-line-item/pdf-expense-line-item.component';
 import { APP_BASE_HREF } from '@angular/common';
+import { PdfViewComponent } from './submission-overview-component/pdf-view/pdf-view.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { APP_BASE_HREF } from '@angular/common';
     CarExpenseFormComponent,
     TrainExpenseFormComponent,
     PdfExpenseLineItemComponent,
+    PdfViewComponent,
   ],
   imports: [
     BrowserModule,

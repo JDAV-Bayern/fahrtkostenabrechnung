@@ -1,0 +1,66 @@
+<div id="pdf-container">
+    <img class="logo" src="/assets/logo.jpg" />
+    <h1>Fahrtkostenabrechnung</h1>
+    <p><b>Datum: {{getDate()}}</b></p>
+    <p style="width: 312px">Diese Fahrtkostenabrechnung wurde automatisch erstellt. Bitte die generierte
+        PDF per E-Mail an
+        <a href="mailto:lgs@jdav-bayern.de">lgs@jdav-bayern.de</a> oder ausgedruckt in die Landesgeschäftsstelle,
+        Preysingstr. 71, 81667 München schicken.
+    </p>
+    <table style="width: 100%">
+        <tr>
+
+            <td style="width: 50%;">
+                <h2>Schulungsdaten</h2>
+                <table class="detailstable">
+                    <tr>
+                        <td>Schulung:</td>
+                        <td>{{r().courseDetails.courseName}}</td>
+                    </tr>
+                    <tr>
+                        <td>Schulungsnummer:</td>
+                        <td>{{r().courseDetails.id}}</td>
+                    </tr>
+                    <tr>
+                        <td>Schulungsdatum:</td>
+                        <td>{{r().courseDetails.courseDate}}</td>
+                    </tr>
+                    <tr>
+                        <td>Kursort:</td>
+                        <td>{{r().courseDetails.courseLocation}}</td>
+                    </tr>
+                </table>
+
+            </td>
+            <td style="width: 50%">
+                <h2>Teilnehmer*innendaten</h2>
+                <table>
+                    <tr>
+                        <td>Name:</td>
+                        <td>{{r().participantDetails.name}}</td>
+                    </tr>
+                    <tr>
+                        <td>Anschrift:</td>
+                        <td>{{r().participantDetails.street}}, {{r().participantDetails.city}}</td>
+                    </tr>
+                    <tr>
+                        <td>IBAN:</td>
+                        <td>{{r().participantDetails.iban}}</td>
+                    </tr>
+                    <tr>
+                        <td>BIC:</td>
+                        <td>{{r().participantDetails.bic}}</td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+    </table>
+    <div class="table-title">
+        <span>Abrechnungspositionen</span><span class="sum">Summe:
+            {{getSum().toFixed(2)}}€</span><br>
+    </div>
+    <hr>
+    <app-pdf-expense-line-item *ngFor="let expense of r().expenses; index as i" [expense]="expense"
+        [index]="i"></app-pdf-expense-line-item>
+</div>
