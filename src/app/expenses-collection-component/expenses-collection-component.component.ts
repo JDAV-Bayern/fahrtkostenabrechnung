@@ -23,7 +23,7 @@ export class ExpensesCollectionComponentComponent {
   openAddExpenseDialog(direction: 'to' | 'from' | 'at') {
     const dialogRef = this.dialog.open(AddExpenseModalComponent, {
       id: 'add-expense-modal',
-      width: '80%',
+      width: 'min(95vw, 700px)',
     });
 
     const lastExpense = this.getLastExpense(direction);
