@@ -49,4 +49,4 @@
     </div>
 </div>
 
-<app-pdf-view *ngIf="true" [reimbursement]="r()" (fullyRendered)="pdfFullyRendered()"></app-pdf-view>
+<app-pdf-view *ngIf="showPdf" [reimbursement]="r()" (fullyRendered)="pdfFullyRendered()"></app-pdf-view>
