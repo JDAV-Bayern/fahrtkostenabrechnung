@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { Direction, ICarExpense, IExpense, mapTripToReturn, mockCarExpense } from 'src/domain/expense';
 import { ReimbursementService } from '../reimbursement.service';
 import { MatDialog } from '@angular/material/dialog';
-import { AddExpenseModalComponent } from '../add-expense-modal/add-expense-modal.component';
+import { AddExpenseModalComponent } from './add-expense-modal/add-expense-modal.component';
 
 @Component({
   selector: 'app-expenses-collection-component',
