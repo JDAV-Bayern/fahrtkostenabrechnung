@@ -16,18 +16,18 @@
                 class="material-symbols-outlined">&#xeb29;</span>&nbsp;Fahrrad</button>
     </div>
 
-    <div *ngIf="expense?.type === 'car'">
+    <div class="formcontainer" *ngIf="expense?.type === 'car'">
         <app-car-expense-form [direction]="this.direction" [expense]="this.expense"></app-car-expense-form>
 
     </div>
-    <div *ngIf="expense?.type === 'train'">
+    <div class="formcontainer" *ngIf="expense?.type === 'train'">
         <app-train-expense-form [direction]="this.direction" [expense]="this.expense"></app-train-expense-form>
 
     </div>
-    <div *ngIf="expense?.type === 'plan'">
+    <div class="formcontainer" *ngIf="expense?.type === 'plan'">
         <app-plan-expense-form [direction]="this.direction " [expense]="this.expense"></app-plan-expense-form>
     </div>
-    <div *ngIf="expense?.type === 'bike'">
+    <div class="formcontainer" *ngIf="expense?.type === 'bike'">
         <app-bike-expense-form [direction]="this.direction" [expense]="this.expense"></app-bike-expense-form>
     </div>
 </div>

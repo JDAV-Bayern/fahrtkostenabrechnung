@@ -17,3 +17,7 @@
 .means-of-travel-buttons-container button {
     display: inline-flex;
 }
+
+.formcontainer {
+    width: 100%;
+}
