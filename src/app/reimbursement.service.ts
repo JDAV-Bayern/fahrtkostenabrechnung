@@ -24,7 +24,8 @@ export class ReimbursementService {
         street: localStorage.getItem('street') || '',
         city: localStorage.getItem('city') || '',
         iban: localStorage.getItem('iban') || '',
-
+        zipCode: localStorage.getItem('zipCode') || '',
+        isBavaria: localStorage.getItem('isBavaria') === 'true',
       },
       courseDetails: {
         id: localStorage.getItem('courseId') || '',
@@ -49,9 +50,11 @@ export class ReimbursementService {
     localStorage.setItem('courseLocation', reimbursement.courseDetails.courseLocation);
     localStorage.setItem('formDate', reimbursement.formDate.toISOString());
     localStorage.setItem('expenses', JSON.stringify(reimbursement.expenses.map(expense => expense.serialize())));
+    localStorage.setItem('zipCode', reimbursement.participantDetails.zipCode);
+    localStorage.setItem('isBavaria', reimbursement.participantDetails.isBavaria.toString());
   }
 
-  setPersonalAndCourseInformation(name: string, street: string, city: string, course: string, courseName: string, courseDate: string, courseLocation: string) {
+  setPersonalAndCourseInformation(name: string, street: string, city: string, course: string, courseName: string, courseDate: string, courseLocation: string, zipCode: string, isBavaria: boolean) {
     const reimbursement = this.loadFromLocalStorage();
     reimbursement.participantDetails.name = name;
     reimbursement.participantDetails.street = street;
@@ -60,6 +63,8 @@ export class ReimbursementService {
     reimbursement.courseDetails.courseName = courseName;
     reimbursement.courseDetails.courseDate = courseDate;
     reimbursement.courseDetails.courseLocation = courseLocation;
+    reimbursement.participantDetails.zipCode = zipCode;
+    reimbursement.participantDetails.isBavaria = isBavaria;
     this.storeToLocalStorage(reimbursement);
   }
 
@@ -93,5 +98,7 @@ export class ReimbursementService {
     localStorage.removeItem('courseName');
     localStorage.removeItem('courseDate');
     localStorage.removeItem('courseLocation');
+    localStorage.removeItem('zipCode');
+    localStorage.removeItem('isBavaria');
   }
 }

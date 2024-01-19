@@ -34,6 +34,10 @@ export class PdfViewComponent {
     return this.reimbursement;
   }
   getSum() {
-    return this.r()?.expenses.reduce((sum, expense) => sum + expense.totalReimbursement(), 0);
+    const expensesSum = this.r()?.expenses.reduce((sum, expense) => sum + expense.totalReimbursement(), 0);
+    if (this.reimbursement.participantDetails.isBavaria) {
+      return expensesSum.toFixed(2);
+    }
+    return `(${expensesSum.toFixed(2)}) -> ${Math.min(expensesSum, 75).toFixed(2)}`;
   }
 }

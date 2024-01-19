@@ -44,6 +44,10 @@
                         <td>{{r().participantDetails.street}}, {{r().participantDetails.city}}</td>
                     </tr>
                     <tr>
+                        <td colspan="2">{{r().participantDetails.isBavaria ? 'Teilnehmer*in kommt aus Bayern' :
+                            'Teilnehmer*in kommt **nicht** aus Bayern'}}</td>
+                    </tr>
+                    <tr>
                         <td>IBAN:</td>
                         <td>{{r().participantDetails.iban}}</td>
                     </tr>
@@ -58,7 +62,7 @@
     </table>
     <div class="table-title">
         <span>Abrechnungspositionen</span><span class="sum">Summe:
-            {{getSum().toFixed(2)}}€</span><br>
+            {{getSum()}}€</span><br>
     </div>
     <hr>
     <app-pdf-expense-line-item *ngFor="let expense of r().expenses; index as i" [expense]="expense"
