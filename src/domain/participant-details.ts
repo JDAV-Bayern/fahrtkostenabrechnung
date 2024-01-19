@@ -4,4 +4,6 @@ export interface IParticipantDetails {
     city: string;
     iban: string;
     bic?: string;
+    zipCode: string;
+    isBavaria: boolean;
 }
