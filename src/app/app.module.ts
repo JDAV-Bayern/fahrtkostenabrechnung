@@ -24,6 +24,7 @@ import { PdfExpenseLineItemComponent } from './submission-overview-component/pdf
 import { APP_BASE_HREF } from '@angular/common';
 import { PdfViewComponent } from './submission-overview-component/pdf-view/pdf-view.component';
 import { DataProtectionDialogComponent } from './personal-information-component/data-protection-dialog/data-protection-dialog.component';
+import { ProgressIndicatorComponent } from './submission-overview-component/progress-indicator/progress-indicator.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { DataProtectionDialogComponent } from './personal-information-component/
     PdfExpenseLineItemComponent,
     PdfViewComponent,
     DataProtectionDialogComponent,
+    ProgressIndicatorComponent,
   ],
   imports: [
     BrowserModule,

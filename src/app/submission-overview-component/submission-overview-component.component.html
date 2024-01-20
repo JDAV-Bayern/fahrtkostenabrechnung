@@ -43,10 +43,12 @@
             <button (click)="back()" class="gray-button">Zurück</button>
         </div>
         <div class="right-button-container">
-            <button (click)="continue()" [class.green-button]="formGroup.valid"
+            <app-progress-indicator *ngIf="loading"></app-progress-indicator>
+            <button (click)="continue()" *ngIf="!loading" [class.green-button]="formGroup.valid"
                 [class.disabled-button]="!formGroup.valid">PDF herunterladen</button>
         </div>
     </div>
 </div>
-
-<app-pdf-view *ngIf="showPdf" [reimbursement]="r()" (fullyRendered)="pdfFullyRendered()"></app-pdf-view>
+<div style="position: absolute; top: 2000px">
+    <app-pdf-view *ngIf="showPdf" [reimbursement]="r()" (fullyRendered)="pdfFullyRendered()"></app-pdf-view>
+</div>

@@ -4188,6 +4188,11 @@ execa@^5.0.0:
     signal-exit "^3.0.3"
     strip-final-newline "^2.0.0"
 
+exif-parser@^0.1.12:
+  version "0.1.12"
+  resolved "https://registry.yarnpkg.com/exif-parser/-/exif-parser-0.1.12.tgz#58a9d2d72c02c1f6f02a0ef4a9166272b7760922"
+  integrity sha512-c2bQfLNbMzLPmzQuOr8fy0csy84WmwnER81W88DzTp9CYNPJ6yzOj2EZAh9pywYpqHnshVLHQJ8WzldAyfY+Iw==
+
 exponential-backoff@^3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/exponential-backoff/-/exponential-backoff-3.1.1.tgz#64ac7526fe341ab18a39016cd22c787d01e00bf6"
@@ -7282,6 +7287,13 @@ tree-kill@1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/tree-kill/-/tree-kill-1.2.2.tgz#4ca09a9092c88b73a7cdc5e8a01b507b0790a0cc"
   integrity sha512-L0Orpi8qGpRG//Nd+H90vFB+3iHnue1zSSGmNOOCh1GLJ7rUKVwV2HvijphGQS2UmhUZewS9VgvxYIdgr+fG1A==
+
+ts-image-processor@^1.1.17:
+  version "1.1.17"
+  resolved "https://registry.yarnpkg.com/ts-image-processor/-/ts-image-processor-1.1.17.tgz#516bc8ce9ee1c8f1c28c6b02ffa7303481494e1d"
+  integrity sha512-7kyLGbPUrWXIQnDaR8wJvvvc+a48JerCfPzYuUqsfy2l+XvJQPFW0LZ0dbWY2H/AwEFXYOY2n87W0+hWHqGDRw==
+  dependencies:
+    exif-parser "^0.1.12"
 
 tslib@2.6.1:
   version "2.6.1"
