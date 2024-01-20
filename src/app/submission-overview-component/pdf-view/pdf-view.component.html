@@ -1,5 +1,4 @@
 <div id="pdf-container">
-    <img class="logo" src="assets/logo.jpg" />
     <h1>Fahrtkostenabrechnung</h1>
     <p><b>Datum: {{getDate()}}</b></p>
     <p style="width: 312px">Diese Fahrtkostenabrechnung wurde automatisch erstellt. Bitte die generierte
@@ -41,7 +40,8 @@
                     </tr>
                     <tr>
                         <td>Anschrift:</td>
-                        <td>{{r().participantDetails.street}}, {{r().participantDetails.city}}</td>
+                        <td>{{r().participantDetails.street}}, {{r().participantDetails.zipCode}}
+                            {{r().participantDetails.city}}</td>
                     </tr>
                     <tr>
                         <td colspan="2">{{r().participantDetails.isBavaria ? 'Teilnehmer*in kommt aus Bayern' :

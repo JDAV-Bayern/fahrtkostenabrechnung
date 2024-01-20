@@ -2,12 +2,14 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import jsPDF from 'jspdf';
-
+import * as imageprocessor from 'ts-image-processor';
 import { validateIBAN } from "ngx-iban-validator";
 import { IReimbursement } from 'src/domain/reimbursement';
 import { ReimbursementService } from '../reimbursement.service';
 import { NgxFileDropEntry } from 'ngx-file-drop';
 import { PDFDocument } from 'pdf-lib';
+import { logoBase64 } from 'src/assets/logoBase64';
+
 
 
 @Component({
@@ -25,6 +27,8 @@ export class SubmissionOverviewComponentComponent {
   public files: File[] = [];
 
   showPdf = false;
+
+  loading = false;
 
 
   pdfFullyRendered = () => { console.error("pdfFullyRendered not set") };
@@ -65,52 +69,58 @@ export class SubmissionOverviewComponentComponent {
   }
 
   async addImageToPdf(imageFile: File, pdf: jsPDF) {
-    const fileExtension = imageFile.name.split('.').pop();
-    const allDone = new Promise<void>(resolve => {
-      const imageFileReader = new FileReader();
-      imageFileReader.onload = (event: any) => {
-        const img = new Image();
-        img.src = event.target.result;
+    const maxWidth = 575;
+    const maxHeight = 802;
 
-        img.onload = () => {
-          // Access the image width and height
-          const originalWidth = img.width;
-          const originalHeight = img.height;
+    const image = await imageprocessor.fileToBase64(imageFile);
+    const exifRotated = await imageprocessor.imageProcessor.src(image).pipe(
+      imageprocessor.applyExifOrientation(),
+    )
 
-          // Set maximum dimensions
-          const maxWidth = 575;
-          const maxHeight = 802;
+    const preprocessedImage = await imageprocessor.base64ToImgElement(exifRotated)
 
-          // Calculate new dimensions while maintaining the aspect ratio
-          let newWidth = originalWidth;
-          let newHeight = originalHeight;
+    let originalHeight = preprocessedImage.height;
+    let originalWidth = preprocessedImage.width;
 
-          if (originalWidth > maxWidth || originalHeight > maxHeight) {
-            const aspectRatio = originalWidth / originalHeight;
+    let finalImageData: string;
+    if (originalWidth > originalHeight) {
+      //The image is in landscape, lets rotate it to view it larger
+      finalImageData = await imageprocessor.imageProcessor.src(exifRotated).pipe(
+        imageprocessor.rotate({ degree: 90, clockwise: false }),
+        imageprocessor.resize({ maxWidth: 1240, maxHeight: 1713 }),
+        imageprocessor.sharpen()
+      )
+      //Swap originalHeight and originalWidth because we rotated by 90 degrees
+      const x = originalHeight;
+      originalHeight = originalWidth;
+      originalWidth = x;
+    } else {
+      //only resize to 150dpi
+      finalImageData = await imageprocessor.imageProcessor.src(exifRotated).pipe(
+        imageprocessor.resize({ maxWidth: 1240, maxHeight: 1713 }),
+        imageprocessor.sharpen()
+      )
+    }
 
-            if (originalWidth > maxWidth) {
-              newWidth = maxWidth;
-              newHeight = newWidth / aspectRatio;
-            }
+    let newWidth = originalWidth;
+    let newHeight = originalHeight;
 
-            if (newHeight > maxHeight) {
-              newHeight = maxHeight;
-              newWidth = newHeight * aspectRatio;
-            }
-          }
+    if (originalWidth > maxWidth || originalHeight > maxHeight) {
+      const aspectRatio = originalWidth / originalHeight;
 
+      if (originalWidth > maxWidth) {
+        newWidth = maxWidth;
+        newHeight = newWidth / aspectRatio;
+      }
 
-          // Do something with the width and height
-          console.log('Image Width:', newWidth);
-          console.log('Image Height:', newHeight);
-          pdf.addPage();
-          pdf.addImage(img, fileExtension === 'png' ? 'PNG' : 'JPEG', 10, 10, newWidth, newHeight, undefined, 'FAST');
-          resolve()
-        };
-      };
-      imageFileReader.readAsDataURL(imageFile);
-    });
-    await allDone;
+      if (newHeight > maxHeight) {
+        newHeight = maxHeight;
+        newWidth = newHeight * aspectRatio;
+      }
+    }
+
+    pdf.addPage();
+    pdf.addImage(finalImageData, 10, 10, newWidth, newHeight, undefined, 'FAST');
   }
 
   async addPdfToPdf(pdfFile: File, pdf: PDFDocument) {
@@ -127,12 +137,15 @@ export class SubmissionOverviewComponentComponent {
 
   async continue() {
     console.log("generating pdf...");
+    this.loading = true;
     this.showPdf = true;
     await new Promise(resolve => setTimeout(resolve, 0));
     await this.pdfFullyRenderedPromise;
 
     const htmlElement = document.getElementById("pdf-container")
     if (!htmlElement || !this.formGroup.valid) {
+      this.loading = false;
+      this.showPdf = false;
       return;
     }
     await new Promise(resolve => setTimeout(resolve, 0));
@@ -143,6 +156,12 @@ export class SubmissionOverviewComponentComponent {
     }).finally(() => resolve()));
 
     this.showPdf = false;
+
+    //Add mailto link and logo
+    doc.link(170, 57, 70, 10, {
+      url: 'mailto:lgs@jdav-bayern.de'
+    });
+    doc.addImage(logoBase64, 'JPEG', 374, 57, 164, 85);
 
     // go through files and add image attachments
     for (const file of this.files) {
@@ -177,6 +196,7 @@ export class SubmissionOverviewComponentComponent {
     link.download = `fka_${this.reimbursement?.courseDetails.id}_${this.reimbursement?.participantDetails.name.split(' ').pop()?.trim()}.pdf`;
     link.click();
     link.remove();
+    this.loading = false;
   }
 
   back() {
