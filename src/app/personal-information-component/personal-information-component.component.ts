@@ -63,7 +63,7 @@ export class PersonalInformationComponentComponent {
         this.personalInfoForm.value.courseDate,
         this.personalInfoForm.value.courseLocation,
         this.personalInfoForm.value.zipCode,
-        this.plzService.search(this.personalInfoForm.value.zipCode)[0].isBavaria,
+        this.plzService.search(this.personalInfoForm.value.zipCode)[0]?.isBavaria ?? false,
       )
       this.router.navigate(['auslagen']);
     }
