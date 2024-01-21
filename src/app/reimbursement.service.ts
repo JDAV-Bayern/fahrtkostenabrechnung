@@ -34,7 +34,8 @@ export class ReimbursementService {
         courseName: localStorage.getItem('courseName') || '',
       },
       expenses,
-      formDate
+      formDate,
+      note: localStorage.getItem('note') || '',
     };
   }
 
@@ -52,6 +53,7 @@ export class ReimbursementService {
     localStorage.setItem('expenses', JSON.stringify(reimbursement.expenses.map(expense => expense.serialize())));
     localStorage.setItem('zipCode', reimbursement.participantDetails.zipCode);
     localStorage.setItem('isBavaria', reimbursement.participantDetails.isBavaria.toString());
+    localStorage.setItem('note', reimbursement.note);
   }
 
   setPersonalAndCourseInformation(name: string, street: string, city: string, course: string, courseName: string, courseDate: string, courseLocation: string, zipCode: string, isBavaria: boolean) {
@@ -74,11 +76,12 @@ export class ReimbursementService {
     this.storeToLocalStorage(reimbursement);
   }
 
-  setSubmitInformation(iban: string, bic: string) {
+  setSubmitInformation(iban: string, bic: string, note: string) {
     const reimbursement = this.loadFromLocalStorage();
     reimbursement.participantDetails.iban = iban;
     reimbursement.participantDetails.bic = bic;
     reimbursement.formDate = new Date();
+    reimbursement.note = note;
     this.storeToLocalStorage(reimbursement);
   }
 
@@ -100,5 +103,6 @@ export class ReimbursementService {
     localStorage.removeItem('courseLocation');
     localStorage.removeItem('zipCode');
     localStorage.removeItem('isBavaria');
+    localStorage.removeItem('note');
   }
 }

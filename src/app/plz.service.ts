@@ -16,4 +16,7 @@ export class PlzService {
         }
         return plzs.filter(val => val[0].startsWith(prefix)).map(val => ({ plz: val[0], city: val[1], isBavaria: val[2] === '09' }));
     }
+    exists(plz: string) {
+        return plzs.some(val => val[0] === plz);
+    }
 }

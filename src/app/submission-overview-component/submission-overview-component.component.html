@@ -1,6 +1,6 @@
 <div class='step-content'>
     <div class="step-box">
-        <h1>Kontodaten und Belege</h1>
+        <h2>Kontodaten</h2>
 
         <form [formGroup]="formGroup" (ngSubmit)="submitForm()">
             <div class="form-group">
@@ -12,16 +12,25 @@
                     Bitte gib eine gültige IBAN ein.
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" *ngIf="!r().participantDetails.iban.startsWith('DE') && formGroup.get('inputIBAN')?.touched">
                 <label for="inputBIC">BIC (nur bei ausländischen Kreditinstituten notwendig)</label>
-                <input type="text" class="form-control" formControlName="inputBIC" id="inputBIC" placeholder="BIC">
+                <input type="text" (change)="saveForm()" class="form-control" formControlName="inputBIC" id="inputBIC"
+                    placeholder="BIC">
+            </div>
+            <div class="form-group">
+                <label for="inputNote">Bemerkung zu deiner Abrechnung</label>
+                <textarea (change)="saveForm()" class="form-control textarea" rows="4" formControlName="inputNote"
+                    id="inputNote" placeholder="Bemerkung"></textarea>
             </div>
         </form>
 
+        <h2>Zusammenfassung</h2>
+        Erstattungsbetrag: {{getSum().toFixed(2)}}€<br>
+        <p *ngFor="let error of getErrors()"><b>Fehler</b> {{error}}</p>
+        <p *ngFor="let warning of getWarnings()"><b>Warnung</b> {{warning}}</p>
+        <p *ngFor="let info of getInfos()"><b>Info</b> {{info}}</p>
+
         <h2>Belege</h2>
-        <p>Bitte füge Belege für deine Fahrtkosten hinzu. Wir benötigen Belege für Zugfahrten und Fahrten mit einem
-            Öffis-Abo.</p>
-        <p>Belege kannst Du hier aus deinem Datei-Browser ablegen oder per klick hinzufügen.</p>
         <ngx-file-drop (onFileDrop)="fileDropped($event)" [accept]="'.pdf,.jpg,.png'">
             <ng-template ngx-file-drop-content-tmp let-openFileSelector="openFileSelector">
                 <button type="button" class="fileupload" (click)="openFileSelector()">
@@ -30,10 +39,11 @@
             </ng-template>
         </ngx-file-drop>
 
-        <fieldset class="files-list">
+        <fieldset *ngIf="files.length" class="files-list">
             <legend style="color: #999">Belege</legend>
             <p class="file-list-entry" *ngFor="let file of files"><span style="cursor: pointer"
-                    class="material-symbols-outlined" (click)="removeFile(file.name)">&#xf74f;</span>{{file.name}}</p>
+                    class="material-symbols-outlined" (click)="removeFile(file.name)">&#xf74f;</span>{{file.name}}
+            </p>
         </fieldset>
 
     </div>
@@ -44,8 +54,8 @@
         </div>
         <div class="right-button-container">
             <app-progress-indicator *ngIf="loading"></app-progress-indicator>
-            <button (click)="continue()" *ngIf="!loading" [class.green-button]="formGroup.valid"
-                [class.disabled-button]="!formGroup.valid">PDF herunterladen</button>
+            <button (click)="continue()" *ngIf="!loading" [class.green-button]="isReimbursementValid()"
+                [class.disabled-button]="!isReimbursementValid()">PDF herunterladen</button>
         </div>
     </div>
 </div>

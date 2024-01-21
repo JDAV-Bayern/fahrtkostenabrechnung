@@ -27,7 +27,6 @@ export class CarExpenseFormComponent {
     })
   }
   ngOnInit() {
-    console.log("expense", this.expense)
     const carExpense = this.expense as ICarExpense ?? {};
     this.formGroup.setValue({
       inputFrom: carExpense.startLocation ?? '',
@@ -39,7 +38,6 @@ export class CarExpenseFormComponent {
   }
   submitForm() {
     if (!this.formGroup.valid) {
-      console.log("invalid form", this.formGroup)
       return;
     }
     const passengers = !['', undefined, null].includes(this.formGroup.value.passengers) ? (this.formGroup.value.passengers as string).split(',').map(passenger => passenger.trim()) : [];

@@ -14,10 +14,6 @@ import { PlzService } from '../plz.service';
 export class PersonalInformationComponentComponent {
   personalInfoForm: FormGroup;
 
-  navigateToStep(step: string) {
-    console.log(`navigating to step ${step}`)
-  }
-
   constructor(private formBuilder: FormBuilder,
     private readonly router: Router,
     public dialog: MatDialog,
@@ -38,9 +34,7 @@ export class PersonalInformationComponentComponent {
   }
 
   plzChanged() {
-    console.log("plz changed");
     const plz = this.personalInfoForm.value.zipCode;
-    console.log(plz)
     const results = this.plzService.search(plz);
     if (results.length === 1) {
       const isBavaria = results[0].isBavaria;
@@ -49,24 +43,28 @@ export class PersonalInformationComponentComponent {
         this.personalInfoForm.patchValue({ city });
       }
     }
+    this.saveData();
   }
 
   // Define the onSubmit method to handle form submission
   onSubmit() {
+    this.saveData();
     if (this.personalInfoForm.valid) {
-      this.reimbursementService.setPersonalAndCourseInformation(
-        this.personalInfoForm.value.name,
-        this.personalInfoForm.value.street,
-        this.personalInfoForm.value.city,
-        this.personalInfoForm.value.course,
-        this.personalInfoForm.value.courseName,
-        this.personalInfoForm.value.courseDate,
-        this.personalInfoForm.value.courseLocation,
-        this.personalInfoForm.value.zipCode,
-        this.plzService.search(this.personalInfoForm.value.zipCode)[0]?.isBavaria ?? false,
-      )
       this.router.navigate(['auslagen']);
     }
+  }
+  saveData() {
+    this.reimbursementService.setPersonalAndCourseInformation(
+      this.personalInfoForm.value.name,
+      this.personalInfoForm.value.street,
+      this.personalInfoForm.value.city,
+      this.personalInfoForm.value.course,
+      this.personalInfoForm.value.courseName,
+      this.personalInfoForm.value.courseDate,
+      this.personalInfoForm.value.courseLocation,
+      this.personalInfoForm.value.zipCode,
+      this.plzService.search(this.personalInfoForm.value.zipCode)[0]?.isBavaria ?? false,
+    )
   }
 
   openDataProtectionInfoDialog() {

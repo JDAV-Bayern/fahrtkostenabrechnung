@@ -36,9 +36,11 @@ export class PlanExpenseFormComponent {
     })
   }
   submitForm() {
+
+    const priceString = this.formGroup.value.inputPrice?.toString() ?? '';
     const price = this.formGroup.value.inputType === 'dtFullPrice' ? 49
       : this.formGroup.value.inputType === 'dtStudents' ? 29
-        : Number((this.formGroup.value.inputPrice as string).replace(',', '.'));
+        : Number(priceString.replace(',', '.'));
     const data: IPublicTransportPlanExpenseData = {
       price,
       direction: this.direction,

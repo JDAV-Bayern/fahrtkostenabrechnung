@@ -9,6 +9,7 @@ import { ReimbursementService } from '../reimbursement.service';
 import { NgxFileDropEntry } from 'ngx-file-drop';
 import { PDFDocument } from 'pdf-lib';
 import { logoBase64 } from 'src/assets/logoBase64';
+import { ReimbursementValidationService } from '../reimbursement.validation.service';
 
 
 
@@ -37,10 +38,14 @@ export class SubmissionOverviewComponentComponent {
   });
 
 
-  constructor(private readonly router: Router, private formBuilder: FormBuilder, private readonly reimbursementService: ReimbursementService) {
+  constructor(private readonly router: Router,
+    private formBuilder: FormBuilder,
+    private readonly reimbursementService: ReimbursementService,
+    private readonly validationService: ReimbursementValidationService) {
     this.formGroup = this.formBuilder.group({
       inputIBAN: ['', [Validators.required, validateIBAN]],
       inputBIC: ['', []],
+      inputNote: ['', []],
     })
     this.fileFormGroup = this.formBuilder.group({
       file: [undefined, []]
@@ -51,21 +56,39 @@ export class SubmissionOverviewComponentComponent {
     this.formGroup.setValue({
       inputIBAN: this.r()?.participantDetails?.iban || '',
       inputBIC: this.r()?.participantDetails?.bic || '',
+      inputNote: this.r()?.note || '',
     });
   }
 
   saveForm() {
-    console.log("saving form...")
     if (this.formGroup.valid) {
-      console.log("form is valid")
       const iban = this.formGroup.get('inputIBAN')?.value;
       const bic = this.formGroup.get('inputBIC')?.value;
+      const note = this.formGroup.get('inputNote')?.value;
       if (this.reimbursement) {
         this.reimbursement.participantDetails.iban = iban;
         this.reimbursement.participantDetails.bic = bic;
+        this.reimbursement.note = note
       }
-      this.reimbursementService.setSubmitInformation(iban, bic);
+      this.reimbursementService.setSubmitInformation(iban, bic, note);
     }
+  }
+
+  getSum(): number {
+    return this.r()?.expenses.reduce((sum, expense) => sum + expense.totalReimbursement(), 0) || 0;
+  }
+
+  getErrors(): string[] {
+    return this.validationService.validateReimbursement(this.r()).findings.filter(f => f.type === 'error').map(f => f.message);
+  }
+  getWarnings(): string[] {
+    return this.validationService.validateReimbursement(this.r()).findings.filter(f => f.type === 'warning').map(f => f.message);
+  }
+  getInfos(): string[] {
+    return this.validationService.validateReimbursement(this.r()).findings.filter(f => f.type === 'info').map(f => f.message);
+  }
+  isReimbursementValid(): boolean {
+    return this.validationService.validateReimbursement(this.r()).isValid;
   }
 
   async addImageToPdf(imageFile: File, pdf: jsPDF) {
@@ -136,7 +159,6 @@ export class SubmissionOverviewComponentComponent {
   }
 
   async continue() {
-    console.log("generating pdf...");
     this.loading = true;
     this.showPdf = true;
     await new Promise(resolve => setTimeout(resolve, 0));
@@ -150,18 +172,19 @@ export class SubmissionOverviewComponentComponent {
     }
     await new Promise(resolve => setTimeout(resolve, 0));
     const doc = new jsPDF('p', 'pt', [595, 822], true);
-    //add the first page
-    await new Promise<void>(resolve => doc.html(htmlElement, {
-      autoPaging: "text"
-    }).finally(() => resolve()));
-
-    this.showPdf = false;
-
     //Add mailto link and logo
     doc.link(170, 57, 70, 10, {
       url: 'mailto:lgs@jdav-bayern.de'
     });
-    doc.addImage(logoBase64, 'JPEG', 374, 57, 164, 85);
+
+    //add the first page
+    await new Promise<void>(resolve => doc.html(htmlElement, {
+      autoPaging: true
+    }).finally(() => resolve()));
+    //doc.addImage(logoBase64, 'JPEG', 374, 57, 164, 85);
+
+    this.showPdf = false;
+
 
     // go through files and add image attachments
     for (const file of this.files) {

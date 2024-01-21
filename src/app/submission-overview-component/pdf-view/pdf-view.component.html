@@ -1,9 +1,9 @@
 <div id="pdf-container">
     <h1>Fahrtkostenabrechnung</h1>
     <p><b>Datum: {{getDate()}}</b></p>
+    <img class="logo" src="data:image/png;base64,{{getLogo()}}">
     <p style="width: 312px">Diese Fahrtkostenabrechnung wurde automatisch erstellt. Bitte die generierte
-        PDF per E-Mail an
-        <a href="mailto:lgs@jdav-bayern.de">lgs@jdav-bayern.de</a> oder ausgedruckt in die Landesgeschäftsstelle,
+        PDF per E-Mail an lgs@jdav-bayern.de oder ausgedruckt in die Landesgeschäftsstelle,
         Preysingstr. 71, 81667 München schicken.
     </p>
     <table style="width: 100%">
@@ -45,13 +45,13 @@
                     </tr>
                     <tr>
                         <td colspan="2">{{r().participantDetails.isBavaria ? 'Teilnehmer*in kommt aus Bayern' :
-                            'Teilnehmer*in kommt **nicht** aus Bayern'}}</td>
+                            'Teilnehmer*in kommt nicht aus Bayern'}}</td>
                     </tr>
                     <tr>
                         <td>IBAN:</td>
                         <td>{{r().participantDetails.iban}}</td>
                     </tr>
-                    <tr>
+                    <tr *ngIf="r().participantDetails.bic?.length">
                         <td>BIC:</td>
                         <td>{{r().participantDetails.bic}}</td>
                     </tr>
@@ -60,6 +60,8 @@
             </td>
         </tr>
     </table>
+    <p *ngIf="r().note !== ''"><b>Bemerkung:</b></p>
+    <p *ngFor="let line of r().note.split('\n')">{{line}}</p>
     <div class="table-title">
         <span>Abrechnungspositionen</span><span class="sum">Summe:
             {{getSum()}}€</span><br>

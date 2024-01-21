@@ -26,7 +26,6 @@ export class TrainExpenseFormComponent {
     })
   }
   ngOnInit() {
-    console.log("expense", this.expense)
     const trainExpense = this.expense as ITrainExpense ?? {};
     this.formGroup.setValue({
       inputFrom: trainExpense.startLocation ?? '',
@@ -37,7 +36,6 @@ export class TrainExpenseFormComponent {
   }
   submitForm() {
     if (!this.formGroup.valid) {
-      console.log("invalid form", this.formGroup)
       return;
     }
     const data: ITrainExpenseData = {
