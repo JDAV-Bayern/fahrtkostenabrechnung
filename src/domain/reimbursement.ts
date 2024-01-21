@@ -7,6 +7,6 @@ export interface IReimbursement {
     formDate: Date;
     courseDetails: ICourseDetails;
     participantDetails: IParticipantDetails;
-
     expenses: IExpense[];
+    note: string;
 }

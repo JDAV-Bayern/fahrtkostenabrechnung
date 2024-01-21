@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { logoBase64 } from 'src/assets/logoBase64';
 import { IReimbursement } from 'src/domain/reimbursement';
 
 @Component({
@@ -17,7 +18,6 @@ export class PdfViewComponent {
 
 
   ngAfterViewInit() {
-    console.log("pdf fully rendered")
     this.fullyRendered.emit();
   }
 
@@ -28,6 +28,10 @@ export class PdfViewComponent {
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
     return `${day}.${month}.${year}`;
+  }
+
+  getLogo() {
+    return logoBase64;
   }
 
   r() {

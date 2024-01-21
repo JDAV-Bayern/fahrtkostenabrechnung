@@ -19,3 +19,12 @@
     background-color: transparent;
     border: none;
 }
+
+.textarea {
+    width: -webkit-fill-available;
+
+}
+
+::-webkit-resizer {
+    display: none;
+}

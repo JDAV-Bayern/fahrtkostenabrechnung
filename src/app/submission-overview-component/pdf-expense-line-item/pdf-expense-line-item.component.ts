@@ -39,7 +39,7 @@ export class PdfExpenseLineItemComponent {
     switch (type) {
       case 'car':
         const carExpense = this.expense as ICarExpense;
-        return `${carExpense.distance}km, Mitfahrer*innen: ${carExpense.passengers.join(',')}`
+        return `${carExpense.distance}km, Mitfahrer*innen: ${carExpense.passengers.map(p => p.trim()).join(', ')}`
       case 'train':
         const trainExpense = this.expense as ITrainExpense;
         return `Ticketpreis nach Rabatt ${trainExpense.priceWithDiscount}€`;
@@ -56,11 +56,11 @@ export class PdfExpenseLineItemComponent {
   getDirection() {
     switch (this.expense.direction) {
       case 'to':
-        return 'hin';
+        return 'Hinfahrt';
       case 'from':
-        return 'heim';
+        return 'Rückfahrt';
       case 'at':
-        return 'dort';
+        return 'Vor Ort';
     }
   }
 }
