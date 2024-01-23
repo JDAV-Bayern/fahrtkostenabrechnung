@@ -23,8 +23,9 @@ import { NgxFileDropModule } from 'ngx-file-drop';
 import { PdfExpenseLineItemComponent } from './submission-overview-component/pdf-expense-line-item/pdf-expense-line-item.component';
 import { APP_BASE_HREF } from '@angular/common';
 import { PdfViewComponent } from './submission-overview-component/pdf-view/pdf-view.component';
-import { DataProtectionDialogComponent } from './personal-information-component/data-protection-dialog/data-protection-dialog.component';
+import { DataProtectionComponent } from './legal/data-protection/data-protection.component';
 import { ProgressIndicatorComponent } from './submission-overview-component/progress-indicator/progress-indicator.component';
+import { ImprintComponent } from './legal/imprint/imprint.component';
 
 @NgModule({
   declarations: [
@@ -42,8 +43,9 @@ import { ProgressIndicatorComponent } from './submission-overview-component/prog
     TrainExpenseFormComponent,
     PdfExpenseLineItemComponent,
     PdfViewComponent,
-    DataProtectionDialogComponent,
+    DataProtectionComponent,
     ProgressIndicatorComponent,
+    ImprintComponent,
   ],
   imports: [
     BrowserModule,

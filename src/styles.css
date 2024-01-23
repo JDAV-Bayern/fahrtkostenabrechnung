@@ -24,15 +24,19 @@ a:hover {
 
 .base-container {
     display: flex;
-
     flex-direction: column;
-
     min-height: 100vh;
 }
 
 .content {
     flex-grow: 1;
     display: inline;
+}
+
+.container {
+    max-width: 810px;
+    margin: 2.5rem auto;
+    padding: 0 1rem;
 }
 
 /* personal-information.component.css */
