@@ -26,6 +26,9 @@ import { PdfViewComponent } from './submission-overview-component/pdf-view/pdf-v
 import { DataProtectionComponent } from './legal/data-protection/data-protection.component';
 import { ProgressIndicatorComponent } from './submission-overview-component/progress-indicator/progress-indicator.component';
 import { ImprintComponent } from './legal/imprint/imprint.component';
+import { LogoComponent } from './icons/logo/logo.component';
+import { InstagramIconComponent } from './icons/instagram-icon/instagram-icon.component';
+import { GithubIconComponent } from './icons/github-icon/github-icon.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +49,9 @@ import { ImprintComponent } from './legal/imprint/imprint.component';
     DataProtectionComponent,
     ProgressIndicatorComponent,
     ImprintComponent,
+    LogoComponent,
+    InstagramIconComponent,
+    GithubIconComponent,
   ],
   imports: [
     BrowserModule,
