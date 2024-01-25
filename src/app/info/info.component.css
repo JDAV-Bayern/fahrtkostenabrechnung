@@ -1,0 +1,11 @@
+.breadcrumbs-container {
+    max-width: 1200px;
+    margin: 1.25rem auto;
+    padding: 0 1rem;
+}
+
+.content-container {
+    max-width: 810px;
+    margin: 1.5rem auto 2.5rem;
+    padding: 0 1rem;
+}

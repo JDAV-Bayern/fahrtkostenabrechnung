@@ -1,5 +1,5 @@
 footer {
-    background-color: #333;
+    background-color: var(--color-footer);
     color: #fff;
     flex-basis: content;
 }
