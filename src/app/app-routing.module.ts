@@ -10,7 +10,7 @@ import { InfoComponent } from './info/info.component';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: '/kurs-und-personen-infos',
+    redirectTo: 'kurs-und-personen-infos',
     pathMatch: 'full',
   },
   {
@@ -53,7 +53,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {useHash: true})],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
