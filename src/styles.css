@@ -1,10 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+    --color-primary: #007BFF;
+    --color-body: #333;
+    --color-footer: #333;
+    --bg-gray: #f4f4f4;
+}
+
 /* Apply a modern font */
 body,
 html {
     font-family: 'Helvetica Neue', sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: var(--bg-gray);
+    color: var(--color-body);
     margin: 0;
     padding: 0;
     max-width: 100vw;
@@ -14,7 +21,7 @@ html {
 /* Style links */
 a {
     text-decoration: none;
-    color: #007BFF;
+    color: var(--color-primary);
     transition: color 0.2s;
 }
 
@@ -24,9 +31,7 @@ a:hover {
 
 .base-container {
     display: flex;
-
     flex-direction: column;
-
     min-height: 100vh;
 }
 

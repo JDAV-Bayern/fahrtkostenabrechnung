@@ -1,23 +1,35 @@
 <footer>
-    <div>
+    <div class="footer-container">
         <div class="footer-content">
-            <h3>Jugend des Deutschen Alpenvereins<br>
-                Landesverband Bayern e.V.</h3>
+            <nav class="footer-nav">
+                <ul class="footer-links">
+                    <li><a href="https://jdav-bayern.de" target="_blank">Homepage</a></li>
+                    <li><a href="https://jdav-bayern.de/schulungen" target="_blank">Schulungen</a></li>
+                    <li><a routerLink="/impressum">Impressum</a></li>
+                    <li><a routerLink="/datenschutz">Datenschutz</a></li>
+                </ul>
+                <ul class="footer-icons">
+                    <li>
+                        <a href="https://instagram.com/jdavbayern" target="_blank" aria-label="Instagram">
+                            <app-instagram-icon aria-hidden="true"></app-instagram-icon>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/JDAV-Bayern/fahrtkostenabrechnung" target="_blank" aria-label="GitHub">
+                            <app-github-icon aria-hidden="true"></app-github-icon>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <a class="branding" routerLink="/">
+                <app-logo aria-hidden="true"></app-logo>
+                <h1>JDAV Bayern</h1>
+            </a>
         </div>
-        <div class="footer-content">
-            Landesgeschäftsstelle Bayern<br>
-            Preysingstr. 71<br>
-            81667 München
-        </div>
-        <div class="footer-content">
-            Telefon: 089 - 44 90 01 95<br>
-            Fax: 089 - 44 90 01 99<br>
-            E-Mail: lgs@jdav-bayern.de
-        </div>
-    </div>
-    <div class="copyright">
-        Made with &#10084;&#65039; by Joseph and Simon, feel free to &nbsp;<a
-            href="https://github.com/JDAV-Bayern/fahrtkostenabrechnung">contribute</a>.
-
+        <p class="contact-info">
+            Preysingstr. 71, 81667 München<br>
+            <a href="mailto:lgs@jdav-bayern.de">lgs@jdav-bayern.de</a><br>
+            +49 89 44900195
+        </p>
     </div>
 </footer>

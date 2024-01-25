@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReimbursementService } from '../reimbursement.service';
-import { MatDialog } from '@angular/material/dialog';
-import { DataProtectionDialogComponent } from './data-protection-dialog/data-protection-dialog.component';
 import { PlzService } from '../plz.service';
 
 @Component({
@@ -16,7 +14,6 @@ export class PersonalInformationComponentComponent {
 
   constructor(private formBuilder: FormBuilder,
     private readonly router: Router,
-    public dialog: MatDialog,
     public readonly plzService: PlzService,
     private readonly reimbursementService: ReimbursementService) {
     // Initialize the form with FormBuilder
@@ -65,12 +62,5 @@ export class PersonalInformationComponentComponent {
       this.personalInfoForm.value.zipCode,
       this.plzService.search(this.personalInfoForm.value.zipCode)[0]?.isBavaria ?? false,
     )
-  }
-
-  openDataProtectionInfoDialog() {
-    const dialogRef = this.dialog.open(DataProtectionDialogComponent, {
-      id: 'add-expense-modal',
-      width: 'min(95vw, 500px)',
-    });
   }
 }

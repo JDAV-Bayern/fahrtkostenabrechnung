@@ -23,8 +23,15 @@ import { NgxFileDropModule } from 'ngx-file-drop';
 import { PdfExpenseLineItemComponent } from './submission-overview-component/pdf-expense-line-item/pdf-expense-line-item.component';
 import { APP_BASE_HREF } from '@angular/common';
 import { PdfViewComponent } from './submission-overview-component/pdf-view/pdf-view.component';
-import { DataProtectionDialogComponent } from './personal-information-component/data-protection-dialog/data-protection-dialog.component';
+import { DataProtectionComponent } from './info/data-protection/data-protection.component';
 import { ProgressIndicatorComponent } from './submission-overview-component/progress-indicator/progress-indicator.component';
+import { ImprintComponent } from './info/imprint/imprint.component';
+import { LogoComponent } from './icons/logo/logo.component';
+import { InstagramIconComponent } from './icons/instagram-icon/instagram-icon.component';
+import { GithubIconComponent } from './icons/github-icon/github-icon.component';
+import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
+import { InfoComponent } from './info/info.component';
+import { ChevronRightIconComponent } from './icons/chevron-right-icon/chevron-right-icon.component';
 
 @NgModule({
   declarations: [
@@ -42,8 +49,15 @@ import { ProgressIndicatorComponent } from './submission-overview-component/prog
     TrainExpenseFormComponent,
     PdfExpenseLineItemComponent,
     PdfViewComponent,
-    DataProtectionDialogComponent,
+    DataProtectionComponent,
     ProgressIndicatorComponent,
+    ImprintComponent,
+    LogoComponent,
+    InstagramIconComponent,
+    GithubIconComponent,
+    BreadcrumbsComponent,
+    InfoComponent,
+    ChevronRightIconComponent,
   ],
   imports: [
     BrowserModule,
