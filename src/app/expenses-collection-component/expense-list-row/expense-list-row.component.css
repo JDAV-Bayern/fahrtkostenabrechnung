@@ -1,33 +1,33 @@
 table {
-    width: 100%;
-    border-collapse: collapse;
-    cursor: grab;
-    margin-bottom: 3px;
+  width: 100%;
+  border-collapse: collapse;
+  cursor: grab;
+  margin-bottom: 3px;
 }
 
 table * {
-    padding: 3px
+  padding: 3px;
 }
 
 .tleft {
-    width: 50%;
-    text-align: left;
+  width: 50%;
+  text-align: left;
 }
 
 .tmid {
-    width: 30%;
+  width: 30%;
 }
 
 .tright {
-    width: 20%;
-    text-align: right;
+  width: 20%;
+  text-align: right;
 }
 
 .card {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    padding: 10px;
-    margin-bottom: 10px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  margin-bottom: 10px;
 }

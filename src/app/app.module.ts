@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { DragulaModule } from 'ng2-dragula';
 
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -57,7 +56,7 @@ import { ChevronRightIconComponent } from './icons/chevron-right-icon/chevron-ri
     GithubIconComponent,
     BreadcrumbsComponent,
     InfoComponent,
-    ChevronRightIconComponent,
+    ChevronRightIconComponent
   ],
   imports: [
     BrowserModule,
@@ -68,9 +67,7 @@ import { ChevronRightIconComponent } from './icons/chevron-right-icon/chevron-ri
     MatDialogModule,
     NgxFileDropModule
   ],
-  providers: [
-    { provide: APP_BASE_HREF, useValue: '/fahrtkostenabrechnung/' }
-  ],
+  providers: [{ provide: APP_BASE_HREF, useValue: '/fahrtkostenabrechnung/' }],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}

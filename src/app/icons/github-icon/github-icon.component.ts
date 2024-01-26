@@ -4,6 +4,4 @@ import { Component } from '@angular/core';
   selector: 'app-github-icon',
   templateUrl: './github-icon.component.svg'
 })
-export class GithubIconComponent {
-
-}
+export class GithubIconComponent {}

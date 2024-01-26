@@ -1,23 +1,23 @@
 .model-content {
-    padding: 20px;
-    max-height: 90vh;
-    overflow-y: scroll;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  padding: 20px;
+  max-height: 90vh;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .means-of-travel-buttons-container {
-    display: flex;
-    justify-content: space-around;
-    flex-direction: column;
-    text-align: center;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  text-align: center;
 }
 
 .means-of-travel-buttons-container button {
-    display: inline-flex;
+  display: inline-flex;
 }
 
 .formcontainer {
-    width: 100%;
+  width: 100%;
 }

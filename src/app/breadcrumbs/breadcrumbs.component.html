@@ -3,6 +3,10 @@
     <a [routerLink]="bc.link">
       {{ bc.label }}
     </a>
-    <app-chevron-right-icon *ngIf="!last" class="breadcrumbs-level" aria-hidden="true"></app-chevron-right-icon>
+    <app-chevron-right-icon
+      *ngIf="!last"
+      class="breadcrumbs-level"
+      aria-hidden="true"
+    ></app-chevron-right-icon>
   </li>
 </ol>

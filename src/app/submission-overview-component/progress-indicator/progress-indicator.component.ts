@@ -5,6 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './progress-indicator.component.html',
   styleUrls: ['./progress-indicator.component.css']
 })
-export class ProgressIndicatorComponent {
-
-}
+export class ProgressIndicatorComponent {}

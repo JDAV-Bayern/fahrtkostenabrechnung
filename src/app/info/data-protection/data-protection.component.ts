@@ -5,6 +5,4 @@ import { Component } from '@angular/core';
   templateUrl: './data-protection.component.html',
   styleUrls: ['./data-protection.component.css']
 })
-export class DataProtectionComponent {
-
-}
+export class DataProtectionComponent {}

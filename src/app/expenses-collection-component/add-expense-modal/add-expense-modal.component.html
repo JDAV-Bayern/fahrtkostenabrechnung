@@ -1,33 +1,57 @@
 <div class="model-content">
-    <h2>Auslage erfassen - {{
-        this.direction === 'to' ? 'Hinfahrt'
-        : this.direction === 'from' ? 'Rückfahrt'
-        : 'Vor Ort'}}
-    </h2>
-    <br>
-    <div *ngIf="expense?.type === undefined" class="means-of-travel-buttons-container">
-        <button (click)="chooseCarExpense()" class="gray-button">
-            <span class="material-symbols-outlined">&#xe531;</span>&nbsp;Autofahrt</button><br>
-        <button (click)="chooseTrainExpense()" class="gray-button"><span
-                class="material-symbols-outlined">&#xe570;</span>&nbsp;Zugfahrt</button><br>
-        <button (click)="choosePlanExpense()" class="gray-button"><span
-                class="material-symbols-outlined">&#xe8f8;</span>&nbsp;Öffis Abo</button><br>
-        <button (click)="chooseBikeExpense()" class="gray-button"><span
-                class="material-symbols-outlined">&#xeb29;</span>&nbsp;Fahrrad</button>
-    </div>
+  <h2>
+    Auslage erfassen -
+    {{
+      this.direction === 'to'
+        ? 'Hinfahrt'
+        : this.direction === 'from'
+          ? 'Rückfahrt'
+          : 'Vor Ort'
+    }}
+  </h2>
+  <br />
+  <div
+    *ngIf="expense?.type === undefined"
+    class="means-of-travel-buttons-container"
+  >
+    <button (click)="chooseCarExpense()" class="gray-button">
+      <span class="material-symbols-outlined">&#xe531;</span
+      >&nbsp;Autofahrt</button
+    ><br />
+    <button (click)="chooseTrainExpense()" class="gray-button">
+      <span class="material-symbols-outlined">&#xe570;</span
+      >&nbsp;Zugfahrt</button
+    ><br />
+    <button (click)="choosePlanExpense()" class="gray-button">
+      <span class="material-symbols-outlined">&#xe8f8;</span>&nbsp;Öffis Abo</button
+    ><br />
+    <button (click)="chooseBikeExpense()" class="gray-button">
+      <span class="material-symbols-outlined">&#xeb29;</span>&nbsp;Fahrrad
+    </button>
+  </div>
 
-    <div class="formcontainer" *ngIf="expense?.type === 'car'">
-        <app-car-expense-form [direction]="this.direction" [expense]="this.expense"></app-car-expense-form>
-
-    </div>
-    <div class="formcontainer" *ngIf="expense?.type === 'train'">
-        <app-train-expense-form [direction]="this.direction" [expense]="this.expense"></app-train-expense-form>
-
-    </div>
-    <div class="formcontainer" *ngIf="expense?.type === 'plan'">
-        <app-plan-expense-form [direction]="this.direction " [expense]="this.expense"></app-plan-expense-form>
-    </div>
-    <div class="formcontainer" *ngIf="expense?.type === 'bike'">
-        <app-bike-expense-form [direction]="this.direction" [expense]="this.expense"></app-bike-expense-form>
-    </div>
+  <div class="formcontainer" *ngIf="expense?.type === 'car'">
+    <app-car-expense-form
+      [direction]="this.direction"
+      [expense]="this.expense"
+    ></app-car-expense-form>
+  </div>
+  <div class="formcontainer" *ngIf="expense?.type === 'train'">
+    <app-train-expense-form
+      [direction]="this.direction"
+      [expense]="this.expense"
+    ></app-train-expense-form>
+  </div>
+  <div class="formcontainer" *ngIf="expense?.type === 'plan'">
+    <app-plan-expense-form
+      [direction]="this.direction"
+      [expense]="this.expense"
+    ></app-plan-expense-form>
+  </div>
+  <div class="formcontainer" *ngIf="expense?.type === 'bike'">
+    <app-bike-expense-form
+      [direction]="this.direction"
+      [expense]="this.expense"
+    ></app-bike-expense-form>
+  </div>
 </div>

@@ -1,20 +1,24 @@
 import { Injectable } from '@angular/core';
-import { IExpense, getDomainObjectFromSerializedData } from 'src/domain/expense';
+import {
+  IExpense,
+  getDomainObjectFromSerializedData
+} from 'src/domain/expense';
 import { IReimbursement } from 'src/domain/reimbursement';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReimbursementService {
-
-  constructor() { }
+  constructor() {}
 
   private loadFromLocalStorage(): IReimbursement {
     const localStorageDate = localStorage.getItem('formDate');
     const formDate = localStorageDate ? new Date(localStorageDate) : new Date();
     const expenses: IExpense[] = [];
-    const expensesJson = JSON.parse(localStorage.getItem('expenses') || '[]') as string[];
-    expensesJson.forEach(expenseJson => {
+    const expensesJson = JSON.parse(
+      localStorage.getItem('expenses') || '[]'
+    ) as string[];
+    expensesJson.forEach((expenseJson) => {
       expenses.push(getDomainObjectFromSerializedData(expenseJson));
     });
     return {
@@ -25,17 +29,17 @@ export class ReimbursementService {
         city: localStorage.getItem('city') || '',
         iban: localStorage.getItem('iban') || '',
         zipCode: localStorage.getItem('zipCode') || '',
-        isBavaria: localStorage.getItem('isBavaria') === 'true',
+        isBavaria: localStorage.getItem('isBavaria') === 'true'
       },
       courseDetails: {
         id: localStorage.getItem('courseId') || '',
         courseDate: localStorage.getItem('courseDate') || '',
         courseLocation: localStorage.getItem('courseLocation') || '',
-        courseName: localStorage.getItem('courseName') || '',
+        courseName: localStorage.getItem('courseName') || ''
       },
       expenses,
       formDate,
-      note: localStorage.getItem('note') || '',
+      note: localStorage.getItem('note') || ''
     };
   }
 
@@ -48,15 +52,36 @@ export class ReimbursementService {
     localStorage.setItem('courseId', reimbursement.courseDetails.id);
     localStorage.setItem('courseName', reimbursement.courseDetails.courseName);
     localStorage.setItem('courseDate', reimbursement.courseDetails.courseDate);
-    localStorage.setItem('courseLocation', reimbursement.courseDetails.courseLocation);
+    localStorage.setItem(
+      'courseLocation',
+      reimbursement.courseDetails.courseLocation
+    );
     localStorage.setItem('formDate', reimbursement.formDate.toISOString());
-    localStorage.setItem('expenses', JSON.stringify(reimbursement.expenses.map(expense => expense.serialize())));
+    localStorage.setItem(
+      'expenses',
+      JSON.stringify(
+        reimbursement.expenses.map((expense) => expense.serialize())
+      )
+    );
     localStorage.setItem('zipCode', reimbursement.participantDetails.zipCode);
-    localStorage.setItem('isBavaria', reimbursement.participantDetails.isBavaria.toString());
+    localStorage.setItem(
+      'isBavaria',
+      reimbursement.participantDetails.isBavaria.toString()
+    );
     localStorage.setItem('note', reimbursement.note);
   }
 
-  setPersonalAndCourseInformation(name: string, street: string, city: string, course: string, courseName: string, courseDate: string, courseLocation: string, zipCode: string, isBavaria: boolean) {
+  setPersonalAndCourseInformation(
+    name: string,
+    street: string,
+    city: string,
+    course: string,
+    courseName: string,
+    courseDate: string,
+    courseLocation: string,
+    zipCode: string,
+    isBavaria: boolean
+  ) {
     const reimbursement = this.loadFromLocalStorage();
     reimbursement.participantDetails.name = name;
     reimbursement.participantDetails.street = street;

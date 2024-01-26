@@ -8,10 +8,8 @@ import { Title } from '@angular/platform-browser';
 })
 export class AppComponent {
   title = 'terf-jdav-by';
-  constructor(private readonly titleService: Title) { }
+  constructor(private readonly titleService: Title) {}
   ngOnInit() {
-    this.titleService.setTitle("Fahtkostenabrechnung JDAV Bayern");
+    this.titleService.setTitle('Fahtkostenabrechnung JDAV Bayern');
   }
-
 }
-

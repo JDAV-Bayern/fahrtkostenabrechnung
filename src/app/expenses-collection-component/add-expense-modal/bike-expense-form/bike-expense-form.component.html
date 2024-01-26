@@ -1,37 +1,73 @@
 <h1>Fahrradfahrt hinzufügen</h1>
 <div class="form-group">
-    <form [formGroup]="formGroup" (ngSubmit)="submitForm()">
-        <div class="form-group">
-            <label for="planDistance">Entfernung (km)</label>
-            <input type="text" class="form-control" formControlName="inputDistance" id="planDistance"
-                placeholder="Preis">
-            <div *ngIf="(formGroup.get('inputDistance')?.hasError('pattern'))&& formGroup.get('inputDistance')?.touched"
-                class="error-message">
-                Bitte gib einen Distanz ein.
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="name">Von</label>
-            <input type="text" id="inputFrom" formControlName="inputFrom" class="form-control" required>
-            <div *ngIf="formGroup.get('inputFrom')?.hasError('required') && formGroup.get('inputFrom')?.touched"
-                class="error-message">
-                Bitte gib einen Startort ein.
-            </div>
-        </div>
-        <div class="form-group">
-            <label for="name">Nach</label>
-            <input type="text" id="inputTo" formControlName="inputTo" class="form-control" required>
-            <div *ngIf="formGroup.get('inputTo')?.hasError('required') && formGroup.get('inputTo')?.touched"
-                class="error-message">
-                Bitte gib einen Zielort ein.
-            </div>
-        </div>
-        <br>
-        <div class="button-container">
-            <div class="right-button-container">
-                <input type="submit" [class.green-button]="formGroup.valid" [class.disabled-button]="!formGroup.valid"
-                    value="speichern" />
-            </div>
-        </div>
-    </form>
+  <form [formGroup]="formGroup" (ngSubmit)="submitForm()">
+    <div class="form-group">
+      <label for="planDistance">Entfernung (km)</label>
+      <input
+        type="text"
+        class="form-control"
+        formControlName="inputDistance"
+        id="planDistance"
+        placeholder="Preis"
+      />
+      <div
+        *ngIf="
+          formGroup.get('inputDistance')?.hasError('pattern') &&
+          formGroup.get('inputDistance')?.touched
+        "
+        class="error-message"
+      >
+        Bitte gib einen Distanz ein.
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="name">Von</label>
+      <input
+        type="text"
+        id="inputFrom"
+        formControlName="inputFrom"
+        class="form-control"
+        required
+      />
+      <div
+        *ngIf="
+          formGroup.get('inputFrom')?.hasError('required') &&
+          formGroup.get('inputFrom')?.touched
+        "
+        class="error-message"
+      >
+        Bitte gib einen Startort ein.
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="name">Nach</label>
+      <input
+        type="text"
+        id="inputTo"
+        formControlName="inputTo"
+        class="form-control"
+        required
+      />
+      <div
+        *ngIf="
+          formGroup.get('inputTo')?.hasError('required') &&
+          formGroup.get('inputTo')?.touched
+        "
+        class="error-message"
+      >
+        Bitte gib einen Zielort ein.
+      </div>
+    </div>
+    <br />
+    <div class="button-container">
+      <div class="right-button-container">
+        <input
+          type="submit"
+          [class.green-button]="formGroup.valid"
+          [class.disabled-button]="!formGroup.valid"
+          value="speichern"
+        />
+      </div>
+    </div>
+  </form>
 </div>

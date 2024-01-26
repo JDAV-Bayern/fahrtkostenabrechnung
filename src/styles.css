@@ -1,335 +1,340 @@
 /* You can add global styles to this file, and also import other style files */
 :root {
-    --color-primary: #007BFF;
-    --color-body: #333;
-    --color-footer: #333;
-    --bg-gray: #f4f4f4;
+  --color-primary: #007bff;
+  --color-body: #333;
+  --color-footer: #333;
+  --bg-gray: #f4f4f4;
 }
 
 /* Apply a modern font */
 body,
 html {
-    font-family: 'Helvetica Neue', sans-serif;
-    background-color: var(--bg-gray);
-    color: var(--color-body);
-    margin: 0;
-    padding: 0;
-    max-width: 100vw;
-    overflow-x: hidden;
+  font-family: 'Helvetica Neue', sans-serif;
+  background-color: var(--bg-gray);
+  color: var(--color-body);
+  margin: 0;
+  padding: 0;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
 /* Style links */
 a {
-    text-decoration: none;
-    color: var(--color-primary);
-    transition: color 0.2s;
+  text-decoration: none;
+  color: var(--color-primary);
+  transition: color 0.2s;
 }
 
 a:hover {
-    color: #0056b3;
+  color: #0056b3;
 }
 
 .base-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .content {
-    flex-grow: 1;
-    display: inline;
+  flex-grow: 1;
+  display: inline;
 }
 
 /* personal-information.component.css */
 
 /* Center the content vertically and horizontally */
 .step-content {
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 20px;
-    max-width: min(95vw, 600px);
-    min-width: 50%;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+  max-width: min(95vw, 600px);
+  min-width: 50%;
 }
 
 /* Create a box around the content */
 .step-box {
-    overflow: auto;
-    background-color: #fff;
-    /* Background color for the box */
-    border: 1px solid #ccc;
-    /* Border for the box */
-    padding-left: 10px;
-    padding-top: 0px;
-    padding-bottom: 20px;
-    padding-right: 10px;
-    /* Spacing inside the box */
-    border-radius: 5px;
-    /* Rounded corners for the box */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  overflow: auto;
+  background-color: #fff;
+  /* Background color for the box */
+  border: 1px solid #ccc;
+  /* Border for the box */
+  padding-left: 10px;
+  padding-top: 0px;
+  padding-bottom: 20px;
+  padding-right: 10px;
+  /* Spacing inside the box */
+  border-radius: 5px;
+  /* Rounded corners for the box */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .button-container {
-    display: flex;
-    margin-top: 20px;
-    /* Apply styles to your positive action button */
-    justify-content: space-between;
+  display: flex;
+  margin-top: 20px;
+  /* Apply styles to your positive action button */
+  justify-content: space-between;
 }
 
 .left-button-container {
-    text-align: left;
-    flex: 1;
-    margin-right: auto;
+  text-align: left;
+  flex: 1;
+  margin-right: auto;
 }
 
 .right-button-container {
-    text-align: right;
-    flex: 1;
-    margin-left: auto;
+  text-align: right;
+  flex: 1;
+  margin-left: auto;
 }
 
 .green-button {
-    background-color: #4CAF50;
-    /* Green background color */
-    color: #fff;
-    /* White text color */
-    padding: 10px 20px;
-    /* Padding inside the button */
-    border: none;
-    /* No border */
-    border-radius: 5px;
-    /* Rounded corners */
-    cursor: pointer;
-    /* Change the cursor to a pointer on hover */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    /* Shadow on hover */
-    transition: background-color 0.3s, box-shadow 0.3s;
-    /* Smooth transitions */
+  background-color: #4caf50;
+  /* Green background color */
+  color: #fff;
+  /* White text color */
+  padding: 10px 20px;
+  /* Padding inside the button */
+  border: none;
+  /* No border */
+  border-radius: 5px;
+  /* Rounded corners */
+  cursor: pointer;
+  /* Change the cursor to a pointer on hover */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* Shadow on hover */
+  transition:
+    background-color 0.3s,
+    box-shadow 0.3s;
+  /* Smooth transitions */
 
-    /* Hover effect */
-    &:hover {
-        background-color: #45A049;
-        /* Slightly darker green on hover */
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        /* Increased shadow on hover */
-    }
+  /* Hover effect */
+  &:hover {
+    background-color: #45a049;
+    /* Slightly darker green on hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    /* Increased shadow on hover */
+  }
 }
 
 .mar {
-    margin: 10px;
+  margin: 10px;
 }
 
 .gray-button {
-    align-items: center;
-    background-color: #e3e3e3;
-    /* Green background color */
-    color: #171717;
-    /* White text color */
-    padding: 10px 20px;
-    /* Padding inside the button */
-    border: none;
-    /* No border */
-    border-radius: 5px;
-    /* Rounded corners */
-    cursor: pointer;
-    /* Change the cursor to a pointer on hover */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    /* Shadow on hover */
-    transition: background-color 0.3s, box-shadow 0.3s;
-    /* Smooth transitions */
+  align-items: center;
+  background-color: #e3e3e3;
+  /* Green background color */
+  color: #171717;
+  /* White text color */
+  padding: 10px 20px;
+  /* Padding inside the button */
+  border: none;
+  /* No border */
+  border-radius: 5px;
+  /* Rounded corners */
+  cursor: pointer;
+  /* Change the cursor to a pointer on hover */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  /* Shadow on hover */
+  transition:
+    background-color 0.3s,
+    box-shadow 0.3s;
+  /* Smooth transitions */
 
-    /* Hover effect */
-    &:hover {
-        background-color: #d8d8d8;
-        /* Slightly darker green on hover */
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-        /* Increased shadow on hover */
-    }
+  /* Hover effect */
+  &:hover {
+    background-color: #d8d8d8;
+    /* Slightly darker green on hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    /* Increased shadow on hover */
+  }
 }
 
 /* CSS class for a disabled button */
 .disabled-button {
-    background-color: #ccc;
-    /* Light gray background color for disabled state */
-    color: #fff;
-    /* White text color */
-    padding: 10px 20px;
-    /* Padding inside the button */
-    border: none;
-    /* No border */
-    border-radius: 5px;
-    /* Rounded corners */
-    cursor: not-allowed;
-    /* Disabled cursor style */
-    box-shadow: none;
-    /* No shadow for disabled state */
+  background-color: #ccc;
+  /* Light gray background color for disabled state */
+  color: #fff;
+  /* White text color */
+  padding: 10px 20px;
+  /* Padding inside the button */
+  border: none;
+  /* No border */
+  border-radius: 5px;
+  /* Rounded corners */
+  cursor: not-allowed;
+  /* Disabled cursor style */
+  box-shadow: none;
+  /* No shadow for disabled state */
 }
 
 /* Style form labels */
 .form-group label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-    margin-top: 20px;
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  margin-top: 20px;
 }
 
 /* Style form inputs */
 .form-control {
-    padding: 10px;
-    margin-bottom: 3px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 3px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 input.form-control {
-    width: -webkit-fill-available;
+  width: -webkit-fill-available;
 }
 
 /* Add this to your component's CSS */
 .error-message {
-    color: #ff0000;
-    /* Red color for error messages */
-    font-size: 12px;
-    /* Adjust font size as needed */
-    margin-top: 5px;
-    margin-bottom: 20px;
+  color: #ff0000;
+  /* Red color for error messages */
+  font-size: 12px;
+  /* Adjust font size as needed */
+  margin-top: 5px;
+  margin-bottom: 20px;
 }
 
 /* Add more global styles as needed */
 .light-theme-dialog {
-    background-color: #FFFFFF;
-    /* Set the background color to white or your desired light theme color */
-    color: #000;
-    /* Set text color to a dark color for good readability */
+  background-color: #ffffff;
+  /* Set the background color to white or your desired light theme color */
+  color: #000;
+  /* Set text color to a dark color for good readability */
 }
 
 @font-face {
-    font-family: 'Material Icons';
-    font-style: normal;
-    font-weight: 400;
-    src: local('Material Icons'),
-        local('MaterialIcons-Regular'),
-        url(assets/mat.woff2) format('woff2'),
-        url(assets/mat.ttf) format('truetype'),
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src:
+    local('Material Icons'),
+    local('MaterialIcons-Regular'),
+    url(assets/mat.woff2) format('woff2'),
+    url(assets/mat.ttf) format('truetype');
 }
 
 .material-symbols-outlined {
-    font-family: 'Material Icons';
-    font-weight: normal;
-    font-style: normal;
-    font-size: 24px;
-    /* Preferred icon size */
-    display: inline-block;
-    line-height: 1;
-    text-transform: none;
-    letter-spacing: normal;
-    word-wrap: normal;
-    white-space: nowrap;
-    direction: ltr;
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
 }
 
 /* Reset default styles */
 select {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background: transparent;
-    border: none;
-    outline: none;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    cursor: pointer;
-    background-color: #fff;
-    /* Background color for the select box */
-    color: #333;
-    /* Text color */
-    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%23333'><polygon points='5,5 15,5 10,12'/></svg>") no-repeat right center;
-    background-size: 20px 20px;
-    /* Adjust the size of the icon */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  cursor: pointer;
+  background-color: #fff;
+  /* Background color for the select box */
+  color: #333;
+  /* Text color */
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%23333'><polygon points='5,5 15,5 10,12'/></svg>")
+    no-repeat right center;
+  background-size: 20px 20px;
+  /* Adjust the size of the icon */
 }
 
 /* Custom dropdown arrow */
 select::after {
-    content: "\25BC";
-    /* Downward arrow character */
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    color: #555;
-    /* Arrow color */
+  content: '\25BC';
+  /* Downward arrow character */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  color: #555;
+  /* Arrow color */
 }
 
 /* Hover effect */
 select:hover {
-    border-color: #999;
-    /* Border color on hover */
+  border-color: #999;
+  /* Border color on hover */
 }
 
 /* Focus effect */
 select:focus {
-    border-color: #007BFF;
-    /* Border color on focus */
+  border-color: #007bff;
+  /* Border color on focus */
 }
 
 /* Disabled style */
 select:disabled {
-    background-color: #f4f4f4;
-    /* Disabled background color */
-    color: #999;
-    /* Disabled text color */
-    cursor: not-allowed;
+  background-color: #f4f4f4;
+  /* Disabled background color */
+  color: #999;
+  /* Disabled text color */
+  cursor: not-allowed;
 }
 
 /* Optional: Style for option elements */
 select option {
-    background-color: #fff;
-    /* Background color for options */
-    color: #333;
-    /* Text color for options */
+  background-color: #fff;
+  /* Background color for options */
+  color: #333;
+  /* Text color for options */
 }
 
 /* Optional: Hover effect for option elements */
 select option:hover {
-    background-color: #007BFF;
-    /* Background color on hover */
-    color: #fff;
-    /* Text color on hover */
+  background-color: #007bff;
+  /* Background color on hover */
+  color: #fff;
+  /* Text color on hover */
 }
-
 
 /* FOR DRAGULA */
 /* in-flight clone */
 .gu-mirror {
-    position: fixed !important;
-    margin: 0 !important;
-    z-index: 9999 !important;
-    opacity: 0.8;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
-    filter: alpha(opacity=80);
-    pointer-events: none;
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8;
+  -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=80)';
+  filter: alpha(opacity=80);
+  pointer-events: none;
 }
 
 /* high-performance display:none; helper */
 .gu-hide {
-    left: -9999px !important;
+  left: -9999px !important;
 }
 
 /* added to mirrorContainer (default = body) while dragging */
 .gu-unselectable {
-    -webkit-user-select: none !important;
-    -moz-user-select: none !important;
-    -ms-user-select: none !important;
-    user-select: none !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
 }
 
 /* added to the source element while its mirror is dragged */
 .gu-transit {
-    opacity: 0.2;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
-    filter: alpha(opacity=20);
+  opacity: 0.2;
+  -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=20)';
+  filter: alpha(opacity=20);
 }

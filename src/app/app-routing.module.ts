@@ -11,7 +11,7 @@ const routes: Routes = [
   {
     path: '',
     redirectTo: 'kurs-und-personen-infos',
-    pathMatch: 'full',
+    pathMatch: 'full'
   },
   {
     path: '',
@@ -22,14 +22,14 @@ const routes: Routes = [
         path: 'impressum',
         title: 'Impressum',
         component: ImprintComponent,
-        data: { breadcrumb: 'Impressum' },
+        data: { breadcrumb: 'Impressum' }
       },
       {
         path: 'datenschutz',
         title: 'Datenschutzerklärung',
         component: DataProtectionComponent,
-        data: { breadcrumb: 'Datenschutz' },
-      },
+        data: { breadcrumb: 'Datenschutz' }
+      }
     ]
   },
   {
@@ -47,13 +47,13 @@ const routes: Routes = [
       {
         path: 'zusammenfassen-und-abschicken',
         component: SubmissionOverviewComponentComponent
-      },
+      }
     ]
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, {useHash: true})],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

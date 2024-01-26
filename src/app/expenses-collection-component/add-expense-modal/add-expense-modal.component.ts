@@ -1,5 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { CarExpense, ExpenseType, IExpense, IPublicTransportPlanExpense, TrainExpense } from '../../../domain/expense'
+import {
+  CarExpense,
+  ExpenseType,
+  IExpense,
+  IPublicTransportPlanExpense,
+  TrainExpense
+} from '../../../domain/expense';
 
 @Component({
   selector: 'app-add-expense-modal',
@@ -8,7 +14,7 @@ import { CarExpense, ExpenseType, IExpense, IPublicTransportPlanExpense, TrainEx
 })
 export class AddExpenseModalComponent {
   @Input({ required: true })
-  direction!: 'from' | 'to' | 'at'
+  direction!: 'from' | 'to' | 'at';
 
   @Input({ required: true })
   expense!: IExpense;
@@ -19,8 +25,7 @@ export class AddExpenseModalComponent {
     }
   }
 
-  constructor() {
-  }
+  constructor() {}
   chooseCarExpense() {
     this.expense.type = 'car';
   }
