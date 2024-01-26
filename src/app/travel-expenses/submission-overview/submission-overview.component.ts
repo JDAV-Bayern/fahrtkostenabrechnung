@@ -5,16 +5,15 @@ import jsPDF from 'jspdf';
 import * as imageprocessor from 'ts-image-processor';
 import { validateIBAN } from 'ngx-iban-validator';
 import { IReimbursement } from 'src/domain/reimbursement';
-import { ReimbursementService } from '../reimbursement.service';
+import { ReimbursementService } from 'src/app/reimbursement.service';
 import { NgxFileDropEntry } from 'ngx-file-drop';
 import { PDFDocument } from 'pdf-lib';
-import { logoBase64 } from 'src/assets/logoBase64';
-import { ReimbursementValidationService } from '../reimbursement.validation.service';
+import { ReimbursementValidationService } from 'src/app/reimbursement.validation.service';
 
 @Component({
-  selector: 'app-submission-overview-component',
-  templateUrl: './submission-overview-component.component.html',
-  styleUrls: ['./submission-overview-component.component.css']
+  selector: 'app-submission-overview',
+  templateUrl: './submission-overview.component.html',
+  styleUrls: ['./submission-overview.component.css']
 })
 export class SubmissionOverviewComponentComponent {
   formGroup: FormGroup;

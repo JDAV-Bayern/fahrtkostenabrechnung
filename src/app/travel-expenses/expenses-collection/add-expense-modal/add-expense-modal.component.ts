@@ -1,11 +1,5 @@
 import { Component, Input } from '@angular/core';
-import {
-  CarExpense,
-  ExpenseType,
-  IExpense,
-  IPublicTransportPlanExpense,
-  TrainExpense
-} from '../../../domain/expense';
+import { IExpense } from 'src/domain/expense';
 
 @Component({
   selector: 'app-add-expense-modal',

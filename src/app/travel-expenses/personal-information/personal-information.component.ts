@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ReimbursementService } from '../reimbursement.service';
-import { PlzService } from '../plz.service';
+import { ReimbursementService } from 'src/app/reimbursement.service';
+import { PlzService } from 'src/app/plz.service';
 
 @Component({
-  selector: 'app-personal-information-component',
-  templateUrl: './personal-information-component.component.html',
-  styleUrls: ['./personal-information-component.component.css']
+  selector: 'app-personal-information',
+  templateUrl: './personal-information.component.html',
+  styleUrls: ['./personal-information.component.css']
 })
 export class PersonalInformationComponentComponent {
   personalInfoForm: FormGroup;

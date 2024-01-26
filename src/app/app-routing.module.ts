@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PersonalInformationComponentComponent } from './personal-information-component/personal-information-component.component';
-import { SubmissionOverviewComponentComponent } from './submission-overview-component/submission-overview-component.component';
-import { ExpensesCollectionComponentComponent } from './expenses-collection-component/expenses-collection-component.component';
+import { PersonalInformationComponentComponent } from './travel-expenses/personal-information/personal-information.component';
+import { SubmissionOverviewComponentComponent } from './travel-expenses/submission-overview/submission-overview.component';
+import { ExpensesCollectionComponentComponent } from './travel-expenses/expenses-collection/expenses-collection.component';
 import { ImprintComponent } from './info/imprint/imprint.component';
 import { DataProtectionComponent } from './info/data-protection/data-protection.component';
 import { InfoComponent } from './info/info.component';
+import { TravelExpensesComponent } from './travel-expenses/travel-expenses.component';
 
 const routes: Routes = [
   {
@@ -28,13 +29,14 @@ const routes: Routes = [
         path: 'datenschutz',
         title: 'Datenschutzerklärung',
         component: DataProtectionComponent,
-        data: { breadcrumb: 'Datenschutz' }
+        data: { breadcrumb: 'Datenschutzerklärung' }
       }
     ]
   },
   {
     path: '',
     title: 'Fahrtkostenabrechnung JDAV Bayern',
+    component: TravelExpensesComponent,
     children: [
       {
         path: 'kurs-und-personen-infos',
