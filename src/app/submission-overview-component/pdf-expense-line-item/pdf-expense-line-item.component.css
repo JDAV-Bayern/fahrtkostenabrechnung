@@ -1,39 +1,38 @@
 table {
-    width: 100%;
-    background-color: transparent;
-    margin: 0;
-    padding: 0;
-    border-collapse: collapse;
-    border: 0px;
+  width: 100%;
+  background-color: transparent;
+  margin: 0;
+  padding: 0;
+  border-collapse: collapse;
+  border: 0px;
 }
 
 .line-wrapper {
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
 }
 
-
 .index {
-    font-size: 6pt;
-    font-weight: bold;
-    text-align: center;
-    width: 20px;
+  font-size: 6pt;
+  font-weight: bold;
+  text-align: center;
+  width: 20px;
 }
 
 .direction {
-    font-size: 5pt;
-    text-align: center;
-    width: 20px;
+  font-size: 5pt;
+  text-align: center;
+  width: 20px;
 }
 
 .location {
-    width: 155px
+  width: 155px;
 }
 
 .details {
-    font-size: 5pt;
+  font-size: 5pt;
 }
 
 .amount {
-    width: 20px;
+  width: 20px;
 }

@@ -1,42 +1,42 @@
 <div class="line-wrapper">
-    <table>
-        <tr>
-            <td>
-                <table style="width:20px">
-                    <tr>
-                        <th class="index">{{index + 1}}</th>
-                    </tr>
-                    <tr>
-                        <td class="direction">
-                            {{getDirection()}}
-                        </td>
-                    </tr>
-                </table>
+  <table>
+    <tr>
+      <td>
+        <table style="width: 20px">
+          <tr>
+            <th class="index">{{ index + 1 }}</th>
+          </tr>
+          <tr>
+            <td class="direction">
+              {{ getDirection() }}
             </td>
-            <td style="vertical-align: bottom;width: 445px;">
-                <table>
-                    <tr>
-                        <td class="location">
-                            <b>{{expense.startLocation}}</b> nach
-                        </td>
-                        <th class="title">
-                            {{getTitle()}}
-                        </th>
-                        <td class="amount">
-                            {{expense.totalReimbursement().toFixed(2)}}€
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="location">
-                            <b>{{expense.endLocation}}</b>
-                        </td>
-                        <td colspan="2" class="details">
-                            {{getDetails()}}
-                        </td>
-                    </tr>
-                </table>
+          </tr>
+        </table>
+      </td>
+      <td style="vertical-align: bottom; width: 445px">
+        <table>
+          <tr>
+            <td class="location">
+              <b>{{ expense.startLocation }}</b> nach
             </td>
-        </tr>
-    </table>
+            <th class="title">
+              {{ getTitle() }}
+            </th>
+            <td class="amount">
+              {{ expense.totalReimbursement().toFixed(2) }}€
+            </td>
+          </tr>
+          <tr>
+            <td class="location">
+              <b>{{ expense.endLocation }}</b>
+            </td>
+            <td colspan="2" class="details">
+              {{ getDetails() }}
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
 </div>
-<hr>
+<hr />

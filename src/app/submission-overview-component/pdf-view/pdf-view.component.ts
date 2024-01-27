@@ -7,15 +7,12 @@ import { IReimbursement } from 'src/domain/reimbursement';
   templateUrl: './pdf-view.component.html',
   styleUrls: ['./pdf-view.component.css']
 })
-
 export class PdfViewComponent {
-
   @Input({ required: true })
   reimbursement!: IReimbursement;
 
   @Output()
   fullyRendered = new EventEmitter<void>();
-
 
   ngAfterViewInit() {
     this.fullyRendered.emit();
@@ -38,7 +35,10 @@ export class PdfViewComponent {
     return this.reimbursement;
   }
   getSum() {
-    const expensesSum = this.r()?.expenses.reduce((sum, expense) => sum + expense.totalReimbursement(), 0);
+    const expensesSum = this.r()?.expenses.reduce(
+      (sum, expense) => sum + expense.totalReimbursement(),
+      0
+    );
     if (!this.reimbursement.participantDetails.isBavaria && expensesSum > 75) {
       return `(${expensesSum.toFixed(2)}) -> 75.00`;
     }

@@ -12,21 +12,29 @@ import { PlzService } from '../plz.service';
 export class PersonalInformationComponentComponent {
   personalInfoForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder,
+  constructor(
+    private formBuilder: FormBuilder,
     private readonly router: Router,
     public readonly plzService: PlzService,
-    private readonly reimbursementService: ReimbursementService) {
+    private readonly reimbursementService: ReimbursementService
+  ) {
     // Initialize the form with FormBuilder
-    const reimbursement = this.reimbursementService.getReimbursment()
+    const reimbursement = this.reimbursementService.getReimbursment();
     this.personalInfoForm = this.formBuilder.group({
       name: [reimbursement.participantDetails.name, Validators.required],
       street: [reimbursement.participantDetails.street, Validators.required],
       city: [reimbursement.participantDetails.city, Validators.required],
-      zipCode: [reimbursement.participantDetails.zipCode, [Validators.required, Validators.pattern(/^[0-9][0-9][0-9][0-9][0-9]$/)]],
+      zipCode: [
+        reimbursement.participantDetails.zipCode,
+        [Validators.required, Validators.pattern(/^[0-9][0-9][0-9][0-9][0-9]$/)]
+      ],
       course: [reimbursement.courseDetails.id, Validators.required],
       courseName: [reimbursement.courseDetails.courseName, Validators.required],
       courseDate: [reimbursement.courseDetails.courseDate, Validators.required],
-      courseLocation: [reimbursement.courseDetails.courseLocation, Validators.required],
+      courseLocation: [
+        reimbursement.courseDetails.courseLocation,
+        Validators.required
+      ]
     });
   }
 
@@ -60,7 +68,8 @@ export class PersonalInformationComponentComponent {
       this.personalInfoForm.value.courseDate,
       this.personalInfoForm.value.courseLocation,
       this.personalInfoForm.value.zipCode,
-      this.plzService.search(this.personalInfoForm.value.zipCode)[0]?.isBavaria ?? false,
-    )
+      this.plzService.search(this.personalInfoForm.value.zipCode)[0]
+        ?.isBavaria ?? false
+    );
   }
 }

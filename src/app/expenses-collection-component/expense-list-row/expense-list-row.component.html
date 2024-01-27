@@ -1,19 +1,33 @@
 <div class="card">
-    <table>
-        <tr>
-            <td class="tleft">von <b>{{this.expense.startLocation}}</b></td>
-            <td class="tmid">{{this.getTitle()}}</td>
-            <th class="tright">{{this.expense.totalReimbursement().toFixed(2)}}€</th>
-        </tr>
-        <tr>
-            <td class="tleft">nach <b>{{this.expense.endLocation}}</b></td>
-            <td class="tmid">{{this.getDetails()}}</td>
-            <td class="tright">
-                <span style="cursor: pointer;" (click)="editMe()" class="
-                    material-symbols-outlined">&#xe3c9;</span>
-                <span style="cursor: pointer;" (click)="deleteMe()" class="
-                    material-symbols-outlined">&#xe872;</span>
-            </td>
-        </tr>
-    </table>
+  <table>
+    <tr>
+      <td class="tleft">
+        von <b>{{ this.expense.startLocation }}</b>
+      </td>
+      <td class="tmid">{{ this.getTitle() }}</td>
+      <th class="tright">
+        {{ this.expense.totalReimbursement().toFixed(2) }}€
+      </th>
+    </tr>
+    <tr>
+      <td class="tleft">
+        nach <b>{{ this.expense.endLocation }}</b>
+      </td>
+      <td class="tmid">{{ this.getDetails() }}</td>
+      <td class="tright">
+        <span
+          style="cursor: pointer"
+          (click)="editMe()"
+          class="material-symbols-outlined"
+          >&#xe3c9;</span
+        >
+        <span
+          style="cursor: pointer"
+          (click)="deleteMe()"
+          class="material-symbols-outlined"
+          >&#xe872;</span
+        >
+      </td>
+    </tr>
+  </table>
 </div>

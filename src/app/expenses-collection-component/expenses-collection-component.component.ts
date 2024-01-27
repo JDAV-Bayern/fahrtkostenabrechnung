@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Direction, ICarExpense, IExpense, mapTripToReturn, mockCarExpense } from 'src/domain/expense';
+import {
+  Direction,
+  ICarExpense,
+  IExpense,
+  mapTripToReturn,
+  mockCarExpense
+} from 'src/domain/expense';
 import { ReimbursementService } from '../reimbursement.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddExpenseModalComponent } from './add-expense-modal/add-expense-modal.component';
@@ -17,13 +23,16 @@ export class ExpensesCollectionComponentComponent {
   constructor(
     private readonly router: Router,
     public dialog: MatDialog,
-    private readonly reimbursementService: ReimbursementService) {
-    reimbursementService.getReimbursment().expenses.forEach(expense => this.addExpense(expense));
+    private readonly reimbursementService: ReimbursementService
+  ) {
+    reimbursementService
+      .getReimbursment()
+      .expenses.forEach(expense => this.addExpense(expense));
   }
   openAddExpenseDialog(direction: 'to' | 'from' | 'at') {
     const dialogRef = this.dialog.open(AddExpenseModalComponent, {
       id: 'add-expense-modal',
-      width: 'min(95vw, 700px)',
+      width: 'min(95vw, 700px)'
     });
 
     const lastExpense = this.getLastExpense(direction);
@@ -31,7 +40,10 @@ export class ExpensesCollectionComponentComponent {
     const carType = this.getCarType();
 
     dialogRef.componentInstance.direction = direction;
-    dialogRef.componentInstance.expense = { startLocation, ...(carType ? { carType } : {}) } as IExpense;
+    dialogRef.componentInstance.expense = {
+      startLocation,
+      ...(carType ? { carType } : {})
+    } as IExpense;
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -41,7 +53,9 @@ export class ExpensesCollectionComponentComponent {
     });
   }
   getCarType() {
-    return (this.getAllExpenses().find(expense => 'carType' in expense) as ICarExpense)?.carType;
+    return (
+      this.getAllExpenses().find(expense => 'carType' in expense) as ICarExpense
+    )?.carType;
   }
   getLastExpense(direction: 'to' | 'from' | 'at') {
     const lastToExpense = this.expensesTo[this.expensesTo.length - 1];
@@ -72,13 +86,17 @@ export class ExpensesCollectionComponentComponent {
     }
   }
   editRow(expenseId: number) {
-    const expense = [...this.expensesTo, ...this.expensesAt, ...this.expensesFrom].find(expense => expense.id === expenseId);
+    const expense = [
+      ...this.expensesTo,
+      ...this.expensesAt,
+      ...this.expensesFrom
+    ].find(expense => expense.id === expenseId);
     if (!expense) {
       return;
     }
     const dialogRef = this.dialog.open(AddExpenseModalComponent, {
       id: 'add-expense-modal',
-      width: '80%',
+      width: '80%'
     });
     dialogRef.componentInstance.direction = expense.direction;
     dialogRef.componentInstance.expense = expense;
@@ -92,13 +110,27 @@ export class ExpensesCollectionComponentComponent {
     });
   }
   getSum() {
-    const reduceSumTotalReimbursement = (list: IExpense[]) => list.reduce((sum: number, expense: IExpense) => sum + expense.totalReimbursement(), 0);
-    return reduceSumTotalReimbursement(this.expensesFrom) + reduceSumTotalReimbursement(this.expensesAt) + reduceSumTotalReimbursement(this.expensesTo);
+    const reduceSumTotalReimbursement = (list: IExpense[]) =>
+      list.reduce(
+        (sum: number, expense: IExpense) => sum + expense.totalReimbursement(),
+        0
+      );
+    return (
+      reduceSumTotalReimbursement(this.expensesFrom) +
+      reduceSumTotalReimbursement(this.expensesAt) +
+      reduceSumTotalReimbursement(this.expensesTo)
+    );
   }
   deleteRow(expenseId: number) {
-    this.expensesTo = this.expensesTo.filter(expense => expense.id !== expenseId);
-    this.expensesFrom = this.expensesFrom.filter(expense => expense.id !== expenseId);
-    this.expensesAt = this.expensesAt.filter(expense => expense.id !== expenseId);
+    this.expensesTo = this.expensesTo.filter(
+      expense => expense.id !== expenseId
+    );
+    this.expensesFrom = this.expensesFrom.filter(
+      expense => expense.id !== expenseId
+    );
+    this.expensesAt = this.expensesAt.filter(
+      expense => expense.id !== expenseId
+    );
     this.storeExpenses();
   }
   continue() {

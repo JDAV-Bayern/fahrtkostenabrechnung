@@ -1,61 +1,123 @@
 <h1>Autofahrt hinzufügen</h1>
 <div class="form-group">
-    <form [formGroup]="formGroup" (ngSubmit)="submitForm()">
-        <div class="form-group">
-            <label for="planDistance">Strecke (km)</label>
-            <input type="text" class="form-control" formControlName="inputDistance" id="planDistance"
-                placeholder="Strecke in Kilometern">
-            <div *ngIf="(formGroup.get('inputDistance')?.hasError('pattern'))&& formGroup.get('inputDistance')?.touched"
-                class="error-message">
-                Bitte gib einen Distanz ein.
-            </div>
-        </div>
-        <div class="form-group">
-            <label>Von</label>
-            <input type="text" id="inputFrom" formControlName="inputFrom" class="form-control" required>
-            <div *ngIf="formGroup.get('inputFrom')?.hasError('required') && formGroup.get('inputFrom')?.touched"
-                class="error-message">
-                Bitte gib einen Startort ein.
-            </div>
-        </div>
-        <div class="form-group">
-            <label>Nach</label>
-            <input type="text" id="inputTo" formControlName="inputTo" class="form-control" required>
-            <div *ngIf="formGroup.get('inputTo')?.hasError('required') && formGroup.get('inputTo')?.touched"
-                class="error-message">
-                Bitte gib einen Zielort ein.
-            </div>
-        </div>
-        <div class="form-group">
-            <label>Auto Typ</label>
-            <select id="carType" formControlName="carType" class="form-control" required>
-                <option value="combustion">Verbrenner</option>
-                <option value="plug-in-hybrid">Plug-in Hybrid</option>
-                <option value="electric">Elektro</option>
-            </select>
-            <div *ngIf="formGroup.get('carType')?.hasError('required') && formGroup.get('carType')?.touched"
-                class="error-message">
-                Bitte gib den Typ deines Autos ein.
-            </div>
-        </div>
-        <div class="form-group">
-            <label>Mitfahrer*innen</label>
-            <p>Bitte gib die Namen der Mitfahrer*innen an. Z.B. "Kathi, Julia Fendt, Peter Zimmermann", oder lass das
-                Feld leer, wenn Du alleine gefahren bist.</p>
-            <p><b>Achtung:</b> Bist Du Teile der Strecke mit unterschiedlicher Anzahl an Mitfahrer*innen gefahren?
-                Dann gib bitte jede Teilstrecke als einzelne Auslage an. </p>
-            <input type="text" id="passengers" formControlName="passengers" class="form-control">
-            <div *ngIf="formGroup.get('passengers')?.hasError('pattern') && formGroup.get('passengers')?.touched"
-                class="error-message">
-                Bitte gib die Namen der Mitfahrer*innen ein.
-            </div>
-        </div>
-        <br>
-        <div class="button-container">
-            <div class="right-button-container">
-                <input type="submit" [class.green-button]="formGroup.valid" [class.disabled-button]="!formGroup.valid"
-                    value="speichern" />
-            </div>
-        </div>
-    </form>
+  <form [formGroup]="formGroup" (ngSubmit)="submitForm()">
+    <div class="form-group">
+      <label for="planDistance">Strecke (km)</label>
+      <input
+        type="text"
+        class="form-control"
+        formControlName="inputDistance"
+        id="planDistance"
+        placeholder="Strecke in Kilometern"
+      />
+      <div
+        *ngIf="
+          formGroup.get('inputDistance')?.hasError('pattern') &&
+          formGroup.get('inputDistance')?.touched
+        "
+        class="error-message"
+      >
+        Bitte gib einen Distanz ein.
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Von</label>
+      <input
+        type="text"
+        id="inputFrom"
+        formControlName="inputFrom"
+        class="form-control"
+        required
+      />
+      <div
+        *ngIf="
+          formGroup.get('inputFrom')?.hasError('required') &&
+          formGroup.get('inputFrom')?.touched
+        "
+        class="error-message"
+      >
+        Bitte gib einen Startort ein.
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Nach</label>
+      <input
+        type="text"
+        id="inputTo"
+        formControlName="inputTo"
+        class="form-control"
+        required
+      />
+      <div
+        *ngIf="
+          formGroup.get('inputTo')?.hasError('required') &&
+          formGroup.get('inputTo')?.touched
+        "
+        class="error-message"
+      >
+        Bitte gib einen Zielort ein.
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Auto Typ</label>
+      <select
+        id="carType"
+        formControlName="carType"
+        class="form-control"
+        required
+      >
+        <option value="combustion">Verbrenner</option>
+        <option value="plug-in-hybrid">Plug-in Hybrid</option>
+        <option value="electric">Elektro</option>
+      </select>
+      <div
+        *ngIf="
+          formGroup.get('carType')?.hasError('required') &&
+          formGroup.get('carType')?.touched
+        "
+        class="error-message"
+      >
+        Bitte gib den Typ deines Autos ein.
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Mitfahrer*innen</label>
+      <p>
+        Bitte gib die Namen der Mitfahrer*innen an. Z.B. "Kathi, Julia Fendt,
+        Peter Zimmermann", oder lass das Feld leer, wenn Du alleine gefahren
+        bist.
+      </p>
+      <p>
+        <b>Achtung:</b> Bist Du Teile der Strecke mit unterschiedlicher Anzahl
+        an Mitfahrer*innen gefahren? Dann gib bitte jede Teilstrecke als
+        einzelne Auslage an.
+      </p>
+      <input
+        type="text"
+        id="passengers"
+        formControlName="passengers"
+        class="form-control"
+      />
+      <div
+        *ngIf="
+          formGroup.get('passengers')?.hasError('pattern') &&
+          formGroup.get('passengers')?.touched
+        "
+        class="error-message"
+      >
+        Bitte gib die Namen der Mitfahrer*innen ein.
+      </div>
+    </div>
+    <br />
+    <div class="button-container">
+      <div class="right-button-container">
+        <input
+          type="submit"
+          [class.green-button]="formGroup.valid"
+          [class.disabled-button]="!formGroup.valid"
+          value="speichern"
+        />
+      </div>
+    </div>
+  </form>
 </div>

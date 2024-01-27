@@ -4,6 +4,4 @@ import { Component } from '@angular/core';
   selector: 'app-chevron-right-icon',
   templateUrl: './chevron-right-icon.component.svg'
 })
-export class ChevronRightIconComponent {
-
-}
+export class ChevronRightIconComponent {}

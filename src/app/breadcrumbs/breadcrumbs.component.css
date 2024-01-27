@@ -1,24 +1,24 @@
 .breadcrumbs {
-    display: flex;
-    flex-wrap: wrap;
-    padding: 0; 
-    font-size: 0.875rem;
-    list-style-type: none;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  font-size: 0.875rem;
+  list-style-type: none;
 }
 
 .breadcrumbs a {
-    color: var(--color-body);
+  color: var(--color-body);
 }
 
 .breadcrumbs a:hover {
-    color: var(--color-primary)
+  color: var(--color-primary);
 }
 
 .breadcrumbs li:last-child a {
-    color: #000;
+  color: #000;
 }
 
 .breadcrumbs-level {
-    padding: 0 1rem;
-    color: #000;
+  padding: 0 1rem;
+  color: #000;
 }

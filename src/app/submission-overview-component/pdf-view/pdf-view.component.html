@@ -1,72 +1,83 @@
 <div id="pdf-container">
-    <h1>Fahrtkostenabrechnung</h1>
-    <p><b>Datum: {{getDate()}}</b></p>
-    <img class="logo" src="data:image/png;base64,{{getLogo()}}">
-    <p style="width: 312px">Diese Fahrtkostenabrechnung wurde automatisch erstellt. Bitte die generierte
-        PDF per E-Mail an lgs@jdav-bayern.de oder ausgedruckt in die Landesgeschäftsstelle,
-        Preysingstr. 71, 81667 München schicken.
-    </p>
-    <table style="width: 100%">
-        <tr>
-
-            <td style="width: 50%;">
-                <h2>Schulungsdaten</h2>
-                <table class="detailstable">
-                    <tr>
-                        <td>Schulung:</td>
-                        <td>{{r().courseDetails.courseName}}</td>
-                    </tr>
-                    <tr>
-                        <td>Schulungsnummer:</td>
-                        <td>{{r().courseDetails.id}}</td>
-                    </tr>
-                    <tr>
-                        <td>Schulungsdatum:</td>
-                        <td>{{r().courseDetails.courseDate}}</td>
-                    </tr>
-                    <tr>
-                        <td>Kursort:</td>
-                        <td>{{r().courseDetails.courseLocation}}</td>
-                    </tr>
-                </table>
-
+  <h1>Fahrtkostenabrechnung</h1>
+  <p>
+    <b>Datum: {{ getDate() }}</b>
+  </p>
+  <img class="logo" src="data:image/png;base64,{{ getLogo() }}" />
+  <p style="width: 312px">
+    Diese Fahrtkostenabrechnung wurde automatisch erstellt. Bitte die generierte
+    PDF per E-Mail an lgs&#64;jdav-bayern.de oder ausgedruckt in die
+    Landesgeschäftsstelle, Preysingstr. 71, 81667 München schicken.
+  </p>
+  <table style="width: 100%">
+    <tr>
+      <td style="width: 50%">
+        <h2>Schulungsdaten</h2>
+        <table class="detailstable">
+          <tr>
+            <td>Schulung:</td>
+            <td>{{ r().courseDetails.courseName }}</td>
+          </tr>
+          <tr>
+            <td>Schulungsnummer:</td>
+            <td>{{ r().courseDetails.id }}</td>
+          </tr>
+          <tr>
+            <td>Schulungsdatum:</td>
+            <td>{{ r().courseDetails.courseDate }}</td>
+          </tr>
+          <tr>
+            <td>Kursort:</td>
+            <td>{{ r().courseDetails.courseLocation }}</td>
+          </tr>
+        </table>
+      </td>
+      <td style="width: 50%">
+        <h2>Teilnehmer*innendaten</h2>
+        <table>
+          <tr>
+            <td>Name:</td>
+            <td>{{ r().participantDetails.name }}</td>
+          </tr>
+          <tr>
+            <td>Anschrift:</td>
+            <td>
+              {{ r().participantDetails.street }},
+              {{ r().participantDetails.zipCode }}
+              {{ r().participantDetails.city }}
             </td>
-            <td style="width: 50%">
-                <h2>Teilnehmer*innendaten</h2>
-                <table>
-                    <tr>
-                        <td>Name:</td>
-                        <td>{{r().participantDetails.name}}</td>
-                    </tr>
-                    <tr>
-                        <td>Anschrift:</td>
-                        <td>{{r().participantDetails.street}}, {{r().participantDetails.zipCode}}
-                            {{r().participantDetails.city}}</td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">{{r().participantDetails.isBavaria ? 'Teilnehmer*in kommt aus Bayern' :
-                            'Teilnehmer*in kommt nicht aus Bayern'}}</td>
-                    </tr>
-                    <tr>
-                        <td>IBAN:</td>
-                        <td>{{r().participantDetails.iban}}</td>
-                    </tr>
-                    <tr *ngIf="r().participantDetails.bic?.length">
-                        <td>BIC:</td>
-                        <td>{{r().participantDetails.bic}}</td>
-                    </tr>
-                </table>
-
+          </tr>
+          <tr>
+            <td colspan="2">
+              {{
+                r().participantDetails.isBavaria
+                  ? 'Teilnehmer*in kommt aus Bayern'
+                  : 'Teilnehmer*in kommt nicht aus Bayern'
+              }}
             </td>
-        </tr>
-    </table>
-    <p *ngIf="r().note !== ''"><b>Bemerkung:</b></p>
-    <p *ngFor="let line of r().note.split('\n')">{{line}}</p>
-    <div class="table-title">
-        <span>Abrechnungspositionen</span><span class="sum">Summe:
-            {{getSum()}}€</span><br>
-    </div>
-    <hr>
-    <app-pdf-expense-line-item *ngFor="let expense of r().expenses; index as i" [expense]="expense"
-        [index]="i"></app-pdf-expense-line-item>
+          </tr>
+          <tr>
+            <td>IBAN:</td>
+            <td>{{ r().participantDetails.iban }}</td>
+          </tr>
+          <tr *ngIf="r().participantDetails.bic?.length">
+            <td>BIC:</td>
+            <td>{{ r().participantDetails.bic }}</td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <p *ngIf="r().note !== ''"><b>Bemerkung:</b></p>
+  <p *ngFor="let line of r().note.split('\n')">{{ line }}</p>
+  <div class="table-title">
+    <span>Abrechnungspositionen</span
+    ><span class="sum">Summe: {{ getSum() }}€</span><br />
+  </div>
+  <hr />
+  <app-pdf-expense-line-item
+    *ngFor="let expense of r().expenses; index as i"
+    [expense]="expense"
+    [index]="i"
+  ></app-pdf-expense-line-item>
 </div>

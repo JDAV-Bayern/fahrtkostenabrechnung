@@ -1,5 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { IBikeExpense, ICarExpense, IExpense, IPublicTransportPlanExpense, ITrainExpense } from 'src/domain/expense';
+import {
+  IBikeExpense,
+  ICarExpense,
+  IExpense,
+  IPublicTransportPlanExpense,
+  ITrainExpense
+} from 'src/domain/expense';
 
 @Component({
   selector: 'app-expense-list-row',
@@ -21,7 +27,7 @@ export class ExpenseListRowComponent {
   }
 
   deleteMe() {
-    this.deleteRow.emit(this.expense.id)
+    this.deleteRow.emit(this.expense.id);
   }
 
   getTitle() {
@@ -50,7 +56,7 @@ export class ExpenseListRowComponent {
     switch (this.expense.type) {
       case 'car':
         const carExpense = this.expense as ICarExpense;
-        details = `${carExpense.distance} km, ${carExpense.passengers.length} Mitfahrer*innen`
+        details = `${carExpense.distance} km, ${carExpense.passengers.length} Mitfahrer*innen`;
         break;
       case 'train':
         const trainExpense = this.expense as ITrainExpense;
@@ -69,6 +75,4 @@ export class ExpenseListRowComponent {
     }
     return details;
   }
-
-
 }

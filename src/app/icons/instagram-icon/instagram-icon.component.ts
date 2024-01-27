@@ -4,6 +4,4 @@ import { Component } from '@angular/core';
   selector: 'app-instagram-icon',
   templateUrl: './instagram-icon.component.svg'
 })
-export class InstagramIconComponent {
-
-}
+export class InstagramIconComponent {}

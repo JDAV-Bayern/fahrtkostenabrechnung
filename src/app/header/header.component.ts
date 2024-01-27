@@ -9,10 +9,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-
-  constructor(private readonly reimbursementService: ReimbursementService, private readonly router: Router) { }
+  constructor(
+    private readonly reimbursementService: ReimbursementService,
+    private readonly router: Router
+  ) {}
   ngOnInit(): void {
-    const image = document.getElementById("logo") as HTMLImageElement;
+    const image = document.getElementById('logo') as HTMLImageElement;
     image.src = `data:image/jpg;base64,${logoBase64}`;
   }
   deleteAllData() {
@@ -20,5 +22,4 @@ export class HeaderComponent {
     this.router.navigate(['kurs-und-personen-infos']);
     window.location.reload();
   }
-
 }

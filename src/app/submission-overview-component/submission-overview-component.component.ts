@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import jsPDF from 'jspdf';
 import * as imageprocessor from 'ts-image-processor';
-import { validateIBAN } from "ngx-iban-validator";
+import { validateIBAN } from 'ngx-iban-validator';
 import { IReimbursement } from 'src/domain/reimbursement';
 import { ReimbursementService } from '../reimbursement.service';
 import { NgxFileDropEntry } from 'ngx-file-drop';
@@ -11,19 +11,16 @@ import { PDFDocument } from 'pdf-lib';
 import { logoBase64 } from 'src/assets/logoBase64';
 import { ReimbursementValidationService } from '../reimbursement.validation.service';
 
-
-
 @Component({
   selector: 'app-submission-overview-component',
   templateUrl: './submission-overview-component.component.html',
   styleUrls: ['./submission-overview-component.component.css']
 })
 export class SubmissionOverviewComponentComponent {
-
-  formGroup: FormGroup
+  formGroup: FormGroup;
   fileFormGroup: FormGroup;
 
-  reimbursement: IReimbursement | undefined
+  reimbursement: IReimbursement | undefined;
 
   public files: File[] = [];
 
@@ -31,22 +28,24 @@ export class SubmissionOverviewComponentComponent {
 
   loading = false;
 
-
-  pdfFullyRendered = () => { console.error("pdfFullyRendered not set") };
+  pdfFullyRendered = () => {
+    console.error('pdfFullyRendered not set');
+  };
   pdfFullyRenderedPromise: Promise<void> = new Promise(resolve => {
     this.pdfFullyRendered = resolve;
   });
 
-
-  constructor(private readonly router: Router,
+  constructor(
+    private readonly router: Router,
     private formBuilder: FormBuilder,
     private readonly reimbursementService: ReimbursementService,
-    private readonly validationService: ReimbursementValidationService) {
+    private readonly validationService: ReimbursementValidationService
+  ) {
     this.formGroup = this.formBuilder.group({
       inputIBAN: ['', [Validators.required, validateIBAN]],
       inputBIC: ['', []],
-      inputNote: ['', []],
-    })
+      inputNote: ['', []]
+    });
     this.fileFormGroup = this.formBuilder.group({
       file: [undefined, []]
     });
@@ -56,7 +55,7 @@ export class SubmissionOverviewComponentComponent {
     this.formGroup.setValue({
       inputIBAN: this.r()?.participantDetails?.iban || '',
       inputBIC: this.r()?.participantDetails?.bic || '',
-      inputNote: this.r()?.note || '',
+      inputNote: this.r()?.note || ''
     });
   }
 
@@ -68,24 +67,38 @@ export class SubmissionOverviewComponentComponent {
       if (this.reimbursement) {
         this.reimbursement.participantDetails.iban = iban;
         this.reimbursement.participantDetails.bic = bic;
-        this.reimbursement.note = note
+        this.reimbursement.note = note;
       }
       this.reimbursementService.setSubmitInformation(iban, bic, note);
     }
   }
 
   getSum(): number {
-    return this.r()?.expenses.reduce((sum, expense) => sum + expense.totalReimbursement(), 0) || 0;
+    return (
+      this.r()?.expenses.reduce(
+        (sum, expense) => sum + expense.totalReimbursement(),
+        0
+      ) || 0
+    );
   }
 
   getErrors(): string[] {
-    return this.validationService.validateReimbursement(this.r()).findings.filter(f => f.type === 'error').map(f => f.message);
+    return this.validationService
+      .validateReimbursement(this.r())
+      .findings.filter(f => f.type === 'error')
+      .map(f => f.message);
   }
   getWarnings(): string[] {
-    return this.validationService.validateReimbursement(this.r()).findings.filter(f => f.type === 'warning').map(f => f.message);
+    return this.validationService
+      .validateReimbursement(this.r())
+      .findings.filter(f => f.type === 'warning')
+      .map(f => f.message);
   }
   getInfos(): string[] {
-    return this.validationService.validateReimbursement(this.r()).findings.filter(f => f.type === 'info').map(f => f.message);
+    return this.validationService
+      .validateReimbursement(this.r())
+      .findings.filter(f => f.type === 'info')
+      .map(f => f.message);
   }
   isReimbursementValid(): boolean {
     return this.validationService.validateReimbursement(this.r()).isValid;
@@ -96,11 +109,12 @@ export class SubmissionOverviewComponentComponent {
     const maxHeight = 802;
 
     const image = await imageprocessor.fileToBase64(imageFile);
-    const exifRotated = await imageprocessor.imageProcessor.src(image).pipe(
-      imageprocessor.applyExifOrientation(),
-    )
+    const exifRotated = await imageprocessor.imageProcessor
+      .src(image)
+      .pipe(imageprocessor.applyExifOrientation());
 
-    const preprocessedImage = await imageprocessor.base64ToImgElement(exifRotated)
+    const preprocessedImage =
+      await imageprocessor.base64ToImgElement(exifRotated);
 
     let originalHeight = preprocessedImage.height;
     let originalWidth = preprocessedImage.width;
@@ -108,21 +122,25 @@ export class SubmissionOverviewComponentComponent {
     let finalImageData: string;
     if (originalWidth > originalHeight) {
       //The image is in landscape, lets rotate it to view it larger
-      finalImageData = await imageprocessor.imageProcessor.src(exifRotated).pipe(
-        imageprocessor.rotate({ degree: 90, clockwise: false }),
-        imageprocessor.resize({ maxWidth: 1240, maxHeight: 1713 }),
-        imageprocessor.sharpen()
-      )
+      finalImageData = await imageprocessor.imageProcessor
+        .src(exifRotated)
+        .pipe(
+          imageprocessor.rotate({ degree: 90, clockwise: false }),
+          imageprocessor.resize({ maxWidth: 1240, maxHeight: 1713 }),
+          imageprocessor.sharpen()
+        );
       //Swap originalHeight and originalWidth because we rotated by 90 degrees
       const x = originalHeight;
       originalHeight = originalWidth;
       originalWidth = x;
     } else {
       //only resize to 150dpi
-      finalImageData = await imageprocessor.imageProcessor.src(exifRotated).pipe(
-        imageprocessor.resize({ maxWidth: 1240, maxHeight: 1713 }),
-        imageprocessor.sharpen()
-      )
+      finalImageData = await imageprocessor.imageProcessor
+        .src(exifRotated)
+        .pipe(
+          imageprocessor.resize({ maxWidth: 1240, maxHeight: 1713 }),
+          imageprocessor.sharpen()
+        );
     }
 
     let newWidth = originalWidth;
@@ -143,7 +161,15 @@ export class SubmissionOverviewComponentComponent {
     }
 
     pdf.addPage();
-    pdf.addImage(finalImageData, 10, 10, newWidth, newHeight, undefined, 'FAST');
+    pdf.addImage(
+      finalImageData,
+      10,
+      10,
+      newWidth,
+      newHeight,
+      undefined,
+      'FAST'
+    );
   }
 
   async addPdfToPdf(pdfFile: File, pdf: PDFDocument) {
@@ -153,9 +179,11 @@ export class SubmissionOverviewComponentComponent {
     }
     const arrayBuffer = await pdfFile.arrayBuffer();
     const pdfDocument = await PDFDocument.load(arrayBuffer);
-    (await pdf.copyPages(pdfDocument, pdfDocument.getPageIndices())).forEach(page => {
-      pdf.addPage(page);
-    });
+    (await pdf.copyPages(pdfDocument, pdfDocument.getPageIndices())).forEach(
+      page => {
+        pdf.addPage(page);
+      }
+    );
   }
 
   async continue() {
@@ -164,7 +192,7 @@ export class SubmissionOverviewComponentComponent {
     await new Promise(resolve => setTimeout(resolve, 0));
     await this.pdfFullyRenderedPromise;
 
-    const htmlElement = document.getElementById("pdf-container")
+    const htmlElement = document.getElementById('pdf-container');
     if (!htmlElement || !this.formGroup.valid) {
       this.loading = false;
       this.showPdf = false;
@@ -178,13 +206,16 @@ export class SubmissionOverviewComponentComponent {
     });
 
     //add the first page
-    await new Promise<void>(resolve => doc.html(htmlElement, {
-      autoPaging: true
-    }).finally(() => resolve()));
+    await new Promise<void>(resolve =>
+      doc
+        .html(htmlElement, {
+          autoPaging: true
+        })
+        .finally(() => resolve())
+    );
     //doc.addImage(logoBase64, 'JPEG', 374, 57, 164, 85);
 
     this.showPdf = false;
-
 
     // go through files and add image attachments
     for (const file of this.files) {
@@ -198,7 +229,12 @@ export class SubmissionOverviewComponentComponent {
     const startPdfDocument = await PDFDocument.load(arrayBuffer);
 
     const combinedPdfDocument = await PDFDocument.create();
-    (await combinedPdfDocument.copyPages(startPdfDocument, startPdfDocument.getPageIndices())).forEach(page => {
+    (
+      await combinedPdfDocument.copyPages(
+        startPdfDocument,
+        startPdfDocument.getPageIndices()
+      )
+    ).forEach(page => {
       combinedPdfDocument.addPage(page);
     });
 
@@ -226,8 +262,7 @@ export class SubmissionOverviewComponentComponent {
     this.router.navigate(['auslagen']);
   }
 
-  submitForm() {
-  }
+  submitForm() {}
 
   fileDropped(files: NgxFileDropEntry[]) {
     for (const droppedFile of files) {
@@ -251,5 +286,4 @@ export class SubmissionOverviewComponentComponent {
     }
     return this.reimbursement;
   }
-
 }

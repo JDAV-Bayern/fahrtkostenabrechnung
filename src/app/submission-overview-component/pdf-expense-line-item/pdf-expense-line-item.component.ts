@@ -1,5 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { IBikeExpense, ICarExpense, IExpense, IPublicTransportPlanExpense, ITrainExpense } from 'src/domain/expense';
+import {
+  IBikeExpense,
+  ICarExpense,
+  IExpense,
+  IPublicTransportPlanExpense,
+  ITrainExpense
+} from 'src/domain/expense';
 
 @Component({
   selector: 'app-pdf-expense-line-item',
@@ -7,7 +13,6 @@ import { IBikeExpense, ICarExpense, IExpense, IPublicTransportPlanExpense, ITrai
   styleUrls: ['./pdf-expense-line-item.component.css']
 })
 export class PdfExpenseLineItemComponent {
-
   @Input({ required: true })
   expense!: IExpense;
 
@@ -19,7 +24,7 @@ export class PdfExpenseLineItemComponent {
     switch (type) {
       case 'car':
         const carExpense = this.expense as ICarExpense;
-        return `Autofahrt, ${carExpense.passengers.length} Mitfahrer*innen`
+        return `Autofahrt, ${carExpense.passengers.length} Mitfahrer*innen`;
       case 'train':
         const trainExpense = this.expense as ITrainExpense;
         return `Zugfahrt, ${trainExpense.discountCard === 'BC50' ? 'BahnCard 50' : trainExpense.discountCard === 'BC25' ? 'BahnCard 25' : 'keine BahnCard'}`;
@@ -39,12 +44,12 @@ export class PdfExpenseLineItemComponent {
     switch (type) {
       case 'car':
         const carExpense = this.expense as ICarExpense;
-        return `${carExpense.distance}km, Mitfahrer*innen: ${carExpense.passengers.map(p => p.trim()).join(', ')}`
+        return `${carExpense.distance}km, Mitfahrer*innen: ${carExpense.passengers.map(p => p.trim()).join(', ')}`;
       case 'train':
         const trainExpense = this.expense as ITrainExpense;
         return `Ticketpreis nach Rabatt ${trainExpense.priceWithDiscount}€`;
       case 'plan':
-        return ''
+        return '';
       case 'bike':
         const bikeExpense = this.expense as IBikeExpense;
         return `${bikeExpense.distance} km`;
