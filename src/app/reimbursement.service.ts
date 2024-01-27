@@ -18,7 +18,7 @@ export class ReimbursementService {
     const expensesJson = JSON.parse(
       localStorage.getItem('expenses') || '[]'
     ) as string[];
-    expensesJson.forEach((expenseJson) => {
+    expensesJson.forEach(expenseJson => {
       expenses.push(getDomainObjectFromSerializedData(expenseJson));
     });
     return {
@@ -59,9 +59,7 @@ export class ReimbursementService {
     localStorage.setItem('formDate', reimbursement.formDate.toISOString());
     localStorage.setItem(
       'expenses',
-      JSON.stringify(
-        reimbursement.expenses.map((expense) => expense.serialize())
-      )
+      JSON.stringify(reimbursement.expenses.map(expense => expense.serialize()))
     );
     localStorage.setItem('zipCode', reimbursement.participantDetails.zipCode);
     localStorage.setItem(

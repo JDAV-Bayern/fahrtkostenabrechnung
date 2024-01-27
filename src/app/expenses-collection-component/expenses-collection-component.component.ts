@@ -27,7 +27,7 @@ export class ExpensesCollectionComponentComponent {
   ) {
     reimbursementService
       .getReimbursment()
-      .expenses.forEach((expense) => this.addExpense(expense));
+      .expenses.forEach(expense => this.addExpense(expense));
   }
   openAddExpenseDialog(direction: 'to' | 'from' | 'at') {
     const dialogRef = this.dialog.open(AddExpenseModalComponent, {
@@ -45,7 +45,7 @@ export class ExpensesCollectionComponentComponent {
       ...(carType ? { carType } : {})
     } as IExpense;
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.addExpense(result);
         this.storeExpenses();
@@ -54,9 +54,7 @@ export class ExpensesCollectionComponentComponent {
   }
   getCarType() {
     return (
-      this.getAllExpenses().find(
-        (expense) => 'carType' in expense
-      ) as ICarExpense
+      this.getAllExpenses().find(expense => 'carType' in expense) as ICarExpense
     )?.carType;
   }
   getLastExpense(direction: 'to' | 'from' | 'at') {
@@ -92,7 +90,7 @@ export class ExpensesCollectionComponentComponent {
       ...this.expensesTo,
       ...this.expensesAt,
       ...this.expensesFrom
-    ].find((expense) => expense.id === expenseId);
+    ].find(expense => expense.id === expenseId);
     if (!expense) {
       return;
     }
@@ -103,7 +101,7 @@ export class ExpensesCollectionComponentComponent {
     dialogRef.componentInstance.direction = expense.direction;
     dialogRef.componentInstance.expense = expense;
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.deleteRow(expenseId);
         this.addExpense(result);
@@ -125,13 +123,13 @@ export class ExpensesCollectionComponentComponent {
   }
   deleteRow(expenseId: number) {
     this.expensesTo = this.expensesTo.filter(
-      (expense) => expense.id !== expenseId
+      expense => expense.id !== expenseId
     );
     this.expensesFrom = this.expensesFrom.filter(
-      (expense) => expense.id !== expenseId
+      expense => expense.id !== expenseId
     );
     this.expensesAt = this.expensesAt.filter(
-      (expense) => expense.id !== expenseId
+      expense => expense.id !== expenseId
     );
     this.storeExpenses();
   }

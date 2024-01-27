@@ -65,7 +65,7 @@ export class CarExpenseFormComponent {
     )
       ? (this.formGroup.value.passengers as string)
           .split(',')
-          .map((passenger) => passenger.trim())
+          .map(passenger => passenger.trim())
       : [];
     const data: ICarExpenseData = {
       distance: this.formGroup.value.inputDistance,

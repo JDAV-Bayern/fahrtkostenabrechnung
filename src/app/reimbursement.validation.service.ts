@@ -110,7 +110,7 @@ export class ReimbursementValidationService {
         });
       }
       if (
-        reimbursement.expenses.some((expense) =>
+        reimbursement.expenses.some(expense =>
           ['train', 'plan'].includes(expense.type)
         )
       ) {
@@ -122,12 +122,12 @@ export class ReimbursementValidationService {
       }
       findings.push(
         ...this.checkValidityOfRoute(
-          reimbursement.expenses.filter((expense) => expense.direction !== 'at')
+          reimbursement.expenses.filter(expense => expense.direction !== 'at')
         )
       );
     }
     return {
-      isValid: !findings.some((finding) => finding.type === 'error'),
+      isValid: !findings.some(finding => finding.type === 'error'),
       findings
     };
   }

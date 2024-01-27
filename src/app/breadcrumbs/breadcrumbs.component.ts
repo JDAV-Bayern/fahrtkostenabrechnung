@@ -21,7 +21,7 @@ export class BreadcrumbsComponent {
     private route: ActivatedRoute
   ) {
     this.router.events
-      .pipe(filter((evt) => evt instanceof NavigationEnd))
+      .pipe(filter(evt => evt instanceof NavigationEnd))
       .subscribe(() => {
         this.breadcrumbs = [];
         this.buildBreadcrumb(this.route);
@@ -32,7 +32,7 @@ export class BreadcrumbsComponent {
     if (route.snapshot.data['breadcrumb']) {
       // get the full path to the current activated route
       const breadcrumbLink = route.pathFromRoot
-        .map((route) => route.snapshot.url)
+        .map(route => route.snapshot.url)
         .flat()
         .join('/');
 

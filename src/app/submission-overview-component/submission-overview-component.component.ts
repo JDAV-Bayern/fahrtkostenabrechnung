@@ -31,7 +31,7 @@ export class SubmissionOverviewComponentComponent {
   pdfFullyRendered = () => {
     console.error('pdfFullyRendered not set');
   };
-  pdfFullyRenderedPromise: Promise<void> = new Promise((resolve) => {
+  pdfFullyRenderedPromise: Promise<void> = new Promise(resolve => {
     this.pdfFullyRendered = resolve;
   });
 
@@ -85,20 +85,20 @@ export class SubmissionOverviewComponentComponent {
   getErrors(): string[] {
     return this.validationService
       .validateReimbursement(this.r())
-      .findings.filter((f) => f.type === 'error')
-      .map((f) => f.message);
+      .findings.filter(f => f.type === 'error')
+      .map(f => f.message);
   }
   getWarnings(): string[] {
     return this.validationService
       .validateReimbursement(this.r())
-      .findings.filter((f) => f.type === 'warning')
-      .map((f) => f.message);
+      .findings.filter(f => f.type === 'warning')
+      .map(f => f.message);
   }
   getInfos(): string[] {
     return this.validationService
       .validateReimbursement(this.r())
-      .findings.filter((f) => f.type === 'info')
-      .map((f) => f.message);
+      .findings.filter(f => f.type === 'info')
+      .map(f => f.message);
   }
   isReimbursementValid(): boolean {
     return this.validationService.validateReimbursement(this.r()).isValid;
@@ -180,7 +180,7 @@ export class SubmissionOverviewComponentComponent {
     const arrayBuffer = await pdfFile.arrayBuffer();
     const pdfDocument = await PDFDocument.load(arrayBuffer);
     (await pdf.copyPages(pdfDocument, pdfDocument.getPageIndices())).forEach(
-      (page) => {
+      page => {
         pdf.addPage(page);
       }
     );
@@ -189,7 +189,7 @@ export class SubmissionOverviewComponentComponent {
   async continue() {
     this.loading = true;
     this.showPdf = true;
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 0));
     await this.pdfFullyRenderedPromise;
 
     const htmlElement = document.getElementById('pdf-container');
@@ -198,7 +198,7 @@ export class SubmissionOverviewComponentComponent {
       this.showPdf = false;
       return;
     }
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await new Promise(resolve => setTimeout(resolve, 0));
     const doc = new jsPDF('p', 'pt', [595, 822], true);
     //Add mailto link and logo
     doc.link(170, 57, 70, 10, {
@@ -206,7 +206,7 @@ export class SubmissionOverviewComponentComponent {
     });
 
     //add the first page
-    await new Promise<void>((resolve) =>
+    await new Promise<void>(resolve =>
       doc
         .html(htmlElement, {
           autoPaging: true
@@ -234,7 +234,7 @@ export class SubmissionOverviewComponentComponent {
         startPdfDocument,
         startPdfDocument.getPageIndices()
       )
-    ).forEach((page) => {
+    ).forEach(page => {
       combinedPdfDocument.addPage(page);
     });
 
@@ -277,7 +277,7 @@ export class SubmissionOverviewComponentComponent {
   }
 
   removeFile(fileName: string) {
-    this.files = this.files.filter((f) => f.name !== fileName);
+    this.files = this.files.filter(f => f.name !== fileName);
   }
 
   r(): IReimbursement {
