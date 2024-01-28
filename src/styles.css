@@ -40,20 +40,6 @@ a:hover {
   display: inline;
 }
 
-/* personal-information.component.css */
-
-/* Center the content vertically and horizontally */
-.step-content {
-  align-items: center;
-  justify-content: center;
-  margin-top: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 20px;
-  max-width: min(95vw, 600px);
-  min-width: 50%;
-}
-
 /* Create a box around the content */
 .step-box {
   overflow: auto;

@@ -1,4 +1,3 @@
-<div class="step-content">
   <div class="step-box" *ngIf="expensesAt && expensesFrom && expensesTo">
     <h1>Auslagen für Fahrtkosten</h1>
     <p><b>Summe:</b> {{ getSum().toFixed(2) }}€</p>
@@ -68,12 +67,3 @@
       <button (click)="continue()" class="green-button">Weiter</button>
     </div>
   </div>
-</div>
-<!-- <div>
-    {{ expensesTo | json }}
-    <br>
-    {{ expensesAt | json }}
-    <br>
-    {{ expensesFrom | json }}
-    <br>
-</div> -->
