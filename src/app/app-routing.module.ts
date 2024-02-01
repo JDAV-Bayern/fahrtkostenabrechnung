@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PersonalInformationComponentComponent } from './travel-expenses/personal-information/personal-information.component';
-import { SubmissionOverviewComponentComponent } from './travel-expenses/submission-overview/submission-overview.component';
-import { ExpensesCollectionComponentComponent } from './travel-expenses/expenses-collection/expenses-collection.component';
+import { PersonalInformationComponent } from './travel-expenses/personal-information/personal-information.component';
+import { SubmissionOverviewComponent } from './travel-expenses/submission-overview/submission-overview.component';
+import { ExpensesCollectionComponent } from './travel-expenses/expenses-collection/expenses-collection.component';
 import { ImprintComponent } from './info/imprint/imprint.component';
 import { DataProtectionComponent } from './info/data-protection/data-protection.component';
 import { InfoComponent } from './info/info.component';
@@ -40,15 +40,15 @@ const routes: Routes = [
     children: [
       {
         path: 'kurs-und-personen-infos',
-        component: PersonalInformationComponentComponent
+        component: PersonalInformationComponent
       },
       {
         path: 'auslagen',
-        component: ExpensesCollectionComponentComponent
+        component: ExpensesCollectionComponent
       },
       {
         path: 'zusammenfassen-und-abschicken',
-        component: SubmissionOverviewComponentComponent
+        component: SubmissionOverviewComponent
       }
     ]
   }

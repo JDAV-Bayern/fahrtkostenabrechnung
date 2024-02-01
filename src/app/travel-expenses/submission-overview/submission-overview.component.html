@@ -1,58 +1,46 @@
 <div class="step-box">
-  <h2>Kontodaten</h2>
+  <fieldset [formGroup]="formGroup">
+    <h2>Kontodaten</h2>
 
-  <form [formGroup]="formGroup" (ngSubmit)="submitForm()">
     <div class="form-group">
-      <label for="inputIBAN">IBAN</label>
+      <label for="iban">IBAN</label>
       <input
         type="text"
-        (change)="saveForm()"
         class="form-control"
-        formControlName="inputIBAN"
-        id="inputIBAN"
+        formControlName="iban"
+        id="iban"
         placeholder="IBAN"
       />
-      <div
-        *ngIf="
-          formGroup.get('inputIBAN')?.hasError('ibanInvalid') &&
-          formGroup.get('inputIBAN')?.touched
-        "
-        class="error-message"
-      >
+      <div *ngIf="iban.invalid && iban.touched" class="error-message">
         Bitte gib eine gültige IBAN ein.
       </div>
     </div>
     <div
       class="form-group"
-      *ngIf="
-        !r().participantDetails.iban.startsWith('DE') &&
-        formGroup.get('inputIBAN')?.touched
-      "
+      *ngIf="!iban.value.startsWith('DE') && iban.touched"
     >
-      <label for="inputBIC"
-        >BIC (nur bei ausländischen Kreditinstituten notwendig)</label
-      >
+      <label for="bic">
+        BIC (nur bei ausländischen Kreditinstituten notwendig)
+      </label>
       <input
         type="text"
-        (change)="saveForm()"
         class="form-control"
-        formControlName="inputBIC"
-        id="inputBIC"
+        formControlName="bic"
+        id="bic"
         placeholder="BIC"
       />
     </div>
     <div class="form-group">
-      <label for="inputNote">Bemerkung zu deiner Abrechnung</label>
+      <label for="note">Bemerkung zu deiner Abrechnung</label>
       <textarea
-        (change)="saveForm()"
         class="form-control textarea"
         rows="4"
-        formControlName="inputNote"
-        id="inputNote"
+        formControlName="note"
+        id="note"
         placeholder="Bemerkung"
       ></textarea>
     </div>
-  </form>
+  </fieldset>
 
   <h2>Zusammenfassung</h2>
   Erstattungsbetrag: {{ getSum().toFixed(2) }}€<br />

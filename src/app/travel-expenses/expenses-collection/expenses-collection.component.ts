@@ -10,7 +10,7 @@ import { AddExpenseModalComponent } from './add-expense-modal/add-expense-modal.
   templateUrl: './expenses-collection.component.html',
   styleUrls: ['./expenses-collection.component.css']
 })
-export class ExpensesCollectionComponentComponent {
+export class ExpensesCollectionComponent {
   expensesTo: IExpense[] = [];
   expensesFrom: IExpense[] = [];
   expensesAt: IExpense[] = [];
@@ -20,8 +20,8 @@ export class ExpensesCollectionComponentComponent {
     private readonly reimbursementService: ReimbursementService
   ) {
     reimbursementService
-      .getReimbursment()
-      .expenses.forEach(expense => this.addExpense(expense));
+      .getExpenses()
+      .forEach(expense => this.addExpense(expense));
   }
   openAddExpenseDialog(direction: 'to' | 'from' | 'at') {
     const dialogRef = this.dialog.open(AddExpenseModalComponent, {

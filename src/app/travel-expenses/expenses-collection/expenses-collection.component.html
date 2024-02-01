@@ -1,4 +1,5 @@
-  <div class="step-box" *ngIf="expensesAt && expensesFrom && expensesTo">
+<div class="step-box" *ngIf="expensesAt && expensesFrom && expensesTo">
+  <fieldset>
     <h1>Auslagen für Fahrtkosten</h1>
     <p><b>Summe:</b> {{ getSum().toFixed(2) }}€</p>
     <p>
@@ -57,13 +58,14 @@
         [expense]="expense"
       ></app-expense-list-row>
     </div>
-  </div>
+  </fieldset>
+</div>
 
-  <div class="button-container">
-    <div class="left-button-container">
-      <button (click)="back()" class="gray-button">Zurück</button>
-    </div>
-    <div class="right-button-container">
-      <button (click)="continue()" class="green-button">Weiter</button>
-    </div>
+<div class="button-container">
+  <div class="left-button-container">
+    <button (click)="back()" class="gray-button">Zurück</button>
   </div>
+  <div class="right-button-container">
+    <button (click)="continue()" class="green-button">Weiter</button>
+  </div>
+</div>

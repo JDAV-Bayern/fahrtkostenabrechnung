@@ -29,6 +29,11 @@ a:hover {
   color: #0056b3;
 }
 
+fieldset {
+  border: none;
+  padding: 0;
+}
+
 .base-container {
   display: flex;
   flex-direction: column;

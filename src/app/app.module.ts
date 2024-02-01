@@ -6,9 +6,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { PersonalInformationComponentComponent } from './travel-expenses/personal-information/personal-information.component';
-import { ExpensesCollectionComponentComponent } from './travel-expenses/expenses-collection/expenses-collection.component';
-import { SubmissionOverviewComponentComponent } from './travel-expenses/submission-overview/submission-overview.component';
+import { PersonalInformationComponent } from './travel-expenses/personal-information/personal-information.component';
+import { ExpensesCollectionComponent } from './travel-expenses/expenses-collection/expenses-collection.component';
+import { SubmissionOverviewComponent } from './travel-expenses/submission-overview/submission-overview.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AddExpenseModalComponent } from './travel-expenses/expenses-collection/add-expense-modal/add-expense-modal.component';
 import { ExpenseListRowComponent } from './travel-expenses/expenses-collection/expense-list-row/expense-list-row.component';
@@ -38,9 +38,9 @@ import { TravelExpensesComponent } from './travel-expenses/travel-expenses.compo
     AppComponent,
     HeaderComponent,
     FooterComponent,
-    PersonalInformationComponentComponent,
-    ExpensesCollectionComponentComponent,
-    SubmissionOverviewComponentComponent,
+    PersonalInformationComponent,
+    ExpensesCollectionComponent,
+    SubmissionOverviewComponent,
     AddExpenseModalComponent,
     ExpenseListRowComponent,
     PlanExpenseFormComponent,

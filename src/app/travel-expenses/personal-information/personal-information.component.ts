@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReimbursementService } from 'src/app/reimbursement.service';
 import { PlzService } from 'src/app/plz.service';
@@ -9,67 +9,65 @@ import { PlzService } from 'src/app/plz.service';
   templateUrl: './personal-information.component.html',
   styleUrls: ['./personal-information.component.css']
 })
-export class PersonalInformationComponentComponent {
+export class PersonalInformationComponent {
   personalInfoForm: FormGroup;
 
   constructor(
-    private formBuilder: FormBuilder,
     private readonly router: Router,
     public readonly plzService: PlzService,
-    private readonly reimbursementService: ReimbursementService
+    reimbursementService: ReimbursementService
   ) {
-    // Initialize the form with FormBuilder
-    const reimbursement = this.reimbursementService.getReimbursment();
-    this.personalInfoForm = this.formBuilder.group({
-      name: [reimbursement.participantDetails.name, Validators.required],
-      street: [reimbursement.participantDetails.street, Validators.required],
-      city: [reimbursement.participantDetails.city, Validators.required],
-      zipCode: [
-        reimbursement.participantDetails.zipCode,
-        [Validators.required, Validators.pattern(/^[0-9][0-9][0-9][0-9][0-9]$/)]
-      ],
-      course: [reimbursement.courseDetails.id, Validators.required],
-      courseName: [reimbursement.courseDetails.courseName, Validators.required],
-      courseDate: [reimbursement.courseDetails.courseDate, Validators.required],
-      courseLocation: [
-        reimbursement.courseDetails.courseLocation,
-        Validators.required
-      ]
-    });
+    this.personalInfoForm = reimbursementService.getFormStep(
+      'personalInformation'
+    );
+  }
+
+  get name() {
+    return this.personalInfoForm.get('name') as FormControl<string>;
+  }
+
+  get street() {
+    return this.personalInfoForm.get('street') as FormControl<string>;
+  }
+
+  get zipCode() {
+    return this.personalInfoForm.get('zipCode') as FormControl<string>;
+  }
+
+  get city() {
+    return this.personalInfoForm.get('city') as FormControl<string>;
+  }
+
+  get courseCode() {
+    return this.personalInfoForm.get('course.code') as FormControl<string>;
+  }
+
+  get courseName() {
+    return this.personalInfoForm.get('course.name') as FormControl<string>;
+  }
+
+  get courseDate() {
+    return this.personalInfoForm.get('course.date') as FormControl<string>;
+  }
+
+  get courseLocation() {
+    return this.personalInfoForm.get('course.location') as FormControl<string>;
   }
 
   plzChanged() {
     const plz = this.personalInfoForm.value.zipCode;
     const results = this.plzService.search(plz);
     if (results.length === 1) {
-      const isBavaria = results[0].isBavaria;
       const city = results[0].city;
       if (!city.includes(',')) {
         this.personalInfoForm.patchValue({ city });
       }
     }
-    this.saveData();
   }
 
-  // Define the onSubmit method to handle form submission
-  onSubmit() {
-    this.saveData();
+  next() {
     if (this.personalInfoForm.valid) {
       this.router.navigate(['auslagen']);
     }
-  }
-  saveData() {
-    this.reimbursementService.setPersonalAndCourseInformation(
-      this.personalInfoForm.value.name,
-      this.personalInfoForm.value.street,
-      this.personalInfoForm.value.city,
-      this.personalInfoForm.value.course,
-      this.personalInfoForm.value.courseName,
-      this.personalInfoForm.value.courseDate,
-      this.personalInfoForm.value.courseLocation,
-      this.personalInfoForm.value.zipCode,
-      this.plzService.search(this.personalInfoForm.value.zipCode)[0]
-        ?.isBavaria ?? false
-    );
   }
 }
