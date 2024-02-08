@@ -5,31 +5,23 @@ export interface IExpense {
   type: ExpenseType;
   id: number;
   totalReimbursement: () => number;
-  direction: Direction;
   startLocation: string;
   endLocation: string;
-  serialize: () => string;
 }
 
-type OmitIdAndTotal<T> = Omit<T, 'id' | 'totalReimbursement' | 'serialize'> & {
+type OmitIdAndTotal<T> = Omit<T, 'id' | 'totalReimbursement'> & { id?: number };
+type OmitIdTotalAndType<T> = Omit<T, 'id' | 'totalReimbursement' | 'type'> & {
   id?: number;
 };
-type OmitIdTotalAndType<T> = Omit<
-  T,
-  'id' | 'totalReimbursement' | 'type' | 'serialize'
-> & { id?: number };
-type WithTypeAndId<T> = T & { id: number; type: ExpenseType };
 
 abstract class Expense implements IExpense {
   type: ExpenseType;
   id: number;
-  direction: Direction;
   startLocation: string;
   endLocation: string;
 
   constructor(data: OmitIdAndTotal<IExpense>) {
     this.type = data.type;
-    this.direction = data.direction;
     this.id = data.id || randomId();
     this.startLocation = data.startLocation;
     this.endLocation = data.endLocation;
@@ -44,6 +36,7 @@ export interface IBikeExpense extends IExpense {
   type: 'bike';
   distance: number;
 }
+
 export type IBikeExpenseData = OmitIdTotalAndType<IBikeExpense>;
 
 export class BikeExpense extends Expense implements IBikeExpense {
@@ -54,23 +47,9 @@ export class BikeExpense extends Expense implements IBikeExpense {
     super({ ...data, type: 'bike' });
     this.distance = data.distance;
   }
+
   totalReimbursement() {
     return this.distance * 0.13;
-  }
-  serialize() {
-    const dataWithId: WithTypeAndId<IBikeExpenseData> = {
-      id: this.id,
-      type: this.type,
-      direction: this.direction,
-      startLocation: this.startLocation,
-      endLocation: this.endLocation,
-      distance: this.distance
-    };
-    return JSON.stringify(dataWithId);
-  }
-  static deserialize(serialized: string) {
-    const data: WithTypeAndId<IBikeExpenseData> = JSON.parse(serialized);
-    return new BikeExpense(data);
   }
 }
 
@@ -95,6 +74,7 @@ export class CarExpense extends Expense implements ICarExpense {
     this.carType = data.carType;
     this.passengers = data.passengers;
   }
+
   totalReimbursement() {
     if (!this.passengers?.length) {
       return this.distance * 0.05;
@@ -111,23 +91,6 @@ export class CarExpense extends Expense implements ICarExpense {
       default:
         return this.distance * 0.3;
     }
-  }
-  serialize() {
-    const dataWithId: WithTypeAndId<ICarExpenseData> = {
-      id: this.id,
-      type: this.type,
-      direction: this.direction,
-      startLocation: this.startLocation,
-      endLocation: this.endLocation,
-      distance: this.distance,
-      carType: this.carType,
-      passengers: this.passengers
-    };
-    return JSON.stringify(dataWithId);
-  }
-  static deserialize(serialized: string) {
-    const data: WithTypeAndId<ICarExpenseData> = JSON.parse(serialized);
-    return new CarExpense(data);
   }
 }
 
@@ -160,23 +123,6 @@ export class TrainExpense extends Expense implements ITrainExpense {
         return this.priceWithDiscount;
     }
   }
-
-  serialize() {
-    const dataWithId: WithTypeAndId<ITrainExpenseData> = {
-      id: this.id,
-      type: this.type,
-      direction: this.direction,
-      startLocation: this.startLocation,
-      endLocation: this.endLocation,
-      discountCard: this.discountCard,
-      priceWithDiscount: this.priceWithDiscount
-    };
-    return JSON.stringify(dataWithId);
-  }
-  static deserialize(serialized: string) {
-    const data: WithTypeAndId<ITrainExpenseData> = JSON.parse(serialized);
-    return new TrainExpense(data);
-  }
 }
 
 export interface IPublicTransportPlanExpense extends IExpense {
@@ -195,24 +141,9 @@ export class PublicTransportPlanExpense
   constructor(data: IPublicTransportPlanExpenseData) {
     super({ ...data, type: 'plan' });
   }
+
   totalReimbursement() {
     return 12.25;
-  }
-  serialize() {
-    const dataWithId: WithTypeAndId<IPublicTransportPlanExpenseData> = {
-      id: this.id,
-      type: this.type,
-      direction: this.direction,
-      startLocation: this.startLocation,
-      endLocation: this.endLocation
-    };
-    return JSON.stringify(dataWithId);
-  }
-
-  static deserialize(serialized: string) {
-    const data: WithTypeAndId<IPublicTransportPlanExpenseData> =
-      JSON.parse(serialized);
-    return new PublicTransportPlanExpense(data);
   }
 }
 
@@ -227,7 +158,6 @@ export function mapTripToReturn(expense: IExpense): IExpense {
       return new CarExpense({
         ...carExpense,
         id: randomId(),
-        direction: carExpense.direction === 'from' ? 'to' : 'from',
         startLocation: carExpense.endLocation,
         endLocation: carExpense.startLocation
       });
@@ -236,7 +166,6 @@ export function mapTripToReturn(expense: IExpense): IExpense {
       return new BikeExpense({
         ...bikeExpense,
         id: randomId(),
-        direction: bikeExpense.direction === 'from' ? 'to' : 'from',
         startLocation: bikeExpense.endLocation,
         endLocation: bikeExpense.startLocation
       });
@@ -245,7 +174,6 @@ export function mapTripToReturn(expense: IExpense): IExpense {
       return new TrainExpense({
         ...trainExpense,
         id: randomId(),
-        direction: trainExpense.direction === 'from' ? 'to' : 'from',
         startLocation: trainExpense.endLocation,
         endLocation: trainExpense.startLocation
       });
@@ -254,7 +182,6 @@ export function mapTripToReturn(expense: IExpense): IExpense {
       return new PublicTransportPlanExpense({
         ...planExpense,
         id: randomId(),
-        direction: planExpense.direction === 'from' ? 'to' : 'from',
         startLocation: planExpense.endLocation,
         endLocation: planExpense.startLocation
       });
@@ -266,18 +193,16 @@ export function mapTripToReturn(expense: IExpense): IExpense {
     endLocation: expense.startLocation
   };
 }
-export function getDomainObjectFromSerializedData(
-  serialized: string
-): IExpense {
-  const type = JSON.parse(serialized).type as ExpenseType;
+export function getDomainObjectFromSerializedData(serialized: any): IExpense {
+  const type = serialized.type as ExpenseType;
   switch (type) {
     case 'car':
-      return CarExpense.deserialize(serialized);
+      return new CarExpense(serialized);
     case 'bike':
-      return BikeExpense.deserialize(serialized);
+      return new BikeExpense(serialized);
     case 'train':
-      return TrainExpense.deserialize(serialized);
+      return new TrainExpense(serialized);
     case 'plan':
-      return PublicTransportPlanExpense.deserialize(serialized);
+      return new PublicTransportPlanExpense(serialized);
   }
 }

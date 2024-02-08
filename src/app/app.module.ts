@@ -32,6 +32,7 @@ import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { InfoComponent } from './info/info.component';
 import { ChevronRightIconComponent } from './icons/chevron-right-icon/chevron-right-icon.component';
 import { TravelExpensesComponent } from './travel-expenses/travel-expenses.component';
+import { ExpenseListComponent } from './travel-expenses/expenses-collection/expense-list/expense-list.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { TravelExpensesComponent } from './travel-expenses/travel-expenses.compo
     BreadcrumbsComponent,
     InfoComponent,
     ChevronRightIconComponent,
-    TravelExpensesComponent
+    TravelExpensesComponent,
+    ExpenseListComponent
   ],
   imports: [
     BrowserModule,

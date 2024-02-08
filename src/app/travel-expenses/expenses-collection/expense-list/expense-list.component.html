@@ -1,0 +1,21 @@
+<fieldset>
+  <h3>{{ heading }}</h3>
+  <button (click)="openAddExpenseDialog()" class="add-button green-button mar">
+    Auslage hinzufügen
+  </button>
+  <button
+    *ngIf="direction === 'from'"
+    (click)="addReturnTrip()"
+    class="add-button green-button mar"
+  >
+    Rückfahrt wie Hinfahrt
+  </button>
+  <div dragula="expenses" [(dragulaModel)]="expenses" class="drop-area">
+    <app-expense-list-row
+      (deleteRow)="deleteRow($event)"
+      (editRow)="editRow($event)"
+      *ngFor="let expense of expenses"
+      [expense]="expense"
+    ></app-expense-list-row>
+  </div>
+</fieldset>

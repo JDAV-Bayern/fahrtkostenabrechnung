@@ -21,6 +21,11 @@ export class ReimbursementValidationService {
   public validateReimbursement(
     reimbursement: IReimbursement
   ): ValidationResult {
+    const expenses = [
+      ...reimbursement.expenses.to,
+      ...reimbursement.expenses.at,
+      ...reimbursement.expenses.from
+    ];
     const findings: ValidationFinding[] = [];
     if (!reimbursement.participantDetails.name?.length) {
       findings.push({ type: 'error', message: 'Dein Name fehlt.' });
@@ -89,14 +94,14 @@ export class ReimbursementValidationService {
         message: 'Bitte gib den Ort der Schulung an.'
       });
     }
-    if (!reimbursement.expenses?.length) {
+    if (!expenses.length) {
       findings.push({
         type: 'error',
         message: 'Bitte gib mindestens eine Auslage an.'
       });
     } else {
       if (
-        reimbursement.expenses.reduce(
+        expenses.reduce(
           (numberOfPlanExpenses, expense) =>
             numberOfPlanExpenses + (expense.type === 'plan' ? 1 : 0),
           0
@@ -109,11 +114,7 @@ export class ReimbursementValidationService {
             'Du kannst maximal zwei Auslagen (Hin- und Rückfahrt) für Abo Tickets angeben.'
         });
       }
-      if (
-        reimbursement.expenses.some(expense =>
-          ['train', 'plan'].includes(expense.type)
-        )
-      ) {
+      if (expenses.some(expense => ['train', 'plan'].includes(expense.type))) {
         findings.push({
           type: 'info',
           message:
@@ -121,9 +122,10 @@ export class ReimbursementValidationService {
         });
       }
       findings.push(
-        ...this.checkValidityOfRoute(
-          reimbursement.expenses.filter(expense => expense.direction !== 'at')
-        )
+        ...this.checkValidityOfRoute([
+          ...reimbursement.expenses.to,
+          ...reimbursement.expenses.from
+        ])
       );
     }
     return {

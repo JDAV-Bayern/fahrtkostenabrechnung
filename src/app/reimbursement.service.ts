@@ -2,8 +2,11 @@ import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { validateIBAN } from 'ngx-iban-validator';
 import {
+  Direction,
+  ICarExpense,
   IExpense,
-  getDomainObjectFromSerializedData
+  getDomainObjectFromSerializedData,
+  mapTripToReturn
 } from 'src/domain/expense';
 import { IReimbursement } from 'src/domain/reimbursement';
 import { PlzService } from './plz.service';
@@ -38,6 +41,12 @@ export class ReimbursementService {
     })
   });
 
+  expenses = {
+    to: [] as IExpense[],
+    at: [] as IExpense[],
+    from: [] as IExpense[]
+  };
+
   constructor(
     private formBuilder: FormBuilder,
     private plzService: PlzService
@@ -59,20 +68,27 @@ export class ReimbursementService {
     localStorage.setItem('travelExpenses', travelExpensesData);
   }
 
-  getExpenses(): IExpense[] {
-    const expensesData = localStorage.getItem('expenses') || '[]';
-    const expensesJson = JSON.parse(expensesData) as string[];
-    const expenses = expensesJson.map(expenseJson =>
-      getDomainObjectFromSerializedData(expenseJson)
-    );
-    return expenses;
+  loadExpenses() {
+    const expensesData = localStorage.getItem('expenses') || '{}';
+    const expensesJson = JSON.parse(expensesData);
+    this.expenses.to =
+      expensesJson.to?.map(getDomainObjectFromSerializedData) || [];
+    this.expenses.at =
+      expensesJson.at?.map(getDomainObjectFromSerializedData) || [];
+    this.expenses.from =
+      expensesJson.from?.map(getDomainObjectFromSerializedData) || [];
   }
 
-  setExpenses(expenses: IExpense[]) {
-    localStorage.setItem(
-      'expenses',
-      JSON.stringify(expenses.map(expense => expense.serialize()))
-    );
+  saveExpenses() {
+    localStorage.setItem('expenses', JSON.stringify(this.expenses));
+  }
+
+  getExpenses(direction: Direction): IExpense[] {
+    return this.expenses[direction];
+  }
+
+  setExpenses(expenses: IExpense[], direction: Direction) {
+    this.expenses[direction] = expenses;
   }
 
   getReimbursment(): IReimbursement {
@@ -99,9 +115,33 @@ export class ReimbursementService {
         iban: v.overview?.iban || '',
         bic: v.overview?.bic || ''
       },
-      expenses: this.getExpenses(),
+      expenses: this.expenses,
       note: v.overview?.note || ''
     };
+  }
+
+  private getAllExpenses() {
+    return [...this.expenses.from, ...this.expenses.at, ...this.expenses.to];
+  }
+
+  getSum() {
+    const reducer = (sum: number, expense: IExpense) =>
+      sum + expense.totalReimbursement();
+    return this.getAllExpenses().reduce(reducer, 0);
+  }
+
+  getDestinationCompletion() {
+    return this.expenses.to[this.expenses.to.length - 1];
+  }
+
+  getCarTypeCompletion() {
+    return (
+      this.getAllExpenses().find(expense => 'carType' in expense) as ICarExpense
+    )?.carType;
+  }
+
+  getReturnTripCompletion() {
+    return this.expenses.to.map(mapTripToReturn).reverse();
   }
 
   deleteStoredData(): void {

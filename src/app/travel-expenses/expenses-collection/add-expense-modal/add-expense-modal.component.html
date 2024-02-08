@@ -31,27 +31,15 @@
   </div>
 
   <div class="formcontainer" *ngIf="expense?.type === 'car'">
-    <app-car-expense-form
-      [direction]="this.direction"
-      [expense]="this.expense"
-    ></app-car-expense-form>
+    <app-car-expense-form [expense]="this.expense" />
   </div>
   <div class="formcontainer" *ngIf="expense?.type === 'train'">
-    <app-train-expense-form
-      [direction]="this.direction"
-      [expense]="this.expense"
-    ></app-train-expense-form>
+    <app-train-expense-form [expense]="this.expense" />
   </div>
   <div class="formcontainer" *ngIf="expense?.type === 'plan'">
-    <app-plan-expense-form
-      [direction]="this.direction"
-      [expense]="this.expense"
-    ></app-plan-expense-form>
+    <app-plan-expense-form [expense]="this.expense" />
   </div>
   <div class="formcontainer" *ngIf="expense?.type === 'bike'">
-    <app-bike-expense-form
-      [direction]="this.direction"
-      [expense]="this.expense"
-    ></app-bike-expense-form>
+    <app-bike-expense-form [expense]="this.expense" />
   </div>
 </div>

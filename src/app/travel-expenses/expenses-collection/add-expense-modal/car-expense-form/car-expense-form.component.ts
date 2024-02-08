@@ -18,9 +18,6 @@ import {
 })
 export class CarExpenseFormComponent {
   @Input({ required: true })
-  direction!: Direction;
-
-  @Input({ required: true })
   expense!: IExpense;
 
   formGroup: FormGroup;
@@ -69,7 +66,6 @@ export class CarExpenseFormComponent {
       : [];
     const data: ICarExpenseData = {
       distance: this.formGroup.value.inputDistance,
-      direction: this.direction,
       startLocation: this.formGroup.value.inputFrom,
       endLocation: this.formGroup.value.inputTo,
       carType: this.formGroup.value.carType,

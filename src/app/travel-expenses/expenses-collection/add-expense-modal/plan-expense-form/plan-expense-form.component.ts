@@ -16,8 +16,6 @@ import {
 })
 export class PlanExpenseFormComponent {
   @Input({ required: true })
-  direction!: Direction;
-  @Input({ required: true })
   expense!: IExpense;
 
   formGroup: FormGroup;
@@ -40,7 +38,7 @@ export class PlanExpenseFormComponent {
   }
   submitForm() {
     const data: IPublicTransportPlanExpenseData = {
-      direction: this.direction,
+      price,
       startLocation: this.formGroup.value.inputFrom,
       endLocation: this.formGroup.value.inputTo
     };
