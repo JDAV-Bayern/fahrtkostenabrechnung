@@ -22,18 +22,11 @@ export class ReimbursementValidationService {
     reimbursement: IReimbursement
   ): ValidationResult {
     const findings: ValidationFinding[] = [];
-    if (!reimbursement.participantDetails.name?.length) {
-      findings.push({ type: 'error', message: 'Dein Name fehlt.' });
-    } else {
-      if (reimbursement.participantDetails.name.split(' ').length < 2) {
-        findings.push({
-          type: 'error',
-          message: 'Bitte gib deinen Vor- und Nachnamen an.'
-        });
-      }
-    }
-    if (!reimbursement.participantDetails.street?.length) {
-      findings.push({ type: 'error', message: 'Deine Straße fehlt.' });
+    if (!reimbursement.participantDetails.givenname?.length) {
+      findings.push({ type: 'error', message: 'Dein Vorname fehlt.' });
+    } 
+    if (!reimbursement.participantDetails.surname?.length) {
+      findings.push({ type: 'error', message: 'Dein Nachname fehlt' });
     }
     if (!reimbursement.participantDetails.city?.length) {
       findings.push({ type: 'error', message: 'Dein Wohnort fehlt.' });

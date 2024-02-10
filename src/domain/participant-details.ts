@@ -1,6 +1,6 @@
 export interface IParticipantDetails {
-  name: string;
-  street: string;
+  givenname: string;
+  surname: string;
   city: string;
   iban: string;
   bic?: string;

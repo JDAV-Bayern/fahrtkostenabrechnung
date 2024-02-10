@@ -21,8 +21,8 @@ export class PersonalInformationComponentComponent {
     // Initialize the form with FormBuilder
     const reimbursement = this.reimbursementService.getReimbursment();
     this.personalInfoForm = this.formBuilder.group({
-      name: [reimbursement.participantDetails.name, Validators.required],
-      street: [reimbursement.participantDetails.street, Validators.required],
+      name: [reimbursement.participantDetails.givenname, Validators.required],
+      surname: [reimbursement.participantDetails.surname, Validators.required],
       city: [reimbursement.participantDetails.city, Validators.required],
       zipCode: [
         reimbursement.participantDetails.zipCode,
@@ -61,7 +61,7 @@ export class PersonalInformationComponentComponent {
   saveData() {
     this.reimbursementService.setPersonalAndCourseInformation(
       this.personalInfoForm.value.name,
-      this.personalInfoForm.value.street,
+      this.personalInfoForm.value.surname,
       this.personalInfoForm.value.city,
       this.personalInfoForm.value.course,
       this.personalInfoForm.value.courseName,

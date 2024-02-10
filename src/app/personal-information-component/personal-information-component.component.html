@@ -8,7 +8,7 @@
         des Formulars, erklärst Du Dich damit einverstanden.
       </p>
       <div class="form-group">
-        <label for="name">Vorname und Nachname</label>
+        <label for="name">Vorname</label>
         <input
           (change)="saveData()"
           type="text"
@@ -24,28 +24,28 @@
           "
           class="error-message"
         >
-          Bitte gib deinen Namen ein.
+          Bitte gib deinen Vornamen ein.
         </div>
       </div>
 
       <div class="form-group">
-        <label for="street">Straße und Hausnummer</label>
+        <label for="surname">Nachname</label>
         <input
           (change)="saveData()"
           type="text"
-          id="street"
-          formControlName="street"
+          id="surname"
+          formControlName="surname"
           class="form-control"
           required
         />
         <div
           *ngIf="
-            personalInfoForm.get('street')?.hasError('required') &&
-            personalInfoForm.get('street')?.touched
+            personalInfoForm.get('surname')?.hasError('required') &&
+            personalInfoForm.get('surname')?.touched
           "
           class="error-message"
         >
-          Bitte gib Straße und Hausnummer ein.
+          Bitte gib deinen Nachnamen.
         </div>
       </div>
 

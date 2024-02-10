@@ -37,12 +37,11 @@
         <table>
           <tr>
             <td>Name:</td>
-            <td>{{ r().participantDetails.name }}</td>
+            <td>{{ r().participantDetails.givenname }} {{r().participantDetails.surname}}</td>
           </tr>
           <tr>
-            <td>Anschrift:</td>
+            <td>Wohnort:</td>
             <td>
-              {{ r().participantDetails.street }},
               {{ r().participantDetails.zipCode }}
               {{ r().participantDetails.city }}
             </td>

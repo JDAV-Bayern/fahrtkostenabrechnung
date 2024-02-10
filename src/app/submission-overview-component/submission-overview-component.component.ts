@@ -252,7 +252,7 @@ export class SubmissionOverviewComponentComponent {
 
     const link = document.createElement('a');
     link.href = fileURL;
-    link.download = `fka_${this.reimbursement?.courseDetails.id}_${this.reimbursement?.participantDetails.name.split(' ').pop()?.trim()}.pdf`;
+    link.download = `fka_${this.reimbursement?.courseDetails.id}_${this.reimbursement?.participantDetails.surname.trim()}.pdf`;
     link.click();
     link.remove();
     this.loading = false;

@@ -24,8 +24,8 @@ export class ReimbursementService {
     return {
       id: localStorage.getItem('id') || '',
       participantDetails: {
-        name: localStorage.getItem('name') || '',
-        street: localStorage.getItem('street') || '',
+        givenname: localStorage.getItem('givenname') || '',
+        surname: localStorage.getItem('surname') || '',
         city: localStorage.getItem('city') || '',
         iban: localStorage.getItem('iban') || '',
         zipCode: localStorage.getItem('zipCode') || '',
@@ -45,8 +45,8 @@ export class ReimbursementService {
 
   private storeToLocalStorage(reimbursement: IReimbursement) {
     localStorage.setItem('id', reimbursement.id);
-    localStorage.setItem('name', reimbursement.participantDetails.name);
-    localStorage.setItem('street', reimbursement.participantDetails.street);
+    localStorage.setItem('givenname', reimbursement.participantDetails.givenname);
+    localStorage.setItem('surname', reimbursement.participantDetails.surname);
     localStorage.setItem('city', reimbursement.participantDetails.city);
     localStorage.setItem('iban', reimbursement.participantDetails.iban);
     localStorage.setItem('courseId', reimbursement.courseDetails.id);
@@ -71,7 +71,7 @@ export class ReimbursementService {
 
   setPersonalAndCourseInformation(
     name: string,
-    street: string,
+    surname: string,
     city: string,
     course: string,
     courseName: string,
@@ -81,8 +81,8 @@ export class ReimbursementService {
     isBavaria: boolean
   ) {
     const reimbursement = this.loadFromLocalStorage();
-    reimbursement.participantDetails.name = name;
-    reimbursement.participantDetails.street = street;
+    reimbursement.participantDetails.givenname = name;
+    reimbursement.participantDetails.surname = surname;
     reimbursement.participantDetails.city = city;
     reimbursement.courseDetails.id = course;
     reimbursement.courseDetails.courseName = courseName;
@@ -114,8 +114,8 @@ export class ReimbursementService {
 
   deleteStoredData(): void {
     localStorage.removeItem('id');
-    localStorage.removeItem('name');
-    localStorage.removeItem('street');
+    localStorage.removeItem('givenname');
+    localStorage.removeItem('surname');
     localStorage.removeItem('city');
     localStorage.removeItem('iban');
     localStorage.removeItem('courseId');
