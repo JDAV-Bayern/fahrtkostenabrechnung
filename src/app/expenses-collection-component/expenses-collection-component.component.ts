@@ -86,25 +86,28 @@ export class ExpensesCollectionComponentComponent {
     }
   }
   editRow(expenseId: number) {
-    const expense = [
-      ...this.expensesTo,
-      ...this.expensesAt,
-      ...this.expensesFrom
-    ].find(expense => expense.id === expenseId);
-    if (!expense) {
+    let collectionRef: IExpense[] | undefined = undefined;
+    let index = -1;
+    for (const collection of [this.expensesTo, this.expensesAt, this.expensesFrom]) {
+      index = collection.findIndex(expense => expense.id === expenseId)
+      if (index !== -1) {
+        collectionRef = collection;
+        break;
+      }
+    }
+    if (!collectionRef || index === -1) {
       return;
     }
     const dialogRef = this.dialog.open(AddExpenseModalComponent, {
       id: 'add-expense-modal',
       width: '80%'
     });
-    dialogRef.componentInstance.direction = expense.direction;
-    dialogRef.componentInstance.expense = expense;
+    dialogRef.componentInstance.direction = collectionRef[index].direction;
+    dialogRef.componentInstance.expense = collectionRef[index];
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.deleteRow(expenseId);
-        this.addExpense(result);
+        collectionRef![index] = result;
         this.storeExpenses();
       }
     });
