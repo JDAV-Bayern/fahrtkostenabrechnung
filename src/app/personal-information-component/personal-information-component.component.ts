@@ -28,7 +28,10 @@ export class PersonalInformationComponentComponent {
         reimbursement.participantDetails.zipCode,
         [Validators.required, Validators.pattern(/^[0-9][0-9][0-9][0-9][0-9]$/)]
       ],
-      course: [reimbursement.courseDetails.id, Validators.required],
+      course: [
+        reimbursement.courseDetails.id,
+        [Validators.required, Validators.pattern(/B\d+(FB|AM)/)]
+      ],
       courseName: [reimbursement.courseDetails.courseName, Validators.required],
       courseDate: [reimbursement.courseDetails.courseDate, Validators.required],
       courseLocation: [

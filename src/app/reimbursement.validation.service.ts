@@ -24,7 +24,7 @@ export class ReimbursementValidationService {
     const findings: ValidationFinding[] = [];
     if (!reimbursement.participantDetails.givenname?.length) {
       findings.push({ type: 'error', message: 'Dein Vorname fehlt.' });
-    } 
+    }
     if (!reimbursement.participantDetails.surname?.length) {
       findings.push({ type: 'error', message: 'Dein Nachname fehlt' });
     }
@@ -69,6 +69,25 @@ export class ReimbursementValidationService {
         type: 'error',
         message: 'Bitte gib den Namen des Kurses an.'
       });
+    }
+    if (!reimbursement.courseDetails.id?.length) {
+      findings.push({
+        type: 'error',
+        message: 'Bitte gib die Kursnummer an.'
+      });
+    } else {
+      if (reimbursement.courseDetails.id.match(/B\d+(FB|AM)/) === null)
+        findings.push({
+          type: 'error',
+          message:
+            'Kursnummern von Kursen der JDAV Bayern folgen dem Format BXXXFB oder BXXXAM. Bitte überprüfe die Kursnummer noch einmal und stelle sicher, dass Du einen Kurs der JDAV Bayern besucht hast und nicht einen eines anderen Landesverbandes oder dem Bundesverband.'
+        });
+      if (reimbursement.courseDetails.id.match(/B\d{3}(FB|AM)/) === null)
+        findings.push({
+          type: 'warning',
+          message:
+            'Kursnummern von Kursen der JDAV Bayern folgen normalerweise dem Format BXXXFB oder BXXXAM mit einer dreistelligen Zahl. Deine Kursnummer weicht davon ab. Bitte überprüfe die Kursnummer noch einmal.'
+        });
     }
     if (!reimbursement.courseDetails.courseDate?.length) {
       findings.push({

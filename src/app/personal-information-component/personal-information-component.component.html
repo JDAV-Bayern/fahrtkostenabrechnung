@@ -131,6 +131,15 @@
         >
           Bitte gib die Kursnummer ein.
         </div>
+        <div
+          *ngIf="
+            personalInfoForm.get('course')?.hasError('pattern') &&
+            personalInfoForm.get('course')?.touched
+          "
+          class="error-message"
+        >
+            Diese Kursnummer sieht falsch aus. Kursnummern von Kursen der JDAV Bayern folgen dem Format BXXXFB oder BXXXAM. Bitte überprüfe die Kursnummer noch einmal und stelle sicher, dass Du einen Kurs der JDAV Bayern besucht hast und nicht einen eines anderen Landesverbandes oder dem Bundesverband.
+        </div>
       </div>
       <div class="form-group">
         <label for="courseDate">Kursdatum</label>
