@@ -22,12 +22,12 @@
       <span class="material-symbols-outlined">&#xe570;</span
       >&nbsp;Zugfahrt</button
     ><br />
-    <button (click)="choosePlanExpense()" class="gray-button">
-      <span class="material-symbols-outlined">&#xe8f8;</span>&nbsp;Öffis Abo</button
-    ><br />
     <button (click)="chooseBikeExpense()" class="gray-button">
       <span class="material-symbols-outlined">&#xeb29;</span>&nbsp;Fahrrad
     </button>
+    <button *ngIf="direction !== 'at'" (click)="choosePlanExpense()" class="gray-button">
+      <span class="material-symbols-outlined">&#xe8f8;</span>&nbsp;Öffis Abo</button
+    ><br />
   </div>
 
   <div class="formcontainer" *ngIf="expense?.type === 'car'">
