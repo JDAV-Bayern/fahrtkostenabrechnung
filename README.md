@@ -1,10 +1,10 @@
-# Fahrtkostenformular für die Schulungen und Veranstaltungen der JDAV Bayern
+# Fahrtkostenformular für die Kurse und Veranstaltungen der JDAV Bayern
 
-Das Projekt wurde in Q1/2024 von Simon Langebrake (stellv. Landesjugendleiter) und Joseph Hirsch (stellv. Landesjugendleiter) initiiert und aufgesetzt. Es soll die Abrechnung von Fahrtkosten für die Schulungen und Veranstaltungen der JDAV Bayern vereinfachen. Die Sofware ist noch nicht live, da sie noch nicht vollständig getestet ist.
+Das Projekt wurde in Q1/2024 von Simon Langebrake (stellv. Landesjugendleiter) und Joseph Hirsch (stellv. Landesjugendleiter) initiiert und aufgesetzt. Es soll die Abrechnung von Fahrtkosten für die Kurse und Veranstaltungen der JDAV Bayern vereinfachen. Die Sofware ist noch nicht live, da sie noch nicht vollständig getestet ist.
 
 ## Anwendung
 
-Mit dem Fahrtkostenformular können Fahrtkosten für die Schulungen und Veranstaltungen der JDAV Bayern erfasst werden. Die Daten werden im letzten Schritt mit Belegen erweitert und können dann als einheitliches PDF heruntergeladen werden. Dieses PDF muss gesondert eingereicht werden. Die Daten werden nicht automatisch an die JDAV Bayern übermittelt. Die einheitliche PDF soll der Landesgeschäftsstelle der JDAV Bayern die Abrechnung vereinfachen, da die Daten idealerweise verständlich und einheitlich aufbereitet sind.
+Mit dem Fahrtkostenformular können Fahrtkosten für die Kurse und Veranstaltungen der JDAV Bayern erfasst werden. Die Daten werden im letzten Schritt mit Belegen erweitert und können dann als einheitliches PDF heruntergeladen werden. Dieses PDF muss gesondert eingereicht werden. Die Daten werden nicht automatisch an die JDAV Bayern übermittelt. Die einheitliche PDF soll der Landesgeschäftsstelle der JDAV Bayern die Abrechnung vereinfachen, da die Daten idealerweise verständlich und einheitlich aufbereitet sind.
 
 ## Client-Only Static Web App
 

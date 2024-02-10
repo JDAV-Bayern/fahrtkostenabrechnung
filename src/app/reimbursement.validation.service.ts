@@ -67,19 +67,19 @@ export class ReimbursementValidationService {
     if (!reimbursement.courseDetails.courseName?.length) {
       findings.push({
         type: 'error',
-        message: 'Bitte gib den Namen der Schulung an.'
+        message: 'Bitte gib den Namen des Kurses an.'
       });
     }
     if (!reimbursement.courseDetails.courseDate?.length) {
       findings.push({
         type: 'error',
-        message: 'Bitte gib das Datum der Schulung an.'
+        message: 'Bitte gib das Datum des Kurses an.'
       });
     }
     if (!reimbursement.courseDetails.courseLocation?.length) {
       findings.push({
         type: 'error',
-        message: 'Bitte gib den Ort der Schulung an.'
+        message: 'Bitte gib den Ort des Kurses an.'
       });
     }
     if (!reimbursement.expenses?.length) {
