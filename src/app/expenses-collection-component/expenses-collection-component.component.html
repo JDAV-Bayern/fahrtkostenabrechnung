@@ -46,7 +46,7 @@
     <button (click)="addReturnTrip()" class="add-button green-button mar">
       Rückfahrt wie hinfahrt
     </button>
-    <div [dragula]="'expensesFrom'" [(dragulaModel)]="expensesFrom">
+    <div [dragula]="'expensesFrom'" [(dragulaModel)]="expensesFrom" (dragulaModelChange)="storeExpenses()">
       <app-expense-list-row
         (deleteRow)="deleteRow($event)"
         (editRow)="editRow($event)"
