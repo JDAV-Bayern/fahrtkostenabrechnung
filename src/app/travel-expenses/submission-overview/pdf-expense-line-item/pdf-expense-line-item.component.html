@@ -6,7 +6,7 @@
         <table>
           <tr>
             <td class="location">
-              <b>{{ expense.startLocation }}</b> nach
+              <b>{{ expense.origin }}</b> nach
             </td>
             <th class="title">
               {{ getTitle() }}
@@ -17,7 +17,7 @@
           </tr>
           <tr>
             <td class="location">
-              <b>{{ expense.endLocation }}</b>
+              <b>{{ expense.destination }}</b>
             </td>
             <td colspan="2" class="details">
               {{ getDetails() }}

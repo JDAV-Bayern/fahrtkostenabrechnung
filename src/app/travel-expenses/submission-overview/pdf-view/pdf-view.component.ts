@@ -39,7 +39,7 @@ export class PdfViewComponent {
   }
   getSum() {
     const expensesSum = this.reimbursementService.getSum();
-    if (!this.reimbursement.participantDetails.isBavaria && expensesSum > 75) {
+    if (!this.reimbursement.participant.isBavaria && expensesSum > 75) {
       return `(${expensesSum.toFixed(2)}) -> 75.00`;
     }
     return expensesSum.toFixed(2);

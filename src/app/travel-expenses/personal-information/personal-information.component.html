@@ -1,5 +1,5 @@
 <div class="step-box">
-  <fieldset [formGroup]="personalInfoForm">
+  <fieldset [formGroup]="participantForm">
     <h1>Angaben zu Dir</h1>
 
     <p style="font-size: small">
@@ -64,86 +64,86 @@
         Bitte gib deinen Wohnort ein.
       </div>
     </div>
+  </fieldset>
 
-    <fieldset formGroupName="course">
-      <h1>Angaben zum Kurs</h1>
+  <fieldset [formGroup]="courseForm">
+    <h1>Angaben zum Kurs</h1>
 
-      <div class="form-group">
-        <label for="courseName">Schulungsname</label>
-        <input
-          type="text"
-          id="courseName"
-          formControlName="name"
-          class="form-control"
-          required
-        />
-        <div
-          *ngIf="courseName.invalid && courseName.touched"
-          class="error-message"
-        >
-          Bitte gib den Schulungsnamen ein.
-        </div>
+    <div class="form-group">
+      <label for="courseName">Schulungsname</label>
+      <input
+        type="text"
+        id="courseName"
+        formControlName="name"
+        class="form-control"
+        required
+      />
+      <div
+        *ngIf="courseName.invalid && courseName.touched"
+        class="error-message"
+      >
+        Bitte gib den Schulungsnamen ein.
       </div>
+    </div>
 
-      <div class="form-group">
-        <label for="courseCode">Schulungsnummer</label>
-        <input
-          type="text"
-          id="courseCode"
-          formControlName="code"
-          class="form-control"
-          required
-        />
-        <div
-          *ngIf="courseCode.invalid && courseCode.touched"
-          class="error-message"
-        >
-          Bitte gib die Schulungsnummer ein.
-        </div>
+    <div class="form-group">
+      <label for="courseCode">Schulungsnummer</label>
+      <input
+        type="text"
+        id="courseCode"
+        formControlName="code"
+        class="form-control"
+        required
+      />
+      <div
+        *ngIf="courseCode.invalid && courseCode.touched"
+        class="error-message"
+      >
+        Bitte gib die Schulungsnummer ein.
       </div>
+    </div>
 
-      <div class="form-group">
-        <label for="courseDate">Schulungsdatum</label>
-        <input
-          type="text"
-          id="courseDate"
-          formControlName="date"
-          class="form-control"
-          required
-        />
-        <div
-          *ngIf="courseDate.invalid && courseDate.touched"
-          class="error-message"
-        >
-          Bitte gib das Schulungsdatum ein.
-        </div>
+    <div class="form-group">
+      <label for="courseDate">Schulungsdatum</label>
+      <input
+        type="text"
+        id="courseDate"
+        formControlName="date"
+        class="form-control"
+        required
+      />
+      <div
+        *ngIf="courseDate.invalid && courseDate.touched"
+        class="error-message"
+      >
+        Bitte gib das Schulungsdatum ein.
       </div>
+    </div>
 
-      <div class="form-group">
-        <label for="courseLocation">Schulungsort</label>
-        <input
-          type="text"
-          id="courseLocation"
-          formControlName="location"
-          class="form-control"
-          required
-        />
-        <div
-          *ngIf="courseLocation.invalid && courseLocation.touched"
-          class="error-message"
-        >
-          Bitte gib den Schulungsort ein.
-        </div>
+    <div class="form-group">
+      <label for="courseLocation">Schulungsort</label>
+      <input
+        type="text"
+        id="courseLocation"
+        formControlName="location"
+        class="form-control"
+        required
+      />
+      <div
+        *ngIf="courseLocation.invalid && courseLocation.touched"
+        class="error-message"
+      >
+        Bitte gib den Schulungsort ein.
       </div>
-    </fieldset>
+    </div>
   </fieldset>
 </div>
 
 <div class="button-container">
   <div class="right-button-container">
     <button
-      [class.green-button]="personalInfoForm.valid"
-      [class.disabled-button]="!personalInfoForm.valid"
+      [class.green-button]="participantForm.valid && courseForm.valid"
+      [class.disabled-button]="participantForm.invalid || courseForm.invalid"
       (click)="next()"
     >
       Weiter

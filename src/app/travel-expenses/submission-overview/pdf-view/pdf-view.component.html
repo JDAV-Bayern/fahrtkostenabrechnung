@@ -16,19 +16,19 @@
         <table class="detailstable">
           <tr>
             <td>Schulung:</td>
-            <td>{{ r().courseDetails.courseName }}</td>
+            <td>{{ r().course.name }}</td>
           </tr>
           <tr>
             <td>Schulungsnummer:</td>
-            <td>{{ r().courseDetails.id }}</td>
+            <td>{{ r().course.code }}</td>
           </tr>
           <tr>
             <td>Schulungsdatum:</td>
-            <td>{{ r().courseDetails.courseDate }}</td>
+            <td>{{ r().course.date }}</td>
           </tr>
           <tr>
             <td>Kursort:</td>
-            <td>{{ r().courseDetails.courseLocation }}</td>
+            <td>{{ r().course.location }}</td>
           </tr>
         </table>
       </td>
@@ -37,20 +37,20 @@
         <table>
           <tr>
             <td>Name:</td>
-            <td>{{ r().participantDetails.name }}</td>
+            <td>{{ r().participant.name }}</td>
           </tr>
           <tr>
             <td>Anschrift:</td>
             <td>
-              {{ r().participantDetails.street }},
-              {{ r().participantDetails.zipCode }}
-              {{ r().participantDetails.city }}
+              {{ r().participant.street }},
+              {{ r().participant.zipCode }}
+              {{ r().participant.city }}
             </td>
           </tr>
           <tr>
             <td colspan="2">
               {{
-                r().participantDetails.isBavaria
+                r().participant.isBavaria
                   ? 'Teilnehmer*in kommt aus Bayern'
                   : 'Teilnehmer*in kommt nicht aus Bayern'
               }}
@@ -58,11 +58,11 @@
           </tr>
           <tr>
             <td>IBAN:</td>
-            <td>{{ r().participantDetails.iban }}</td>
+            <td>{{ r().participant.iban }}</td>
           </tr>
-          <tr *ngIf="r().participantDetails.bic?.length">
+          <tr *ngIf="r().participant.bic?.length">
             <td>BIC:</td>
-            <td>{{ r().participantDetails.bic }}</td>
+            <td>{{ r().participant.bic }}</td>
           </tr>
         </table>
       </td>
@@ -77,19 +77,19 @@
   <hr />
   <h3>Hinfahrt</h3>
   <app-pdf-expense-line-item
-    *ngFor="let expense of r().expenses.to; index as i"
+    *ngFor="let expense of r().expenses.inbound; index as i"
     [expense]="expense"
     [index]="i"
   ></app-pdf-expense-line-item>
   <h3>Vor Ort</h3>
   <app-pdf-expense-line-item
-    *ngFor="let expense of r().expenses.at; index as i"
+    *ngFor="let expense of r().expenses.onsite; index as i"
     [expense]="expense"
     [index]="i"
   ></app-pdf-expense-line-item>
   <h3>Rückfahrt</h3>
   <app-pdf-expense-line-item
-    *ngFor="let expense of r().expenses.from; index as i"
+    *ngFor="let expense of r().expenses.outbound; index as i"
     [expense]="expense"
     [index]="i"
   ></app-pdf-expense-line-item>

@@ -1,12 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import {
-  FormDirection,
-  ReimbursementService
-} from 'src/app/reimbursement.service';
+import { ReimbursementService } from 'src/app/reimbursement.service';
 import { AddExpenseModalComponent } from '../add-expense-modal/add-expense-modal.component';
 import { FormArray, FormGroup } from '@angular/forms';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
+import { Direction } from 'src/domain/expense';
 
 @Component({
   selector: 'app-expense-list',
@@ -15,7 +13,7 @@ import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 })
 export class ExpenseListComponent {
   @Input({ required: true })
-  direction!: FormDirection;
+  direction!: Direction;
 
   @Input({ required: true })
   heading!: string;

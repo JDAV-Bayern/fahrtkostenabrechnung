@@ -29,11 +29,11 @@ export class ExpenseListRowComponent {
   }
 
   get origin() {
-    return this.form.get('from')?.value as string;
+    return this.form.get('origin')?.value as string;
   }
 
   get destination() {
-    return this.form.get('to')?.value as string;
+    return this.form.get('destination')?.value as string;
   }
 
   get distance() {
@@ -50,10 +50,13 @@ export class ExpenseListRowComponent {
   }
 
   editMe() {
-    this.dialog.open(AddExpenseModalComponent, {
-      data: { form: this.form },
-      width: '80%'
-    });
+    this.dialog
+      .open(AddExpenseModalComponent, {
+        data: { form: this.form },
+        width: '80%'
+      })
+      .afterClosed()
+      .subscribe(() => this.reimbursementService.saveForm());
   }
 
   deleteMe() {

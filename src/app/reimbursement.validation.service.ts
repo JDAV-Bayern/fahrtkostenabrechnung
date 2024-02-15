@@ -22,53 +22,53 @@ export class ReimbursementValidationService {
     reimbursement: IReimbursement
   ): ValidationResult {
     const expenses = [
-      ...reimbursement.expenses.to,
-      ...reimbursement.expenses.at,
-      ...reimbursement.expenses.from
+      ...reimbursement.expenses.inbound,
+      ...reimbursement.expenses.onsite,
+      ...reimbursement.expenses.outbound
     ];
     const findings: ValidationFinding[] = [];
-    if (!reimbursement.participantDetails.name?.length) {
+    if (!reimbursement.participant.name?.length) {
       findings.push({ type: 'error', message: 'Dein Name fehlt.' });
     } else {
-      if (reimbursement.participantDetails.name.split(' ').length < 2) {
+      if (reimbursement.participant.name.split(' ').length < 2) {
         findings.push({
           type: 'error',
           message: 'Bitte gib deinen Vor- und Nachnamen an.'
         });
       }
     }
-    if (!reimbursement.participantDetails.street?.length) {
+    if (!reimbursement.participant.street?.length) {
       findings.push({ type: 'error', message: 'Deine Straße fehlt.' });
     }
-    if (!reimbursement.participantDetails.city?.length) {
+    if (!reimbursement.participant.city?.length) {
       findings.push({ type: 'error', message: 'Dein Wohnort fehlt.' });
     }
-    if (!reimbursement.participantDetails.zipCode?.length) {
+    if (!reimbursement.participant.zipCode?.length) {
       findings.push({ type: 'error', message: 'Deine Postleitzahl fehlt' });
     } else {
-      if (!this.plzService.exists(reimbursement.participantDetails.zipCode)) {
+      if (!this.plzService.exists(reimbursement.participant.zipCode)) {
         findings.push({
           type: 'warning',
-          message: `Deine Postleitzahl (${reimbursement.participantDetails.zipCode}) ist uns unbekannt. Bitte überprüfe sie noch einmal.`
+          message: `Deine Postleitzahl (${reimbursement.participant.zipCode}) ist uns unbekannt. Bitte überprüfe sie noch einmal.`
         });
       } else {
         if (
-          !this.plzService.search(reimbursement.participantDetails.zipCode)[0]
+          !this.plzService.search(reimbursement.participant.zipCode)[0]
             ?.isBavaria
         ) {
           findings.push({
             type: 'info',
-            message: `Deine Postleitzahl (${reimbursement.participantDetails.zipCode}) liegt nicht in Bayern. Wir begrenzen daher den Erstattungsbetrag gemäß unserer Reisekostenrichtlinien auf 75,-€`
+            message: `Deine Postleitzahl (${reimbursement.participant.zipCode}) liegt nicht in Bayern. Wir begrenzen daher den Erstattungsbetrag gemäß unserer Reisekostenrichtlinien auf 75,-€`
           });
         }
       }
     }
-    if (!reimbursement.participantDetails.iban?.length) {
+    if (!reimbursement.participant.iban?.length) {
       findings.push({ type: 'error', message: 'Deine IBAN fehlt.' });
     } else {
       if (
-        !reimbursement.participantDetails.iban.startsWith('DE') &&
-        !reimbursement.participantDetails.bic?.length
+        !reimbursement.participant.iban.startsWith('DE') &&
+        !reimbursement.participant.bic?.length
       ) {
         findings.push({
           type: 'error',
@@ -76,19 +76,19 @@ export class ReimbursementValidationService {
         });
       }
     }
-    if (!reimbursement.courseDetails.courseName?.length) {
+    if (!reimbursement.course.name?.length) {
       findings.push({
         type: 'error',
         message: 'Bitte gib den Namen der Schulung an.'
       });
     }
-    if (!reimbursement.courseDetails.courseDate?.length) {
+    if (!reimbursement.course.date?.length) {
       findings.push({
         type: 'error',
         message: 'Bitte gib das Datum der Schulung an.'
       });
     }
-    if (!reimbursement.courseDetails.courseLocation?.length) {
+    if (!reimbursement.course.location?.length) {
       findings.push({
         type: 'error',
         message: 'Bitte gib den Ort der Schulung an.'
@@ -123,8 +123,8 @@ export class ReimbursementValidationService {
       }
       findings.push(
         ...this.checkValidityOfRoute([
-          ...reimbursement.expenses.to,
-          ...reimbursement.expenses.from
+          ...reimbursement.expenses.inbound,
+          ...reimbursement.expenses.outbound
         ])
       );
     }
@@ -135,10 +135,10 @@ export class ReimbursementValidationService {
   }
   private checkValidityOfRoute(expenses: IExpense[]): ValidationFinding[] {
     const findings: ValidationFinding[] = [];
-    let currentPosition = expenses[0].endLocation;
+    let currentPosition = expenses[0].destination;
     for (let i = 1; i < expenses.length; i++) {
-      const endPosition = expenses[i].endLocation;
-      const startPosition = expenses[i].startLocation;
+      const endPosition = expenses[i].destination;
+      const startPosition = expenses[i].origin;
       if (startPosition !== currentPosition) {
         findings.push({
           type: 'warning',

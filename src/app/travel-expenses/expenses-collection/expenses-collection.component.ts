@@ -10,13 +10,13 @@ import { ReimbursementService } from 'src/app/reimbursement.service';
   styleUrls: ['./expenses-collection.component.css']
 })
 export class ExpensesCollectionComponent {
-  formStep: FormGroup;
+  form: FormGroup;
 
   constructor(
     private readonly router: Router,
     private readonly reimbursementService: ReimbursementService
   ) {
-    this.formStep = this.reimbursementService.expensesStep;
+    this.form = this.reimbursementService.expensesStep;
   }
 
   getSum() {

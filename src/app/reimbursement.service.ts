@@ -4,6 +4,7 @@ import { validateIBAN } from 'ngx-iban-validator';
 import {
   BikeExpense,
   CarExpense,
+  Direction,
   ExpenseType,
   IExpense,
   PublicTransportPlanExpense,
@@ -12,24 +13,22 @@ import {
 import { IReimbursement } from 'src/domain/reimbursement';
 import { PlzService } from './plz.service';
 
-export type FormDirection = 'inbound' | 'outbound' | 'onsite';
-
 @Injectable({
   providedIn: 'root'
 })
 export class ReimbursementService {
   travelExpensesForm = this.formBuilder.group({
-    personalInformation: this.formBuilder.nonNullable.group({
+    course: this.formBuilder.nonNullable.group({
+      code: ['', Validators.required],
+      name: ['', Validators.required],
+      date: ['', Validators.required],
+      location: ['', Validators.required]
+    }),
+    participant: this.formBuilder.nonNullable.group({
       name: ['', Validators.required],
       street: ['', Validators.required],
       zipCode: ['', [Validators.required, Validators.pattern(/^[0-9]{5}$/)]],
-      city: ['', Validators.required],
-      course: this.formBuilder.nonNullable.group({
-        code: ['', Validators.required],
-        name: ['', Validators.required],
-        date: ['', Validators.required],
-        location: ['', Validators.required]
-      })
+      city: ['', Validators.required]
     }),
     expenses: this.formBuilder.group({
       inbound: this.formBuilder.array<IExpense>([]),
@@ -49,8 +48,12 @@ export class ReimbursementService {
     private plzService: PlzService
   ) {}
 
-  get personalInformationStep() {
-    return this.travelExpensesForm.get('personalInformation') as FormGroup;
+  get participantStep() {
+    return this.travelExpensesForm.get('participant') as FormGroup;
+  }
+
+  get courseStep() {
+    return this.travelExpensesForm.get('course') as FormGroup;
   }
 
   get expensesStep() {
@@ -61,15 +64,15 @@ export class ReimbursementService {
     return this.travelExpensesForm.get('overview') as FormGroup;
   }
 
-  getExpenses(direction: FormDirection): FormArray {
+  getExpenses(direction: Direction): FormArray {
     return this.travelExpensesForm.get(`expenses.${direction}`) as FormArray;
   }
 
   getExpenseFormGroup(type: ExpenseType): FormGroup {
     const commonControls = {
       type: [type, Validators.required],
-      from: ['', Validators.required],
-      to: ['', Validators.required]
+      origin: ['', Validators.required],
+      destination: ['', Validators.required]
     };
 
     switch (type) {
@@ -105,30 +108,18 @@ export class ReimbursementService {
               .map(passenger => passenger.trim())
           : [];
         return new CarExpense({
-          distance: v.distance,
-          startLocation: v.from,
-          endLocation: v.to,
-          carType: v.carType,
+          ...v,
           passengers
         });
       case 'train':
         return new TrainExpense({
-          startLocation: v.from,
-          endLocation: v.to,
-          priceWithDiscount: Number(v.price.replace(',', '.').trim()),
-          discountCard: v.discountCard
+          ...v,
+          priceWithDiscount: Number(v.price.replace(',', '.').trim())
         });
       case 'plan':
-        return new PublicTransportPlanExpense({
-          startLocation: v.from,
-          endLocation: v.to
-        });
+        return new PublicTransportPlanExpense(v);
       case 'bike':
-        return new BikeExpense({
-          distance: v.distance,
-          startLocation: v.from,
-          endLocation: v.to
-        });
+        return new BikeExpense(v);
       default:
         throw new Error(`Unknown expense type: ${v.type}`);
     }
@@ -140,11 +131,7 @@ export class ReimbursementService {
     this.travelExpensesForm.patchValue(travelExpenses);
 
     // create controls for form arrays
-    for (let direction of [
-      'inbound',
-      'onsite',
-      'outbound'
-    ] as FormDirection[]) {
+    for (let direction of ['inbound', 'onsite', 'outbound'] as Direction[]) {
       const expenses = travelExpenses.expenses[direction];
       if (expenses) {
         const formArray = this.getExpenses(direction);
@@ -169,30 +156,20 @@ export class ReimbursementService {
 
   getReimbursment(): IReimbursement {
     const v = this.travelExpensesForm.getRawValue();
-    const plzInfo = this.plzService.search(v.personalInformation.zipCode);
+    const plzInfo = this.plzService.search(v.participant.zipCode);
 
     return {
-      id: 0,
-      formDate: new Date(),
-      courseDetails: {
-        id: v.personalInformation.course.code,
-        courseName: v.personalInformation.course.name,
-        courseDate: v.personalInformation.course.date,
-        courseLocation: v.personalInformation.course.location
-      },
-      participantDetails: {
-        name: v.personalInformation.name,
-        street: v.personalInformation.street,
-        zipCode: v.personalInformation.zipCode,
-        city: v.personalInformation.city,
+      course: v.course,
+      participant: {
+        ...v.participant,
         isBavaria: plzInfo.length > 0 ? plzInfo[0].isBavaria : false,
         iban: v.overview.iban,
         bic: v.overview.bic
       },
       expenses: {
-        to: v.expenses.inbound.map(this.getExpense),
-        at: v.expenses.onsite.map(this.getExpense),
-        from: v.expenses.outbound.map(this.getExpense)
+        inbound: v.expenses.inbound.map(this.getExpense),
+        onsite: v.expenses.onsite.map(this.getExpense),
+        outbound: v.expenses.outbound.map(this.getExpense)
       },
       note: v.overview.note
     };
@@ -200,7 +177,7 @@ export class ReimbursementService {
 
   private getAllExpenses() {
     const expenses = this.getReimbursment().expenses;
-    return [...expenses.from, ...expenses.at, ...expenses.to];
+    return [...expenses.outbound, ...expenses.onsite, ...expenses.inbound];
   }
 
   getSum() {
@@ -209,7 +186,7 @@ export class ReimbursementService {
     return this.getAllExpenses().reduce(reducer, 0);
   }
 
-  getDestinationCompletion(direction: FormDirection): string {
+  getDestinationCompletion(direction: Direction): string {
     const expenses = this.getExpenses(direction);
 
     if (expenses.length === 0) {
@@ -219,15 +196,11 @@ export class ReimbursementService {
     }
 
     const lastExpense = expenses.value[expenses.length - 1];
-    return lastExpense.to;
+    return lastExpense.destination;
   }
 
   getCarTypeCompletion(): string {
-    for (let direction of [
-      'inbound',
-      'onsite',
-      'outbound'
-    ] as FormDirection[]) {
+    for (let direction of ['inbound', 'onsite', 'outbound'] as Direction[]) {
       const expenses = this.getExpenses(direction).getRawValue();
       const carExpense = expenses.find(expense => 'carType' in expense);
       if (carExpense) {
@@ -246,9 +219,9 @@ export class ReimbursementService {
       const value = values[i];
 
       // swap origin and destination
-      let temp = value.from;
-      value.from = value.to;
-      value.to = temp;
+      let temp = value.origin;
+      value.origin = value.destination;
+      value.destination = temp;
 
       let control = this.getExpenseFormGroup(value.type);
       control.patchValue(value);

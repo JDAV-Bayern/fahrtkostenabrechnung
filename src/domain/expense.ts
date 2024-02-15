@@ -1,12 +1,12 @@
 export type ExpenseType = 'bike' | 'car' | 'train' | 'plan';
-export type Direction = 'from' | 'to' | 'at';
+export type Direction = 'inbound' | 'onsite' | 'outbound';
 
 export interface IExpense {
   type: ExpenseType;
   id: number;
   totalReimbursement: () => number;
-  startLocation: string;
-  endLocation: string;
+  origin: string;
+  destination: string;
 }
 
 type OmitIdAndTotal<T> = Omit<T, 'id' | 'totalReimbursement'> & { id?: number };
@@ -17,14 +17,14 @@ type OmitIdTotalAndType<T> = Omit<T, 'id' | 'totalReimbursement' | 'type'> & {
 abstract class Expense implements IExpense {
   type: ExpenseType;
   id: number;
-  startLocation: string;
-  endLocation: string;
+  origin: string;
+  destination: string;
 
   constructor(data: OmitIdAndTotal<IExpense>) {
     this.type = data.type;
     this.id = data.id || 0;
-    this.startLocation = data.startLocation;
-    this.endLocation = data.endLocation;
+    this.origin = data.origin;
+    this.destination = data.destination;
   }
 
   abstract totalReimbursement(): number;

@@ -6,14 +6,11 @@ import {
   Validators
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {
-  FormDirection,
-  ReimbursementService
-} from 'src/app/reimbursement.service';
-import { ExpenseType } from 'src/domain/expense';
+import { ReimbursementService } from 'src/app/reimbursement.service';
+import { Direction, ExpenseType } from 'src/domain/expense';
 
 export interface ExpenseDialogData {
-  direction: FormDirection;
+  direction: Direction;
   form?: FormGroup;
 }
 
@@ -23,7 +20,7 @@ export interface ExpenseDialogData {
   styleUrls: ['./add-expense-modal.component.css']
 })
 export class AddExpenseModalComponent {
-  direction: FormDirection;
+  direction: Direction;
   form: FormGroup;
 
   constructor(
@@ -45,11 +42,11 @@ export class AddExpenseModalComponent {
   }
 
   get origin() {
-    return this.form.get('from') as FormControl<string> | null;
+    return this.form.get('origin') as FormControl<string> | null;
   }
 
   get destination() {
-    return this.form.get('to') as FormControl<string> | null;
+    return this.form.get('destination') as FormControl<string> | null;
   }
 
   // for car and bike expenses

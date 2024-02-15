@@ -15,7 +15,7 @@ import { ReimbursementValidationService } from 'src/app/reimbursement.validation
   styleUrls: ['./submission-overview.component.css']
 })
 export class SubmissionOverviewComponent {
-  formGroup: FormGroup;
+  form: FormGroup;
 
   public files: File[] = [];
 
@@ -35,11 +35,11 @@ export class SubmissionOverviewComponent {
     private readonly reimbursementService: ReimbursementService,
     private readonly validationService: ReimbursementValidationService
   ) {
-    this.formGroup = reimbursementService.overviewStep;
+    this.form = reimbursementService.overviewStep;
   }
 
   get iban() {
-    return this.formGroup.get('iban') as FormControl<string>;
+    return this.form.get('iban') as FormControl<string>;
   }
 
   getSum(): number {
@@ -157,7 +157,7 @@ export class SubmissionOverviewComponent {
     await this.pdfFullyRenderedPromise;
 
     const htmlElement = document.getElementById('pdf-container');
-    if (!htmlElement || !this.formGroup.valid) {
+    if (!htmlElement || !this.form.valid) {
       this.loading = false;
       this.showPdf = false;
       return;
@@ -216,7 +216,7 @@ export class SubmissionOverviewComponent {
 
     const link = document.createElement('a');
     link.href = fileURL;
-    link.download = `fka_${this.r().courseDetails.id}_${this.r().participantDetails.name.split(' ').pop()?.trim()}.pdf`;
+    link.download = `fka_${this.r().course.code}_${this.r().participant.name.split(' ').pop()?.trim()}.pdf`;
     link.click();
     link.remove();
     this.loading = false;
