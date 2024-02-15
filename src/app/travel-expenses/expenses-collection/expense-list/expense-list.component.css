@@ -1,3 +1,7 @@
 .drop-area {
   min-height: 100px;
 }
+
+.cdk-drag-placeholder {
+  opacity: 0.5;
+}

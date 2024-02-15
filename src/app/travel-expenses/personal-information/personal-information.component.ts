@@ -17,9 +17,7 @@ export class PersonalInformationComponent {
     public readonly plzService: PlzService,
     reimbursementService: ReimbursementService
   ) {
-    this.personalInfoForm = reimbursementService.getFormStep(
-      'personalInformation'
-    );
+    this.personalInfoForm = reimbursementService.personalInformationStep;
   }
 
   get name() {

@@ -35,7 +35,7 @@ export class SubmissionOverviewComponent {
     private readonly reimbursementService: ReimbursementService,
     private readonly validationService: ReimbursementValidationService
   ) {
-    this.formGroup = reimbursementService.getFormStep('overview');
+    this.formGroup = reimbursementService.overviewStep;
   }
 
   get iban() {

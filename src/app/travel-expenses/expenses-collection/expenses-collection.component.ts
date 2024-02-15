@@ -1,7 +1,8 @@
+import { CdkDrag } from '@angular/cdk/drag-drop';
 import { Component } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReimbursementService } from 'src/app/reimbursement.service';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-expenses-collection',
@@ -9,14 +10,25 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./expenses-collection.component.css']
 })
 export class ExpensesCollectionComponent {
+  formStep: FormGroup;
+
   constructor(
     private readonly router: Router,
-    public dialog: MatDialog,
     private readonly reimbursementService: ReimbursementService
-  ) {}
+  ) {
+    this.formStep = this.reimbursementService.expensesStep;
+  }
 
   getSum() {
     return this.reimbursementService.getSum();
+  }
+
+  onsitePredicate(item: CdkDrag<FormControl>) {
+    return item.data.value.type !== 'plan' && item.data.value.type !== 'bike';
+  }
+
+  completeReturnTrip() {
+    this.reimbursementService.completeReturnTrip();
   }
 
   continue() {

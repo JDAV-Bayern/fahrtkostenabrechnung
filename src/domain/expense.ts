@@ -22,14 +22,12 @@ abstract class Expense implements IExpense {
 
   constructor(data: OmitIdAndTotal<IExpense>) {
     this.type = data.type;
-    this.id = data.id || randomId();
+    this.id = data.id || 0;
     this.startLocation = data.startLocation;
     this.endLocation = data.endLocation;
   }
 
   abstract totalReimbursement(): number;
-
-  abstract serialize(): string;
 }
 
 export interface IBikeExpense extends IExpense {
@@ -144,65 +142,5 @@ export class PublicTransportPlanExpense
 
   totalReimbursement() {
     return 12.25;
-  }
-}
-
-function randomId(): number {
-  return Math.floor(Math.random() * 100000000000000);
-}
-
-export function mapTripToReturn(expense: IExpense): IExpense {
-  switch (expense.type) {
-    case 'car':
-      const carExpense = expense as ICarExpense;
-      return new CarExpense({
-        ...carExpense,
-        id: randomId(),
-        startLocation: carExpense.endLocation,
-        endLocation: carExpense.startLocation
-      });
-    case 'bike':
-      const bikeExpense = expense as IBikeExpense;
-      return new BikeExpense({
-        ...bikeExpense,
-        id: randomId(),
-        startLocation: bikeExpense.endLocation,
-        endLocation: bikeExpense.startLocation
-      });
-    case 'train':
-      const trainExpense = expense as ITrainExpense;
-      return new TrainExpense({
-        ...trainExpense,
-        id: randomId(),
-        startLocation: trainExpense.endLocation,
-        endLocation: trainExpense.startLocation
-      });
-    case 'plan':
-      const planExpense = expense as IPublicTransportPlanExpense;
-      return new PublicTransportPlanExpense({
-        ...planExpense,
-        id: randomId(),
-        startLocation: planExpense.endLocation,
-        endLocation: planExpense.startLocation
-      });
-  }
-  return {
-    ...expense,
-    id: randomId(),
-    startLocation: expense.endLocation,
-    endLocation: expense.startLocation
-  };
-}
-export function getDomainObjectFromSerializedData(serialized: any): IExpense {
-  const type = serialized.type as ExpenseType;
-  switch (type) {
-    case 'car':
-      return new CarExpense(serialized);
-    case 'bike':
-      return new BikeExpense(serialized);
-    case 'train':
-      return new TrainExpense(serialized);
-    case 'plan':
-      return new PublicTransportPlanExpense(serialized);
   }
 }

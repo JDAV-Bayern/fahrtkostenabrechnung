@@ -1,27 +1,30 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { validateIBAN } from 'ngx-iban-validator';
 import {
-  Direction,
-  ICarExpense,
+  BikeExpense,
+  CarExpense,
+  ExpenseType,
   IExpense,
-  getDomainObjectFromSerializedData,
-  mapTripToReturn
+  PublicTransportPlanExpense,
+  TrainExpense
 } from 'src/domain/expense';
 import { IReimbursement } from 'src/domain/reimbursement';
 import { PlzService } from './plz.service';
+
+export type FormDirection = 'inbound' | 'outbound' | 'onsite';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReimbursementService {
   travelExpensesForm = this.formBuilder.group({
-    personalInformation: this.formBuilder.group({
+    personalInformation: this.formBuilder.nonNullable.group({
       name: ['', Validators.required],
       street: ['', Validators.required],
       zipCode: ['', [Validators.required, Validators.pattern(/^[0-9]{5}$/)]],
       city: ['', Validators.required],
-      course: this.formBuilder.group({
+      course: this.formBuilder.nonNullable.group({
         code: ['', Validators.required],
         name: ['', Validators.required],
         date: ['', Validators.required],
@@ -29,11 +32,11 @@ export class ReimbursementService {
       })
     }),
     expenses: this.formBuilder.group({
-      expensesTo: this.formBuilder.array([]),
-      expensesAt: this.formBuilder.array([]),
-      expensesFrom: this.formBuilder.array([])
+      inbound: this.formBuilder.array<IExpense>([]),
+      onsite: this.formBuilder.array<IExpense>([]),
+      outbound: this.formBuilder.array<IExpense>([])
     }),
-    overview: this.formBuilder.group({
+    overview: this.formBuilder.nonNullable.group({
       iban: ['', [Validators.required, validateIBAN]],
       bic: [''],
       note: [''],
@@ -41,25 +44,117 @@ export class ReimbursementService {
     })
   });
 
-  expenses = {
-    to: [] as IExpense[],
-    at: [] as IExpense[],
-    from: [] as IExpense[]
-  };
-
   constructor(
     private formBuilder: FormBuilder,
     private plzService: PlzService
   ) {}
 
-  getFormStep(step: string): FormGroup {
-    return this.travelExpensesForm.get(step) as FormGroup;
+  get personalInformationStep() {
+    return this.travelExpensesForm.get('personalInformation') as FormGroup;
+  }
+
+  get expensesStep() {
+    return this.travelExpensesForm.get('expenses') as FormGroup;
+  }
+
+  get overviewStep() {
+    return this.travelExpensesForm.get('overview') as FormGroup;
+  }
+
+  getExpenses(direction: FormDirection): FormArray {
+    return this.travelExpensesForm.get(`expenses.${direction}`) as FormArray;
+  }
+
+  getExpenseFormGroup(type: ExpenseType): FormGroup {
+    const commonControls = {
+      type: [type, Validators.required],
+      from: ['', Validators.required],
+      to: ['', Validators.required]
+    };
+
+    switch (type) {
+      case 'car':
+        return this.formBuilder.group({
+          ...commonControls,
+          distance: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
+          carType: ['', [Validators.required]],
+          passengers: ['']
+        });
+      case 'train':
+        return this.formBuilder.group({
+          ...commonControls,
+          price: ['', [Validators.required, Validators.min(0)]],
+          discountCard: ['', [Validators.required]]
+        });
+      case 'plan':
+        return this.formBuilder.group(commonControls);
+      case 'bike':
+        return this.formBuilder.group({
+          ...commonControls,
+          distance: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]]
+        });
+    }
+  }
+
+  getExpense(v: any): IExpense {
+    switch (v.type) {
+      case 'car':
+        const passengers = v.passengers
+          ? (v.passengers as string)
+              .split(',')
+              .map(passenger => passenger.trim())
+          : [];
+        return new CarExpense({
+          distance: v.distance,
+          startLocation: v.from,
+          endLocation: v.to,
+          carType: v.carType,
+          passengers
+        });
+      case 'train':
+        return new TrainExpense({
+          startLocation: v.from,
+          endLocation: v.to,
+          priceWithDiscount: Number(v.price.replace(',', '.').trim()),
+          discountCard: v.discountCard
+        });
+      case 'plan':
+        return new PublicTransportPlanExpense({
+          startLocation: v.from,
+          endLocation: v.to
+        });
+      case 'bike':
+        return new BikeExpense({
+          distance: v.distance,
+          startLocation: v.from,
+          endLocation: v.to
+        });
+      default:
+        throw new Error(`Unknown expense type: ${v.type}`);
+    }
   }
 
   loadForm() {
     const travelExpensesData = localStorage.getItem('travelExpenses') || '{}';
     const travelExpenses = JSON.parse(travelExpensesData);
     this.travelExpensesForm.patchValue(travelExpenses);
+
+    // create controls for form arrays
+    for (let direction of [
+      'inbound',
+      'onsite',
+      'outbound'
+    ] as FormDirection[]) {
+      const expenses = travelExpenses.expenses[direction];
+      if (expenses) {
+        const formArray = this.getExpenses(direction);
+        for (let expense of expenses) {
+          const formRecord = this.getExpenseFormGroup(expense.type);
+          formRecord.patchValue(expense);
+          formArray.push(formRecord);
+        }
+      }
+    }
   }
 
   saveForm() {
@@ -68,60 +163,44 @@ export class ReimbursementService {
     localStorage.setItem('travelExpenses', travelExpensesData);
   }
 
-  loadExpenses() {
-    const expensesData = localStorage.getItem('expenses') || '{}';
-    const expensesJson = JSON.parse(expensesData);
-    this.expenses.to =
-      expensesJson.to?.map(getDomainObjectFromSerializedData) || [];
-    this.expenses.at =
-      expensesJson.at?.map(getDomainObjectFromSerializedData) || [];
-    this.expenses.from =
-      expensesJson.from?.map(getDomainObjectFromSerializedData) || [];
-  }
-
-  saveExpenses() {
-    localStorage.setItem('expenses', JSON.stringify(this.expenses));
-  }
-
-  getExpenses(direction: Direction): IExpense[] {
-    return this.expenses[direction];
-  }
-
-  setExpenses(expenses: IExpense[], direction: Direction) {
-    this.expenses[direction] = expenses;
+  deleteStoredData(): void {
+    localStorage.removeItem('travelExpenses');
   }
 
   getReimbursment(): IReimbursement {
-    const v = this.travelExpensesForm.value;
-    const plzInfo = this.plzService.search(
-      v.personalInformation?.zipCode || ''
-    );
+    const v = this.travelExpensesForm.getRawValue();
+    const plzInfo = this.plzService.search(v.personalInformation.zipCode);
 
     return {
-      id: '',
+      id: 0,
       formDate: new Date(),
       courseDetails: {
-        id: v.personalInformation?.course?.code || '',
-        courseName: v.personalInformation?.course?.name || '',
-        courseDate: v.personalInformation?.course?.date || '',
-        courseLocation: v.personalInformation?.course?.location || ''
+        id: v.personalInformation.course.code,
+        courseName: v.personalInformation.course.name,
+        courseDate: v.personalInformation.course.date,
+        courseLocation: v.personalInformation.course.location
       },
       participantDetails: {
-        name: v.personalInformation?.name || '',
-        street: v.personalInformation?.street || '',
-        zipCode: v.personalInformation?.zipCode || '',
-        city: v.personalInformation?.city || '',
+        name: v.personalInformation.name,
+        street: v.personalInformation.street,
+        zipCode: v.personalInformation.zipCode,
+        city: v.personalInformation.city,
         isBavaria: plzInfo.length > 0 ? plzInfo[0].isBavaria : false,
-        iban: v.overview?.iban || '',
-        bic: v.overview?.bic || ''
+        iban: v.overview.iban,
+        bic: v.overview.bic
       },
-      expenses: this.expenses,
-      note: v.overview?.note || ''
+      expenses: {
+        to: v.expenses.inbound.map(this.getExpense),
+        at: v.expenses.onsite.map(this.getExpense),
+        from: v.expenses.outbound.map(this.getExpense)
+      },
+      note: v.overview.note
     };
   }
 
   private getAllExpenses() {
-    return [...this.expenses.from, ...this.expenses.at, ...this.expenses.to];
+    const expenses = this.getReimbursment().expenses;
+    return [...expenses.from, ...expenses.at, ...expenses.to];
   }
 
   getSum() {
@@ -130,22 +209,52 @@ export class ReimbursementService {
     return this.getAllExpenses().reduce(reducer, 0);
   }
 
-  getDestinationCompletion() {
-    return this.expenses.to[this.expenses.to.length - 1];
+  getDestinationCompletion(direction: FormDirection): string {
+    const expenses = this.getExpenses(direction);
+
+    if (expenses.length === 0) {
+      return direction === 'inbound'
+        ? ''
+        : this.getDestinationCompletion('inbound');
+    }
+
+    const lastExpense = expenses.value[expenses.length - 1];
+    return lastExpense.to;
   }
 
-  getCarTypeCompletion() {
-    return (
-      this.getAllExpenses().find(expense => 'carType' in expense) as ICarExpense
-    )?.carType;
+  getCarTypeCompletion(): string {
+    for (let direction of [
+      'inbound',
+      'onsite',
+      'outbound'
+    ] as FormDirection[]) {
+      const expenses = this.getExpenses(direction).getRawValue();
+      const carExpense = expenses.find(expense => 'carType' in expense);
+      if (carExpense) {
+        return carExpense.carType;
+      }
+    }
+    return '';
   }
 
-  getReturnTripCompletion() {
-    return this.expenses.to.map(mapTripToReturn).reverse();
-  }
+  completeReturnTrip(): void {
+    const values = this.getExpenses('inbound').getRawValue();
+    const outbound = this.getExpenses('outbound');
+    outbound.clear();
 
-  deleteStoredData(): void {
-    localStorage.removeItem('travelExpenses');
-    localStorage.removeItem('expenses');
+    for (let i = values.length - 1; i >= 0; i--) {
+      const value = values[i];
+
+      // swap origin and destination
+      let temp = value.from;
+      value.from = value.to;
+      value.to = temp;
+
+      let control = this.getExpenseFormGroup(value.type);
+      control.patchValue(value);
+      outbound.push(control);
+    }
+
+    this.saveForm();
   }
 }

@@ -1,14 +1,25 @@
 <div class="step-box">
-  <fieldset>
+  <fieldset [formGroup]="formStep">
     <h1>Auslagen für Fahrtkosten</h1>
     <p><b>Summe:</b> {{ getSum().toFixed(2) }}€</p>
     <p>
       Bitte die richtige Reihenfolge beachten und nötigenfalls per Drag-and-Drop
       richtigstellen.
     </p>
-    <app-expense-list direction="to" heading="Hinfahrt" />
-    <app-expense-list direction="at" heading="Während der Schulung" />
-    <app-expense-list direction="from" heading="Rückfahrt" />
+    <div cdkDropListGroup>
+      <app-expense-list direction="inbound" heading="Hinfahrt" />
+      <app-expense-list
+        direction="onsite"
+        heading="Während der Schulung"
+        [enterPredicate]="onsitePredicate"
+      />
+      <app-expense-list
+        direction="outbound"
+        heading="Rückfahrt"
+        extraButton="Rückfahrt wie Hinfahrt"
+        (clickExtraButton)="completeReturnTrip()"
+      />
+    </div>
   </fieldset>
 </div>
 

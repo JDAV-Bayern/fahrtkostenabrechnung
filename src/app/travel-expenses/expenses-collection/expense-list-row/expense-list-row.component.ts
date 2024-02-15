@@ -1,11 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import {
-  IBikeExpense,
-  ICarExpense,
-  IExpense,
-  IPublicTransportPlanExpense,
-  ITrainExpense
-} from 'src/domain/expense';
+import { MatDialog } from '@angular/material/dialog';
+import { AddExpenseModalComponent } from '../add-expense-modal/add-expense-modal.component';
+import { FormGroup } from '@angular/forms';
+import { ReimbursementService } from 'src/app/reimbursement.service';
 
 @Component({
   selector: 'app-expense-list-row',
@@ -16,23 +13,56 @@ export class ExpenseListRowComponent {
   @Output()
   deleteRow = new EventEmitter<number>();
 
-  @Output()
-  editRow = new EventEmitter<number>();
+  @Input({ required: true })
+  form!: FormGroup;
 
   @Input({ required: true })
-  expense!: IExpense;
+  index!: number;
+
+  constructor(
+    private reimbursementService: ReimbursementService,
+    private readonly dialog: MatDialog
+  ) {}
+
+  get type() {
+    return this.form.get('type')!.value as string;
+  }
+
+  get origin() {
+    return this.form.get('from')?.value as string;
+  }
+
+  get destination() {
+    return this.form.get('to')?.value as string;
+  }
+
+  get distance() {
+    return this.form.get('distance')?.value as string;
+  }
+
+  get discount() {
+    return this.form.get('discountCard')?.value as string;
+  }
+
+  get passengerCount() {
+    const passengers = this.form.get('passengers')?.value as string;
+    return passengers.length > 0 ? passengers.split(',').length : 0;
+  }
 
   editMe() {
-    this.editRow.emit(this.expense.id);
+    this.dialog.open(AddExpenseModalComponent, {
+      data: { form: this.form },
+      width: '80%'
+    });
   }
 
   deleteMe() {
-    this.deleteRow.emit(this.expense.id);
+    this.deleteRow.emit(this.index);
   }
 
   getTitle() {
     let title: string;
-    switch (this.expense.type) {
+    switch (this.type) {
       case 'car':
         title = 'Autofahrt';
         break;
@@ -51,24 +81,35 @@ export class ExpenseListRowComponent {
     return title;
   }
 
+  getDiscount(discount: string) {
+    switch (discount) {
+      case 'BC50':
+        return 'BahnCard 50';
+      case 'BC25':
+        return 'BahnCard 25';
+      default:
+        return 'keine BahnCard';
+    }
+  }
+
+  getAmount() {
+    return this.reimbursementService
+      .getExpense(this.form.value)
+      .totalReimbursement()
+      .toFixed(2);
+  }
+
   getDetails() {
     let details: string;
-    switch (this.expense.type) {
+    switch (this.type) {
       case 'car':
-        const carExpense = this.expense as ICarExpense;
-        details = `${carExpense.distance} km, ${carExpense.passengers.length} Mitfahrer*innen`;
+        details = `${this.distance} km, ${this.passengerCount} Mitfahrer*innen`;
         break;
       case 'train':
-        const trainExpense = this.expense as ITrainExpense;
-        details = `${trainExpense.discountCard === 'BC50' ? 'BahnCard 50' : trainExpense.discountCard === 'BC25' ? 'BahnCard 25' : 'keine BahnCard'}`;
-        break;
-      case 'plan':
-        const planExpense = this.expense as IPublicTransportPlanExpense;
-        details = `pauschal 12,25 €`;
+        details = `${this.getDiscount(this.discount)}`;
         break;
       case 'bike':
-        const bikeExpense = this.expense as IBikeExpense;
-        details = `${bikeExpense.distance} km`;
+        details = `${this.distance} km`;
         break;
       default:
         details = '';

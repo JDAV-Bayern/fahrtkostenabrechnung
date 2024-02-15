@@ -3,7 +3,7 @@ import { IExpense } from './expense';
 import { IParticipantDetails } from './participant-details';
 
 export interface IReimbursement {
-  id: string;
+  id: number;
   formDate: Date;
   courseDetails: ICourseDetails;
   participantDetails: IParticipantDetails;
