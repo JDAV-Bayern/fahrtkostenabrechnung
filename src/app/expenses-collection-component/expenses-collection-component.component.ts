@@ -1,12 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-  Direction,
-  ICarExpense,
-  IExpense,
-  mapTripToReturn,
-  mockCarExpense
-} from 'src/domain/expense';
+import { ICarExpense, IExpense, mapTripToReturn } from 'src/domain/expense';
 import { ReimbursementService } from '../reimbursement.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddExpenseModalComponent } from './add-expense-modal/add-expense-modal.component';
@@ -86,16 +80,20 @@ export class ExpensesCollectionComponentComponent {
     }
   }
   editRow(expenseId: number) {
-    let collectionRef: IExpense[] | undefined = undefined;
+    let collectionRef: IExpense[] | undefined = undefined;
     let index = -1;
-    for (const collection of [this.expensesTo, this.expensesAt, this.expensesFrom]) {
-      index = collection.findIndex(expense => expense.id === expenseId)
+    for (const collection of [
+      this.expensesTo,
+      this.expensesAt,
+      this.expensesFrom
+    ]) {
+      index = collection.findIndex(expense => expense.id === expenseId);
       if (index !== -1) {
         collectionRef = collection;
         break;
       }
     }
-    if (!collectionRef || index === -1) {
+    if (!collectionRef || index === -1) {
       return;
     }
     const dialogRef = this.dialog.open(AddExpenseModalComponent, {

@@ -11,17 +11,16 @@ export interface IExpense {
   serialize: () => string;
 }
 
-type OmitIdAndTotal<T> = Omit<
-  T,
-  'id' | 'totalReimbursement' | 'serialize' | 'deserialize'
-> & { id?: number };
+type OmitIdAndTotal<T> = Omit<T, 'id' | 'totalReimbursement' | 'serialize'> & {
+  id?: number;
+};
 type OmitIdTotalAndType<T> = Omit<
   T,
   'id' | 'totalReimbursement' | 'type' | 'serialize'
 > & { id?: number };
 type WithTypeAndId<T> = T & { id: number; type: ExpenseType };
 
-class Expense implements OmitIdAndTotal<IExpense> {
+abstract class Expense implements IExpense {
   type: ExpenseType;
   id: number;
   direction: Direction;
@@ -35,6 +34,10 @@ class Expense implements OmitIdAndTotal<IExpense> {
     this.startLocation = data.startLocation;
     this.endLocation = data.endLocation;
   }
+
+  abstract totalReimbursement(): number;
+
+  abstract serialize(): string;
 }
 
 export interface IBikeExpense extends IExpense {
@@ -178,7 +181,6 @@ export class TrainExpense extends Expense implements ITrainExpense {
 
 export interface IPublicTransportPlanExpense extends IExpense {
   type: 'plan';
-  price: number;
 }
 
 export type IPublicTransportPlanExpenseData =
@@ -189,14 +191,12 @@ export class PublicTransportPlanExpense
   implements IPublicTransportPlanExpense
 {
   override type: 'plan' = 'plan';
-  price: number;
 
   constructor(data: IPublicTransportPlanExpenseData) {
     super({ ...data, type: 'plan' });
-    this.price = data.price;
   }
   totalReimbursement() {
-    return this.price * 0.25;
+    return 12.25;
   }
   serialize() {
     const dataWithId: WithTypeAndId<IPublicTransportPlanExpenseData> = {
@@ -204,8 +204,7 @@ export class PublicTransportPlanExpense
       type: this.type,
       direction: this.direction,
       startLocation: this.startLocation,
-      endLocation: this.endLocation,
-      price: this.price
+      endLocation: this.endLocation
     };
     return JSON.stringify(dataWithId);
   }
@@ -217,42 +216,8 @@ export class PublicTransportPlanExpense
   }
 }
 
-export function mockCarExpense(): ICarExpense {
-  const expense: ICarExpense = {
-    type: 'car',
-    distance: Math.floor(Math.random() * 200),
-    carType: pick('combustion', 'electric', 'plug-in-hybrid'),
-    startLocation: 'Stardt',
-    endLocation: 'Zielty',
-    passengers: ['Alex'],
-    id: randomId(),
-    totalReimbursement: function (): number {
-      return this.distance * 0.1;
-    },
-    direction: pick('from', 'to', 'at'),
-    serialize() {
-      const dataWithId: WithTypeAndId<ICarExpenseData> = {
-        id: this.id,
-        type: this.type,
-        direction: this.direction,
-        startLocation: this.startLocation,
-        endLocation: this.endLocation,
-        distance: this.distance,
-        carType: this.carType,
-        passengers: this.passengers
-      };
-      return JSON.stringify(dataWithId);
-    }
-  };
-  return expense;
-}
-
 function randomId(): number {
   return Math.floor(Math.random() * 100000000000000);
-}
-
-function pick<T>(...array: T[]): T {
-  return array[Math.floor(Math.random() * array.length)];
 }
 
 export function mapTripToReturn(expense: IExpense): IExpense {

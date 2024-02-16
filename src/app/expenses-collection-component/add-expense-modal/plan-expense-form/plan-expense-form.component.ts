@@ -26,44 +26,20 @@ export class PlanExpenseFormComponent {
     public dialog: MatDialog
   ) {
     this.formGroup = this.formBuilder.group({
-      inputType: ['dtFullPrice', Validators.required],
       inputFrom: ['', Validators.required],
-      inputTo: ['', Validators.required],
-      inputPrice: [
-        0,
-        [
-          Validators.required,
-          Validators.max(49),
-          Validators.pattern(/^[0-9]+(?:[.,][0-9]+)?$/)
-        ]
-      ]
+      inputTo: ['', Validators.required]
     });
   }
   ngOnInit() {
     const planExpense =
       (this.expense as unknown as IPublicTransportPlanExpenseData) ?? {};
     this.formGroup.setValue({
-      inputType:
-        planExpense.price === 49
-          ? 'dtFullPrice'
-          : planExpense.price === 29
-            ? 'dtStudents'
-            : 'other',
       inputFrom: planExpense.startLocation ?? '',
-      inputTo: planExpense.endLocation ?? '',
-      inputPrice: planExpense.price ?? 0
+      inputTo: planExpense.endLocation ?? ''
     });
   }
   submitForm() {
-    const priceString = this.formGroup.value.inputPrice?.toString() ?? '';
-    const price =
-      this.formGroup.value.inputType === 'dtFullPrice'
-        ? 49
-        : this.formGroup.value.inputType === 'dtStudents'
-          ? 29
-          : Number(priceString.replace(',', '.'));
     const data: IPublicTransportPlanExpenseData = {
-      price,
       direction: this.direction,
       startLocation: this.formGroup.value.inputFrom,
       endLocation: this.formGroup.value.inputTo
