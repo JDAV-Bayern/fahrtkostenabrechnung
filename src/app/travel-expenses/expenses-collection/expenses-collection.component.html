@@ -28,17 +28,6 @@
 </div>
 
 <div class="button-container">
-  <div class="left-button-container">
-    <button (click)="back()" class="gray-button">Zurück</button>
-  </div>
-  <div class="right-button-container">
-    <button
-      (click)="continue()"
-      [class.green-button]="form.valid"
-      [class.disabled-button]="form.invalid"
-      [disabled]="form.invalid"
-    >
-      Weiter
-    </button>
-  </div>
+  <button class="secondary" (click)="back()">Zurück</button>
+  <button [disabled]="form.invalid" (click)="continue()">Weiter</button>
 </div>

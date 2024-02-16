@@ -2,23 +2,23 @@
   <h2>Auslage erfassen - {{ getDirectionName() }}</h2>
 
   <div *ngIf="type.invalid" class="means-of-travel-buttons-container">
-    <button (click)="chooseExpense('car')" class="gray-button">
+    <button class="secondary" (click)="chooseExpense('car')">
       <span class="material-symbols-outlined">&#xe531;</span>&nbsp;Autofahrt
     </button>
-    <button (click)="chooseExpense('train')" class="gray-button">
+    <button class="secondary" (click)="chooseExpense('train')">
       <span class="material-symbols-outlined">&#xe570;</span>&nbsp;Zugfahrt
     </button>
     <button
       *ngIf="direction !== 'onsite'"
+      class="secondary"
       (click)="chooseExpense('plan')"
-      class="gray-button"
     >
       <span class="material-symbols-outlined">&#xe8f8;</span>&nbsp;Öffis Abo
     </button>
     <button
       *ngIf="direction !== 'onsite'"
+      class="secondary"
       (click)="chooseExpense('bike')"
-      class="gray-button"
     >
       <span class="material-symbols-outlined">&#xeb29;</span>&nbsp;Fahrrad
     </button>
@@ -175,14 +175,7 @@
       >
     </div>
     <div class="button-container">
-      <div class="right-button-container">
-        <input
-          type="submit"
-          [class.green-button]="form.valid"
-          [class.disabled-button]="!form.valid"
-          value="speichern"
-        />
-      </div>
+      <button type="submit" [disabled]="!form.valid">Speichern</button>
     </div>
   </div>
 </form>

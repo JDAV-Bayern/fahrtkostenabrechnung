@@ -1,7 +1,17 @@
-.drop-area {
-  min-height: 100px;
+.button-group {
+  display: flex;
+  margin: 10px;
+  gap: 20px;
 }
 
 .cdk-drag-placeholder {
   opacity: 0.5;
+}
+
+.cdk-drop-list {
+  min-height: 100px;
+}
+
+.cdk-drop-list-receiving:empty {
+  border: 2px dashed #ccc;
 }

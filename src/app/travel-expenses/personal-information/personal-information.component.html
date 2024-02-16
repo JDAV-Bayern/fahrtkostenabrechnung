@@ -161,14 +161,10 @@
 </div>
 
 <div class="button-container">
-  <div class="right-button-container">
-    <button
-      [class.green-button]="participantForm.valid && courseForm.valid"
-      [class.disabled-button]="participantForm.invalid || courseForm.invalid"
-      [disabled]="participantForm.invalid || courseForm.invalid"
-      (click)="next()"
-    >
-      Weiter
-    </button>
-  </div>
+  <button
+    [disabled]="participantForm.invalid || courseForm.invalid"
+    (click)="next()"
+  >
+    Weiter
+  </button>
 </div>

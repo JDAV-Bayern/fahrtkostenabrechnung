@@ -12,12 +12,12 @@
 
 .fileupload {
   display: flex;
-  padding: 10px;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  color: #000;
   background-color: transparent;
   border: none;
+  box-shadow: none;
 }
 
 .textarea {

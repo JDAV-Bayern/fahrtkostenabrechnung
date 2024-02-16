@@ -6,7 +6,6 @@
   --bg-gray: #f4f4f4;
 }
 
-/* Apply a modern font */
 body,
 html {
   font-family: 'Helvetica Neue', sans-serif;
@@ -18,7 +17,6 @@ html {
   overflow-x: hidden;
 }
 
-/* Style links */
 a {
   text-decoration: none;
   color: var(--color-primary);
@@ -45,121 +43,60 @@ fieldset {
   display: inline;
 }
 
-/* Create a box around the content */
 .step-box {
   overflow: auto;
   background-color: #fff;
-  /* Background color for the box */
   border: 1px solid #ccc;
-  /* Border for the box */
   padding-left: 10px;
   padding-top: 0px;
   padding-bottom: 20px;
   padding-right: 10px;
-  /* Spacing inside the box */
   border-radius: 5px;
-  /* Rounded corners for the box */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .button-container {
   display: flex;
-  margin-top: 20px;
-  /* Apply styles to your positive action button */
   justify-content: space-between;
+  margin-top: 20px;
 }
 
-.left-button-container {
-  text-align: left;
-  flex: 1;
-  margin-right: auto;
-}
-
-.right-button-container {
-  text-align: right;
-  flex: 1;
+.button-container button:last-child {
   margin-left: auto;
 }
 
-.green-button {
-  background-color: #4caf50;
-  /* Green background color */
-  color: #fff;
-  /* White text color */
+button {
   padding: 10px 20px;
-  /* Padding inside the button */
+  background-color: #4caf50;
+  color: #fff;
   border: none;
-  /* No border */
   border-radius: 5px;
-  /* Rounded corners */
   cursor: pointer;
-  /* Change the cursor to a pointer on hover */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  /* Shadow on hover */
   transition:
     background-color 0.3s,
     box-shadow 0.3s;
-  /* Smooth transitions */
 
-  /* Hover effect */
   &:hover {
     background-color: #45a049;
-    /* Slightly darker green on hover */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    /* Increased shadow on hover */
   }
 }
 
-.mar {
-  margin: 10px;
-}
-
-.gray-button {
-  align-items: center;
+button.secondary {
   background-color: #e3e3e3;
-  /* Green background color */
   color: #171717;
-  /* White text color */
-  padding: 10px 20px;
-  /* Padding inside the button */
-  border: none;
-  /* No border */
-  border-radius: 5px;
-  /* Rounded corners */
-  cursor: pointer;
-  /* Change the cursor to a pointer on hover */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  /* Shadow on hover */
-  transition:
-    background-color 0.3s,
-    box-shadow 0.3s;
-  /* Smooth transitions */
 
-  /* Hover effect */
   &:hover {
     background-color: #d8d8d8;
-    /* Slightly darker green on hover */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    /* Increased shadow on hover */
   }
 }
 
-/* CSS class for a disabled button */
-.disabled-button {
+button:disabled {
   background-color: #ccc;
-  /* Light gray background color for disabled state */
   color: #fff;
-  /* White text color */
-  padding: 10px 20px;
-  /* Padding inside the button */
-  border: none;
-  /* No border */
-  border-radius: 5px;
-  /* Rounded corners */
   cursor: not-allowed;
-  /* Disabled cursor style */
   box-shadow: none;
-  /* No shadow for disabled state */
 }
 
 /* Style form labels */
@@ -182,22 +119,11 @@ input.form-control {
   width: -webkit-fill-available;
 }
 
-/* Add this to your component's CSS */
 .error-message {
   color: #ff0000;
-  /* Red color for error messages */
   font-size: 12px;
-  /* Adjust font size as needed */
   margin-top: 5px;
   margin-bottom: 20px;
-}
-
-/* Add more global styles as needed */
-.light-theme-dialog {
-  background-color: #ffffff;
-  /* Set the background color to white or your desired light theme color */
-  color: #000;
-  /* Set text color to a dark color for good readability */
 }
 
 @font-face {
@@ -296,36 +222,4 @@ select option:hover {
   /* Background color on hover */
   color: #fff;
   /* Text color on hover */
-}
-
-/* FOR DRAGULA */
-/* in-flight clone */
-.gu-mirror {
-  position: fixed !important;
-  margin: 0 !important;
-  z-index: 9999 !important;
-  opacity: 0.8;
-  -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=80)';
-  filter: alpha(opacity=80);
-  pointer-events: none;
-}
-
-/* high-performance display:none; helper */
-.gu-hide {
-  left: -9999px !important;
-}
-
-/* added to mirrorContainer (default = body) while dragging */
-.gu-unselectable {
-  -webkit-user-select: none !important;
-  -moz-user-select: none !important;
-  -ms-user-select: none !important;
-  user-select: none !important;
-}
-
-/* added to the source element while its mirror is dragged */
-.gu-transit {
-  opacity: 0.2;
-  -ms-filter: 'progid:DXImageTransform.Microsoft.Alpha(Opacity=20)';
-  filter: alpha(opacity=20);
 }

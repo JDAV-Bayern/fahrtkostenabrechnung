@@ -71,7 +71,7 @@
         ngx-file-drop-content-tmp
         let-openFileSelector="openFileSelector"
       >
-        <button type="button" class="fileupload" (click)="openFileSelector()">
+        <button class="fileupload" (click)="openFileSelector()">
           <span class="material-symbols-outlined">&#xe9fc;</span>
           Beleg hinzufügen
         </button>
@@ -93,21 +93,11 @@
 </div>
 
 <div class="button-container">
-  <div class="left-button-container">
-    <button (click)="back()" class="gray-button">Zurück</button>
-  </div>
-  <div class="right-button-container">
+  <button class="secondary" (click)="back()">Zurück</button>
+  <button (click)="continue()" [disabled]="loading || form.parent?.invalid">
     <app-progress-indicator *ngIf="loading"></app-progress-indicator>
-    <button
-      (click)="continue()"
-      *ngIf="!loading"
-      [class.green-button]="form.parent?.valid"
-      [class.disabled-button]="form.parent?.invalid"
-      [disabled]="form.parent?.invalid"
-    >
-      PDF herunterladen
-    </button>
-  </div>
+    <span *ngIf="!loading">PDF herunterladen</span>
+  </button>
 </div>
 
 <div style="position: absolute; top: 2000px">
