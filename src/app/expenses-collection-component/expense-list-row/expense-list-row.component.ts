@@ -64,7 +64,7 @@ export class ExpenseListRowComponent {
         break;
       case 'plan':
         const planExpense = this.expense as IPublicTransportPlanExpense;
-        details = `Abo-Preis: ${planExpense.price} €`;
+        details = `pauschal 12,25 €`;
         break;
       case 'bike':
         const bikeExpense = this.expense as IBikeExpense;

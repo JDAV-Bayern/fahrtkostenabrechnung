@@ -30,7 +30,7 @@ export class PdfExpenseLineItemComponent {
         return `Zugfahrt, ${trainExpense.discountCard === 'BC50' ? 'BahnCard 50' : trainExpense.discountCard === 'BC25' ? 'BahnCard 25' : 'keine BahnCard'}`;
       case 'plan':
         const planExpense = this.expense as IPublicTransportPlanExpense;
-        return `Öffi Abo, Preis ${planExpense.price} €`;
+        return `Öffi Abo, pauschal 12,25 €`;
       case 'bike':
         const bikeExpense = this.expense as IBikeExpense;
         return `Fahrradfahrt`;
