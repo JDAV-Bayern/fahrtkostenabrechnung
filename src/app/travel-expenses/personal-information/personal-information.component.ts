@@ -37,9 +37,11 @@ export class PersonalInformationComponent {
        * 2. Sort other states alphabetically
        * 3. Sort sections within the same state alphabetically
        */
-      return Number(isBavarianB) - Number(isBavarianA)
-        || a.jdavState.name.localeCompare(b.jdavState.name)
-        || a.name.localeCompare(b.name);
+      return (
+        Number(isBavarianB) - Number(isBavarianA) ||
+        a.jdavState.name.localeCompare(b.jdavState.name) ||
+        a.name.localeCompare(b.name)
+      );
     });
   }
 
@@ -80,7 +82,7 @@ export class PersonalInformationComponent {
   }
 
   groupByFn(item: Section) {
-    return "JDAV " + item.jdavState.name;
+    return 'JDAV ' + item.jdavState.name;
   }
 
   plzChanged() {
