@@ -31,13 +31,12 @@
         id="section"
         class="combo-box"
         formControlName="sectionId"
-        bindLabel="name"
         required
-      >
-        <ng-option *ngFor="let section of sections" [value]="section.id">
-          {{ section.name }}
-        </ng-option>
-      </ng-select>
+        [items]="sections"
+        bindValue="id"
+        bindLabel="name"
+        [groupBy]="groupByFn"
+      />
       <div
         *ngIf="sectionId.hasError('required') && sectionId.touched"
         class="error-message"

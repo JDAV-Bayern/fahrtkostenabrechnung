@@ -3,7 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
 import { PlzService } from 'src/app/plz.service';
-import { JdavOrganisation } from 'src/domain/section';
+import { Section } from 'src/domain/section';
 import { SectionService } from 'src/app/section.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class PersonalInformationComponent {
   participantForm: FormGroup;
   courseForm: FormGroup;
 
-  sections: JdavOrganisation[] = [];
+  sections: Section[] = [];
 
   constructor(
     private readonly router: Router,
@@ -28,7 +28,19 @@ export class PersonalInformationComponent {
 
     // load section autocompletions
     this.sections = this.sectionService.getSections();
-    this.sections.sort((a, b) => a.name.localeCompare(b.name));
+    this.sections.sort((a, b) => {
+      const isBavarianA = this.sectionService.isBavarian(a);
+      const isBavarianB = this.sectionService.isBavarian(b);
+      /*
+       * Sort by multipe criteria with descending priority:
+       * 1. Sort Bavarian sections first
+       * 2. Sort other states alphabetically
+       * 3. Sort sections within the same state alphabetically
+       */
+      return Number(isBavarianB) - Number(isBavarianA)
+        || a.jdavState.name.localeCompare(b.jdavState.name)
+        || a.name.localeCompare(b.name);
+    });
   }
 
   get name() {
@@ -65,6 +77,10 @@ export class PersonalInformationComponent {
 
   get courseLocation() {
     return this.courseForm.get('location') as FormControl<string>;
+  }
+
+  groupByFn(item: Section) {
+    return item.jdavState.name;
   }
 
   plzChanged() {
