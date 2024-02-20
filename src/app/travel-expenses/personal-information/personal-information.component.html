@@ -37,6 +37,7 @@
         bindLabel="name"
         [groupBy]="groupByFn"
         [editableSearchTerm]="true"
+        [inputAttrs]="{ style: 'margin-top: 4px' }"
       />
       <div
         *ngIf="sectionId.hasError('required') && sectionId.touched"
