@@ -26,6 +26,27 @@
     </div>
 
     <div class="form-group">
+      <label for="section">Sektion</label>
+      <ng-select
+        id="section"
+        class="combo-box"
+        formControlName="sectionId"
+        bindLabel="name"
+        required
+      >
+        <ng-option *ngFor="let section of sections" [value]="section.id">
+          {{ section.name }}
+        </ng-option>
+      </ng-select>
+      <div
+        *ngIf="sectionId.hasError('required') && sectionId.touched"
+        class="error-message"
+      >
+        Bitte gib deine Sektion ein.
+      </div>
+    </div>
+
+    <div class="form-group">
       <label for="street">Straße und Hausnummer</label>
       <input
         type="text"
@@ -64,7 +85,7 @@
     </div>
 
     <div class="form-group">
-      <label for="city">Ort</label>
+      <label for="city">Wohnort</label>
       <input
         type="text"
         id="city"

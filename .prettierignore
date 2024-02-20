@@ -1,4 +1,7 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+# Large files containing lookup data
+src/data/
+
+# Copied contents of .gitignore
 
 # Compiled output
 /dist

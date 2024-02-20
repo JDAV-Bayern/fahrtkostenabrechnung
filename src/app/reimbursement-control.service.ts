@@ -24,6 +24,7 @@ export class ReimbursementControlService {
     }),
     participant: this.formBuilder.nonNullable.group({
       name: ['', Validators.required],
+      sectionId: [undefined, Validators.required],
       street: ['', Validators.required],
       zipCode: ['', [Validators.required, Validators.pattern(PLZ_PATTERN)]],
       city: ['', Validators.required]
@@ -47,10 +48,7 @@ export class ReimbursementControlService {
     )
   });
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private plzService: PlzService
-  ) {}
+  constructor(private formBuilder: FormBuilder) {}
 
   get participantStep() {
     return this.travelExpensesForm.get('participant') as FormGroup;
@@ -147,13 +145,11 @@ export class ReimbursementControlService {
 
   getReimbursment(): Reimbursement {
     const v = this.travelExpensesForm.getRawValue();
-    const plzInfo = this.plzService.search(v.participant.zipCode);
 
     return {
       course: v.course,
       participant: {
         ...v.participant,
-        isBavaria: plzInfo.length > 0 ? plzInfo[0].isBavaria : false,
         iban: v.overview.iban,
         bic: v.overview.bic
       },

@@ -2,6 +2,7 @@ import { Reimbursement } from 'src/domain/reimbursement';
 import { Injectable } from '@angular/core';
 import { PlzService } from './plz.service';
 import { Expense } from 'src/domain/expense';
+import { SectionService } from './section.service';
 
 export type ValidationFinding = {
   type: 'warning' | 'info';
@@ -12,7 +13,11 @@ export type ValidationFinding = {
   providedIn: 'root'
 })
 export class ReimbursementValidationService {
-  constructor(private readonly plzService: PlzService) {}
+  constructor(
+    private readonly plzService: PlzService,
+    private readonly sectionService: SectionService
+  ) {}
+
   public validateReimbursement(
     reimbursement: Reimbursement
   ): ValidationFinding[] {
@@ -26,21 +31,24 @@ export class ReimbursementValidationService {
       });
     }
 
+    // Check if section is in Bavaria
+    const sectionId = reimbursement.participant.sectionId;
+    const section = sectionId
+      ? this.sectionService.getSection(sectionId)!
+      : undefined;
+    if (section && !this.sectionService.isBavarian(section)) {
+      findings.push({
+        type: 'info',
+        message: `Deine Sektion (${section.name}) liegt nicht in Bayern. Wir begrenzen daher den Erstattungsbetrag gemäß unserer Reisekostenrichtlinien auf 75,-€`
+      });
+    }
+
     // Check if zip code exists and if it is in bavaria
     if (!this.plzService.exists(reimbursement.participant.zipCode)) {
       findings.push({
         type: 'warning',
         message: `Deine Postleitzahl (${reimbursement.participant.zipCode}) ist uns unbekannt. Bitte überprüfe sie noch einmal.`
       });
-    } else {
-      if (
-        !this.plzService.search(reimbursement.participant.zipCode)[0]?.isBavaria
-      ) {
-        findings.push({
-          type: 'info',
-          message: `Deine Postleitzahl (${reimbursement.participant.zipCode}) liegt nicht in Bayern. Wir begrenzen daher den Erstattungsbetrag gemäß unserer Reisekostenrichtlinien auf 75,-€`
-        });
-      }
     }
 
     const expenses = [

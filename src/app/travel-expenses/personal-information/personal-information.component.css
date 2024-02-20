@@ -1,3 +1,8 @@
 table {
   width: 100%;
 }
+
+.combo-box {
+  width: 200px;
+  font-size: 14px;
+}
