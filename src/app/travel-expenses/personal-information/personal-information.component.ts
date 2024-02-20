@@ -80,7 +80,7 @@ export class PersonalInformationComponent {
   }
 
   groupByFn(item: Section) {
-    return item.jdavState.name;
+    return "JDAV " + item.jdavState.name;
   }
 
   plzChanged() {
