@@ -1,11 +1,6 @@
 import { Component, Input } from '@angular/core';
-import {
-  IBikeExpense,
-  ICarExpense,
-  IExpense,
-  IPublicTransportPlanExpense,
-  ITrainExpense
-} from 'src/domain/expense';
+import { ExpenseService } from 'src/app/expense.service';
+import { Expense } from 'src/domain/expense';
 
 @Component({
   selector: 'app-pdf-expense-line-item',
@@ -14,47 +9,22 @@ import {
 })
 export class PdfExpenseLineItemComponent {
   @Input({ required: true })
-  expense!: IExpense;
+  expense!: Expense;
 
   @Input({ required: true })
   index!: number;
 
+  constructor(private expenseService: ExpenseService) {}
+
+  getCosts() {
+    return this.expenseService.getAmount(this.expense).toFixed(2);
+  }
+
   getTitle() {
-    const type = this.expense.type;
-    switch (type) {
-      case 'car':
-        const carExpense = this.expense as ICarExpense;
-        return `Autofahrt, ${carExpense.passengers.length} Mitfahrer*innen`;
-      case 'train':
-        const trainExpense = this.expense as ITrainExpense;
-        return `Zugfahrt, ${trainExpense.discountCard === 'BC50' ? 'BahnCard 50' : trainExpense.discountCard === 'BC25' ? 'BahnCard 25' : 'keine BahnCard'}`;
-      case 'plan':
-        const planExpense = this.expense as IPublicTransportPlanExpense;
-        return `Öffi Abo`;
-      case 'bike':
-        const bikeExpense = this.expense as IBikeExpense;
-        return `Fahrradfahrt`;
-      default:
-        return '';
-    }
+    return this.expenseService.getName(this.expense);
   }
 
   getDetails() {
-    const type = this.expense.type;
-    switch (type) {
-      case 'car':
-        const carExpense = this.expense as ICarExpense;
-        return `${carExpense.distance}km, Mitfahrer*innen: ${carExpense.passengers.map(p => p.trim()).join(', ')}`;
-      case 'train':
-        const trainExpense = this.expense as ITrainExpense;
-        return `Ticketpreis nach Rabatt ${trainExpense.priceWithDiscount}€`;
-      case 'plan':
-        return '';
-      case 'bike':
-        const bikeExpense = this.expense as IBikeExpense;
-        return `${bikeExpense.distance} km`;
-      default:
-        return '';
-    }
+    return this.expenseService.getDescription(this.expense);
   }
 }

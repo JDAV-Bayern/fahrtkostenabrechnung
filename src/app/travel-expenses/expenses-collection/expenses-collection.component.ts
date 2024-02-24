@@ -2,7 +2,8 @@ import { CdkDrag } from '@angular/cdk/drag-drop';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ReimbursementService } from 'src/app/reimbursement.service';
+import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
+import { ExpenseService } from 'src/app/expense.service';
 
 @Component({
   selector: 'app-expenses-collection',
@@ -14,13 +15,15 @@ export class ExpensesCollectionComponent {
 
   constructor(
     private readonly router: Router,
-    private readonly reimbursementService: ReimbursementService
+    private readonly expenseService: ExpenseService,
+    private readonly controlService: ReimbursementControlService
   ) {
-    this.form = this.reimbursementService.expensesStep;
+    this.form = this.controlService.expensesStep;
   }
 
-  getSum() {
-    return this.reimbursementService.getSum();
+  getTotal() {
+    const reimbursement = this.controlService.getReimbursment();
+    return this.expenseService.getTotal(reimbursement).toFixed(2);
   }
 
   onsitePredicate(item: CdkDrag<FormControl>) {
@@ -28,7 +31,7 @@ export class ExpensesCollectionComponent {
   }
 
   completeReturnTrip() {
-    this.reimbursementService.completeReturnTrip();
+    this.controlService.completeReturnTrip();
   }
 
   continue() {

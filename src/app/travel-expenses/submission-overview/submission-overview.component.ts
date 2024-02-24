@@ -3,11 +3,11 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import jsPDF from 'jspdf';
 import * as imageprocessor from 'ts-image-processor';
-import { IReimbursement } from 'src/domain/reimbursement';
-import { ReimbursementService } from 'src/app/reimbursement.service';
-import { NgxFileDropEntry } from 'ngx-file-drop';
+import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
 import { PDFDocument } from 'pdf-lib';
 import { ReimbursementValidationService } from 'src/app/reimbursement.validation.service';
+import { NgxFileDropEntry } from 'ngx-file-drop';
+import { ExpenseService } from 'src/app/expense.service';
 
 @Component({
   selector: 'app-submission-overview',
@@ -32,40 +32,46 @@ export class SubmissionOverviewComponent {
 
   constructor(
     private readonly router: Router,
-    private readonly reimbursementService: ReimbursementService,
+    private readonly expenseService: ExpenseService,
+    private readonly controlService: ReimbursementControlService,
     private readonly validationService: ReimbursementValidationService
   ) {
-    this.form = reimbursementService.overviewStep;
+    this.form = controlService.overviewStep;
   }
 
   get iban() {
     return this.form.get('iban') as FormControl<string>;
   }
 
-  getSum(): number {
-    return this.reimbursementService.getSum();
+  get reimbursement() {
+    return this.controlService.getReimbursment();
+  }
+
+  getTotal(): string {
+    return this.expenseService.getTotal(this.reimbursement).toFixed(2);
   }
 
   getErrors(): string[] {
     return this.validationService
-      .validateReimbursement(this.r())
+      .validateReimbursement(this.reimbursement)
       .findings.filter(f => f.type === 'error')
       .map(f => f.message);
   }
   getWarnings(): string[] {
     return this.validationService
-      .validateReimbursement(this.r())
+      .validateReimbursement(this.reimbursement)
       .findings.filter(f => f.type === 'warning')
       .map(f => f.message);
   }
   getInfos(): string[] {
     return this.validationService
-      .validateReimbursement(this.r())
+      .validateReimbursement(this.reimbursement)
       .findings.filter(f => f.type === 'info')
       .map(f => f.message);
   }
   isReimbursementValid(): boolean {
-    return this.validationService.validateReimbursement(this.r()).isValid;
+    return this.validationService.validateReimbursement(this.reimbursement)
+      .isValid;
   }
 
   async addImageToPdf(imageFile: File, pdf: jsPDF) {
@@ -215,8 +221,12 @@ export class SubmissionOverviewComponent {
     const fileURL = URL.createObjectURL(file);
 
     const link = document.createElement('a');
+    const lastName = this.reimbursement.participant.name
+      .split(' ')
+      .pop()
+      ?.trim();
     link.href = fileURL;
-    link.download = `fka_${this.r().course.code}_${this.r().participant.name.split(' ').pop()?.trim()}.pdf`;
+    link.download = `fka_${this.reimbursement.course.code}_${lastName}.pdf`;
     link.click();
     link.remove();
     this.loading = false;
@@ -240,9 +250,5 @@ export class SubmissionOverviewComponent {
 
   removeFile(fileName: string) {
     this.files = this.files.filter(f => f.name !== fileName);
-  }
-
-  r(): IReimbursement {
-    return this.reimbursementService.getReimbursment();
   }
 }

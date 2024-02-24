@@ -1,7 +1,7 @@
-import { IReimbursement } from 'src/domain/reimbursement';
+import { Reimbursement } from 'src/domain/reimbursement';
 import { Injectable } from '@angular/core';
 import { PlzService } from './plz.service';
-import { IExpense } from 'src/domain/expense';
+import { Expense } from 'src/domain/expense';
 
 export type ValidationResult = {
   isValid: boolean;
@@ -18,9 +18,7 @@ export type ValidationFinding = {
 })
 export class ReimbursementValidationService {
   constructor(private readonly plzService: PlzService) {}
-  public validateReimbursement(
-    reimbursement: IReimbursement
-  ): ValidationResult {
+  public validateReimbursement(reimbursement: Reimbursement): ValidationResult {
     const expenses = [
       ...reimbursement.expenses.inbound,
       ...reimbursement.expenses.onsite,
@@ -133,7 +131,7 @@ export class ReimbursementValidationService {
       findings
     };
   }
-  private checkValidityOfRoute(expenses: IExpense[]): ValidationFinding[] {
+  private checkValidityOfRoute(expenses: Expense[]): ValidationFinding[] {
     const findings: ValidationFinding[] = [];
     let currentPosition = expenses[0].destination;
     for (let i = 1; i < expenses.length; i++) {

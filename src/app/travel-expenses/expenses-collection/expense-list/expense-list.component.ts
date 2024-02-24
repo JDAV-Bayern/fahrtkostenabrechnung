@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ReimbursementService } from 'src/app/reimbursement.service';
+import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
 import { AddExpenseModalComponent } from '../add-expense-modal/add-expense-modal.component';
 import { FormArray, FormGroup } from '@angular/forms';
-import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { Direction } from 'src/domain/expense';
+import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-expense-list',
@@ -32,12 +32,12 @@ export class ExpenseListComponent {
 
   constructor(
     public dialog: MatDialog,
-    private readonly reimbursementService: ReimbursementService
+    private readonly controlService: ReimbursementControlService
   ) {}
 
   ngOnInit() {
-    this.formGroup = this.reimbursementService.expensesStep;
-    this.formArray = this.reimbursementService.getExpenses(this.direction);
+    this.formGroup = this.controlService.expensesStep;
+    this.formArray = this.controlService.getExpenses(this.direction);
   }
 
   openAddExpenseDialog() {
@@ -50,14 +50,14 @@ export class ExpenseListComponent {
       .subscribe(result => {
         if (result) {
           this.formArray.push(result);
-          this.reimbursementService.saveForm();
+          this.controlService.saveForm();
         }
       });
   }
 
   deleteExpense(index: number) {
     this.formArray.removeAt(index);
-    this.reimbursementService.saveForm();
+    this.controlService.saveForm();
   }
 
   onClickExtraButton(event: MouseEvent) {
@@ -68,6 +68,6 @@ export class ExpenseListComponent {
     const target = event.previousContainer.data.at(event.previousIndex);
     event.previousContainer.data.removeAt(event.previousIndex);
     event.container.data.insert(event.currentIndex, target);
-    this.reimbursementService.saveForm();
+    this.controlService.saveForm();
   }
 }

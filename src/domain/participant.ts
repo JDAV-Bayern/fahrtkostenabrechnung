@@ -1,4 +1,4 @@
-export interface IParticipant {
+export interface Participant {
   name: string;
   street: string;
   zipCode: string;

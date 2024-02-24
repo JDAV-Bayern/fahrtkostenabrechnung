@@ -2,7 +2,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddExpenseModalComponent } from '../add-expense-modal/add-expense-modal.component';
 import { FormGroup } from '@angular/forms';
-import { ReimbursementService } from 'src/app/reimbursement.service';
+import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
+import { ExpenseService } from 'src/app/expense.service';
+import { ExpenseType } from 'src/domain/expense';
 
 @Component({
   selector: 'app-expense-list-row',
@@ -20,33 +22,13 @@ export class ExpenseListRowComponent {
   index!: number;
 
   constructor(
-    private reimbursementService: ReimbursementService,
+    private expenseService: ExpenseService,
+    private controlService: ReimbursementControlService,
     private readonly dialog: MatDialog
   ) {}
 
-  get type() {
-    return this.form.get('type')!.value as string;
-  }
-
-  get origin() {
-    return this.form.get('origin')?.value as string;
-  }
-
-  get destination() {
-    return this.form.get('destination')?.value as string;
-  }
-
-  get distance() {
-    return this.form.get('distance')?.value as string;
-  }
-
-  get discount() {
-    return this.form.get('discountCard')?.value as string;
-  }
-
-  get passengerCount() {
-    const passengers = this.form.get('passengers')?.value as string;
-    return passengers.length > 0 ? passengers.split(',').length : 0;
+  get expense() {
+    return this.controlService.getExpense(this.form.value);
   }
 
   editMe() {
@@ -56,7 +38,7 @@ export class ExpenseListRowComponent {
         width: '80%'
       })
       .afterClosed()
-      .subscribe(() => this.reimbursementService.saveForm());
+      .subscribe(() => this.controlService.saveForm());
   }
 
   deleteMe() {
@@ -64,59 +46,14 @@ export class ExpenseListRowComponent {
   }
 
   getTitle() {
-    let title: string;
-    switch (this.type) {
-      case 'car':
-        title = 'Autofahrt';
-        break;
-      case 'train':
-        title = 'Zugfahrt';
-        break;
-      case 'plan':
-        title = 'Fahrt mit ÖPNV-Abo';
-        break;
-      case 'bike':
-        title = 'Fahrradfahrt';
-        break;
-      default:
-        title = '';
-    }
-    return title;
-  }
-
-  getDiscount(discount: string) {
-    switch (discount) {
-      case 'BC50':
-        return 'BahnCard 50';
-      case 'BC25':
-        return 'BahnCard 25';
-      default:
-        return 'keine BahnCard';
-    }
+    return this.expenseService.getName(this.expense);
   }
 
   getAmount() {
-    return this.reimbursementService
-      .getExpense(this.form.value)
-      .totalReimbursement()
-      .toFixed(2);
+    return this.expenseService.getAmount(this.expense).toFixed(2);
   }
 
   getDetails() {
-    let details: string;
-    switch (this.type) {
-      case 'car':
-        details = `${this.distance} km, ${this.passengerCount} Mitfahrer*innen`;
-        break;
-      case 'train':
-        details = `${this.getDiscount(this.discount)}`;
-        break;
-      case 'bike':
-        details = `${this.distance} km`;
-        break;
-      default:
-        details = '';
-    }
-    return details;
+    return this.expenseService.getDescription(this.expense);
   }
 }

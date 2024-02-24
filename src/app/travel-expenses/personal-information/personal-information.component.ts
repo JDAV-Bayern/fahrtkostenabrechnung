@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ReimbursementService } from 'src/app/reimbursement.service';
+import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
 import { PlzService } from 'src/app/plz.service';
 
 @Component({
@@ -16,10 +16,10 @@ export class PersonalInformationComponent {
   constructor(
     private readonly router: Router,
     public readonly plzService: PlzService,
-    reimbursementService: ReimbursementService
+    controlService: ReimbursementControlService
   ) {
-    this.participantForm = reimbursementService.participantStep;
-    this.courseForm = reimbursementService.courseStep;
+    this.participantForm = controlService.participantStep;
+    this.courseForm = controlService.courseStep;
   }
 
   get name() {

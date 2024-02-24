@@ -6,7 +6,7 @@ import {
   Validators
 } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ReimbursementService } from 'src/app/reimbursement.service';
+import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
 import { Direction, ExpenseType } from 'src/domain/expense';
 
 export interface ExpenseDialogData {
@@ -24,7 +24,7 @@ export class AddExpenseModalComponent {
   form: FormGroup;
 
   constructor(
-    private reimbursementService: ReimbursementService,
+    private controlService: ReimbursementControlService,
     private dialogRef: MatDialogRef<AddExpenseModalComponent>,
     formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) data: ExpenseDialogData
@@ -102,13 +102,11 @@ export class AddExpenseModalComponent {
 
   chooseExpense(type: ExpenseType) {
     this.type.setValue(type);
-    this.form = this.reimbursementService.getExpenseFormGroup(type);
+    this.form = this.controlService.getExpenseFormGroup(type);
 
     // autofill some fields
-    const from = this.reimbursementService.getDestinationCompletion(
-      this.direction
-    );
-    const carType = this.reimbursementService.getCarTypeCompletion();
+    const from = this.controlService.getDestinationCompletion(this.direction);
+    const carType = this.controlService.getCarTypeCompletion();
     this.form.patchValue({ from, carType });
   }
 

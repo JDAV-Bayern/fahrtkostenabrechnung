@@ -16,19 +16,19 @@
         <table class="detailstable">
           <tr>
             <td>Schulung:</td>
-            <td>{{ r().course.name }}</td>
+            <td>{{ course.name }}</td>
           </tr>
           <tr>
             <td>Schulungsnummer:</td>
-            <td>{{ r().course.code }}</td>
+            <td>{{ course.code }}</td>
           </tr>
           <tr>
             <td>Schulungsdatum:</td>
-            <td>{{ r().course.date }}</td>
+            <td>{{ course.date }}</td>
           </tr>
           <tr>
             <td>Kursort:</td>
-            <td>{{ r().course.location }}</td>
+            <td>{{ course.location }}</td>
           </tr>
         </table>
       </td>
@@ -37,20 +37,20 @@
         <table>
           <tr>
             <td>Name:</td>
-            <td>{{ r().participant.name }}</td>
+            <td>{{ participant.name }}</td>
           </tr>
           <tr>
             <td>Anschrift:</td>
             <td>
-              {{ r().participant.street }},
-              {{ r().participant.zipCode }}
-              {{ r().participant.city }}
+              {{ participant.street }},
+              {{ participant.zipCode }}
+              {{ participant.city }}
             </td>
           </tr>
           <tr>
             <td colspan="2">
               {{
-                r().participant.isBavaria
+                participant.isBavaria
                   ? 'Teilnehmer*in kommt aus Bayern'
                   : 'Teilnehmer*in kommt nicht aus Bayern'
               }}
@@ -58,38 +58,38 @@
           </tr>
           <tr>
             <td>IBAN:</td>
-            <td>{{ r().participant.iban }}</td>
+            <td>{{ participant.iban }}</td>
           </tr>
-          <tr *ngIf="r().participant.bic?.length">
+          <tr *ngIf="participant.bic?.length">
             <td>BIC:</td>
-            <td>{{ r().participant.bic }}</td>
+            <td>{{ participant.bic }}</td>
           </tr>
         </table>
       </td>
     </tr>
   </table>
-  <p *ngIf="r().note !== ''"><b>Bemerkung:</b></p>
-  <p *ngFor="let line of r().note.split('\n')">{{ line }}</p>
+  <p *ngIf="reimbursement.note !== ''"><b>Bemerkung:</b></p>
+  <p *ngFor="let line of reimbursement.note.split('\n')">{{ line }}</p>
   <div class="table-title">
     <span>Abrechnungspositionen</span>
-    <span class="sum">Summe: {{ getSum() }}€</span><br />
+    <span class="sum">Summe: {{ getTotal() }}€</span><br />
   </div>
   <hr />
   <h3>Hinfahrt</h3>
   <app-pdf-expense-line-item
-    *ngFor="let expense of r().expenses.inbound; index as i"
+    *ngFor="let expense of reimbursement.expenses.inbound; index as i"
     [expense]="expense"
     [index]="i"
   ></app-pdf-expense-line-item>
   <h3>Vor Ort</h3>
   <app-pdf-expense-line-item
-    *ngFor="let expense of r().expenses.onsite; index as i"
+    *ngFor="let expense of reimbursement.expenses.onsite; index as i"
     [expense]="expense"
     [index]="i"
   ></app-pdf-expense-line-item>
   <h3>Rückfahrt</h3>
   <app-pdf-expense-line-item
-    *ngFor="let expense of r().expenses.outbound; index as i"
+    *ngFor="let expense of reimbursement.expenses.outbound; index as i"
     [expense]="expense"
     [index]="i"
   ></app-pdf-expense-line-item>

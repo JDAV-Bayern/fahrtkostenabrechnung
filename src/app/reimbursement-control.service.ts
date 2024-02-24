@@ -1,22 +1,14 @@
 import { Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { validateIBAN } from 'ngx-iban-validator';
-import {
-  BikeExpense,
-  CarExpense,
-  Direction,
-  ExpenseType,
-  IExpense,
-  PublicTransportPlanExpense,
-  TrainExpense
-} from 'src/domain/expense';
-import { IReimbursement } from 'src/domain/reimbursement';
+import { Direction, ExpenseType, Expense } from 'src/domain/expense';
+import { Reimbursement } from 'src/domain/reimbursement';
 import { PlzService } from './plz.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ReimbursementService {
+export class ReimbursementControlService {
   travelExpensesForm = this.formBuilder.group({
     course: this.formBuilder.nonNullable.group({
       code: ['', Validators.required],
@@ -31,9 +23,9 @@ export class ReimbursementService {
       city: ['', Validators.required]
     }),
     expenses: this.formBuilder.group({
-      inbound: this.formBuilder.array<IExpense>([]),
-      onsite: this.formBuilder.array<IExpense>([]),
-      outbound: this.formBuilder.array<IExpense>([])
+      inbound: this.formBuilder.array<Expense>([]),
+      onsite: this.formBuilder.array<Expense>([]),
+      outbound: this.formBuilder.array<Expense>([])
     }),
     overview: this.formBuilder.nonNullable.group({
       iban: ['', [Validators.required, validateIBAN]],
@@ -99,32 +91,6 @@ export class ReimbursementService {
     }
   }
 
-  getExpense(v: any): IExpense {
-    switch (v.type) {
-      case 'car':
-        const passengers = v.passengers
-          ? (v.passengers as string)
-              .split(',')
-              .map(passenger => passenger.trim())
-          : [];
-        return new CarExpense({
-          ...v,
-          passengers
-        });
-      case 'train':
-        return new TrainExpense({
-          ...v,
-          priceWithDiscount: Number(v.price.replace(',', '.').trim())
-        });
-      case 'plan':
-        return new PublicTransportPlanExpense(v);
-      case 'bike':
-        return new BikeExpense(v);
-      default:
-        throw new Error(`Unknown expense type: ${v.type}`);
-    }
-  }
-
   loadForm() {
     const travelExpensesData = localStorage.getItem('travelExpenses') || '{}';
     const travelExpenses = JSON.parse(travelExpensesData);
@@ -154,7 +120,20 @@ export class ReimbursementService {
     localStorage.removeItem('travelExpenses');
   }
 
-  getReimbursment(): IReimbursement {
+  getExpense<T extends Expense>(expense: any): T {
+    if (expense.type === 'car') {
+      const carExpense = expense as any;
+      const passengers = carExpense.passengers
+        ? (carExpense.passengers as string)
+            .split(',')
+            .map(passenger => passenger.trim())
+        : [];
+      return { ...expense, passengers };
+    }
+    return expense;
+  }
+
+  getReimbursment(): Reimbursement {
     const v = this.travelExpensesForm.getRawValue();
     const plzInfo = this.plzService.search(v.participant.zipCode);
 
@@ -173,17 +152,6 @@ export class ReimbursementService {
       },
       note: v.overview.note
     };
-  }
-
-  private getAllExpenses() {
-    const expenses = this.getReimbursment().expenses;
-    return [...expenses.outbound, ...expenses.onsite, ...expenses.inbound];
-  }
-
-  getSum() {
-    const reducer = (sum: number, expense: IExpense) =>
-      sum + expense.totalReimbursement();
-    return this.getAllExpenses().reduce(reducer, 0);
   }
 
   getDestinationCompletion(direction: Direction): string {
