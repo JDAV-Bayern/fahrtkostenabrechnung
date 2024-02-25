@@ -36,4 +36,8 @@
       />
     </div>
   </div>
+
+  <div *ngIf="formArray.hasError('maxPlanExpenses')" class="error-message">
+    Du kannst pro Fahrtrichtung maximal eine Auslage für Abo Tickets angeben.
+  </div>
 </fieldset>

@@ -20,6 +20,10 @@
         (clickExtraButton)="completeReturnTrip()"
       />
     </div>
+
+    <div *ngIf="form.hasError('expensesRequired')" class="error-message">
+      Bitte gib mindestens eine Auslage an.
+    </div>
   </fieldset>
 </div>
 
@@ -28,6 +32,13 @@
     <button (click)="back()" class="gray-button">Zurück</button>
   </div>
   <div class="right-button-container">
-    <button (click)="continue()" class="green-button">Weiter</button>
+    <button
+      (click)="continue()"
+      [class.green-button]="form.valid"
+      [class.disabled-button]="form.invalid"
+      [disabled]="form.invalid"
+    >
+      Weiter
+    </button>
   </div>
 </div>

@@ -16,6 +16,7 @@ import { ExpenseService } from 'src/app/expense.service';
 })
 export class SubmissionOverviewComponent {
   form: FormGroup;
+  travelExpensesForm: FormGroup;
 
   public files: File[] = [];
 
@@ -36,11 +37,16 @@ export class SubmissionOverviewComponent {
     private readonly controlService: ReimbursementControlService,
     private readonly validationService: ReimbursementValidationService
   ) {
+    this.travelExpensesForm = controlService.travelExpensesForm;
     this.form = controlService.overviewStep;
   }
 
   get iban() {
     return this.form.get('iban') as FormControl<string>;
+  }
+
+  get bic() {
+    return this.form.get('bic') as FormControl<string>;
   }
 
   get reimbursement() {
@@ -51,27 +57,17 @@ export class SubmissionOverviewComponent {
     return this.expenseService.getTotal(this.reimbursement).toFixed(2);
   }
 
-  getErrors(): string[] {
-    return this.validationService
-      .validateReimbursement(this.reimbursement)
-      .findings.filter(f => f.type === 'error')
-      .map(f => f.message);
-  }
   getWarnings(): string[] {
     return this.validationService
       .validateReimbursement(this.reimbursement)
-      .findings.filter(f => f.type === 'warning')
+      .filter(f => f.type === 'warning')
       .map(f => f.message);
   }
   getInfos(): string[] {
     return this.validationService
       .validateReimbursement(this.reimbursement)
-      .findings.filter(f => f.type === 'info')
+      .filter(f => f.type === 'info')
       .map(f => f.message);
-  }
-  isReimbursementValid(): boolean {
-    return this.validationService.validateReimbursement(this.reimbursement)
-      .isValid;
   }
 
   async addImageToPdf(imageFile: File, pdf: jsPDF) {

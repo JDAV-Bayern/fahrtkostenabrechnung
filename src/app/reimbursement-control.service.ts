@@ -4,6 +4,12 @@ import { validateIBAN } from 'ngx-iban-validator';
 import { Direction, ExpenseType, Expense } from 'src/domain/expense';
 import { Reimbursement } from 'src/domain/reimbursement';
 import { PlzService } from './plz.service';
+import { expensesRequired } from './forms/validators/expenses-required.validator';
+import { maxPlanExpenses } from './forms/validators/max-plan-expenses.validator';
+import { validateBankAccount } from './forms/validators/bank-account.validator';
+
+const PLZ_PATTERN = /^[0-9]{5}$/;
+const BIC_PATTERN = /^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/;
 
 @Injectable({
   providedIn: 'root'
@@ -19,20 +25,26 @@ export class ReimbursementControlService {
     participant: this.formBuilder.nonNullable.group({
       name: ['', Validators.required],
       street: ['', Validators.required],
-      zipCode: ['', [Validators.required, Validators.pattern(/^[0-9]{5}$/)]],
+      zipCode: ['', [Validators.required, Validators.pattern(PLZ_PATTERN)]],
       city: ['', Validators.required]
     }),
-    expenses: this.formBuilder.group({
-      inbound: this.formBuilder.array<Expense>([]),
-      onsite: this.formBuilder.array<Expense>([]),
-      outbound: this.formBuilder.array<Expense>([])
-    }),
-    overview: this.formBuilder.nonNullable.group({
-      iban: ['', [Validators.required, validateIBAN]],
-      bic: [''],
-      note: [''],
-      file: [undefined]
-    })
+    expenses: this.formBuilder.group(
+      {
+        inbound: this.formBuilder.array<Expense>([], [maxPlanExpenses]),
+        onsite: this.formBuilder.array<Expense>([]),
+        outbound: this.formBuilder.array<Expense>([], [maxPlanExpenses])
+      },
+      { validators: [expensesRequired] }
+    ),
+    overview: this.formBuilder.nonNullable.group(
+      {
+        iban: ['', [Validators.required, validateIBAN]],
+        bic: ['', [Validators.pattern(BIC_PATTERN)]],
+        note: [''],
+        file: [undefined]
+      },
+      { validators: [validateBankAccount] }
+    )
   });
 
   constructor(
@@ -71,7 +83,7 @@ export class ReimbursementControlService {
       case 'car':
         return this.formBuilder.group({
           ...commonControls,
-          distance: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
+          distance: ['', [Validators.required, Validators.min(0)]],
           carType: ['', [Validators.required]],
           passengers: ['']
         });
@@ -86,7 +98,7 @@ export class ReimbursementControlService {
       case 'bike':
         return this.formBuilder.group({
           ...commonControls,
-          distance: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]]
+          distance: ['', [Validators.required, Validators.min(0)]]
         });
     }
   }
@@ -154,13 +166,11 @@ export class ReimbursementControlService {
     };
   }
 
-  getDestinationCompletion(direction: Direction): string {
+  getOriginCompletion(direction: Direction): string {
     const expenses = this.getExpenses(direction);
 
     if (expenses.length === 0) {
-      return direction === 'inbound'
-        ? ''
-        : this.getDestinationCompletion('inbound');
+      return direction === 'inbound' ? '' : this.getOriginCompletion('inbound');
     }
 
     const lastExpense = expenses.value[expenses.length - 1];
@@ -173,6 +183,17 @@ export class ReimbursementControlService {
       const carExpense = expenses.find(expense => 'carType' in expense);
       if (carExpense) {
         return carExpense.carType;
+      }
+    }
+    return '';
+  }
+
+  getDiscountCompletion(): string {
+    for (let direction of ['inbound', 'onsite', 'outbound'] as Direction[]) {
+      const expenses = this.getExpenses(direction).getRawValue();
+      const carExpense = expenses.find(expense => 'discountCard' in expense);
+      if (carExpense) {
+        return carExpense.discountCard;
       }
     }
     return '';

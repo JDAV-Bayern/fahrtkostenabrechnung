@@ -36,7 +36,10 @@
         class="form-control"
         required
       />
-      <div *ngIf="origin.invalid && origin.touched" class="error-message">
+      <div
+        *ngIf="origin.hasError('required') && origin.touched"
+        class="error-message"
+      >
         Bitte gib einen Startort ein.
       </div>
     </div>
@@ -51,7 +54,7 @@
         required
       />
       <div
-        *ngIf="destination.invalid && destination.touched"
+        *ngIf="destination.hasError('required') && destination.touched"
         class="error-message"
       >
         Bitte gib einen Zielort ein.
@@ -68,8 +71,14 @@
         id="distance"
         placeholder="Strecke in Kilometern"
       />
-      <div *ngIf="distance.invalid && distance.touched" class="error-message">
-        Bitte gib einen Distanz ein.
+      <div
+        *ngIf="distance.hasError('required') && distance.touched"
+        class="error-message"
+      >
+        Bitte gib die Distanz ein.
+      </div>
+      <div *ngIf="distance.hasError('min')" class="error-message">
+        Bitte gib eine gültige Distanz ein.
       </div>
     </div>
 
@@ -83,8 +92,14 @@
         class="form-control"
         required
       />
-      <div *ngIf="price.invalid && price.touched" class="error-message">
+      <div
+        *ngIf="price.hasError('required') && price.touched"
+        class="error-message"
+      >
         Bitte gib einen Preis ein.
+      </div>
+      <div *ngIf="price.hasError('min')" class="error-message">
+        Bitte gib einen gültigen Preis ein.
       </div>
     </div>
 
@@ -101,8 +116,11 @@
         <option value="BC25">BahnCard 25</option>
         <option value="BC50">BahnCard 50</option>
       </select>
-      <div *ngIf="discount.invalid && discount.touched" class="error-message">
-        Bitte wähle eine Option aus.
+      <div
+        *ngIf="discount.hasError('required') && discount.touched"
+        class="error-message"
+      >
+        Bitte wähle deine BahnCard aus.
       </div>
     </div>
 
@@ -119,8 +137,11 @@
         <option value="plug-in-hybrid">Plug-in Hybrid</option>
         <option value="electric">Elektro</option>
       </select>
-      <div *ngIf="carType.invalid && carType.touched" class="error-message">
-        Bitte gib den Typ deines Autos ein.
+      <div
+        *ngIf="carType.hasError('required') && carType.touched"
+        class="error-message"
+      >
+        Bitte wähle den Typ deines Autos aus.
       </div>
     </div>
 

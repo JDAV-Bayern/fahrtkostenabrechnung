@@ -17,7 +17,10 @@
         class="form-control"
         required
       />
-      <div *ngIf="name.invalid && name.touched" class="error-message">
+      <div
+        *ngIf="name.hasError('required') && name.touched"
+        class="error-message"
+      >
         Bitte gib deinen Namen ein.
       </div>
     </div>
@@ -31,7 +34,10 @@
         class="form-control"
         required
       />
-      <div *ngIf="street.invalid && street.touched" class="error-message">
+      <div
+        *ngIf="street.hasError('required') && street.touched"
+        class="error-message"
+      >
         Bitte gib Straße und Hausnummer ein.
       </div>
     </div>
@@ -46,8 +52,14 @@
         class="form-control"
         required
       />
-      <div *ngIf="zipCode.invalid && zipCode.touched" class="error-message">
+      <div
+        *ngIf="zipCode.hasError('required') && zipCode.touched"
+        class="error-message"
+      >
         Bitte gib deine Postleitzahl ein.
+      </div>
+      <div *ngIf="zipCode.hasError('pattern')" class="error-message">
+        Bitte gib eine gültige Postleitzahl ein.
       </div>
     </div>
 
@@ -60,7 +72,10 @@
         class="form-control"
         required
       />
-      <div *ngIf="city.invalid && city.touched" class="error-message">
+      <div
+        *ngIf="city.hasError('required') && city.touched"
+        class="error-message"
+      >
         Bitte gib deinen Wohnort ein.
       </div>
     </div>
@@ -79,7 +94,7 @@
         required
       />
       <div
-        *ngIf="courseName.invalid && courseName.touched"
+        *ngIf="courseName.hasError('required') && courseName.touched"
         class="error-message"
       >
         Bitte gib den Schulungsnamen ein.
@@ -96,7 +111,7 @@
         required
       />
       <div
-        *ngIf="courseCode.invalid && courseCode.touched"
+        *ngIf="courseCode.hasError('required') && courseCode.touched"
         class="error-message"
       >
         Bitte gib die Schulungsnummer ein.
@@ -113,7 +128,7 @@
         required
       />
       <div
-        *ngIf="courseDate.invalid && courseDate.touched"
+        *ngIf="courseDate.hasError('required') && courseDate.touched"
         class="error-message"
       >
         Bitte gib das Schulungsdatum ein.
@@ -130,7 +145,7 @@
         required
       />
       <div
-        *ngIf="courseLocation.invalid && courseLocation.touched"
+        *ngIf="courseLocation.hasError('required') && courseLocation.touched"
         class="error-message"
       >
         Bitte gib den Schulungsort ein.
@@ -144,6 +159,7 @@
     <button
       [class.green-button]="participantForm.valid && courseForm.valid"
       [class.disabled-button]="participantForm.invalid || courseForm.invalid"
+      [disabled]="participantForm.invalid || courseForm.invalid"
       (click)="next()"
     >
       Weiter

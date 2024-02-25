@@ -105,9 +105,10 @@ export class AddExpenseModalComponent {
     this.form = this.controlService.getExpenseFormGroup(type);
 
     // autofill some fields
-    const from = this.controlService.getDestinationCompletion(this.direction);
+    const origin = this.controlService.getOriginCompletion(this.direction);
     const carType = this.controlService.getCarTypeCompletion();
-    this.form.patchValue({ from, carType });
+    const discountCard = this.controlService.getDiscountCompletion();
+    this.form.patchValue({ origin, carType, discountCard });
   }
 
   submitForm() {
