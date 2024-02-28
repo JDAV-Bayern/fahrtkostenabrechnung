@@ -16,6 +16,7 @@ export class TravelExpensesComponent implements OnInit {
 
   ngOnInit() {
     this.reimbursementService.loadForm();
+    this.reimbursementService.loadExpenses();
   }
 
   onChange() {

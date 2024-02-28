@@ -1,4 +1,4 @@
-<div class="step-box" *ngIf="expensesAt && expensesFrom && expensesTo">
+<div class="step-box">
   <fieldset>
     <h1>Auslagen für Fahrtkosten</h1>
     <p><b>Summe:</b> {{ getSum().toFixed(2) }}€</p>
@@ -6,58 +6,9 @@
       Bitte die richtige Reihenfolge beachten und nötigenfalls per Drag-and-Drop
       richtigstellen.
     </p>
-    <h3>Hinfahrt</h3>
-    <button
-      (click)="openAddExpenseDialog('to')"
-      class="add-button green-button mar"
-    >
-      Auslage hinzufügen
-    </button>
-    <div [dragula]="'expensesTo'" [(dragulaModel)]="expensesTo">
-      <app-expense-list-row
-        (deleteRow)="deleteRow($event)"
-        (editRow)="editRow($event)"
-        *ngFor="let expense of expensesTo"
-        [expense]="expense"
-      ></app-expense-list-row>
-    </div>
-    <h3>Während der Schulung</h3>
-    <button
-      (click)="openAddExpenseDialog('at')"
-      class="add-button green-button mar"
-    >
-      Auslage hinzufügen
-    </button>
-    <div [dragula]="'expensesAt'" [(dragulaModel)]="expensesAt">
-      <app-expense-list-row
-        (deleteRow)="deleteRow($event)"
-        (editRow)="editRow($event)"
-        *ngFor="let expense of expensesAt"
-        [expense]="expense"
-      ></app-expense-list-row>
-    </div>
-    <h3>Rückfahrt</h3>
-    <button
-      (click)="openAddExpenseDialog('from')"
-      class="add-button green-button mar"
-    >
-      Auslage hinzufügen
-    </button>
-    <button (click)="addReturnTrip()" class="add-button green-button mar">
-      Rückfahrt wie hinfahrt
-    </button>
-    <div
-      [dragula]="'expensesFrom'"
-      [(dragulaModel)]="expensesFrom"
-      (dragulaModelChange)="storeExpenses()"
-    >
-      <app-expense-list-row
-        (deleteRow)="deleteRow($event)"
-        (editRow)="editRow($event)"
-        *ngFor="let expense of expensesFrom"
-        [expense]="expense"
-      ></app-expense-list-row>
-    </div>
+    <app-expense-list direction="to" heading="Hinfahrt" />
+    <app-expense-list direction="at" heading="Während der Schulung" />
+    <app-expense-list direction="from" heading="Rückfahrt" />
   </fieldset>
 </div>
 

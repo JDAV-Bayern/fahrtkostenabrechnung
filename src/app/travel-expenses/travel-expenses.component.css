@@ -1,8 +1,5 @@
 /* Center the content vertically and horizontally */
 .step-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   margin: 20px auto;
   max-width: min(95vw, 600px);
   min-width: 50%;

@@ -71,12 +71,25 @@
   <p *ngIf="r().note !== ''"><b>Bemerkung:</b></p>
   <p *ngFor="let line of r().note.split('\n')">{{ line }}</p>
   <div class="table-title">
-    <span>Abrechnungspositionen</span
-    ><span class="sum">Summe: {{ getSum() }}€</span><br />
+    <span>Abrechnungspositionen</span>
+    <span class="sum">Summe: {{ getSum() }}€</span><br />
   </div>
   <hr />
+  <h3>Hinfahrt</h3>
   <app-pdf-expense-line-item
-    *ngFor="let expense of r().expenses; index as i"
+    *ngFor="let expense of r().expenses.to; index as i"
+    [expense]="expense"
+    [index]="i"
+  ></app-pdf-expense-line-item>
+  <h3>Vor Ort</h3>
+  <app-pdf-expense-line-item
+    *ngFor="let expense of r().expenses.at; index as i"
+    [expense]="expense"
+    [index]="i"
+  ></app-pdf-expense-line-item>
+  <h3>Rückfahrt</h3>
+  <app-pdf-expense-line-item
+    *ngFor="let expense of r().expenses.from; index as i"
     [expense]="expense"
     [index]="i"
   ></app-pdf-expense-line-item>

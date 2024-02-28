@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import {
+  Direction,
   IBikeExpense,
   ICarExpense,
   IExpense,
@@ -55,17 +56,6 @@ export class PdfExpenseLineItemComponent {
         return `${bikeExpense.distance} km`;
       default:
         return '';
-    }
-  }
-
-  getDirection() {
-    switch (this.expense.direction) {
-      case 'to':
-        return 'Hinfahrt';
-      case 'from':
-        return 'Rückfahrt';
-      case 'at':
-        return 'Vor Ort';
     }
   }
 }

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ReimbursementService } from 'src/app/reimbursement.service';
 import { logoBase64 } from 'src/assets/logoBase64';
 import { IReimbursement } from 'src/domain/reimbursement';
 
@@ -13,6 +14,8 @@ export class PdfViewComponent {
 
   @Output()
   fullyRendered = new EventEmitter<void>();
+
+  constructor(private readonly reimbursementService: ReimbursementService) {}
 
   ngAfterViewInit() {
     this.fullyRendered.emit();
@@ -35,10 +38,7 @@ export class PdfViewComponent {
     return this.reimbursement;
   }
   getSum() {
-    const expensesSum = this.r()?.expenses.reduce(
-      (sum, expense) => sum + expense.totalReimbursement(),
-      0
-    );
+    const expensesSum = this.reimbursementService.getSum();
     if (!this.reimbursement.participantDetails.isBavaria && expensesSum > 75) {
       return `(${expensesSum.toFixed(2)}) -> 75.00`;
     }

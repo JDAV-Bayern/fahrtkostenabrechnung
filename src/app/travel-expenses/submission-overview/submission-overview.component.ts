@@ -43,12 +43,7 @@ export class SubmissionOverviewComponent {
   }
 
   getSum(): number {
-    return (
-      this.r()?.expenses.reduce(
-        (sum, expense) => sum + expense.totalReimbursement(),
-        0
-      ) || 0
-    );
+    return this.reimbursementService.getSum();
   }
 
   getErrors(): string[] {
