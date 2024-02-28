@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ICarExpense, IExpense, mapTripToReturn } from 'src/domain/expense';
-import { ReimbursementService } from '../reimbursement.service';
+import { ReimbursementService } from 'src/app/reimbursement.service';
 import { MatDialog } from '@angular/material/dialog';
 import { AddExpenseModalComponent } from './add-expense-modal/add-expense-modal.component';
 
 @Component({
-  selector: 'app-expenses-collection-component',
-  templateUrl: './expenses-collection-component.component.html',
-  styleUrls: ['./expenses-collection-component.component.css']
+  selector: 'app-expenses-collection',
+  templateUrl: './expenses-collection.component.html',
+  styleUrls: ['./expenses-collection.component.css']
 })
-export class ExpensesCollectionComponentComponent {
+export class ExpensesCollectionComponent {
   expensesTo: IExpense[] = [];
   expensesFrom: IExpense[] = [];
   expensesAt: IExpense[] = [];
@@ -20,8 +20,8 @@ export class ExpensesCollectionComponentComponent {
     private readonly reimbursementService: ReimbursementService
   ) {
     reimbursementService
-      .getReimbursment()
-      .expenses.forEach(expense => this.addExpense(expense));
+      .getExpenses()
+      .forEach(expense => this.addExpense(expense));
   }
   openAddExpenseDialog(direction: 'to' | 'from' | 'at') {
     const dialogRef = this.dialog.open(AddExpenseModalComponent, {

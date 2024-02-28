@@ -1,26 +1,21 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import jsPDF from 'jspdf';
 import * as imageprocessor from 'ts-image-processor';
-import { validateIBAN } from 'ngx-iban-validator';
 import { IReimbursement } from 'src/domain/reimbursement';
-import { ReimbursementService } from '../reimbursement.service';
+import { ReimbursementService } from 'src/app/reimbursement.service';
 import { NgxFileDropEntry } from 'ngx-file-drop';
 import { PDFDocument } from 'pdf-lib';
-import { logoBase64 } from 'src/assets/logoBase64';
-import { ReimbursementValidationService } from '../reimbursement.validation.service';
+import { ReimbursementValidationService } from 'src/app/reimbursement.validation.service';
 
 @Component({
-  selector: 'app-submission-overview-component',
-  templateUrl: './submission-overview-component.component.html',
-  styleUrls: ['./submission-overview-component.component.css']
+  selector: 'app-submission-overview',
+  templateUrl: './submission-overview.component.html',
+  styleUrls: ['./submission-overview.component.css']
 })
-export class SubmissionOverviewComponentComponent {
+export class SubmissionOverviewComponent {
   formGroup: FormGroup;
-  fileFormGroup: FormGroup;
-
-  reimbursement: IReimbursement | undefined;
 
   public files: File[] = [];
 
@@ -37,40 +32,14 @@ export class SubmissionOverviewComponentComponent {
 
   constructor(
     private readonly router: Router,
-    private formBuilder: FormBuilder,
     private readonly reimbursementService: ReimbursementService,
     private readonly validationService: ReimbursementValidationService
   ) {
-    this.formGroup = this.formBuilder.group({
-      inputIBAN: ['', [Validators.required, validateIBAN]],
-      inputBIC: ['', []],
-      inputNote: ['', []]
-    });
-    this.fileFormGroup = this.formBuilder.group({
-      file: [undefined, []]
-    });
+    this.formGroup = reimbursementService.getFormStep('overview');
   }
 
-  ngOnInit(): void {
-    this.formGroup.setValue({
-      inputIBAN: this.r()?.participantDetails?.iban || '',
-      inputBIC: this.r()?.participantDetails?.bic || '',
-      inputNote: this.r()?.note || ''
-    });
-  }
-
-  saveForm() {
-    if (this.formGroup.valid) {
-      const iban = this.formGroup.get('inputIBAN')?.value;
-      const bic = this.formGroup.get('inputBIC')?.value;
-      const note = this.formGroup.get('inputNote')?.value;
-      if (this.reimbursement) {
-        this.reimbursement.participantDetails.iban = iban;
-        this.reimbursement.participantDetails.bic = bic;
-        this.reimbursement.note = note;
-      }
-      this.reimbursementService.setSubmitInformation(iban, bic, note);
-    }
+  get iban() {
+    return this.formGroup.get('iban') as FormControl<string>;
   }
 
   getSum(): number {
@@ -252,7 +221,7 @@ export class SubmissionOverviewComponentComponent {
 
     const link = document.createElement('a');
     link.href = fileURL;
-    link.download = `fka_${this.reimbursement?.courseDetails.id}_${this.reimbursement?.participantDetails.name.split(' ').pop()?.trim()}.pdf`;
+    link.download = `fka_${this.r().courseDetails.id}_${this.r().participantDetails.name.split(' ').pop()?.trim()}.pdf`;
     link.click();
     link.remove();
     this.loading = false;
@@ -261,8 +230,6 @@ export class SubmissionOverviewComponentComponent {
   back() {
     this.router.navigate(['auslagen']);
   }
-
-  submitForm() {}
 
   fileDropped(files: NgxFileDropEntry[]) {
     for (const droppedFile of files) {
@@ -281,9 +248,6 @@ export class SubmissionOverviewComponentComponent {
   }
 
   r(): IReimbursement {
-    if (!this.reimbursement) {
-      this.reimbursement = this.reimbursementService.getReimbursment();
-    }
-    return this.reimbursement;
+    return this.reimbursementService.getReimbursment();
   }
 }

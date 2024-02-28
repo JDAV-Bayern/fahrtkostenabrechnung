@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PersonalInformationComponentComponent } from './personal-information-component/personal-information-component.component';
-import { SubmissionOverviewComponentComponent } from './submission-overview-component/submission-overview-component.component';
-import { ExpensesCollectionComponentComponent } from './expenses-collection-component/expenses-collection-component.component';
+import { PersonalInformationComponent } from './travel-expenses/personal-information/personal-information.component';
+import { SubmissionOverviewComponent } from './travel-expenses/submission-overview/submission-overview.component';
+import { ExpensesCollectionComponent } from './travel-expenses/expenses-collection/expenses-collection.component';
 import { ImprintComponent } from './info/imprint/imprint.component';
 import { DataProtectionComponent } from './info/data-protection/data-protection.component';
 import { InfoComponent } from './info/info.component';
+import { TravelExpensesComponent } from './travel-expenses/travel-expenses.component';
 
 const routes: Routes = [
   {
@@ -28,25 +29,26 @@ const routes: Routes = [
         path: 'datenschutz',
         title: 'Datenschutzerklärung',
         component: DataProtectionComponent,
-        data: { breadcrumb: 'Datenschutz' }
+        data: { breadcrumb: 'Datenschutzerklärung' }
       }
     ]
   },
   {
     path: '',
     title: 'Fahrtkostenabrechnung JDAV Bayern',
+    component: TravelExpensesComponent,
     children: [
       {
         path: 'kurs-und-personen-infos',
-        component: PersonalInformationComponentComponent
+        component: PersonalInformationComponent
       },
       {
         path: 'auslagen',
-        component: ExpensesCollectionComponentComponent
+        component: ExpensesCollectionComponent
       },
       {
         path: 'zusammenfassen-und-abschicken',
-        component: SubmissionOverviewComponentComponent
+        component: SubmissionOverviewComponent
       }
     ]
   }

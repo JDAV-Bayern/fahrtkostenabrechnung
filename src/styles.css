@@ -29,6 +29,11 @@ a:hover {
   color: #0056b3;
 }
 
+fieldset {
+  border: none;
+  padding: 0;
+}
+
 .base-container {
   display: flex;
   flex-direction: column;
@@ -38,20 +43,6 @@ a:hover {
 .content {
   flex-grow: 1;
   display: inline;
-}
-
-/* personal-information.component.css */
-
-/* Center the content vertically and horizontally */
-.step-content {
-  align-items: center;
-  justify-content: center;
-  margin-top: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 20px;
-  max-width: min(95vw, 600px);
-  min-width: 50%;
 }
 
 /* Create a box around the content */

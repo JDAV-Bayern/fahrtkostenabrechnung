@@ -1,131 +1,111 @@
 import { Injectable } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { validateIBAN } from 'ngx-iban-validator';
 import {
   IExpense,
   getDomainObjectFromSerializedData
 } from 'src/domain/expense';
 import { IReimbursement } from 'src/domain/reimbursement';
+import { PlzService } from './plz.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReimbursementService {
-  constructor() {}
+  travelExpensesForm = this.formBuilder.group({
+    personalInformation: this.formBuilder.group({
+      name: ['', Validators.required],
+      street: ['', Validators.required],
+      zipCode: ['', [Validators.required, Validators.pattern(/^[0-9]{5}$/)]],
+      city: ['', Validators.required],
+      course: this.formBuilder.group({
+        code: ['', Validators.required],
+        name: ['', Validators.required],
+        date: ['', Validators.required],
+        location: ['', Validators.required]
+      })
+    }),
+    expenses: this.formBuilder.group({
+      expensesTo: this.formBuilder.array([]),
+      expensesAt: this.formBuilder.array([]),
+      expensesFrom: this.formBuilder.array([])
+    }),
+    overview: this.formBuilder.group({
+      iban: ['', [Validators.required, validateIBAN]],
+      bic: [''],
+      note: [''],
+      file: [undefined]
+    })
+  });
 
-  private loadFromLocalStorage(): IReimbursement {
-    const localStorageDate = localStorage.getItem('formDate');
-    const formDate = localStorageDate ? new Date(localStorageDate) : new Date();
-    const expenses: IExpense[] = [];
-    const expensesJson = JSON.parse(
-      localStorage.getItem('expenses') || '[]'
-    ) as string[];
-    expensesJson.forEach(expenseJson => {
-      expenses.push(getDomainObjectFromSerializedData(expenseJson));
-    });
-    return {
-      id: localStorage.getItem('id') || '',
-      participantDetails: {
-        name: localStorage.getItem('name') || '',
-        street: localStorage.getItem('street') || '',
-        city: localStorage.getItem('city') || '',
-        iban: localStorage.getItem('iban') || '',
-        zipCode: localStorage.getItem('zipCode') || '',
-        isBavaria: localStorage.getItem('isBavaria') === 'true'
-      },
-      courseDetails: {
-        id: localStorage.getItem('courseId') || '',
-        courseDate: localStorage.getItem('courseDate') || '',
-        courseLocation: localStorage.getItem('courseLocation') || '',
-        courseName: localStorage.getItem('courseName') || ''
-      },
-      expenses,
-      formDate,
-      note: localStorage.getItem('note') || ''
-    };
+  constructor(
+    private formBuilder: FormBuilder,
+    private plzService: PlzService
+  ) {}
+
+  getFormStep(step: string): FormGroup {
+    return this.travelExpensesForm.get(step) as FormGroup;
   }
 
-  private storeToLocalStorage(reimbursement: IReimbursement) {
-    localStorage.setItem('id', reimbursement.id);
-    localStorage.setItem('name', reimbursement.participantDetails.name);
-    localStorage.setItem('street', reimbursement.participantDetails.street);
-    localStorage.setItem('city', reimbursement.participantDetails.city);
-    localStorage.setItem('iban', reimbursement.participantDetails.iban);
-    localStorage.setItem('courseId', reimbursement.courseDetails.id);
-    localStorage.setItem('courseName', reimbursement.courseDetails.courseName);
-    localStorage.setItem('courseDate', reimbursement.courseDetails.courseDate);
-    localStorage.setItem(
-      'courseLocation',
-      reimbursement.courseDetails.courseLocation
-    );
-    localStorage.setItem('formDate', reimbursement.formDate.toISOString());
-    localStorage.setItem(
-      'expenses',
-      JSON.stringify(reimbursement.expenses.map(expense => expense.serialize()))
-    );
-    localStorage.setItem('zipCode', reimbursement.participantDetails.zipCode);
-    localStorage.setItem(
-      'isBavaria',
-      reimbursement.participantDetails.isBavaria.toString()
-    );
-    localStorage.setItem('note', reimbursement.note);
+  loadForm() {
+    const travelExpensesData = localStorage.getItem('travelExpenses') || '{}';
+    const travelExpenses = JSON.parse(travelExpensesData);
+    this.travelExpensesForm.patchValue(travelExpenses);
   }
 
-  setPersonalAndCourseInformation(
-    name: string,
-    street: string,
-    city: string,
-    course: string,
-    courseName: string,
-    courseDate: string,
-    courseLocation: string,
-    zipCode: string,
-    isBavaria: boolean
-  ) {
-    const reimbursement = this.loadFromLocalStorage();
-    reimbursement.participantDetails.name = name;
-    reimbursement.participantDetails.street = street;
-    reimbursement.participantDetails.city = city;
-    reimbursement.courseDetails.id = course;
-    reimbursement.courseDetails.courseName = courseName;
-    reimbursement.courseDetails.courseDate = courseDate;
-    reimbursement.courseDetails.courseLocation = courseLocation;
-    reimbursement.participantDetails.zipCode = zipCode;
-    reimbursement.participantDetails.isBavaria = isBavaria;
-    this.storeToLocalStorage(reimbursement);
+  saveForm() {
+    // TODO: exclude file field?
+    const travelExpensesData = JSON.stringify(this.travelExpensesForm.value);
+    localStorage.setItem('travelExpenses', travelExpensesData);
+  }
+
+  getExpenses(): IExpense[] {
+    const expensesData = localStorage.getItem('expenses') || '[]';
+    const expensesJson = JSON.parse(expensesData) as string[];
+    const expenses = expensesJson.map(expenseJson =>
+      getDomainObjectFromSerializedData(expenseJson)
+    );
+    return expenses;
   }
 
   setExpenses(expenses: IExpense[]) {
-    const reimbursement = this.loadFromLocalStorage();
-    reimbursement.expenses = expenses;
-    this.storeToLocalStorage(reimbursement);
-  }
-
-  setSubmitInformation(iban: string, bic: string, note: string) {
-    const reimbursement = this.loadFromLocalStorage();
-    reimbursement.participantDetails.iban = iban;
-    reimbursement.participantDetails.bic = bic;
-    reimbursement.formDate = new Date();
-    reimbursement.note = note;
-    this.storeToLocalStorage(reimbursement);
+    localStorage.setItem(
+      'expenses',
+      JSON.stringify(expenses.map(expense => expense.serialize()))
+    );
   }
 
   getReimbursment(): IReimbursement {
-    return this.loadFromLocalStorage();
+    const v = this.travelExpensesForm.value;
+    const plzInfo = this.plzService.search(
+      v.personalInformation?.zipCode || ''
+    );
+
+    return {
+      id: '',
+      formDate: new Date(),
+      courseDetails: {
+        id: v.personalInformation?.course?.code || '',
+        courseName: v.personalInformation?.course?.name || '',
+        courseDate: v.personalInformation?.course?.date || '',
+        courseLocation: v.personalInformation?.course?.location || ''
+      },
+      participantDetails: {
+        name: v.personalInformation?.name || '',
+        street: v.personalInformation?.street || '',
+        zipCode: v.personalInformation?.zipCode || '',
+        city: v.personalInformation?.city || '',
+        isBavaria: plzInfo.length > 0 ? plzInfo[0].isBavaria : false,
+        iban: v.overview?.iban || '',
+        bic: v.overview?.bic || ''
+      },
+      expenses: this.getExpenses(),
+      note: v.overview?.note || ''
+    };
   }
 
   deleteStoredData(): void {
-    localStorage.removeItem('id');
-    localStorage.removeItem('name');
-    localStorage.removeItem('street');
-    localStorage.removeItem('city');
-    localStorage.removeItem('iban');
-    localStorage.removeItem('courseId');
-    localStorage.removeItem('formDate');
+    localStorage.removeItem('travelExpenses');
     localStorage.removeItem('expenses');
-    localStorage.removeItem('courseName');
-    localStorage.removeItem('courseDate');
-    localStorage.removeItem('courseLocation');
-    localStorage.removeItem('zipCode');
-    localStorage.removeItem('isBavaria');
-    localStorage.removeItem('note');
   }
 }
