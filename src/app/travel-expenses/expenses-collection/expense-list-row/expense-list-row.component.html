@@ -2,16 +2,14 @@
   <table>
     <tr>
       <td class="tleft">
-        von <b>{{ this.expense.startLocation }}</b>
+        von <b>{{ expense.origin }}</b>
       </td>
       <td class="tmid">{{ this.getTitle() }}</td>
-      <th class="tright">
-        {{ this.expense.totalReimbursement().toFixed(2) }}€
-      </th>
+      <th class="tright">{{ getAmount() }} €</th>
     </tr>
     <tr>
       <td class="tleft">
-        nach <b>{{ this.expense.endLocation }}</b>
+        nach <b>{{ expense.destination }}</b>
       </td>
       <td class="tmid">{{ this.getDetails() }}</td>
       <td class="tright">

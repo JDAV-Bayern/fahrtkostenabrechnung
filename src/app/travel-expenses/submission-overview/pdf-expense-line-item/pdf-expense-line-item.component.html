@@ -6,18 +6,16 @@
         <table>
           <tr>
             <td class="location">
-              <b>{{ expense.startLocation }}</b> nach
+              <b>{{ expense.origin }}</b> nach
             </td>
             <th class="title">
               {{ getTitle() }}
             </th>
-            <td class="amount">
-              {{ expense.totalReimbursement().toFixed(2) }}€
-            </td>
+            <td class="amount">{{ getCosts() }} €</td>
           </tr>
           <tr>
             <td class="location">
-              <b>{{ expense.endLocation }}</b>
+              <b>{{ expense.destination }}</b>
             </td>
             <td colspan="2" class="details">
               {{ getDetails() }}

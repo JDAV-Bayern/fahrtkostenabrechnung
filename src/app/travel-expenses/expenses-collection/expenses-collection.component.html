@@ -1,14 +1,29 @@
 <div class="step-box">
-  <fieldset>
+  <fieldset [formGroup]="form">
     <h1>Auslagen für Fahrtkosten</h1>
-    <p><b>Summe:</b> {{ getSum().toFixed(2) }}€</p>
+    <p><b>Summe:</b> {{ getTotal() }}€</p>
     <p>
       Bitte die richtige Reihenfolge beachten und nötigenfalls per Drag-and-Drop
       richtigstellen.
     </p>
-    <app-expense-list direction="to" heading="Hinfahrt" />
-    <app-expense-list direction="at" heading="Während der Schulung" />
-    <app-expense-list direction="from" heading="Rückfahrt" />
+    <div cdkDropListGroup>
+      <app-expense-list direction="inbound" heading="Hinfahrt" />
+      <app-expense-list
+        direction="onsite"
+        heading="Während der Schulung"
+        [enterPredicate]="onsitePredicate"
+      />
+      <app-expense-list
+        direction="outbound"
+        heading="Rückfahrt"
+        extraButton="Rückfahrt wie Hinfahrt"
+        (clickExtraButton)="completeReturnTrip()"
+      />
+    </div>
+
+    <div *ngIf="form.hasError('expensesRequired')" class="error-message">
+      Bitte gib mindestens eine Auslage an.
+    </div>
   </fieldset>
 </div>
 
@@ -17,6 +32,13 @@
     <button (click)="back()" class="gray-button">Zurück</button>
   </div>
   <div class="right-button-container">
-    <button (click)="continue()" class="green-button">Weiter</button>
+    <button
+      (click)="continue()"
+      [class.green-button]="form.valid"
+      [class.disabled-button]="form.invalid"
+      [disabled]="form.invalid"
+    >
+      Weiter
+    </button>
   </div>
 </div>

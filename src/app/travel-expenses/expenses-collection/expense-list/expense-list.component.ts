@@ -1,8 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ReimbursementService } from 'src/app/reimbursement.service';
-import { Direction, ICarExpense, IExpense } from 'src/domain/expense';
+import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
 import { AddExpenseModalComponent } from '../add-expense-modal/add-expense-modal.component';
+import { FormArray, FormGroup } from '@angular/forms';
+import { Direction } from 'src/domain/expense';
+import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-expense-list',
@@ -16,80 +18,56 @@ export class ExpenseListComponent {
   @Input({ required: true })
   heading!: string;
 
-  expenses: IExpense[] = [];
+  @Input()
+  extraButton?: string;
+
+  @Output()
+  clickExtraButton = new EventEmitter<MouseEvent>();
+
+  @Input()
+  enterPredicate: (drag: CdkDrag, drop: CdkDropList) => boolean = () => true;
+
+  formGroup!: FormGroup;
+  formArray!: FormArray<FormGroup>;
 
   constructor(
     public dialog: MatDialog,
-    private readonly reimbursementService: ReimbursementService
+    private readonly controlService: ReimbursementControlService
   ) {}
 
   ngOnInit() {
-    this.expenses = this.reimbursementService.getExpenses(this.direction);
+    this.formGroup = this.controlService.expensesStep;
+    this.formArray = this.controlService.getExpenses(this.direction);
   }
 
   openAddExpenseDialog() {
-    const dialogRef = this.dialog.open(AddExpenseModalComponent, {
-      id: 'add-expense-modal',
-      width: 'min(95vw, 700px)'
-    });
-
-    const lastExpense = this.getLastExpense();
-    const startLocation = lastExpense?.endLocation;
-    const carType = this.reimbursementService.getCarTypeCompletion();
-
-    dialogRef.componentInstance.expense = {
-      startLocation,
-      ...(carType ? { carType } : {})
-    } as IExpense;
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.addExpense(result);
-      }
-    });
+    this.dialog
+      .open(AddExpenseModalComponent, {
+        data: { direction: this.direction },
+        width: 'min(95vw, 700px)'
+      })
+      .afterClosed()
+      .subscribe(result => {
+        if (result) {
+          this.formArray.push(result);
+          this.controlService.saveForm();
+        }
+      });
   }
 
-  getLastExpense() {
-    const lastToExpense = this.reimbursementService.getDestinationCompletion();
-    return this.expenses[this.expenses.length - 1] || lastToExpense;
+  deleteExpense(index: number) {
+    this.formArray.removeAt(index);
+    this.controlService.saveForm();
   }
 
-  storeExpenses() {
-    this.reimbursementService.setExpenses(this.expenses, this.direction);
-    this.reimbursementService.saveExpenses();
+  onClickExtraButton(event: MouseEvent) {
+    this.clickExtraButton.emit(event);
   }
 
-  addExpense(expense: IExpense) {
-    this.expenses.push(expense);
-    this.storeExpenses();
-  }
-
-  editRow(expenseId: number) {
-    const expense = this.expenses.find(expense => expense.id === expenseId);
-    if (!expense) {
-      return;
-    }
-    const dialogRef = this.dialog.open(AddExpenseModalComponent, {
-      id: 'add-expense-modal',
-      width: '80%'
-    });
-    dialogRef.componentInstance.expense = expense;
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.deleteRow(expenseId);
-        this.addExpense(result);
-      }
-    });
-  }
-
-  deleteRow(expenseId: number) {
-    this.expenses = this.expenses.filter(expense => expense.id !== expenseId);
-    this.storeExpenses();
-  }
-
-  addReturnTrip() {
-    this.expenses = this.reimbursementService.getReturnTripCompletion();
-    this.storeExpenses();
+  drop(event: CdkDragDrop<FormArray>) {
+    const target = event.previousContainer.data.at(event.previousIndex);
+    event.previousContainer.data.removeAt(event.previousIndex);
+    event.container.data.insert(event.currentIndex, target);
+    this.controlService.saveForm();
   }
 }

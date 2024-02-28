@@ -1,11 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import {
-  IBikeExpense,
-  ICarExpense,
-  IExpense,
-  IPublicTransportPlanExpense,
-  ITrainExpense
-} from 'src/domain/expense';
+import { MatDialog } from '@angular/material/dialog';
+import { AddExpenseModalComponent } from '../add-expense-modal/add-expense-modal.component';
+import { FormGroup } from '@angular/forms';
+import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
+import { ExpenseService } from 'src/app/expense.service';
+import { ExpenseType } from 'src/domain/expense';
 
 @Component({
   selector: 'app-expense-list-row',
@@ -16,63 +15,45 @@ export class ExpenseListRowComponent {
   @Output()
   deleteRow = new EventEmitter<number>();
 
-  @Output()
-  editRow = new EventEmitter<number>();
+  @Input({ required: true })
+  form!: FormGroup;
 
   @Input({ required: true })
-  expense!: IExpense;
+  index!: number;
+
+  constructor(
+    private expenseService: ExpenseService,
+    private controlService: ReimbursementControlService,
+    private readonly dialog: MatDialog
+  ) {}
+
+  get expense() {
+    return this.controlService.getExpense(this.form.value);
+  }
 
   editMe() {
-    this.editRow.emit(this.expense.id);
+    this.dialog
+      .open(AddExpenseModalComponent, {
+        data: { form: this.form },
+        width: '80%'
+      })
+      .afterClosed()
+      .subscribe(() => this.controlService.saveForm());
   }
 
   deleteMe() {
-    this.deleteRow.emit(this.expense.id);
+    this.deleteRow.emit(this.index);
   }
 
   getTitle() {
-    let title: string;
-    switch (this.expense.type) {
-      case 'car':
-        title = 'Autofahrt';
-        break;
-      case 'train':
-        title = 'Zugfahrt';
-        break;
-      case 'plan':
-        title = 'Fahrt mit ÖPNV-Abo';
-        break;
-      case 'bike':
-        title = 'Fahrradfahrt';
-        break;
-      default:
-        title = '';
-    }
-    return title;
+    return this.expenseService.getName(this.expense);
+  }
+
+  getAmount() {
+    return this.expenseService.getAmount(this.expense).toFixed(2);
   }
 
   getDetails() {
-    let details: string;
-    switch (this.expense.type) {
-      case 'car':
-        const carExpense = this.expense as ICarExpense;
-        details = `${carExpense.distance} km, ${carExpense.passengers.length} Mitfahrer*innen`;
-        break;
-      case 'train':
-        const trainExpense = this.expense as ITrainExpense;
-        details = `${trainExpense.discountCard === 'BC50' ? 'BahnCard 50' : trainExpense.discountCard === 'BC25' ? 'BahnCard 25' : 'keine BahnCard'}`;
-        break;
-      case 'plan':
-        const planExpense = this.expense as IPublicTransportPlanExpense;
-        details = `pauschal 12,25 €`;
-        break;
-      case 'bike':
-        const bikeExpense = this.expense as IBikeExpense;
-        details = `${bikeExpense.distance} km`;
-        break;
-      default:
-        details = '';
-    }
-    return details;
+    return this.expenseService.getDescription(this.expense);
   }
 }

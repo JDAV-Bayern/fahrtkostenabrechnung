@@ -1,45 +1,185 @@
-<div class="model-content">
-  <h2>
-    Auslage erfassen -
-    {{
-      this.direction === 'to'
-        ? 'Hinfahrt'
-        : this.direction === 'from'
-          ? 'Rückfahrt'
-          : 'Vor Ort'
-    }}
-  </h2>
-  <br />
-  <div
-    *ngIf="expense?.type === undefined"
-    class="means-of-travel-buttons-container"
-  >
-    <button (click)="chooseCarExpense()" class="gray-button">
-      <span class="material-symbols-outlined">&#xe531;</span
-      >&nbsp;Autofahrt</button
-    ><br />
-    <button (click)="chooseTrainExpense()" class="gray-button">
-      <span class="material-symbols-outlined">&#xe570;</span
-      >&nbsp;Zugfahrt</button
-    ><br />
-    <button (click)="choosePlanExpense()" class="gray-button">
-      <span class="material-symbols-outlined">&#xe8f8;</span>&nbsp;Öffis Abo</button
-    ><br />
-    <button (click)="chooseBikeExpense()" class="gray-button">
+<form [formGroup]="form" (ngSubmit)="submitForm()" class="model-content">
+  <h2>Auslage erfassen - {{ getDirectionName() }}</h2>
+
+  <div *ngIf="type.invalid" class="means-of-travel-buttons-container">
+    <button (click)="chooseExpense('car')" class="gray-button">
+      <span class="material-symbols-outlined">&#xe531;</span>&nbsp;Autofahrt
+    </button>
+    <button (click)="chooseExpense('train')" class="gray-button">
+      <span class="material-symbols-outlined">&#xe570;</span>&nbsp;Zugfahrt
+    </button>
+    <button
+      *ngIf="direction !== 'onsite'"
+      (click)="chooseExpense('plan')"
+      class="gray-button"
+    >
+      <span class="material-symbols-outlined">&#xe8f8;</span>&nbsp;Öffis Abo
+    </button>
+    <button
+      *ngIf="direction !== 'onsite'"
+      (click)="chooseExpense('bike')"
+      class="gray-button"
+    >
       <span class="material-symbols-outlined">&#xeb29;</span>&nbsp;Fahrrad
     </button>
   </div>
 
-  <div class="formcontainer" *ngIf="expense?.type === 'car'">
-    <app-car-expense-form [expense]="this.expense" />
+  <div *ngIf="type.valid" class="formcontainer">
+    <h3>{{ getExpenseName() }} hinzufügen</h3>
+
+    <div *ngIf="origin" class="form-group">
+      <label for="origin">Von</label>
+      <input
+        type="text"
+        id="origin"
+        formControlName="origin"
+        class="form-control"
+        required
+      />
+      <div
+        *ngIf="origin.hasError('required') && origin.touched"
+        class="error-message"
+      >
+        Bitte gib einen Startort ein.
+      </div>
+    </div>
+
+    <div *ngIf="destination" class="form-group">
+      <label for="destination">Nach</label>
+      <input
+        type="text"
+        id="destination"
+        formControlName="destination"
+        class="form-control"
+        required
+      />
+      <div
+        *ngIf="destination.hasError('required') && destination.touched"
+        class="error-message"
+      >
+        Bitte gib einen Zielort ein.
+      </div>
+    </div>
+
+    <!-- car and bike expenses -->
+    <div *ngIf="distance" class="form-group">
+      <label for="distance">Strecke (km)</label>
+      <input
+        type="number"
+        class="form-control"
+        formControlName="distance"
+        id="distance"
+        placeholder="Strecke in Kilometern"
+      />
+      <div
+        *ngIf="distance.hasError('required') && distance.touched"
+        class="error-message"
+      >
+        Bitte gib die Distanz ein.
+      </div>
+      <div *ngIf="distance.hasError('min')" class="error-message">
+        Bitte gib eine gültige Distanz ein.
+      </div>
+    </div>
+
+    <!-- train expenses -->
+    <div *ngIf="price" class="form-group">
+      <label for="price">Preis <b>nach</b> Rabatten</label>
+      <input
+        type="number"
+        id="price"
+        formControlName="price"
+        class="form-control"
+        required
+      />
+      <div
+        *ngIf="price.hasError('required') && price.touched"
+        class="error-message"
+      >
+        Bitte gib einen Preis ein.
+      </div>
+      <div *ngIf="price.hasError('min')" class="error-message">
+        Bitte gib einen gültigen Preis ein.
+      </div>
+    </div>
+
+    <!-- train expenses -->
+    <div *ngIf="discount" class="form-group">
+      <label for="discountCard">BahnCard</label>
+      <select
+        id="discountCard"
+        formControlName="discountCard"
+        class="form-control"
+        required
+      >
+        <option value="none">Keine BahnCard</option>
+        <option value="BC25">BahnCard 25</option>
+        <option value="BC50">BahnCard 50</option>
+      </select>
+      <div
+        *ngIf="discount.hasError('required') && discount.touched"
+        class="error-message"
+      >
+        Bitte wähle deine BahnCard aus.
+      </div>
+    </div>
+
+    <!-- car expenses -->
+    <div *ngIf="carType" class="form-group">
+      <label for="carType">Auto Typ</label>
+      <select
+        id="carType"
+        formControlName="carType"
+        class="form-control"
+        required
+      >
+        <option value="combustion">Verbrenner</option>
+        <option value="plug-in-hybrid">Plug-in Hybrid</option>
+        <option value="electric">Elektro</option>
+      </select>
+      <div
+        *ngIf="carType.hasError('required') && carType.touched"
+        class="error-message"
+      >
+        Bitte wähle den Typ deines Autos aus.
+      </div>
+    </div>
+
+    <div *ngIf="passengers" class="form-group">
+      <label for="passengers">Mitfahrer*innen</label>
+      <p>
+        Bitte gib die Namen der Mitfahrer*innen an. Z.B. "Kathi, Julia Fendt,
+        Peter Zimmermann", oder lass das Feld leer, wenn Du alleine gefahren
+        bist.
+      </p>
+      <p>
+        <b>Achtung:</b> Bist Du Teile der Strecke mit unterschiedlicher Anzahl
+        an Mitfahrer*innen gefahren? Dann gib bitte jede Teilstrecke als
+        einzelne Auslage an.
+      </p>
+      <input
+        type="text"
+        id="passengers"
+        formControlName="passengers"
+        class="form-control"
+      />
+      <div
+        *ngIf="passengers.invalid && passengers.touched"
+        class="error-message"
+      >
+        Bitte gib die Namen der Mitfahrer*innen ein.
+      </div>
+    </div>
+
+    <div class="button-container">
+      <div class="right-button-container">
+        <input
+          type="submit"
+          [class.green-button]="form.valid"
+          [class.disabled-button]="!form.valid"
+          value="speichern"
+        />
+      </div>
+    </div>
   </div>
-  <div class="formcontainer" *ngIf="expense?.type === 'train'">
-    <app-train-expense-form [expense]="this.expense" />
-  </div>
-  <div class="formcontainer" *ngIf="expense?.type === 'plan'">
-    <app-plan-expense-form [expense]="this.expense" />
-  </div>
-  <div class="formcontainer" *ngIf="expense?.type === 'bike'">
-    <app-bike-expense-form [expense]="this.expense" />
-  </div>
-</div>
+</form>

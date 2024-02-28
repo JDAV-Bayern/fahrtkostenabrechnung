@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { ReimbursementService } from 'src/app/reimbursement.service';
+import { ExpenseService } from 'src/app/expense.service';
 import { logoBase64 } from 'src/assets/logoBase64';
-import { IReimbursement } from 'src/domain/reimbursement';
+import { Reimbursement } from 'src/domain/reimbursement';
 
 @Component({
   selector: 'app-pdf-view',
@@ -10,12 +10,20 @@ import { IReimbursement } from 'src/domain/reimbursement';
 })
 export class PdfViewComponent {
   @Input({ required: true })
-  reimbursement!: IReimbursement;
+  reimbursement!: Reimbursement;
 
   @Output()
   fullyRendered = new EventEmitter<void>();
 
-  constructor(private readonly reimbursementService: ReimbursementService) {}
+  constructor(private readonly expenseService: ExpenseService) {}
+
+  get course() {
+    return this.reimbursement.course;
+  }
+
+  get participant() {
+    return this.reimbursement.participant;
+  }
 
   ngAfterViewInit() {
     this.fullyRendered.emit();
@@ -24,22 +32,20 @@ export class PdfViewComponent {
   getDate() {
     //Get date in the format DD.MM.YYYY
     const date = new Date();
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
-    const year = date.getFullYear();
-    return `${day}.${month}.${year}`;
+    return date.toLocaleDateString('de-DE', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
   }
 
   getLogo() {
     return logoBase64;
   }
 
-  r() {
-    return this.reimbursement;
-  }
-  getSum() {
-    const expensesSum = this.reimbursementService.getSum();
-    if (!this.reimbursement.participantDetails.isBavaria && expensesSum > 75) {
+  getTotal() {
+    const expensesSum = this.expenseService.getTotal(this.reimbursement);
+    if (!this.reimbursement.participant.isBavaria && expensesSum > 75) {
       return `(${expensesSum.toFixed(2)}) -> 75.00`;
     }
     return expensesSum.toFixed(2);

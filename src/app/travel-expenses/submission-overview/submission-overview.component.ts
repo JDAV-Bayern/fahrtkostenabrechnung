@@ -3,11 +3,11 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import jsPDF from 'jspdf';
 import * as imageprocessor from 'ts-image-processor';
-import { IReimbursement } from 'src/domain/reimbursement';
-import { ReimbursementService } from 'src/app/reimbursement.service';
-import { NgxFileDropEntry } from 'ngx-file-drop';
+import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
 import { PDFDocument } from 'pdf-lib';
 import { ReimbursementValidationService } from 'src/app/reimbursement.validation.service';
+import { NgxFileDropEntry } from 'ngx-file-drop';
+import { ExpenseService } from 'src/app/expense.service';
 
 @Component({
   selector: 'app-submission-overview',
@@ -15,7 +15,8 @@ import { ReimbursementValidationService } from 'src/app/reimbursement.validation
   styleUrls: ['./submission-overview.component.css']
 })
 export class SubmissionOverviewComponent {
-  formGroup: FormGroup;
+  form: FormGroup;
+  travelExpensesForm: FormGroup;
 
   public files: File[] = [];
 
@@ -32,40 +33,41 @@ export class SubmissionOverviewComponent {
 
   constructor(
     private readonly router: Router,
-    private readonly reimbursementService: ReimbursementService,
+    private readonly expenseService: ExpenseService,
+    private readonly controlService: ReimbursementControlService,
     private readonly validationService: ReimbursementValidationService
   ) {
-    this.formGroup = reimbursementService.getFormStep('overview');
+    this.travelExpensesForm = controlService.travelExpensesForm;
+    this.form = controlService.overviewStep;
   }
 
   get iban() {
-    return this.formGroup.get('iban') as FormControl<string>;
+    return this.form.get('iban') as FormControl<string>;
   }
 
-  getSum(): number {
-    return this.reimbursementService.getSum();
+  get bic() {
+    return this.form.get('bic') as FormControl<string>;
   }
 
-  getErrors(): string[] {
-    return this.validationService
-      .validateReimbursement(this.r())
-      .findings.filter(f => f.type === 'error')
-      .map(f => f.message);
+  get reimbursement() {
+    return this.controlService.getReimbursment();
   }
+
+  getTotal(): string {
+    return this.expenseService.getTotal(this.reimbursement).toFixed(2);
+  }
+
   getWarnings(): string[] {
     return this.validationService
-      .validateReimbursement(this.r())
-      .findings.filter(f => f.type === 'warning')
+      .validateReimbursement(this.reimbursement)
+      .filter(f => f.type === 'warning')
       .map(f => f.message);
   }
   getInfos(): string[] {
     return this.validationService
-      .validateReimbursement(this.r())
-      .findings.filter(f => f.type === 'info')
+      .validateReimbursement(this.reimbursement)
+      .filter(f => f.type === 'info')
       .map(f => f.message);
-  }
-  isReimbursementValid(): boolean {
-    return this.validationService.validateReimbursement(this.r()).isValid;
   }
 
   async addImageToPdf(imageFile: File, pdf: jsPDF) {
@@ -157,7 +159,7 @@ export class SubmissionOverviewComponent {
     await this.pdfFullyRenderedPromise;
 
     const htmlElement = document.getElementById('pdf-container');
-    if (!htmlElement || !this.formGroup.valid) {
+    if (!htmlElement || !this.form.valid) {
       this.loading = false;
       this.showPdf = false;
       return;
@@ -215,8 +217,12 @@ export class SubmissionOverviewComponent {
     const fileURL = URL.createObjectURL(file);
 
     const link = document.createElement('a');
+    const lastName = this.reimbursement.participant.name
+      .split(' ')
+      .pop()
+      ?.trim();
     link.href = fileURL;
-    link.download = `fka_${this.r().courseDetails.id}_${this.r().participantDetails.name.split(' ').pop()?.trim()}.pdf`;
+    link.download = `fka_${this.reimbursement.course.code}_${lastName}.pdf`;
     link.click();
     link.remove();
     this.loading = false;
@@ -240,9 +246,5 @@ export class SubmissionOverviewComponent {
 
   removeFile(fileName: string) {
     this.files = this.files.filter(f => f.name !== fileName);
-  }
-
-  r(): IReimbursement {
-    return this.reimbursementService.getReimbursment();
   }
 }

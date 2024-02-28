@@ -1,21 +1,43 @@
-<fieldset>
+<fieldset [formGroup]="formGroup">
   <h3>{{ heading }}</h3>
   <button (click)="openAddExpenseDialog()" class="add-button green-button mar">
     Auslage hinzufügen
   </button>
   <button
-    *ngIf="direction === 'from'"
-    (click)="addReturnTrip()"
+    *ngIf="extraButton"
+    (click)="onClickExtraButton($event)"
     class="add-button green-button mar"
   >
-    Rückfahrt wie Hinfahrt
+    {{ extraButton }}
   </button>
-  <div dragula="expenses" [(dragulaModel)]="expenses" class="drop-area">
-    <app-expense-list-row
-      (deleteRow)="deleteRow($event)"
-      (editRow)="editRow($event)"
-      *ngFor="let expense of expenses"
-      [expense]="expense"
-    ></app-expense-list-row>
+  <div
+    [formArrayName]="direction"
+    class="drop-area"
+    cdkDropList
+    [cdkDropListData]="formArray"
+    [cdkDropListEnterPredicate]="enterPredicate"
+  >
+    <!--
+      @angular/cdk/drag-drop applies a transform style to list elements in
+      order to preview sorting while dragging.
+      For some reason, this style has no effect when directly applied to the
+      child component, so the expense component has to be wrapped in a div.
+    -->
+    <div
+      *ngFor="let expenseForm of formArray.controls; index as i"
+      cdkDrag
+      [cdkDragData]="expenseForm"
+      (cdkDragDropped)="drop($event)"
+    >
+      <app-expense-list-row
+        [form]="expenseForm"
+        [index]="i"
+        (deleteRow)="deleteExpense($event)"
+      />
+    </div>
+  </div>
+
+  <div *ngIf="formArray.hasError('maxPlanExpenses')" class="error-message">
+    Du kannst pro Fahrtrichtung maximal eine Auslage für Abo Tickets angeben.
   </div>
 </fieldset>

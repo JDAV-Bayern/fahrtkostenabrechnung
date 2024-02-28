@@ -1,16 +1,14 @@
-import { ICourseDetails } from './course-details';
-import { IExpense } from './expense';
-import { IParticipantDetails } from './participant-details';
+import { Course } from './course';
+import { Expense } from './expense';
+import { Participant } from './participant';
 
-export interface IReimbursement {
-  id: string;
-  formDate: Date;
-  courseDetails: ICourseDetails;
-  participantDetails: IParticipantDetails;
+export interface Reimbursement {
+  course: Course;
+  participant: Participant;
   expenses: {
-    to: IExpense[];
-    at: IExpense[];
-    from: IExpense[];
+    inbound: Expense[];
+    onsite: Expense[];
+    outbound: Expense[];
   };
   note: string;
 }

@@ -1,5 +1,5 @@
 <div class="step-box">
-  <fieldset [formGroup]="personalInfoForm">
+  <fieldset [formGroup]="participantForm">
     <h1>Angaben zu Dir</h1>
 
     <p style="font-size: small">
@@ -17,7 +17,10 @@
         class="form-control"
         required
       />
-      <div *ngIf="name.invalid && name.touched" class="error-message">
+      <div
+        *ngIf="name.hasError('required') && name.touched"
+        class="error-message"
+      >
         Bitte gib deinen Namen ein.
       </div>
     </div>
@@ -31,7 +34,10 @@
         class="form-control"
         required
       />
-      <div *ngIf="street.invalid && street.touched" class="error-message">
+      <div
+        *ngIf="street.hasError('required') && street.touched"
+        class="error-message"
+      >
         Bitte gib Straße und Hausnummer ein.
       </div>
     </div>
@@ -46,8 +52,14 @@
         class="form-control"
         required
       />
-      <div *ngIf="zipCode.invalid && zipCode.touched" class="error-message">
+      <div
+        *ngIf="zipCode.hasError('required') && zipCode.touched"
+        class="error-message"
+      >
         Bitte gib deine Postleitzahl ein.
+      </div>
+      <div *ngIf="zipCode.hasError('pattern')" class="error-message">
+        Bitte gib eine gültige Postleitzahl ein.
       </div>
     </div>
 
@@ -60,90 +72,94 @@
         class="form-control"
         required
       />
-      <div *ngIf="city.invalid && city.touched" class="error-message">
+      <div
+        *ngIf="city.hasError('required') && city.touched"
+        class="error-message"
+      >
         Bitte gib deinen Wohnort ein.
       </div>
     </div>
+  </fieldset>
 
-    <fieldset formGroupName="course">
-      <h1>Angaben zum Kurs</h1>
+  <fieldset [formGroup]="courseForm">
+    <h1>Angaben zum Kurs</h1>
 
-      <div class="form-group">
-        <label for="courseName">Schulungsname</label>
-        <input
-          type="text"
-          id="courseName"
-          formControlName="name"
-          class="form-control"
-          required
-        />
-        <div
-          *ngIf="courseName.invalid && courseName.touched"
-          class="error-message"
-        >
-          Bitte gib den Schulungsnamen ein.
-        </div>
+    <div class="form-group">
+      <label for="courseName">Schulungsname</label>
+      <input
+        type="text"
+        id="courseName"
+        formControlName="name"
+        class="form-control"
+        required
+      />
+      <div
+        *ngIf="courseName.hasError('required') && courseName.touched"
+        class="error-message"
+      >
+        Bitte gib den Schulungsnamen ein.
       </div>
+    </div>
 
-      <div class="form-group">
-        <label for="courseCode">Schulungsnummer</label>
-        <input
-          type="text"
-          id="courseCode"
-          formControlName="code"
-          class="form-control"
-          required
-        />
-        <div
-          *ngIf="courseCode.invalid && courseCode.touched"
-          class="error-message"
-        >
-          Bitte gib die Schulungsnummer ein.
-        </div>
+    <div class="form-group">
+      <label for="courseCode">Schulungsnummer</label>
+      <input
+        type="text"
+        id="courseCode"
+        formControlName="code"
+        class="form-control"
+        required
+      />
+      <div
+        *ngIf="courseCode.hasError('required') && courseCode.touched"
+        class="error-message"
+      >
+        Bitte gib die Schulungsnummer ein.
       </div>
+    </div>
 
-      <div class="form-group">
-        <label for="courseDate">Schulungsdatum</label>
-        <input
-          type="text"
-          id="courseDate"
-          formControlName="date"
-          class="form-control"
-          required
-        />
-        <div
-          *ngIf="courseDate.invalid && courseDate.touched"
-          class="error-message"
-        >
-          Bitte gib das Schulungsdatum ein.
-        </div>
+    <div class="form-group">
+      <label for="courseDate">Schulungsdatum</label>
+      <input
+        type="text"
+        id="courseDate"
+        formControlName="date"
+        class="form-control"
+        required
+      />
+      <div
+        *ngIf="courseDate.hasError('required') && courseDate.touched"
+        class="error-message"
+      >
+        Bitte gib das Schulungsdatum ein.
       </div>
+    </div>
 
-      <div class="form-group">
-        <label for="courseLocation">Schulungsort</label>
-        <input
-          type="text"
-          id="courseLocation"
-          formControlName="location"
-          class="form-control"
-          required
-        />
-        <div
-          *ngIf="courseLocation.invalid && courseLocation.touched"
-          class="error-message"
-        >
-          Bitte gib den Schulungsort ein.
-        </div>
+    <div class="form-group">
+      <label for="courseLocation">Schulungsort</label>
+      <input
+        type="text"
+        id="courseLocation"
+        formControlName="location"
+        class="form-control"
+        required
+      />
+      <div
+        *ngIf="courseLocation.hasError('required') && courseLocation.touched"
+        class="error-message"
+      >
+        Bitte gib den Schulungsort ein.
       </div>
-    </fieldset>
+    </div>
   </fieldset>
 </div>
 
 <div class="button-container">
   <div class="right-button-container">
     <button
-      [class.green-button]="personalInfoForm.valid"
-      [class.disabled-button]="!personalInfoForm.valid"
+      [class.green-button]="participantForm.valid && courseForm.valid"
+      [class.disabled-button]="participantForm.invalid || courseForm.invalid"
+      [disabled]="participantForm.invalid || courseForm.invalid"
       (click)="next()"
     >
       Weiter

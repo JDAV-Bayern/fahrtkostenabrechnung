@@ -1,5 +1,5 @@
 <div class="step-box">
-  <fieldset [formGroup]="formGroup">
+  <fieldset [formGroup]="form">
     <h2>Kontodaten</h2>
 
     <div class="form-group">
@@ -9,27 +9,36 @@
         class="form-control"
         formControlName="iban"
         id="iban"
-        placeholder="IBAN"
+        required
       />
-      <div *ngIf="iban.invalid && iban.touched" class="error-message">
+      <div
+        *ngIf="iban.hasError('required') && iban.touched"
+        class="error-message"
+      >
+        Bitte gib deine IBAN ein.
+      </div>
+      <div *ngIf="iban.hasError('ibanInvalid')" class="error-message">
         Bitte gib eine gültige IBAN ein.
       </div>
     </div>
+
     <div
       class="form-group"
-      *ngIf="!iban.value.startsWith('DE') && iban.touched"
+      *ngIf="(iban.valid && !iban.value.startsWith('DE')) || bic.value"
     >
-      <label for="bic">
-        BIC (nur bei ausländischen Kreditinstituten notwendig)
-      </label>
-      <input
-        type="text"
-        class="form-control"
-        formControlName="bic"
-        id="bic"
-        placeholder="BIC"
-      />
+      <label for="bic">BIC</label>
+      <input type="text" class="form-control" formControlName="bic" id="bic" />
+      <div
+        *ngIf="form.hasError('bicRequired') && bic.touched"
+        class="error-message"
+      >
+        Bitte gib bei ausländischen Konten deine BIC ein.
+      </div>
+      <div *ngIf="bic.hasError('pattern')" class="error-message">
+        Bitte gib eine gültige BIC ein.
+      </div>
     </div>
+
     <div class="form-group">
       <label for="note">Bemerkung zu deiner Abrechnung</label>
       <textarea
@@ -37,14 +46,12 @@
         rows="4"
         formControlName="note"
         id="note"
-        placeholder="Bemerkung"
       ></textarea>
     </div>
   </fieldset>
 
   <h2>Zusammenfassung</h2>
-  Erstattungsbetrag: {{ getSum().toFixed(2) }}€<br />
-  <p *ngFor="let error of getErrors()"><b>Fehler</b> {{ error }}</p>
+  Erstattungsbetrag: {{ getTotal() }}€<br />
   <p *ngFor="let warning of getWarnings()"><b>Warnung</b> {{ warning }}</p>
   <p *ngFor="let info of getInfos()"><b>Info</b> {{ info }}</p>
 
@@ -83,8 +90,9 @@
     <button
       (click)="continue()"
       *ngIf="!loading"
-      [class.green-button]="isReimbursementValid()"
-      [class.disabled-button]="!isReimbursementValid()"
+      [class.green-button]="travelExpensesForm.valid"
+      [class.disabled-button]="travelExpensesForm.invalid"
+      [disabled]="travelExpensesForm.invalid"
     >
       PDF herunterladen
     </button>
@@ -94,7 +102,7 @@
 <div style="position: absolute; top: 2000px">
   <app-pdf-view
     *ngIf="showPdf"
-    [reimbursement]="r()"
+    [reimbursement]="reimbursement"
     (fullyRendered)="pdfFullyRendered()"
   ></app-pdf-view>
 </div>
