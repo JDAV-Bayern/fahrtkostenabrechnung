@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { PersonalInformationComponent } from './travel-expenses/personal-information/personal-information.component';
 import { SubmissionOverviewComponent } from './travel-expenses/submission-overview/submission-overview.component';
 import { ExpensesCollectionComponent } from './travel-expenses/expenses-collection/expenses-collection.component';
-import { ImprintComponent } from './info/imprint/imprint.component';
 import { DataProtectionComponent } from './info/data-protection/data-protection.component';
 import { InfoComponent } from './info/info.component';
 import { TravelExpensesComponent } from './travel-expenses/travel-expenses.component';
@@ -19,12 +18,6 @@ const routes: Routes = [
     component: InfoComponent,
     data: { breadcrumb: 'Start' },
     children: [
-      {
-        path: 'impressum',
-        title: 'Impressum',
-        component: ImprintComponent,
-        data: { breadcrumb: 'Impressum' }
-      },
       {
         path: 'datenschutz',
         title: 'Datenschutzerklärung',
