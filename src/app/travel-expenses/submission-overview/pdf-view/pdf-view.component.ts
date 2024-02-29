@@ -29,6 +29,10 @@ export class PdfViewComponent {
     return this.reimbursement.course;
   }
 
+  get courseCode() {
+    return this.reimbursement.course.code.replace(/( |-)/g, '');
+  }
+
   get participant() {
     return this.reimbursement.participant;
   }

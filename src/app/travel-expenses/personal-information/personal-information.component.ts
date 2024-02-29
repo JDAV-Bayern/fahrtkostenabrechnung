@@ -45,16 +45,15 @@ export class PersonalInformationComponent {
     });
   }
 
-  get name() {
-    return this.participantForm.get('name') as FormControl<string>;
+  get givenName() {
+    return this.participantForm.get('givenName') as FormControl<string>;
+  }
+  get surname() {
+    return this.participantForm.get('surname') as FormControl<string>;
   }
 
   get sectionId() {
     return this.participantForm.get('sectionId') as FormControl<number>;
-  }
-
-  get street() {
-    return this.participantForm.get('street') as FormControl<string>;
   }
 
   get zipCode() {

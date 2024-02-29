@@ -55,30 +55,35 @@
   <p *ngFor="let warning of getWarnings()"><b>Warnung</b> {{ warning }}</p>
   <p *ngFor="let info of getInfos()"><b>Info</b> {{ info }}</p>
 
-  <h2>Belege</h2>
-  <ngx-file-drop (onFileDrop)="fileDropped($event)" [accept]="'.pdf,.jpg,.png'">
-    <ng-template
-      ngx-file-drop-content-tmp
-      let-openFileSelector="openFileSelector"
+  <div *ngIf="anyTrainTravel">
+    <h2>Belege für Zugfahrten</h2>
+    <ngx-file-drop
+      (onFileDrop)="fileDropped($event)"
+      [accept]="'.pdf,.jpg,.png,.jpeg,.JPG,.JPEG,.PDF,.PNG'"
     >
-      <button type="button" class="fileupload" (click)="openFileSelector()">
-        <span class="material-symbols-outlined">&#xe9fc;</span>
-        Beleg hinzufügen
-      </button>
-    </ng-template>
-  </ngx-file-drop>
+      <ng-template
+        ngx-file-drop-content-tmp
+        let-openFileSelector="openFileSelector"
+      >
+        <button type="button" class="fileupload" (click)="openFileSelector()">
+          <span class="material-symbols-outlined">&#xe9fc;</span>
+          Beleg hinzufügen
+        </button>
+      </ng-template>
+    </ngx-file-drop>
 
-  <fieldset *ngIf="files.length" class="files-list">
-    <legend style="color: #999">Belege</legend>
-    <p class="file-list-entry" *ngFor="let file of files">
-      <span
-        style="cursor: pointer"
-        class="material-symbols-outlined"
-        (click)="removeFile(file.name)"
-        >&#xf74f;</span
-      >{{ file.name }}
-    </p>
-  </fieldset>
+    <fieldset *ngIf="files.length" class="files-list">
+      <legend style="color: #999">Belege</legend>
+      <p class="file-list-entry" *ngFor="let file of files">
+        <span
+          style="cursor: pointer"
+          class="material-symbols-outlined"
+          (click)="removeFile(file.name)"
+          >&#xe872;</span
+        >{{ file.name }}
+      </p>
+    </fieldset>
+  </div>
 </div>
 
 <div class="button-container">

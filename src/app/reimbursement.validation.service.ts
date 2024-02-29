@@ -24,7 +24,7 @@ export class ReimbursementValidationService {
     const findings: ValidationFinding[] = [];
 
     // Check if participant first and last name are given
-    if (reimbursement.participant.name.split(' ').length < 2) {
+    if (reimbursement.participant.givenName.split(' ').length < 2) {
       findings.push({
         type: 'warning',
         message: 'Bitte gib deinen Vor- und Nachnamen an.'

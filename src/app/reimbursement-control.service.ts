@@ -9,6 +9,7 @@ import { validateBankAccount } from './forms/validators/bank-account.validator';
 
 const PLZ_PATTERN = /^[0-9]{5}$/;
 const BIC_PATTERN = /^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/;
+const COURSE_CODE_PATTERN = /B(-| )?\d+(-| )?(FB|AM|GA)/;
 
 @Injectable({
   providedIn: 'root'
@@ -16,15 +17,16 @@ const BIC_PATTERN = /^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/;
 export class ReimbursementControlService {
   travelExpensesForm = this.formBuilder.group({
     course: this.formBuilder.nonNullable.group({
-      code: ['', Validators.required],
-      name: ['', Validators.required],
-      date: ['', Validators.required],
-      location: ['', Validators.required]
+      code: [
+        '',
+        [Validators.required, Validators.pattern(COURSE_CODE_PATTERN)]
+      ],
+      name: ['', Validators.required]
     }),
     participant: this.formBuilder.nonNullable.group({
-      name: ['', Validators.required],
+      givenName: ['', Validators.required],
+      surname: ['', Validators.required],
       sectionId: [0, Validators.required],
-      street: ['', Validators.required],
       zipCode: ['', [Validators.required, Validators.pattern(PLZ_PATTERN)]],
       city: ['', Validators.required]
     }),

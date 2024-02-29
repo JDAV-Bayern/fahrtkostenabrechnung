@@ -53,6 +53,12 @@ export class SubmissionOverviewComponent {
     return this.controlService.getReimbursment();
   }
 
+  get anyTrainTravel() {
+    return this.expenseService
+      .getAllExpenses(this.controlService.getReimbursment())
+      .some(e => ['train', 'plan'].includes(e.type));
+  }
+
   getTotal(): string {
     return this.expenseService.getTotal(this.reimbursement).toFixed(2);
   }
@@ -217,12 +223,10 @@ export class SubmissionOverviewComponent {
     const fileURL = URL.createObjectURL(file);
 
     const link = document.createElement('a');
-    const lastName = this.reimbursement.participant.name
-      .split(' ')
-      .pop()
-      ?.trim();
+    const lastName = this.reimbursement.participant.surname;
+    const courseCode = this.reimbursement.course.code.replace(/( |-)/g, '');
     link.href = fileURL;
-    link.download = `fka_${this.reimbursement.course.code}_${lastName}.pdf`;
+    link.download = `fka_${courseCode}_${lastName}.pdf`;
     link.click();
     link.remove();
     this.loading = false;

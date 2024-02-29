@@ -9,19 +9,36 @@
     </p>
 
     <div class="form-group">
-      <label for="name">Vorname und Nachname</label>
+      <label for="givenName">Vorname</label>
       <input
         type="text"
-        id="name"
-        formControlName="name"
+        id="givenName"
+        formControlName="givenName"
         class="form-control"
         required
       />
       <div
-        *ngIf="name.hasError('required') && name.touched"
+        *ngIf="givenName.hasError('required') && givenName.touched"
         class="error-message"
       >
-        Bitte gib deinen Namen ein.
+        Bitte gib deinen Vornamen ein.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="surname">Nachname</label>
+      <input
+        type="text"
+        id="surname"
+        formControlName="surname"
+        class="form-control"
+        required
+      />
+      <div
+        *ngIf="surname.hasError('required') && surname.touched"
+        class="error-message"
+      >
+        Bitte gib deinen Nachnamen ein.
       </div>
     </div>
 
@@ -44,23 +61,6 @@
         class="error-message"
       >
         Bitte gib deine Sektion ein.
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="street">Straße und Hausnummer</label>
-      <input
-        type="text"
-        id="street"
-        formControlName="street"
-        class="form-control"
-        required
-      />
-      <div
-        *ngIf="street.hasError('required') && street.touched"
-        class="error-message"
-      >
-        Bitte gib Straße und Hausnummer ein.
       </div>
     </div>
 
@@ -107,7 +107,7 @@
     <h1>Angaben zum Kurs</h1>
 
     <div class="form-group">
-      <label for="courseName">Schulungsname</label>
+      <label for="courseName">Kursname</label>
       <input
         type="text"
         id="courseName"
@@ -119,12 +119,12 @@
         *ngIf="courseName.hasError('required') && courseName.touched"
         class="error-message"
       >
-        Bitte gib den Schulungsnamen ein.
+        Bitte gib den Kursnamen ein.
       </div>
     </div>
 
     <div class="form-group">
-      <label for="courseCode">Schulungsnummer</label>
+      <label for="courseCode">Kursnummer</label>
       <input
         type="text"
         id="courseCode"
@@ -136,43 +136,16 @@
         *ngIf="courseCode.hasError('required') && courseCode.touched"
         class="error-message"
       >
-        Bitte gib die Schulungsnummer ein.
+        Bitte gib die Kursnummer ein.
+      </div>
+      <div
+        *ngIf="!courseCode.hasError('required') && courseCode.hasError('pattern') && courseCode.touched"
+        class="error-message"
+      >
+      Kursnummern von Kursen der JDAV Bayern folgen normalerweise dem Format BXXXGA, BXXXFB oder BXXXAM mit einer dreistelligen Zahl. Deine Kursnummer weicht davon ab. Bitte überprüfe die Kursnummer noch einmal.
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="courseDate">Schulungsdatum</label>
-      <input
-        type="text"
-        id="courseDate"
-        formControlName="date"
-        class="form-control"
-        required
-      />
-      <div
-        *ngIf="courseDate.hasError('required') && courseDate.touched"
-        class="error-message"
-      >
-        Bitte gib das Schulungsdatum ein.
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="courseLocation">Schulungsort</label>
-      <input
-        type="text"
-        id="courseLocation"
-        formControlName="location"
-        class="form-control"
-        required
-      />
-      <div
-        *ngIf="courseLocation.hasError('required') && courseLocation.touched"
-        class="error-message"
-      >
-        Bitte gib den Schulungsort ein.
-      </div>
-    </div>
   </fieldset>
 </div>
 
