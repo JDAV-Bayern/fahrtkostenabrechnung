@@ -106,6 +106,15 @@ export class ReimbursementControlService {
     const travelExpensesData = localStorage.getItem('travelExpenses') || '{}';
     const travelExpenses = JSON.parse(travelExpensesData);
     this.travelExpensesForm.patchValue(travelExpenses);
+    Object.values(this.travelExpensesForm.controls).forEach(
+      formGroupControl => {
+        Object.values(formGroupControl.controls).forEach(control => {
+          if (control.value) {
+            control.markAsTouched();
+          }
+        });
+      }
+    );
 
     // create controls for form arrays
     for (let direction of ['inbound', 'onsite', 'outbound'] as Direction[]) {
