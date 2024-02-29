@@ -30,10 +30,6 @@ export class SectionService {
     return this.mapOrganisations(data);
   }
 
-  exists(section: Section): boolean {
-    return sections.some(s => s.id === section.id);
-  }
-
   isBavarian(section: Section): boolean {
     return section.jdavState.id === 2;
   }

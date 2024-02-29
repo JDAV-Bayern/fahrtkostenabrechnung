@@ -35,9 +35,7 @@ export class PdfViewComponent {
 
   ngOnInit() {
     const sectionId = this.reimbursement.participant.sectionId;
-    this.section = sectionId
-      ? this.sectionService.getSection(sectionId)
-      : undefined;
+    this.section = this.sectionService.getSection(sectionId);
     this.isBavarian = this.section
       ? this.sectionService.isBavarian(this.section)
       : false;

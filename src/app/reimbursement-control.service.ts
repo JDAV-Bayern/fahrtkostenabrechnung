@@ -3,7 +3,6 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { validateIBAN } from 'ngx-iban-validator';
 import { Direction, ExpenseType, Expense } from 'src/domain/expense';
 import { Reimbursement } from 'src/domain/reimbursement';
-import { PlzService } from './plz.service';
 import { expensesRequired } from './forms/validators/expenses-required.validator';
 import { maxPlanExpenses } from './forms/validators/max-plan-expenses.validator';
 import { validateBankAccount } from './forms/validators/bank-account.validator';
@@ -24,7 +23,7 @@ export class ReimbursementControlService {
     }),
     participant: this.formBuilder.nonNullable.group({
       name: ['', Validators.required],
-      sectionId: [undefined, Validators.required],
+      sectionId: [0, Validators.required],
       street: ['', Validators.required],
       zipCode: ['', [Validators.required, Validators.pattern(PLZ_PATTERN)]],
       city: ['', Validators.required]
