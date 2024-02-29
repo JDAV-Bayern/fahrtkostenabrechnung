@@ -20,7 +20,6 @@ import { PdfExpenseLineItemComponent } from './travel-expenses/submission-overvi
 import { PdfViewComponent } from './travel-expenses/submission-overview/pdf-view/pdf-view.component';
 import { DataProtectionComponent } from './info/data-protection/data-protection.component';
 import { ProgressIndicatorComponent } from './travel-expenses/submission-overview/progress-indicator/progress-indicator.component';
-import { ImprintComponent } from './info/imprint/imprint.component';
 import { LogoComponent } from './icons/logo/logo.component';
 import { InstagramIconComponent } from './icons/instagram-icon/instagram-icon.component';
 import { GithubIconComponent } from './icons/github-icon/github-icon.component';
@@ -45,7 +44,6 @@ import { NgSelectModule } from '@ng-select/ng-select';
     PdfViewComponent,
     DataProtectionComponent,
     ProgressIndicatorComponent,
-    ImprintComponent,
     LogoComponent,
     InstagramIconComponent,
     GithubIconComponent,
