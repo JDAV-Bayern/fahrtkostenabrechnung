@@ -40,20 +40,15 @@
             <td>{{ participant.name }}</td>
           </tr>
           <tr>
+            <td>Sektion:</td>
+            <td>{{ section?.name }} (JDAV {{ section?.jdavState?.name }})</td>
+          </tr>
+          <tr>
             <td>Anschrift:</td>
             <td>
               {{ participant.street }},
               {{ participant.zipCode }}
               {{ participant.city }}
-            </td>
-          </tr>
-          <tr>
-            <td colspan="2">
-              {{
-                participant.isBavaria
-                  ? 'Teilnehmer*in kommt aus Bayern'
-                  : 'Teilnehmer*in kommt nicht aus Bayern'
-              }}
             </td>
           </tr>
           <tr>

@@ -20,6 +20,7 @@
     "@angular/platform-browser": "^16.2.0",
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
+    "@ng-select/ng-select": "^12.0.7",
     "jspdf": "^2.5.1",
     "ngx-file-drop": "^16.0.0",
     "ngx-iban-validator": "^1.1.8",

@@ -3,6 +3,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
 import { PlzService } from 'src/app/plz.service';
+import { Section } from 'src/domain/section';
+import { SectionService } from 'src/app/section.service';
 
 @Component({
   selector: 'app-personal-information',
@@ -13,17 +15,42 @@ export class PersonalInformationComponent {
   participantForm: FormGroup;
   courseForm: FormGroup;
 
+  sections: Section[] = [];
+
   constructor(
     private readonly router: Router,
     public readonly plzService: PlzService,
+    public sectionService: SectionService,
     controlService: ReimbursementControlService
   ) {
     this.participantForm = controlService.participantStep;
     this.courseForm = controlService.courseStep;
+
+    // load section autocompletions
+    this.sections = this.sectionService.getSections();
+    this.sections.sort((a, b) => {
+      const isBavarianA = this.sectionService.isBavarian(a);
+      const isBavarianB = this.sectionService.isBavarian(b);
+      /*
+       * Sort by multipe criteria with descending priority:
+       * 1. Sort Bavarian sections first
+       * 2. Sort other states alphabetically
+       * 3. Sort sections within the same state alphabetically
+       */
+      return (
+        Number(isBavarianB) - Number(isBavarianA) ||
+        a.jdavState.name.localeCompare(b.jdavState.name) ||
+        a.name.localeCompare(b.name)
+      );
+    });
   }
 
   get name() {
     return this.participantForm.get('name') as FormControl<string>;
+  }
+
+  get sectionId() {
+    return this.participantForm.get('sectionId') as FormControl<number>;
   }
 
   get street() {
@@ -54,14 +81,16 @@ export class PersonalInformationComponent {
     return this.courseForm.get('location') as FormControl<string>;
   }
 
+  groupByFn(item: Section) {
+    return 'JDAV ' + item.jdavState.name;
+  }
+
   plzChanged() {
     const plz = this.participantForm.value.zipCode;
     const results = this.plzService.search(plz);
     if (results.length === 1) {
       const city = results[0].city;
-      if (!city.includes(',')) {
-        this.participantForm.patchValue({ city });
-      }
+      this.participantForm.patchValue({ city });
     }
   }
 

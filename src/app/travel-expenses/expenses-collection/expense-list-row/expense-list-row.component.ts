@@ -4,7 +4,6 @@ import { AddExpenseModalComponent } from '../add-expense-modal/add-expense-modal
 import { FormGroup } from '@angular/forms';
 import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
 import { ExpenseService } from 'src/app/expense.service';
-import { ExpenseType } from 'src/domain/expense';
 
 @Component({
   selector: 'app-expense-list-row',

@@ -29,6 +29,7 @@ import { InfoComponent } from './info/info.component';
 import { ChevronRightIconComponent } from './icons/chevron-right-icon/chevron-right-icon.component';
 import { TravelExpensesComponent } from './travel-expenses/travel-expenses.component';
 import { ExpenseListComponent } from './travel-expenses/expenses-collection/expense-list/expense-list.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -63,7 +64,8 @@ import { ExpenseListComponent } from './travel-expenses/expenses-collection/expe
     NgxFileDropModule,
     CdkDropListGroup,
     CdkDropList,
-    CdkDrag
+    CdkDrag,
+    NgSelectModule
   ],
   providers: [{ provide: APP_BASE_HREF, useValue: '/fahrtkostenabrechnung/' }],
   bootstrap: [AppComponent]
