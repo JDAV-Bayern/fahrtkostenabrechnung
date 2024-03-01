@@ -19,9 +19,9 @@ export class PersonalInformationComponent {
 
   constructor(
     private readonly router: Router,
-    public readonly plzService: PlzService,
-    public sectionService: SectionService,
-    controlService: ReimbursementControlService
+    private readonly plzService: PlzService,
+    private readonly sectionService: SectionService,
+    private readonly controlService: ReimbursementControlService
   ) {
     this.participantForm = controlService.participantStep;
     this.courseForm = controlService.courseStep;
@@ -82,6 +82,11 @@ export class PersonalInformationComponent {
 
   groupByFn(item: Section) {
     return 'JDAV ' + item.jdavState.name;
+  }
+
+  sectionChanged(event: any) {
+    // ng-select change event is not detected by the form
+    this.controlService.saveForm();
   }
 
   plzChanged() {
