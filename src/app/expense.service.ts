@@ -1,10 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  BikeExpense,
-  CarExpense,
-  Expense,
-  TrainExpense
-} from 'src/domain/expense';
+import { Expense } from 'src/domain/expense';
 import { Reimbursement } from 'src/domain/reimbursement';
 
 const discountFactors = {
@@ -43,16 +38,12 @@ export class ExpenseService {
   getAmount(expense: Expense) {
     switch (expense.type) {
       case 'car':
-        const carExpense = expense as CarExpense;
-        const nPassengers = carExpense.passengers.length + 1;
-        return carExpense.distance * Math.min(nPassengers, 6) * 0.05;
+        const nPassengers = expense.passengers.length + 1;
+        return expense.distance * Math.min(nPassengers, 6) * 0.05;
       case 'train':
-        const trainExpense = expense as TrainExpense;
-        const factor = discountFactors[trainExpense.discountCard];
-        return trainExpense.price * factor;
+        return expense.price * discountFactors[expense.discountCard];
       case 'bike':
-        const bikeExpense = expense as BikeExpense;
-        return bikeExpense.distance * 0.13;
+        return expense.distance * 0.13;
       case 'plan':
         return 12.25;
     }
@@ -74,23 +65,19 @@ export class ExpenseService {
   getDescription(expense: Expense) {
     switch (expense.type) {
       case 'car':
-        const carExpense = expense as CarExpense;
-        const carType = carTypeLabels[carExpense.carType];
-        const nPax = carExpense.passengers.length;
-        const pax = carExpense.passengers.join(', ');
+        const nPax = expense.passengers.length;
+        const pax = expense.passengers.join(', ');
         return (
-          `${carExpense.distance} km, ${carType}` +
+          `${expense.distance} km, ${carTypeLabels[expense.carType]}` +
           (nPax > 0 ? `, ${nPax} Mitfahrer*innen: ${pax}` : '')
         );
       case 'train':
-        const trainExpense = expense as TrainExpense;
-        const discount = discountLabels[trainExpense.discountCard];
-        return trainExpense.discountCard !== 'none'
-          ? `${trainExpense.price} € mit ${discount}`
+        const discount = discountLabels[expense.discountCard];
+        return expense.discountCard !== 'none'
+          ? `${expense.price} € mit ${discount}`
           : discount;
       case 'bike':
-        const bikeExpense = expense as BikeExpense;
-        return `${bikeExpense.distance} km`;
+        return `${expense.distance} km`;
       case 'plan':
         return 'pauschal 12,25 €';
     }
