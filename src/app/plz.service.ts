@@ -14,7 +14,7 @@ export class PlzService {
       .map(val => ({ plz: val[0], city: val[1] }));
   }
 
-  exists(plz: string) {
-    return plzs.some(val => val[0] === plz);
+  exists(plz: string, city: string) {
+    return plzs.some(val => val[0] === plz && val[1] === city);
   }
 }

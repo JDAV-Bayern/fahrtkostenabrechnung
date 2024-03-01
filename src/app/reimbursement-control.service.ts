@@ -1,15 +1,21 @@
 import { Injectable } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormArray,
+  FormBuilder,
+  FormGroup,
+  Validators
+} from '@angular/forms';
 import { validateIBAN } from 'ngx-iban-validator';
 import { Direction, ExpenseType, Expense } from 'src/domain/expense';
 import { Reimbursement } from 'src/domain/reimbursement';
 import { expensesRequired } from './forms/validators/expenses-required.validator';
 import { maxPlanExpenses } from './forms/validators/max-plan-expenses.validator';
 import { validateBankAccount } from './forms/validators/bank-account.validator';
+import { validateCourseCode } from './forms/validators/course-code.validator';
 
 const PLZ_PATTERN = /^[0-9]{5}$/;
 const BIC_PATTERN = /^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/;
-const COURSE_CODE_PATTERN = /B(-| )?\d+(-| )?(FB|AM|GA)/;
 
 @Injectable({
   providedIn: 'root'
@@ -17,10 +23,7 @@ const COURSE_CODE_PATTERN = /B(-| )?\d+(-| )?(FB|AM|GA)/;
 export class ReimbursementControlService {
   travelExpensesForm = this.formBuilder.group({
     course: this.formBuilder.nonNullable.group({
-      code: [
-        '',
-        [Validators.required, Validators.pattern(COURSE_CODE_PATTERN)]
-      ],
+      code: ['', [Validators.required, validateCourseCode]],
       name: ['', Validators.required]
     }),
     participant: this.formBuilder.nonNullable.group({
@@ -32,20 +35,20 @@ export class ReimbursementControlService {
     }),
     expenses: this.formBuilder.group(
       {
-        inbound: this.formBuilder.array<Expense>([], [maxPlanExpenses]),
+        inbound: this.formBuilder.array<Expense>([], maxPlanExpenses),
         onsite: this.formBuilder.array<Expense>([]),
-        outbound: this.formBuilder.array<Expense>([], [maxPlanExpenses])
+        outbound: this.formBuilder.array<Expense>([], maxPlanExpenses)
       },
-      { validators: [expensesRequired] }
+      { validators: expensesRequired }
     ),
     overview: this.formBuilder.nonNullable.group(
       {
         iban: ['', [Validators.required, validateIBAN]],
-        bic: ['', [Validators.pattern(BIC_PATTERN)]],
+        bic: ['', Validators.pattern(BIC_PATTERN)],
         note: [''],
         file: [undefined]
       },
-      { validators: [validateBankAccount] }
+      { validators: validateBankAccount }
     )
   });
 
@@ -106,15 +109,6 @@ export class ReimbursementControlService {
     const travelExpensesData = localStorage.getItem('travelExpenses') || '{}';
     const travelExpenses = JSON.parse(travelExpensesData);
     this.travelExpensesForm.patchValue(travelExpenses);
-    Object.values(this.travelExpensesForm.controls).forEach(
-      formGroupControl => {
-        Object.values(formGroupControl.controls).forEach(control => {
-          if (control.value) {
-            control.markAsTouched();
-          }
-        });
-      }
-    );
 
     // create controls for form arrays
     for (let direction of ['inbound', 'onsite', 'outbound'] as Direction[]) {
@@ -128,6 +122,9 @@ export class ReimbursementControlService {
         }
       }
     }
+
+    // mark controls with values as touched
+    this.deepMarkAsDirty(this.travelExpensesForm);
   }
 
   saveForm() {
@@ -192,6 +189,19 @@ export class ReimbursementControlService {
       }
     }
     return '';
+  }
+
+  deepMarkAsDirty(parent: AbstractControl) {
+    if (parent instanceof FormGroup) {
+      Object.values(parent.controls).forEach(child =>
+        this.deepMarkAsDirty(child)
+      );
+    } else if (parent instanceof FormArray) {
+      parent.controls.forEach(child => this.deepMarkAsDirty(child));
+    } else if (parent.value) {
+      parent.markAsDirty();
+      parent.markAsTouched();
+    }
   }
 
   getDiscountCompletion(): string {

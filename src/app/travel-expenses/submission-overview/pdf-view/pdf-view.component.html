@@ -20,7 +20,7 @@
           </tr>
           <tr>
             <td>Kursnummer:</td>
-            <td>{{ courseCode }}</td>
+            <td>{{ course.code }}</td>
           </tr>
         </table>
       </td>
@@ -36,11 +36,8 @@
             <td>{{ section?.name }} (JDAV {{ section?.jdavState?.name }})</td>
           </tr>
           <tr>
-            <td>Wohnort</td>
-            <td>
-              {{ participant.zipCode }}
-              {{ participant.city }}
-            </td>
+            <td>Wohnort:</td>
+            <td>{{ participant.zipCode }} {{ participant.city }}</td>
           </tr>
           <tr>
             <td>IBAN:</td>
