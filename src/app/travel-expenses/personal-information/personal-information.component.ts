@@ -49,8 +49,8 @@ export class PersonalInformationComponent {
     return this.participantForm.get('givenName') as FormControl<string>;
   }
 
-  get surname() {
-    return this.participantForm.get('surname') as FormControl<string>;
+  get familyName() {
+    return this.participantForm.get('familyName') as FormControl<string>;
   }
 
   get sectionId() {

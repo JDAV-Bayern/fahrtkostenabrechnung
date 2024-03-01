@@ -9,7 +9,7 @@ import {
 import { validateIBAN } from 'ngx-iban-validator';
 import { Direction, ExpenseType, Expense } from 'src/domain/expense';
 import { Reimbursement } from 'src/domain/reimbursement';
-import { expensesRequired } from './forms/validators/expenses-required.validator';
+import { anyRequired } from './forms/validators/any-required.validator';
 import { maxPlanExpenses } from './forms/validators/max-plan-expenses.validator';
 import { validateCourseCode } from './forms/validators/course-code.validator';
 
@@ -31,7 +31,7 @@ export class ReimbursementControlService {
     }),
     participant: this.formBuilder.nonNullable.group({
       givenName: ['', Validators.required],
-      surname: ['', Validators.required],
+      familyName: ['', Validators.required],
       sectionId: [0, Validators.required],
       zipCode: ['', [Validators.required, Validators.pattern(PLZ_PATTERN)]],
       city: ['', Validators.required]
@@ -42,7 +42,7 @@ export class ReimbursementControlService {
         onsite: this.formBuilder.array<Expense>([]),
         outbound: this.formBuilder.array<Expense>([], maxPlanExpenses)
       },
-      { validators: expensesRequired }
+      { validators: anyRequired }
     ),
     overview: this.formBuilder.nonNullable.group({
       iban: ['', [Validators.required, validateIBAN]],

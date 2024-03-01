@@ -26,16 +26,16 @@
     </div>
 
     <div class="form-group">
-      <label for="surname">Nachname</label>
+      <label for="familyName">Nachname</label>
       <input
         type="text"
-        id="surname"
-        formControlName="surname"
+        id="familyName"
+        formControlName="familyName"
         class="form-control"
         required
       />
       <div
-        *ngIf="surname.hasError('required') && surname.touched"
+        *ngIf="familyName.hasError('required') && familyName.touched"
         class="error-message"
       >
         Bitte gib deinen Nachnamen ein.
