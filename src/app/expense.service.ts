@@ -7,27 +7,28 @@ import {
 } from 'src/domain/expense';
 import { Reimbursement } from 'src/domain/reimbursement';
 
+const discountFactors = {
+  BC50: 1.1,
+  BC25: 1.05,
+  none: 1
+};
+
+const discountLabels = {
+  BC50: 'BahnCard 50',
+  BC25: 'BahnCard 25',
+  none: 'keine BahnCard'
+};
+
+const carTypeLabels = {
+  combustion: 'Verbrenner',
+  electric: 'Elektro',
+  'plug-in-hybrid': 'Plug-In Hybrid'
+};
+
 @Injectable({
   providedIn: 'root'
 })
 export class ExpenseService {
-  private readonly discounts = {
-    BC50: {
-      factor: 1.1,
-      name: 'BahnCard 50'
-    },
-    BC25: {
-      factor: 1.05,
-      name: 'BahnCard 25'
-    },
-    none: {
-      factor: 1,
-      name: 'keine BahnCard'
-    }
-  };
-
-  constructor() {}
-
   getAllExpenses(reimbursement: Reimbursement) {
     const expenses = reimbursement.expenses;
     return [...expenses.outbound, ...expenses.onsite, ...expenses.inbound];
@@ -47,9 +48,8 @@ export class ExpenseService {
         return carExpense.distance * Math.min(nPassengers, 6) * 0.05;
       case 'train':
         const trainExpense = expense as TrainExpense;
-        return (
-          trainExpense.price * this.discounts[trainExpense.discountCard].factor
-        );
+        const factor = discountFactors[trainExpense.discountCard];
+        return trainExpense.price * factor;
       case 'bike':
         const bikeExpense = expense as BikeExpense;
         return bikeExpense.distance * 0.13;
@@ -75,13 +75,19 @@ export class ExpenseService {
     switch (expense.type) {
       case 'car':
         const carExpense = expense as CarExpense;
-        const nPassengers = carExpense.passengers.length;
-        const passengers = carExpense.passengers.join(', ');
-        return `${carExpense.distance} km, ${nPassengers} Mitfahrer*innen: ${passengers}`;
+        const carType = carTypeLabels[carExpense.carType];
+        const nPax = carExpense.passengers.length;
+        const pax = carExpense.passengers.join(', ');
+        return (
+          `${carExpense.distance} km, ${carType}` +
+          (nPax > 0 ? `, ${nPax} Mitfahrer*innen: ${pax}` : '')
+        );
       case 'train':
         const trainExpense = expense as TrainExpense;
-        const discount = this.discounts[trainExpense.discountCard].name;
-        return `Ticketpreis ${trainExpense.price} ${discount}`;
+        const discount = discountLabels[trainExpense.discountCard];
+        return trainExpense.discountCard !== 'none'
+          ? `${trainExpense.price} € mit ${discount}`
+          : discount;
       case 'bike':
         const bikeExpense = expense as BikeExpense;
         return `${bikeExpense.distance} km`;
