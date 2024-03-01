@@ -55,7 +55,7 @@
         [groupBy]="groupByFn"
         [editableSearchTerm]="true"
         [inputAttrs]="{ style: 'margin-top: 4px' }"
-        (change)="sectionChanged($event)"
+        (change)="sectionChanged()"
       />
       <div
         *ngIf="sectionId.hasError('required') && sectionId.touched"

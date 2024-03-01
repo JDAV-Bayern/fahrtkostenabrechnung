@@ -10,6 +10,7 @@
         formControlName="iban"
         id="iban"
         required
+        (input)="ibanChanged()"
       />
       <div
         *ngIf="iban.hasError('required') && iban.touched"
@@ -25,17 +26,20 @@
       </div>
     </div>
 
-    <div
-      class="form-group"
-      *ngIf="(iban.valid && isBICRequired()) || bic.value"
-    >
+    <div class="form-group" *ngIf="bic.enabled">
       <label for="bic">BIC</label>
-      <input type="text" class="form-control" formControlName="bic" id="bic" />
+      <input
+        type="text"
+        class="form-control"
+        formControlName="bic"
+        id="bic"
+        required
+      />
       <div
-        *ngIf="form.hasError('bicRequired') && bic.touched"
+        *ngIf="bic.hasError('required') && bic.touched"
         class="error-message"
       >
-        Bitte gib bei ausländischen Konten deine BIC ein.
+        Bitte gib deine BIC ein.
       </div>
       <div *ngIf="bic.hasError('pattern') && bic.touched" class="error-message">
         Bitte gib eine gültige BIC ein.

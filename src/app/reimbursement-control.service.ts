@@ -11,11 +11,14 @@ import { Direction, ExpenseType, Expense } from 'src/domain/expense';
 import { Reimbursement } from 'src/domain/reimbursement';
 import { expensesRequired } from './forms/validators/expenses-required.validator';
 import { maxPlanExpenses } from './forms/validators/max-plan-expenses.validator';
-import { validateBankAccount } from './forms/validators/bank-account.validator';
 import { validateCourseCode } from './forms/validators/course-code.validator';
 
 const PLZ_PATTERN = /^[0-9]{5}$/;
 const BIC_PATTERN = /^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/;
+
+const SEPA_CODES =
+  /^(BE|BG|DK|DE|EE|FI|FR|GR|GB|IE|IS|IT|HR|LV|LI|LT|LU|MT|MC|NL|NO|AT|PL|PT|RO|SM|SE|CH|SK|SI|ES|CZ|HU|CY)/;
+const BIC_REQUIRED = /^(MC|SM|CH)/;
 
 @Injectable({
   providedIn: 'root'
@@ -41,15 +44,12 @@ export class ReimbursementControlService {
       },
       { validators: expensesRequired }
     ),
-    overview: this.formBuilder.nonNullable.group(
-      {
-        iban: ['', [Validators.required, validateIBAN]],
-        bic: ['', Validators.pattern(BIC_PATTERN)],
-        note: [''],
-        file: [undefined]
-      },
-      { validators: validateBankAccount }
-    )
+    overview: this.formBuilder.nonNullable.group({
+      iban: ['', [Validators.required, validateIBAN]],
+      bic: ['', [Validators.required, Validators.pattern(BIC_PATTERN)]],
+      note: [''],
+      file: [undefined]
+    })
   });
 
   constructor(private formBuilder: FormBuilder) {}
@@ -106,6 +106,7 @@ export class ReimbursementControlService {
   }
 
   loadForm() {
+    // parse JSON from local storage
     const travelExpensesData = localStorage.getItem('travelExpenses') || '{}';
     const travelExpenses = JSON.parse(travelExpensesData);
     this.travelExpensesForm.patchValue(travelExpenses);
@@ -125,6 +126,9 @@ export class ReimbursementControlService {
 
     // mark controls with values as touched
     this.deepMarkAsDirty(this.travelExpensesForm);
+
+    // update BIC field state
+    this.updateBicState();
   }
 
   saveForm() {
@@ -135,6 +139,15 @@ export class ReimbursementControlService {
 
   deleteStoredData(): void {
     localStorage.removeItem('travelExpenses');
+  }
+
+  updateBicState() {
+    const iban = this.overviewStep.get('iban')!;
+    const bic = this.overviewStep.get('bic')!;
+    const enable =
+      iban.valid &&
+      (iban.value.match(BIC_REQUIRED) || !iban.value.match(SEPA_CODES));
+    enable ? bic.enable() : bic.disable();
   }
 
   getExpense<T extends Expense>(expense: any): T {
