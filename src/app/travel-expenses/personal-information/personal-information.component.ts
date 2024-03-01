@@ -85,7 +85,7 @@ export class PersonalInformationComponent {
     return 'JDAV ' + item.jdavState.name;
   }
 
-  sectionChanged(event: any) {
+  sectionChanged() {
     // ng-select change event is not detected by the form
     this.controlService.saveForm();
   }

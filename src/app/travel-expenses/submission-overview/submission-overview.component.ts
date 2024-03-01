@@ -8,7 +8,6 @@ import { PDFDocument } from 'pdf-lib';
 import { ReimbursementValidationService } from 'src/app/reimbursement.validation.service';
 import { NgxFileDropEntry } from 'ngx-file-drop';
 import { ExpenseService } from 'src/app/expense.service';
-import { isBICRequired } from 'src/app/forms/validators/bank-account.validator';
 
 @Component({
   selector: 'app-submission-overview',
@@ -60,6 +59,10 @@ export class SubmissionOverviewComponent {
       .some(e => ['train', 'plan'].includes(e.type));
   }
 
+  ibanChanged() {
+    this.controlService.updateBicState();
+  }
+
   getTotal(): string {
     return this.expenseService.getTotal(this.reimbursement).toFixed(2);
   }
@@ -75,10 +78,6 @@ export class SubmissionOverviewComponent {
       .validateReimbursement(this.reimbursement)
       .filter(f => f.type === 'info')
       .map(f => f.message);
-  }
-
-  isBICRequired() {
-    return isBICRequired(this.iban.value);
   }
 
   async addImageToPdf(imageFile: File, pdf: jsPDF) {
