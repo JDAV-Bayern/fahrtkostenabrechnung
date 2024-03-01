@@ -227,7 +227,7 @@ export class SubmissionOverviewComponent {
     const fileURL = URL.createObjectURL(file);
 
     const link = document.createElement('a');
-    const lastName = this.reimbursement.participant.surname;
+    const lastName = this.reimbursement.participant.familyName;
     const courseCode = this.reimbursement.course.code;
     link.href = fileURL;
     link.download = `fka_${courseCode}_${lastName}.pdf`;
