@@ -17,14 +17,17 @@
       >
         Bitte gib deine IBAN ein.
       </div>
-      <div *ngIf="iban.hasError('ibanInvalid')" class="error-message">
+      <div
+        *ngIf="iban.hasError('ibanInvalid') && iban.touched"
+        class="error-message"
+      >
         Bitte gib eine gültige IBAN ein.
       </div>
     </div>
 
     <div
       class="form-group"
-      *ngIf="(iban.valid && !iban.value.startsWith('DE')) || bic.value"
+      *ngIf="(iban.valid && isBICRequired()) || bic.value"
     >
       <label for="bic">BIC</label>
       <input type="text" class="form-control" formControlName="bic" id="bic" />
@@ -34,7 +37,7 @@
       >
         Bitte gib bei ausländischen Konten deine BIC ein.
       </div>
-      <div *ngIf="bic.hasError('pattern')" class="error-message">
+      <div *ngIf="bic.hasError('pattern') && bic.touched" class="error-message">
         Bitte gib eine gültige BIC ein.
       </div>
     </div>

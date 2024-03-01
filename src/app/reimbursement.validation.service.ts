@@ -23,14 +23,6 @@ export class ReimbursementValidationService {
   ): ValidationFinding[] {
     const findings: ValidationFinding[] = [];
 
-    // Check if participant first and last name are given
-    if (reimbursement.participant.givenName.split(' ').length < 2) {
-      findings.push({
-        type: 'warning',
-        message: 'Bitte gib deinen Vor- und Nachnamen an.'
-      });
-    }
-
     // Check if section is in Bavaria
     const sectionId = reimbursement.participant.sectionId;
     const section = this.sectionService.getSection(sectionId)!;
@@ -42,10 +34,12 @@ export class ReimbursementValidationService {
     }
 
     // Check if zip code exists and if it is in bavaria
-    if (!this.plzService.exists(reimbursement.participant.zipCode)) {
+    const plz = reimbursement.participant.zipCode;
+    const city = reimbursement.participant.city;
+    if (!this.plzService.exists(plz, city)) {
       findings.push({
         type: 'warning',
-        message: `Deine Postleitzahl (${reimbursement.participant.zipCode}) ist uns unbekannt. Bitte überprüfe sie noch einmal.`
+        message: `Dein Wohnort (${plz} ${city}) ist uns unbekannt. Bitte überprüfe sie noch einmal.`
       });
     }
 

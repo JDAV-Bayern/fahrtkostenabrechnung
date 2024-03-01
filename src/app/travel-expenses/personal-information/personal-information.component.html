@@ -81,7 +81,10 @@
       >
         Bitte gib deine Postleitzahl ein.
       </div>
-      <div *ngIf="zipCode.hasError('pattern')" class="error-message">
+      <div
+        *ngIf="zipCode.hasError('pattern') && zipCode.touched"
+        class="error-message"
+      >
         Bitte gib eine gültige Postleitzahl ein.
       </div>
     </div>
@@ -140,13 +143,21 @@
         Bitte gib die Kursnummer ein.
       </div>
       <div
-        *ngIf="!courseCode.hasError('required') && courseCode.hasError('pattern') && courseCode.touched"
+        *ngIf="courseCode.hasError('unknownCourse') && courseCode.touched"
         class="error-message"
       >
-      Kursnummern von Kursen der JDAV Bayern folgen normalerweise dem Format BXXXGA, BXXXFB oder BXXXAM mit einer dreistelligen Zahl. Deine Kursnummer weicht davon ab. Bitte überprüfe die Kursnummer noch einmal.
+        <p>Bitte gib eine gültige Kursnummer an.</p>
+        <p>
+          Kursnummern der JDAV Bayern haben das Format BXXXGA, BXXXFB oder
+          BXXXAM mit einer dreistelligen Zahl. Bitte stelle sicher, dass du
+          einen Kurs der JDAV Bayern besucht hast.
+        </p>
+      </div>
+      <div *ngIf="courseCode.hasError('federalCourse')" class="error-message">
+        Diese Kursnummer (JXXX) sieht nach einem Kurs des Bundesverbands aus.
+        Diese können nicht über dieses Formular abgerechnet werden.
       </div>
     </div>
-
   </fieldset>
 </div>
 

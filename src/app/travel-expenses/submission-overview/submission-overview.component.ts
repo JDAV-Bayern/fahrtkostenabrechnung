@@ -8,6 +8,7 @@ import { PDFDocument } from 'pdf-lib';
 import { ReimbursementValidationService } from 'src/app/reimbursement.validation.service';
 import { NgxFileDropEntry } from 'ngx-file-drop';
 import { ExpenseService } from 'src/app/expense.service';
+import { isBICRequired } from 'src/app/forms/validators/bank-account.validator';
 
 @Component({
   selector: 'app-submission-overview',
@@ -74,6 +75,10 @@ export class SubmissionOverviewComponent {
       .validateReimbursement(this.reimbursement)
       .filter(f => f.type === 'info')
       .map(f => f.message);
+  }
+
+  isBICRequired() {
+    return isBICRequired(this.iban.value);
   }
 
   async addImageToPdf(imageFile: File, pdf: jsPDF) {
@@ -224,7 +229,7 @@ export class SubmissionOverviewComponent {
 
     const link = document.createElement('a');
     const lastName = this.reimbursement.participant.surname;
-    const courseCode = this.reimbursement.course.code.replace(/( |-)/g, '');
+    const courseCode = this.reimbursement.course.code;
     link.href = fileURL;
     link.download = `fka_${courseCode}_${lastName}.pdf`;
     link.click();
