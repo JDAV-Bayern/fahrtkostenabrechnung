@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
-  FormBuilder,
   FormGroup,
+  NonNullableFormBuilder,
   Validators
 } from '@angular/forms';
 import { validateIBAN } from 'ngx-iban-validator';
@@ -24,15 +24,18 @@ const BIC_REQUIRED = /^(MC|SM|CH)/;
   providedIn: 'root'
 })
 export class ReimbursementControlService {
-  travelExpensesForm = this.formBuilder.group({
-    course: this.formBuilder.nonNullable.group({
+  form = this.formBuilder.group({
+    course: this.formBuilder.group({
       code: ['', [Validators.required, validateCourseCode]],
       name: ['', Validators.required]
     }),
-    participant: this.formBuilder.nonNullable.group({
+    participant: this.formBuilder.group({
       givenName: ['', Validators.required],
       familyName: ['', Validators.required],
-      sectionId: [0, Validators.required],
+      sectionId: this.formBuilder.control<number | null>(
+        null,
+        Validators.required
+      ),
       zipCode: ['', [Validators.required, Validators.pattern(PLZ_PATTERN)]],
       city: ['', Validators.required]
     }),
@@ -44,7 +47,7 @@ export class ReimbursementControlService {
       },
       { validators: anyRequired }
     ),
-    overview: this.formBuilder.nonNullable.group({
+    overview: this.formBuilder.group({
       iban: ['', [Validators.required, validateIBAN]],
       bic: ['', [Validators.required, Validators.pattern(BIC_PATTERN)]],
       note: [''],
@@ -52,26 +55,26 @@ export class ReimbursementControlService {
     })
   });
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: NonNullableFormBuilder) {}
 
   get participantStep() {
-    return this.travelExpensesForm.get('participant') as FormGroup;
+    return this.form.get('participant') as FormGroup;
   }
 
   get courseStep() {
-    return this.travelExpensesForm.get('course') as FormGroup;
+    return this.form.get('course') as FormGroup;
   }
 
   get expensesStep() {
-    return this.travelExpensesForm.get('expenses') as FormGroup;
+    return this.form.get('expenses') as FormGroup;
   }
 
   get overviewStep() {
-    return this.travelExpensesForm.get('overview') as FormGroup;
+    return this.form.get('overview') as FormGroup;
   }
 
   getExpenses(direction: Direction): FormArray {
-    return this.travelExpensesForm.get(`expenses.${direction}`) as FormArray;
+    return this.form.get(`expenses.${direction}`) as FormArray;
   }
 
   getExpenseFormGroup(type: ExpenseType): FormGroup {
@@ -109,7 +112,7 @@ export class ReimbursementControlService {
     // parse JSON from local storage
     const travelExpensesData = localStorage.getItem('travelExpenses') || '{}';
     const travelExpenses = JSON.parse(travelExpensesData);
-    this.travelExpensesForm.patchValue(travelExpenses);
+    this.form.patchValue(travelExpenses);
 
     // create controls for form arrays
     for (let direction of ['inbound', 'onsite', 'outbound'] as Direction[]) {
@@ -125,7 +128,7 @@ export class ReimbursementControlService {
     }
 
     // mark controls with values as touched
-    this.deepMarkAsDirty(this.travelExpensesForm);
+    this.deepMarkAsDirty(this.form);
 
     // update BIC field state
     this.updateBicState();
@@ -133,7 +136,7 @@ export class ReimbursementControlService {
 
   saveForm() {
     // TODO: exclude file field?
-    const travelExpensesData = JSON.stringify(this.travelExpensesForm.value);
+    const travelExpensesData = JSON.stringify(this.form.value);
     localStorage.setItem('travelExpenses', travelExpensesData);
   }
 
@@ -163,13 +166,14 @@ export class ReimbursementControlService {
     return expense;
   }
 
-  getReimbursment(): Reimbursement {
-    const v = this.travelExpensesForm.getRawValue();
+  getReimbursement(): Reimbursement {
+    const v = this.form.getRawValue();
 
     return {
       course: v.course,
       participant: {
         ...v.participant,
+        sectionId: v.participant.sectionId || 0,
         iban: v.overview.iban,
         bic: v.overview.bic
       },

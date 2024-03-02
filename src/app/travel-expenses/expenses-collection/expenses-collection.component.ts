@@ -22,7 +22,7 @@ export class ExpensesCollectionComponent {
   }
 
   getTotal() {
-    const reimbursement = this.controlService.getReimbursment();
+    const reimbursement = this.controlService.getReimbursement();
     return this.expenseService.getTotal(reimbursement).toFixed(2);
   }
 

@@ -8,10 +8,10 @@ import { ReimbursementControlService } from '../reimbursement-control.service';
   styleUrls: ['./travel-expenses.component.css']
 })
 export class TravelExpensesComponent implements OnInit {
-  travelExpensesForm: FormGroup;
+  form: FormGroup;
 
   constructor(private readonly controlService: ReimbursementControlService) {
-    this.travelExpensesForm = this.controlService.travelExpensesForm;
+    this.form = this.controlService.form;
   }
 
   ngOnInit() {

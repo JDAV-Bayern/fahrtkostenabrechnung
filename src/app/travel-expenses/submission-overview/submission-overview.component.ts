@@ -16,7 +16,7 @@ import { ExpenseService } from 'src/app/expense.service';
 })
 export class SubmissionOverviewComponent {
   form: FormGroup;
-  travelExpensesForm: FormGroup;
+  parentForm: FormGroup;
 
   public files: File[] = [];
 
@@ -37,7 +37,7 @@ export class SubmissionOverviewComponent {
     private readonly controlService: ReimbursementControlService,
     private readonly validationService: ReimbursementValidationService
   ) {
-    this.travelExpensesForm = controlService.travelExpensesForm;
+    this.parentForm = controlService.form;
     this.form = controlService.overviewStep;
   }
 
@@ -50,12 +50,12 @@ export class SubmissionOverviewComponent {
   }
 
   get reimbursement() {
-    return this.controlService.getReimbursment();
+    return this.controlService.getReimbursement();
   }
 
   get anyTrainTravel() {
     return this.expenseService
-      .getAllExpenses(this.controlService.getReimbursment())
+      .getAllExpenses(this.controlService.getReimbursement())
       .some(e => ['train', 'plan'].includes(e.type));
   }
 

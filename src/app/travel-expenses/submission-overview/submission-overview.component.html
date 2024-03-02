@@ -102,9 +102,9 @@
     <button
       (click)="continue()"
       *ngIf="!loading"
-      [class.green-button]="travelExpensesForm.valid"
-      [class.disabled-button]="travelExpensesForm.invalid"
-      [disabled]="travelExpensesForm.invalid"
+      [class.green-button]="parentForm.valid"
+      [class.disabled-button]="parentForm.invalid"
+      [disabled]="parentForm.invalid"
     >
       PDF herunterladen
     </button>

@@ -25,7 +25,7 @@ export class ReimbursementValidationService {
 
     // Check if section is in Bavaria
     const sectionId = reimbursement.participant.sectionId;
-    const section = this.sectionService.getSection(sectionId)!;
+    const section = this.sectionService.getSection(sectionId);
     if (section && !this.sectionService.isBavarian(section)) {
       findings.push({
         type: 'info',
