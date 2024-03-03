@@ -109,20 +109,25 @@ export class ReimbursementControlService {
   }
 
   loadForm() {
+    console.log('Loading form values from local storage...')
+
     // parse JSON from local storage
     const travelExpensesData = localStorage.getItem('travelExpenses') || '{}';
-    const travelExpenses = JSON.parse(travelExpensesData);
+    const travelExpenses = JSON.parse(travelExpensesData) as Partial<Reimbursement>;
     this.form.patchValue(travelExpenses);
 
     // create controls for form arrays
+    if (travelExpenses.expenses) {
     for (let direction of ['inbound', 'onsite', 'outbound'] as Direction[]) {
       const expenses = travelExpenses.expenses[direction];
       if (expenses) {
         const formArray = this.getExpenses(direction);
+          formArray.clear();
         for (let expense of expenses) {
           const formRecord = this.getExpenseFormGroup(expense.type);
           formRecord.patchValue(expense);
           formArray.push(formRecord);
+          }
         }
       }
     }
@@ -142,6 +147,7 @@ export class ReimbursementControlService {
 
   deleteStoredData(): void {
     localStorage.removeItem('travelExpenses');
+    this.form.reset();
   }
 
   updateBicState() {

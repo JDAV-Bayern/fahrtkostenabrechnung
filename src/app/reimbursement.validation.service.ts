@@ -71,7 +71,7 @@ export class ReimbursementValidationService {
 
   private checkValidityOfRoute(expenses: Expense[]): ValidationFinding[] {
     const findings: ValidationFinding[] = [];
-    let currentPosition = expenses[0].destination;
+    let currentPosition = expenses[0]?.destination;
     for (let i = 1; i < expenses.length; i++) {
       const endPosition = expenses[i].destination;
       const startPosition = expenses[i].origin;
