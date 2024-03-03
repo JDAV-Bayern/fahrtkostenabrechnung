@@ -55,7 +55,14 @@ export class ReimbursementControlService {
     })
   });
 
-  constructor(private formBuilder: NonNullableFormBuilder) {}
+  constructor(private formBuilder: NonNullableFormBuilder) {
+    this.form.valueChanges.subscribe(() => this.saveForm());
+
+    const iban = this.form.get('overview.iban')!;
+    iban.valueChanges.subscribe(value => this.onIbanChanged(value));
+
+    this.loadForm();
+  }
 
   get participantStep() {
     return this.form.get('participant') as FormGroup;
@@ -109,24 +116,24 @@ export class ReimbursementControlService {
   }
 
   loadForm() {
-    console.log('Loading form values from local storage...')
+    console.log('Loading form values from local storage...');
 
     // parse JSON from local storage
-    const travelExpensesData = localStorage.getItem('travelExpenses') || '{}';
-    const travelExpenses = JSON.parse(travelExpensesData) as Partial<Reimbursement>;
-    this.form.patchValue(travelExpenses);
+    const storedData = localStorage.getItem('travelExpenses') || '{}';
+    const storedValue = JSON.parse(storedData) as Partial<Reimbursement>;
+    this.form.patchValue(storedValue);
 
     // create controls for form arrays
-    if (travelExpenses.expenses) {
-    for (let direction of ['inbound', 'onsite', 'outbound'] as Direction[]) {
-      const expenses = travelExpenses.expenses[direction];
-      if (expenses) {
-        const formArray = this.getExpenses(direction);
+    if (storedValue.expenses) {
+      for (let direction of ['inbound', 'onsite', 'outbound'] as Direction[]) {
+        const expenses = storedValue.expenses[direction];
+        if (expenses) {
+          const formArray = this.getExpenses(direction);
           formArray.clear();
-        for (let expense of expenses) {
-          const formRecord = this.getExpenseFormGroup(expense.type);
-          formRecord.patchValue(expense);
-          formArray.push(formRecord);
+          for (let expense of expenses) {
+            const formRecord = this.getExpenseFormGroup(expense.type);
+            formRecord.patchValue(expense);
+            formArray.push(formRecord);
           }
         }
       }
@@ -134,29 +141,17 @@ export class ReimbursementControlService {
 
     // mark controls with values as touched
     this.deepMarkAsDirty(this.form);
-
-    // update BIC field state
-    this.updateBicState();
   }
 
   saveForm() {
     // TODO: exclude file field?
-    const travelExpensesData = JSON.stringify(this.form.value);
-    localStorage.setItem('travelExpenses', travelExpensesData);
+    const data = JSON.stringify(this.form.value);
+    localStorage.setItem('travelExpenses', data);
   }
 
   deleteStoredData(): void {
     localStorage.removeItem('travelExpenses');
     this.form.reset();
-  }
-
-  updateBicState() {
-    const iban = this.overviewStep.get('iban')!;
-    const bic = this.overviewStep.get('bic')!;
-    const enable =
-      iban.valid &&
-      (iban.value.match(BIC_REQUIRED) || !iban.value.match(SEPA_CODES));
-    enable ? bic.enable() : bic.disable();
   }
 
   getExpense<T extends Expense>(expense: any): T {
@@ -255,7 +250,13 @@ export class ReimbursementControlService {
       control.patchValue(value);
       outbound.push(control);
     }
+  }
 
-    this.saveForm();
+  private onIbanChanged(value: string) {
+    const iban = this.overviewStep.get('iban')!;
+    const bic = this.overviewStep.get('bic')!;
+    const enable =
+      iban.valid && (value.match(BIC_REQUIRED) || !value.match(SEPA_CODES));
+    enable ? bic.enable() : bic.disable();
   }
 }

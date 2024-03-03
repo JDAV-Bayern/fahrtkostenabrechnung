@@ -7,18 +7,10 @@ import { ReimbursementControlService } from '../reimbursement-control.service';
   templateUrl: './travel-expenses.component.html',
   styleUrls: ['./travel-expenses.component.css']
 })
-export class TravelExpensesComponent implements OnInit {
+export class TravelExpensesComponent {
   form: FormGroup;
 
   constructor(private readonly controlService: ReimbursementControlService) {
     this.form = this.controlService.form;
-  }
-
-  ngOnInit() {
-    this.controlService.loadForm();
-  }
-
-  onChange() {
-    this.controlService.saveForm();
   }
 }

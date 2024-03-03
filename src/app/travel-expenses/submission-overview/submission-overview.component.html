@@ -10,7 +10,6 @@
         formControlName="iban"
         id="iban"
         required
-        (input)="ibanChanged()"
       />
       <div
         *ngIf="iban.hasError('required') && iban.touched"

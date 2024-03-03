@@ -50,14 +50,12 @@ export class ExpenseListComponent {
       .subscribe(result => {
         if (result) {
           this.formArray.push(result);
-          this.controlService.saveForm();
         }
       });
   }
 
   deleteExpense(index: number) {
     this.formArray.removeAt(index);
-    this.controlService.saveForm();
   }
 
   onClickExtraButton(event: MouseEvent) {
@@ -68,6 +66,5 @@ export class ExpenseListComponent {
     const target = event.previousContainer.data.at(event.previousIndex);
     event.previousContainer.data.removeAt(event.previousIndex);
     event.container.data.insert(event.currentIndex, target);
-    this.controlService.saveForm();
   }
 }

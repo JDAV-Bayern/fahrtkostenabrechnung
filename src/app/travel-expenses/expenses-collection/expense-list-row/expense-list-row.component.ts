@@ -31,13 +31,10 @@ export class ExpenseListRowComponent {
   }
 
   editMe() {
-    this.dialog
-      .open(AddExpenseModalComponent, {
-        data: { form: this.form },
-        width: '80%'
-      })
-      .afterClosed()
-      .subscribe(() => this.controlService.saveForm());
+    this.dialog.open(AddExpenseModalComponent, {
+      data: { form: this.form },
+      width: '80%'
+    });
   }
 
   deleteMe() {

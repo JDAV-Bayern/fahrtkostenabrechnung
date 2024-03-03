@@ -59,10 +59,6 @@ export class SubmissionOverviewComponent {
       .some(e => ['train', 'plan'].includes(e.type));
   }
 
-  ibanChanged() {
-    this.controlService.updateBicState();
-  }
-
   getTotal(): string {
     return this.expenseService.getTotal(this.reimbursement).toFixed(2);
   }
