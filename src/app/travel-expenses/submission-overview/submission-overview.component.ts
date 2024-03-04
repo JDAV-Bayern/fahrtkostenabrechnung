@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import jsPDF from 'jspdf';
 import * as imageprocessor from 'ts-image-processor';
@@ -15,8 +14,7 @@ import { ExpenseService } from 'src/app/expense.service';
   styleUrls: ['./submission-overview.component.css']
 })
 export class SubmissionOverviewComponent {
-  form: FormGroup;
-  parentForm: FormGroup;
+  form;
 
   public files: File[] = [];
 
@@ -37,16 +35,15 @@ export class SubmissionOverviewComponent {
     private readonly controlService: ReimbursementControlService,
     private readonly validationService: ReimbursementValidationService
   ) {
-    this.parentForm = controlService.form;
     this.form = controlService.overviewStep;
   }
 
   get iban() {
-    return this.form.get('iban') as FormControl<string>;
+    return this.form.controls.iban;
   }
 
   get bic() {
-    return this.form.get('bic') as FormControl<string>;
+    return this.form.controls.bic;
   }
 
   get reimbursement() {

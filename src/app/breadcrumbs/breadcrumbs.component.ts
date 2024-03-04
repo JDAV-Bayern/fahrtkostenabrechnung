@@ -40,7 +40,7 @@ export class BreadcrumbsComponent {
       this.breadcrumbs.push({
         label: route.snapshot.data['breadcrumb'],
         link: breadcrumbLink
-      } as Breadcrumb);
+      });
     }
 
     if (route.firstChild !== null) {

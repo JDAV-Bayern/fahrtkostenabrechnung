@@ -1,12 +1,10 @@
 import { Component, Inject } from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators
-} from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
+import {
+  ExpenseForm,
+  ReimbursementControlService
+} from 'src/app/reimbursement-control.service';
 import { Direction, ExpenseType } from 'src/domain/expense';
 
 export interface ExpenseDialogData {
@@ -21,57 +19,52 @@ export interface ExpenseDialogData {
 })
 export class AddExpenseModalComponent {
   direction: Direction;
-  form: FormGroup;
+  form: FormGroup<ExpenseForm>;
 
   constructor(
     private controlService: ReimbursementControlService,
     private dialogRef: MatDialogRef<AddExpenseModalComponent>,
-    formBuilder: FormBuilder,
     @Inject(MAT_DIALOG_DATA) data: ExpenseDialogData
   ) {
     this.direction = data.direction;
-    this.form =
-      data.form ||
-      formBuilder.nonNullable.group({
-        type: ['', Validators.required]
-      });
+    this.form = data.form || this.controlService.getExpenseFormGroup();
   }
 
   get type() {
-    return this.form.get('type') as FormControl<string>;
+    return this.form.controls.type;
   }
 
   get origin() {
-    return this.form.get('origin') as FormControl<string> | null;
+    return this.form.controls.origin;
   }
 
   get destination() {
-    return this.form.get('destination') as FormControl<string> | null;
+    return this.form.controls.destination;
   }
 
   // for car and bike expenses
   get distance() {
-    return this.form.get('distance') as FormControl | null;
+    return this.form.controls.distance;
   }
 
   // for train expenses
   get price() {
-    return this.form.get('price') as FormControl | null;
+    return this.form.controls.price;
   }
 
   // for train expenses
   get discount() {
-    return this.form.get('discountCard') as FormControl | null;
+    return this.form.controls.discountCard;
   }
 
   // for car expenses
   get carType() {
-    return this.form.get('carType') as FormControl | null;
+    return this.form.controls.carType;
   }
 
   // for car expenses
   get passengers() {
-    return this.form.get('passengers') as FormControl | null;
+    return this.form.controls.passengers;
   }
 
   getDirectionName() {

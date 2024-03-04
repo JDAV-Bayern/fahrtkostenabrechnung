@@ -1,6 +1,6 @@
 import { CdkDrag } from '@angular/cdk/drag-drop';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
 import { ExpenseService } from 'src/app/expense.service';
@@ -11,7 +11,7 @@ import { ExpenseService } from 'src/app/expense.service';
   styleUrls: ['./expenses-collection.component.css']
 })
 export class ExpensesCollectionComponent {
-  form: FormGroup;
+  form;
 
   constructor(
     private readonly router: Router,
