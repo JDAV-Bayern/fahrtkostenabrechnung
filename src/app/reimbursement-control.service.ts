@@ -29,7 +29,7 @@ export type ExpenseForm = {
   price?: FormControl<number>;
   discountCard?: FormControl<string>;
   carType?: FormControl<string>;
-  passengers?: FormControl<string>;
+  passengers?: FormArray<FormControl<string>>;
 };
 
 export type ExpenseFormValue = {
@@ -38,7 +38,9 @@ export type ExpenseFormValue = {
     undefined
   > extends FormControl<infer T>
     ? T
-    : never;
+    : Exclude<ExpenseForm[K], undefined> extends FormArray<FormControl<infer T>>
+      ? T[]
+      : never;
 };
 
 @Injectable({
@@ -126,7 +128,7 @@ export class ReimbursementControlService {
       case 'car':
         form.addControl('distance', positiveNumber);
         form.addControl('carType', requiredString);
-        form.addControl('passengers', this.formBuilder.control(''));
+        form.addControl('passengers', this.formBuilder.array([] as string[]));
         break;
       case 'train':
         form.addControl('price', positiveNumber);
@@ -160,6 +162,12 @@ export class ReimbursementControlService {
           for (let expense of expenses) {
             const formRecord = this.getExpenseFormGroup(expense.type);
             formRecord.patchValue(expense);
+            if (expense.type === 'car') {
+              formRecord.setControl(
+                'passengers',
+                this.formBuilder.array(expense.passengers)
+              );
+            }
             formArray.push(formRecord);
           }
         }
@@ -183,10 +191,8 @@ export class ReimbursementControlService {
 
   getExpense(value: ExpenseFormValue): Expense {
     if (value.type === 'car') {
-      const passengers = value.passengers
-        ? value.passengers.split(',').map(passenger => passenger.trim())
-        : [];
-      return { ...value, passengers } as Expense;
+      const passengers = value.passengers;
+      return { ...value, passengers: passengers ?? [] } as Expense;
     }
     return value as Expense;
   }
@@ -225,7 +231,9 @@ export class ReimbursementControlService {
   getCarTypeCompletion(): string {
     for (let direction of ['inbound', 'onsite', 'outbound'] as Direction[]) {
       const expenses = this.getExpenses(direction).getRawValue();
-      const carExpense = expenses.find(expense => expense.carType !== undefined);
+      const carExpense = expenses.find(
+        expense => expense.carType !== undefined
+      );
       if (carExpense) {
         return carExpense.carType || '';
       }
@@ -249,7 +257,9 @@ export class ReimbursementControlService {
   getDiscountCompletion(): string {
     for (let direction of ['inbound', 'onsite', 'outbound'] as Direction[]) {
       const expenses = this.getExpenses(direction).getRawValue();
-      const trainExpense = expenses.find(expense => expense.discountCard !== undefined);
+      const trainExpense = expenses.find(
+        expense => expense.discountCard !== undefined
+      );
       if (trainExpense) {
         return trainExpense.discountCard || '';
       }
@@ -262,6 +272,7 @@ export class ReimbursementControlService {
     const outbound = this.getExpenses('outbound');
     outbound.clear();
 
+    console.log(values);
     for (let i = values.length - 1; i >= 0; i--) {
       const value = values[i];
 
@@ -272,6 +283,12 @@ export class ReimbursementControlService {
 
       let control = this.getExpenseFormGroup(value.type);
       control.patchValue(value);
+      if (value.type === 'car') {
+        control.setControl(
+          'passengers',
+          this.formBuilder.array(value.passengers!)
+        );
+      }
       outbound.push(control);
     }
   }
