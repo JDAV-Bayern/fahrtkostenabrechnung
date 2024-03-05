@@ -2,7 +2,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AddExpenseModalComponent } from '../add-expense-modal/add-expense-modal.component';
 import { FormGroup } from '@angular/forms';
-import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
+import {
+  ExpenseForm,
+  ReimbursementControlService
+} from 'src/app/reimbursement-control.service';
 import { ExpenseService } from 'src/app/expense.service';
 
 @Component({
@@ -15,7 +18,7 @@ export class ExpenseListRowComponent {
   deleteRow = new EventEmitter<number>();
 
   @Input({ required: true })
-  form!: FormGroup;
+  form!: FormGroup<ExpenseForm>;
 
   @Input({ required: true })
   index!: number;
@@ -27,17 +30,14 @@ export class ExpenseListRowComponent {
   ) {}
 
   get expense() {
-    return this.controlService.getExpense(this.form.value);
+    return this.controlService.getExpense(this.form.getRawValue());
   }
 
   editMe() {
-    this.dialog
-      .open(AddExpenseModalComponent, {
-        data: { form: this.form },
-        width: '80%'
-      })
-      .afterClosed()
-      .subscribe(() => this.controlService.saveForm());
+    this.dialog.open(AddExpenseModalComponent, {
+      data: { form: this.form },
+      width: '80%'
+    });
   }
 
   deleteMe() {

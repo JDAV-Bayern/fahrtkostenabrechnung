@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
-  FormBuilder,
+  FormControl,
   FormGroup,
+  NonNullableFormBuilder,
   Validators
 } from '@angular/forms';
 import { validateIBAN } from 'ngx-iban-validator';
@@ -20,31 +21,57 @@ const SEPA_CODES =
   /^(BE|BG|DK|DE|EE|FI|FR|GR|GB|IE|IS|IT|HR|LV|LI|LT|LU|MT|MC|NL|NO|AT|PL|PT|RO|SM|SE|CH|SK|SI|ES|CZ|HU|CY)/;
 const BIC_REQUIRED = /^(MC|SM|CH)/;
 
+export type ExpenseForm = {
+  type: FormControl<ExpenseType | ''>;
+  origin: FormControl<string>;
+  destination: FormControl<string>;
+  distance?: FormControl<number>;
+  price?: FormControl<number>;
+  discountCard?: FormControl<string>;
+  carType?: FormControl<string>;
+  passengers?: FormControl<string>;
+};
+
+export type ExpenseFormValue = {
+  [K in keyof ExpenseForm]: Exclude<
+    ExpenseForm[K],
+    undefined
+  > extends FormControl<infer T>
+    ? T
+    : never;
+};
+
 @Injectable({
   providedIn: 'root'
 })
 export class ReimbursementControlService {
-  travelExpensesForm = this.formBuilder.group({
-    course: this.formBuilder.nonNullable.group({
+  form = this.formBuilder.group({
+    course: this.formBuilder.group({
       code: ['', [Validators.required, validateCourseCode]],
       name: ['', Validators.required]
     }),
-    participant: this.formBuilder.nonNullable.group({
+    participant: this.formBuilder.group({
       givenName: ['', Validators.required],
       familyName: ['', Validators.required],
-      sectionId: [0, Validators.required],
+      sectionId: new FormControl<number | null>(null, Validators.required),
       zipCode: ['', [Validators.required, Validators.pattern(PLZ_PATTERN)]],
       city: ['', Validators.required]
     }),
     expenses: this.formBuilder.group(
       {
-        inbound: this.formBuilder.array<Expense>([], maxPlanExpenses),
-        onsite: this.formBuilder.array<Expense>([]),
-        outbound: this.formBuilder.array<Expense>([], maxPlanExpenses)
+        inbound: this.formBuilder.array<FormGroup<ExpenseForm>>(
+          [],
+          maxPlanExpenses
+        ),
+        onsite: this.formBuilder.array<FormGroup<ExpenseForm>>([]),
+        outbound: this.formBuilder.array<FormGroup<ExpenseForm>>(
+          [],
+          maxPlanExpenses
+        )
       },
       { validators: anyRequired }
     ),
-    overview: this.formBuilder.nonNullable.group({
+    overview: this.formBuilder.group({
       iban: ['', [Validators.required, validateIBAN]],
       bic: ['', [Validators.required, Validators.pattern(BIC_PATTERN)]],
       note: [''],
@@ -52,124 +79,126 @@ export class ReimbursementControlService {
     })
   });
 
-  constructor(private formBuilder: FormBuilder) {}
+  constructor(private formBuilder: NonNullableFormBuilder) {
+    this.form.valueChanges.subscribe(() => this.saveForm());
+
+    const iban = this.form.get('overview.iban')!;
+    iban.valueChanges.subscribe(value => this.onIbanChanged(value));
+
+    this.loadForm();
+  }
 
   get participantStep() {
-    return this.travelExpensesForm.get('participant') as FormGroup;
+    return this.form.controls.participant;
   }
 
   get courseStep() {
-    return this.travelExpensesForm.get('course') as FormGroup;
+    return this.form.controls.course;
   }
 
   get expensesStep() {
-    return this.travelExpensesForm.get('expenses') as FormGroup;
+    return this.form.controls.expenses;
   }
 
   get overviewStep() {
-    return this.travelExpensesForm.get('overview') as FormGroup;
+    return this.form.controls.overview;
   }
 
-  getExpenses(direction: Direction): FormArray {
-    return this.travelExpensesForm.get(`expenses.${direction}`) as FormArray;
+  getExpenses(direction: Direction) {
+    return this.expensesStep.controls[direction];
   }
 
-  getExpenseFormGroup(type: ExpenseType): FormGroup {
-    const commonControls = {
-      type: [type, Validators.required],
-      origin: ['', Validators.required],
-      destination: ['', Validators.required]
-    };
+  getExpenseFormGroup(type?: ExpenseType | '') {
+    const form = new FormGroup<ExpenseForm>({
+      type: this.formBuilder.control(type || '', Validators.required),
+      origin: this.formBuilder.control('', Validators.required),
+      destination: this.formBuilder.control('', Validators.required)
+    });
+
+    // predefine controls - these must only be added once!
+    const positiveNumber = this.formBuilder.control(0, [
+      Validators.required,
+      Validators.min(0)
+    ]);
+    const requiredString = this.formBuilder.control('', Validators.required);
 
     switch (type) {
       case 'car':
-        return this.formBuilder.group({
-          ...commonControls,
-          distance: ['', [Validators.required, Validators.min(0)]],
-          carType: ['', [Validators.required]],
-          passengers: ['']
-        });
+        form.addControl('distance', positiveNumber);
+        form.addControl('carType', requiredString);
+        form.addControl('passengers', this.formBuilder.control(''));
+        break;
       case 'train':
-        return this.formBuilder.group({
-          ...commonControls,
-          price: ['', [Validators.required, Validators.min(0)]],
-          discountCard: ['', [Validators.required]]
-        });
+        form.addControl('price', positiveNumber);
+        form.addControl('discountCard', requiredString);
+        break;
       case 'plan':
-        return this.formBuilder.group(commonControls);
+        break;
       case 'bike':
-        return this.formBuilder.group({
-          ...commonControls,
-          distance: ['', [Validators.required, Validators.min(0)]]
-        });
+        form.addControl('distance', positiveNumber);
+        break;
     }
+
+    return form;
   }
 
   loadForm() {
+    console.log('Loading form values from local storage...');
+
     // parse JSON from local storage
-    const travelExpensesData = localStorage.getItem('travelExpenses') || '{}';
-    const travelExpenses = JSON.parse(travelExpensesData);
-    this.travelExpensesForm.patchValue(travelExpenses);
+    const storedData = localStorage.getItem('travelExpenses') || '{}';
+    const storedValue = JSON.parse(storedData);
+    this.form.patchValue(storedValue);
 
     // create controls for form arrays
-    for (let direction of ['inbound', 'onsite', 'outbound'] as Direction[]) {
-      const expenses = travelExpenses.expenses[direction];
-      if (expenses) {
-        const formArray = this.getExpenses(direction);
-        for (let expense of expenses) {
-          const formRecord = this.getExpenseFormGroup(expense.type);
-          formRecord.patchValue(expense);
-          formArray.push(formRecord);
+    if (storedValue.expenses) {
+      for (let direction of ['inbound', 'onsite', 'outbound'] as Direction[]) {
+        const expenses = storedValue.expenses[direction];
+        if (expenses) {
+          const formArray = this.getExpenses(direction);
+          formArray.clear();
+          for (let expense of expenses) {
+            const formRecord = this.getExpenseFormGroup(expense.type);
+            formRecord.patchValue(expense);
+            formArray.push(formRecord);
+          }
         }
       }
     }
 
     // mark controls with values as touched
-    this.deepMarkAsDirty(this.travelExpensesForm);
-
-    // update BIC field state
-    this.updateBicState();
+    this.deepMarkAsDirty(this.form);
   }
 
   saveForm() {
     // TODO: exclude file field?
-    const travelExpensesData = JSON.stringify(this.travelExpensesForm.value);
-    localStorage.setItem('travelExpenses', travelExpensesData);
+    const data = JSON.stringify(this.form.value);
+    localStorage.setItem('travelExpenses', data);
   }
 
   deleteStoredData(): void {
     localStorage.removeItem('travelExpenses');
+    this.form.reset();
   }
 
-  updateBicState() {
-    const iban = this.overviewStep.get('iban')!;
-    const bic = this.overviewStep.get('bic')!;
-    const enable =
-      iban.valid &&
-      (iban.value.match(BIC_REQUIRED) || !iban.value.match(SEPA_CODES));
-    enable ? bic.enable() : bic.disable();
-  }
-
-  getExpense<T extends Expense>(expense: any): T {
-    if (expense.type === 'car') {
-      const carExpense = expense as any;
-      const passengers = carExpense.passengers
-        ? (carExpense.passengers as string)
-            .split(',')
-            .map(passenger => passenger.trim())
+  getExpense(value: ExpenseFormValue): Expense {
+    if (value.type === 'car') {
+      const passengers = value.passengers
+        ? value.passengers.split(',').map(passenger => passenger.trim())
         : [];
-      return { ...expense, passengers };
+      return { ...value, passengers } as Expense;
     }
-    return expense;
+    return value as Expense;
   }
 
-  getReimbursment(): Reimbursement {
-    const v = this.travelExpensesForm.getRawValue();
+  getReimbursement(): Reimbursement {
+    const v = this.form.getRawValue();
 
     return {
       course: v.course,
       participant: {
         ...v.participant,
+        sectionId: v.participant.sectionId || 0,
         iban: v.overview.iban,
         bic: v.overview.bic
       },
@@ -189,16 +218,16 @@ export class ReimbursementControlService {
       return direction === 'inbound' ? '' : this.getOriginCompletion('inbound');
     }
 
-    const lastExpense = expenses.value[expenses.length - 1];
+    const lastExpense = expenses.getRawValue()[expenses.length - 1];
     return lastExpense.destination;
   }
 
   getCarTypeCompletion(): string {
     for (let direction of ['inbound', 'onsite', 'outbound'] as Direction[]) {
       const expenses = this.getExpenses(direction).getRawValue();
-      const carExpense = expenses.find(expense => 'carType' in expense);
+      const carExpense = expenses.find(expense => expense.carType !== undefined);
       if (carExpense) {
-        return carExpense.carType;
+        return carExpense.carType || '';
       }
     }
     return '';
@@ -220,9 +249,9 @@ export class ReimbursementControlService {
   getDiscountCompletion(): string {
     for (let direction of ['inbound', 'onsite', 'outbound'] as Direction[]) {
       const expenses = this.getExpenses(direction).getRawValue();
-      const carExpense = expenses.find(expense => 'discountCard' in expense);
-      if (carExpense) {
-        return carExpense.discountCard;
+      const trainExpense = expenses.find(expense => expense.discountCard !== undefined);
+      if (trainExpense) {
+        return trainExpense.discountCard || '';
       }
     }
     return '';
@@ -245,7 +274,13 @@ export class ReimbursementControlService {
       control.patchValue(value);
       outbound.push(control);
     }
+  }
 
-    this.saveForm();
+  private onIbanChanged(value: string) {
+    const iban = this.overviewStep.get('iban')!;
+    const bic = this.overviewStep.get('bic')!;
+    const enable =
+      iban.valid && (value.match(BIC_REQUIRED) || !value.match(SEPA_CODES));
+    enable ? bic.enable() : bic.disable();
   }
 }

@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
+import {
+  ExpenseForm,
+  ReimbursementControlService
+} from 'src/app/reimbursement-control.service';
 import { AddExpenseModalComponent } from '../add-expense-modal/add-expense-modal.component';
 import { FormArray, FormGroup } from '@angular/forms';
 import { Direction } from 'src/domain/expense';
@@ -28,7 +31,7 @@ export class ExpenseListComponent {
   enterPredicate: (drag: CdkDrag, drop: CdkDropList) => boolean = () => true;
 
   formGroup!: FormGroup;
-  formArray!: FormArray<FormGroup>;
+  formArray!: FormArray<FormGroup<ExpenseForm>>;
 
   constructor(
     public dialog: MatDialog,
@@ -47,17 +50,15 @@ export class ExpenseListComponent {
         width: 'min(95vw, 700px)'
       })
       .afterClosed()
-      .subscribe(result => {
+      .subscribe((result: FormGroup<ExpenseForm>) => {
         if (result) {
           this.formArray.push(result);
-          this.controlService.saveForm();
         }
       });
   }
 
   deleteExpense(index: number) {
     this.formArray.removeAt(index);
-    this.controlService.saveForm();
   }
 
   onClickExtraButton(event: MouseEvent) {
@@ -68,6 +69,5 @@ export class ExpenseListComponent {
     const target = event.previousContainer.data.at(event.previousIndex);
     event.previousContainer.data.removeAt(event.previousIndex);
     event.container.data.insert(event.currentIndex, target);
-    this.controlService.saveForm();
   }
 }

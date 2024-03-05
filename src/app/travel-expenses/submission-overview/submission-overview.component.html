@@ -10,7 +10,6 @@
         formControlName="iban"
         id="iban"
         required
-        (input)="ibanChanged()"
       />
       <div
         *ngIf="iban.hasError('required') && iban.touched"
@@ -102,9 +101,9 @@
     <button
       (click)="continue()"
       *ngIf="!loading"
-      [class.green-button]="travelExpensesForm.valid"
-      [class.disabled-button]="travelExpensesForm.invalid"
-      [disabled]="travelExpensesForm.invalid"
+      [class.green-button]="form.parent?.valid"
+      [class.disabled-button]="form.parent?.invalid"
+      [disabled]="form.parent?.invalid"
     >
       PDF herunterladen
     </button>
