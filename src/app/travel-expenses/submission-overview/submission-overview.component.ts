@@ -7,6 +7,8 @@ import { PDFDocument } from 'pdf-lib';
 import { ReimbursementValidationService } from 'src/app/reimbursement.validation.service';
 import { NgxFileDropEntry } from 'ngx-file-drop';
 import { ExpenseService } from 'src/app/expense.service';
+import { MatDialog } from '@angular/material/dialog';
+import { FinishedDialogComponent } from './finished-dialog/finished-dialog.component';
 
 @Component({
   selector: 'app-submission-overview',
@@ -33,7 +35,8 @@ export class SubmissionOverviewComponent {
     private readonly router: Router,
     private readonly expenseService: ExpenseService,
     private readonly controlService: ReimbursementControlService,
-    private readonly validationService: ReimbursementValidationService
+    private readonly validationService: ReimbursementValidationService,
+    private readonly dialog: MatDialog
   ) {
     this.form = controlService.overviewStep;
   }
@@ -227,6 +230,15 @@ export class SubmissionOverviewComponent {
     link.click();
     link.remove();
     this.loading = false;
+
+    this.dialog.open(FinishedDialogComponent, {
+      width: 'min(95vw, 700px)',
+      data: {
+        givenName: this.reimbursement.participant.givenName,
+        courseName: this.reimbursement.course.name,
+        courseCode: this.reimbursement.course.code
+      }
+    });
   }
 
   back() {

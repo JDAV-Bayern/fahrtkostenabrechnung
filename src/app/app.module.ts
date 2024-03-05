@@ -29,6 +29,7 @@ import { ChevronRightIconComponent } from './icons/chevron-right-icon/chevron-ri
 import { TravelExpensesComponent } from './travel-expenses/travel-expenses.component';
 import { ExpenseListComponent } from './travel-expenses/expenses-collection/expense-list/expense-list.component';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { FinishedDialogComponent } from './travel-expenses/submission-overview/finished-dialog/finished-dialog.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     InfoComponent,
     ChevronRightIconComponent,
     TravelExpensesComponent,
-    ExpenseListComponent
+    ExpenseListComponent,
+    FinishedDialogComponent
   ],
   imports: [
     BrowserModule,
