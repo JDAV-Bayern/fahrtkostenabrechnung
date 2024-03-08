@@ -43,28 +43,6 @@ fieldset {
   display: inline;
 }
 
-.step-box {
-  overflow: auto;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  padding-left: 10px;
-  padding-top: 0px;
-  padding-bottom: 20px;
-  padding-right: 10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.button-container {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-}
-
-.button-container button:last-child {
-  margin-left: auto;
-}
-
 button {
   padding: 10px 20px;
   background-color: #4caf50;

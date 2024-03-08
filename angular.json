@@ -24,8 +24,7 @@
               "@ng-select/ng-select/themes/default.theme.css",
               "src/styles.css"
             ],
-            "scripts": [],
-            "allowedCommonJsDependencies": ["dragula"]
+            "scripts": []
           },
           "configurations": {
             "production": {

@@ -1,0 +1,13 @@
+<div class="form-card">
+  <ng-content />
+</div>
+
+<div class="button-container">
+  <button *ngIf="prevStep" class="secondary" (click)="previous()">
+    Zurück
+  </button>
+  <button *ngIf="nextStep" [disabled]="nextDisabled" (click)="next()">
+    Weiter
+  </button>
+  <ng-content select="[submitButton]" />
+</div>
