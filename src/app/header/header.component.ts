@@ -19,6 +19,6 @@ export class HeaderComponent {
   }
   deleteAllData() {
     this.controlService.deleteStoredData();
-    this.router.navigate(['kurs-und-personen-infos']);
+    this.router.navigate(['kurs']);
   }
 }
