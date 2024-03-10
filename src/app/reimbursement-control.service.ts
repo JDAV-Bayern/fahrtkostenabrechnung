@@ -190,10 +190,6 @@ export class ReimbursementControlService {
   }
 
   getExpense(value: ExpenseFormValue): Expense {
-    if (value.type === 'car') {
-      const passengers = value.passengers;
-      return { ...value, passengers: passengers ?? [] } as Expense;
-    }
     return value as Expense;
   }
 
