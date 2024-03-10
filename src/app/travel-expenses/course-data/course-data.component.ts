@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
 
 @Component({
@@ -9,8 +10,19 @@ import { ReimbursementControlService } from 'src/app/reimbursement-control.servi
 export class CourseDataComponent {
   form;
 
-  constructor(public controlService: ReimbursementControlService) {
+  constructor(
+    public router: Router,
+    public route: ActivatedRoute,
+    public controlService: ReimbursementControlService
+  ) {
     this.form = controlService.courseStep;
+    const params = this.route.snapshot.queryParamMap;
+    if (params.has('nummer') || params.has('name')) {
+      this.form.patchValue({
+        code: params.get('nummer') || '',
+        name: params.get('name') || ''
+      });
+    }
   }
 
   get code() {
