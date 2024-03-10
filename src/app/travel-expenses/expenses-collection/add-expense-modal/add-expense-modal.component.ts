@@ -81,8 +81,6 @@ export class AddExpenseModalComponent {
     }
     const newForm = this.formBuilder.control('', Validators.required);
     passengersControl.push(newForm);
-    console.log(passengersControl);
-    console.log(this.form);
   }
 
   removePassenger(index: number) {
