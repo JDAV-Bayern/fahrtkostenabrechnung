@@ -1,5 +1,11 @@
 import { Component, Inject } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import {
+  FormGroup,
+  FormArray,
+  Validators,
+  FormControl,
+  NonNullableFormBuilder
+} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   ExpenseForm,
@@ -24,7 +30,8 @@ export class AddExpenseModalComponent {
   constructor(
     private controlService: ReimbursementControlService,
     private dialogRef: MatDialogRef<AddExpenseModalComponent>,
-    @Inject(MAT_DIALOG_DATA) data: ExpenseDialogData
+    @Inject(MAT_DIALOG_DATA) data: ExpenseDialogData,
+    private formBuilder: NonNullableFormBuilder
   ) {
     this.direction = data.direction;
     this.form = data.form || this.controlService.getExpenseFormGroup();
@@ -65,6 +72,20 @@ export class AddExpenseModalComponent {
   // for car expenses
   get passengers() {
     return this.form.controls.passengers;
+  }
+
+  addPassenger() {
+    const passengersControl = this.form.controls.passengers;
+    if (!passengersControl) {
+      return;
+    }
+    const newForm = this.formBuilder.control('', Validators.required);
+    passengersControl.push(newForm);
+  }
+
+  removePassenger(index: number) {
+    const passengersControl = <FormArray>this.form.get('passengers');
+    passengersControl.removeAt(index);
   }
 
   getDirectionName() {
