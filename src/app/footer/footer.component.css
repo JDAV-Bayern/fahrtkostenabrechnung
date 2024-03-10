@@ -1,5 +1,5 @@
 footer {
-  background-color: var(--color-footer);
+  background-color: rgb(72,89,99)	;
   color: #fff;
   flex-basis: content;
 }
@@ -20,11 +20,11 @@ a {
 .footer-container {
   max-width: 1200px;
   margin: auto;
-  padding: 2.5rem 1rem;
 }
 
 .footer-nav {
   margin-bottom: 2rem;
+  justify-content: space-around;
 }
 
 .footer-links {
@@ -33,7 +33,13 @@ a {
 
 .footer-links li {
   margin: 0.5rem 1.75rem;
-  font-size: 1.125rem;
+  font-size: 0.825rem;
+}
+
+.footer-links .address {
+  min-width: fit-content;
+  margin: 0.5rem 1.75rem;
+  font-size: 0.825rem;
 }
 
 .footer-icons {
@@ -74,8 +80,7 @@ a {
 @media (min-width: 1024px) {
   .footer-content {
     display: flex;
-    flex-direction: row-reverse;
-    justify-content: space-between;
+    justify-content: center;
   }
   .footer-nav {
     display: flex;

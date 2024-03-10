@@ -4,7 +4,10 @@ import {
   ExpenseForm,
   ReimbursementControlService
 } from 'src/app/reimbursement-control.service';
-import { AddExpenseModalComponent } from '../add-expense-modal/add-expense-modal.component';
+import {
+  AddExpenseModalComponent,
+  ExpenseDialogData
+} from '../add-expense-modal/add-expense-modal.component';
 import { FormArray, FormGroup } from '@angular/forms';
 import { Direction } from 'src/domain/expense';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
@@ -43,10 +46,30 @@ export class ExpenseListComponent {
     this.formArray = this.controlService.getExpenses(this.direction);
   }
 
+  get showPlan() {
+    console.log(
+      this.direction,
+      this.controlService.getExpenses(this.direction).controls
+    );
+    const directionOkay = this.direction !== 'onsite';
+    const planExists = this.controlService
+      .getExpenses(this.direction)
+      .controls.some(
+        (expense: FormGroup<ExpenseForm>) => expense.value.type === 'plan'
+      );
+    const showPlan = directionOkay && !planExists;
+    console.log(directionOkay, planExists, showPlan);
+    return showPlan;
+  }
+
   openAddExpenseDialog() {
+    const data: ExpenseDialogData = {
+      direction: this.direction,
+      showPlan: this.showPlan
+    };
     this.dialog
       .open(AddExpenseModalComponent, {
-        data: { direction: this.direction },
+        data,
         width: 'min(95vw, 700px)'
       })
       .afterClosed()

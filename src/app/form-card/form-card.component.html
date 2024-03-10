@@ -4,10 +4,10 @@
 
 <div class="button-container">
   <button *ngIf="prevStep" class="secondary" (click)="previous()">
-    Zurück
+    ZURÜCK
   </button>
   <button *ngIf="nextStep" [disabled]="nextDisabled" (click)="next()">
-    Weiter
+    WEITER
   </button>
   <ng-content select="[submitButton]" />
 </div>

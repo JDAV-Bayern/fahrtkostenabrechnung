@@ -1,6 +1,20 @@
 <fieldset [formGroup]="formGroup">
-  <h3>{{ heading }}</h3>
-
+  <h3 class="heading">
+    {{ heading }}
+    <button
+      *ngIf="extraButton"
+      (click)="onClickExtraButton($event)"
+      class="mar extra-button"
+    >
+      <span
+        style="margin-right: 10px; font-size: 11px"
+        class="material-symbols-outlined"
+      >
+        swap_horiz
+      </span>
+      {{ extraButton }}
+    </button>
+  </h3>
   <div
     [formArrayName]="direction"
     cdkDropList
@@ -26,13 +40,15 @@
       />
     </div>
   </div>
-
-  <div class="button-group">
-    <button (click)="openAddExpenseDialog()">Auslage hinzufügen</button>
-    <button *ngIf="extraButton" (click)="onClickExtraButton($event)">
-      {{ extraButton }}
-    </button>
-  </div>
+  <button (click)="openAddExpenseDialog()" class="add-button">
+    <span
+      style="margin-right: 10px; font-size: 11px"
+      class="material-symbols-outlined"
+    >
+      add
+    </span>
+    AUSLAGE HINZUFÜGEN
+  </button>
 
   <div *ngIf="formArray.hasError('maxPlanExpenses')" class="error-message">
     Du kannst pro Fahrtrichtung maximal eine Auslage für Abo Tickets angeben.

@@ -20,12 +20,12 @@
       <app-expense-list
         direction="outbound"
         heading="Rückfahrt"
-        extraButton="Rückfahrt wie Hinfahrt"
+        extraButton="RÜCKFAHRT WIE HINFAHRT"
         (clickExtraButton)="completeReturnTrip()"
       />
     </div>
 
-    <div *ngIf="form.hasError('anyRequired')" class="error-message">
+    <div *ngIf="form.hasError('anyRequired')" class="error-message margin-top">
       Bitte gib mindestens eine Auslage an.
     </div>
   </fieldset>

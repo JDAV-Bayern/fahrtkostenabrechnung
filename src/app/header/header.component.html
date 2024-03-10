@@ -4,20 +4,9 @@
   </div>
   <div class="user-info">
     <p>JDAV Bayern Reisekostenabrechnung</p>
-    <p
-      (click)="deleteAllData()"
-      style="
-        font-weight: normal;
-        font-size: small;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        cursor: pointer;
-        font-style: italic;
-      "
-    >
-      <span class="material-symbols-outlined">&#xe872;</span>Gespeicherte Daten
-      löschen
-    </p>
   </div>
+  <p (click)="deleteAllData()" class="delete-data">
+    <span class="material-symbols-outlined">&#xe872;</span>Gespeicherte Daten
+    löschen
+  </p>
 </header>

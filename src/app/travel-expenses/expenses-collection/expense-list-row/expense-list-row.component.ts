@@ -35,7 +35,7 @@ export class ExpenseListRowComponent {
 
   editMe() {
     this.dialog.open(AddExpenseModalComponent, {
-      data: { form: this.form },
+      data: { form: this.form, showPlan: false },
       width: '80%'
     });
   }

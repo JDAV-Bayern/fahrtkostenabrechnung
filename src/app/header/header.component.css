@@ -1,29 +1,32 @@
 header {
-  background-color: #333;
-  color: #fff;
+  background-color: rgb(251,251,251	);
+  color: rgb(102,124,137);
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   padding: 10px 10px;
   flex-basis: content;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .logo img {
-  max-height: 100px;
+  max-height: 80px;
   max-width: 40vw;
-}
-
-nav ul {
-  list-style-type: none;
-  display: flex;
-}
-
-nav li {
-  margin-right: 20px;
 }
 
 .user-info {
   font-weight: bold;
+  font-size: x-large;
   padding-left: 10px;
   padding-right: 10px;
+  display: flex;
+}
+.delete-data {
+        font-weight: normal;
+        font-size: small;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        cursor: pointer;
+        font-style: italic;
 }
