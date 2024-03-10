@@ -11,9 +11,7 @@ import { SectionService } from 'src/app/section.service';
   styleUrls: ['./personal-information.component.css']
 })
 export class PersonalInformationComponent {
-  participantForm;
-  courseForm;
-
+  form;
   sections: Section[] = [];
 
   constructor(
@@ -22,8 +20,7 @@ export class PersonalInformationComponent {
     private readonly sectionService: SectionService,
     public controlService: ReimbursementControlService
   ) {
-    this.participantForm = controlService.participantStep;
-    this.courseForm = controlService.courseStep;
+    this.form = controlService.participantStep;
 
     // load section autocompletions
     this.sections = this.sectionService.getSections();
@@ -45,31 +42,31 @@ export class PersonalInformationComponent {
   }
 
   get givenName() {
-    return this.participantForm.controls.givenName;
+    return this.form.controls.givenName;
   }
 
   get familyName() {
-    return this.participantForm.controls.familyName;
+    return this.form.controls.familyName;
   }
 
   get sectionId() {
-    return this.participantForm.controls.sectionId;
+    return this.form.controls.sectionId;
   }
 
   get zipCode() {
-    return this.participantForm.controls.zipCode;
+    return this.form.controls.zipCode;
   }
 
   get city() {
-    return this.participantForm.controls.city;
+    return this.form.controls.city;
   }
 
-  get courseCode() {
-    return this.courseForm.controls.code;
+  get iban() {
+    return this.form.controls.iban;
   }
 
-  get courseName() {
-    return this.courseForm.controls.name;
+  get bic() {
+    return this.form.controls.bic;
   }
 
   groupByFn(item: Section) {
@@ -81,13 +78,7 @@ export class PersonalInformationComponent {
     const results = this.plzService.search(plz);
     if (results.length === 1) {
       const city = results[0].city;
-      this.participantForm.patchValue({ city });
-    }
-  }
-
-  next() {
-    if (this.participantForm.valid && this.courseForm.valid) {
-      this.router.navigate(['auslagen']);
+      this.form.patchValue({ city });
     }
   }
 }

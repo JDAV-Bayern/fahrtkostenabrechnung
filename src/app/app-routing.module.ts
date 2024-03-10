@@ -6,11 +6,12 @@ import { ExpensesCollectionComponent } from './travel-expenses/expenses-collecti
 import { DataProtectionComponent } from './info/data-protection/data-protection.component';
 import { InfoComponent } from './info/info.component';
 import { TravelExpensesComponent } from './travel-expenses/travel-expenses.component';
+import { CourseDataComponent } from './travel-expenses/course-data/course-data.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'kurs-und-personen-infos',
+    redirectTo: 'kurs',
     pathMatch: 'full'
   },
   {
@@ -32,7 +33,11 @@ const routes: Routes = [
     component: TravelExpensesComponent,
     children: [
       {
-        path: 'kurs-und-personen-infos',
+        path: 'kurs',
+        component: CourseDataComponent
+      },
+      {
+        path: 'teilnehmer-in',
         component: PersonalInformationComponent
       },
       {
@@ -40,7 +45,7 @@ const routes: Routes = [
         component: ExpensesCollectionComponent
       },
       {
-        path: 'zusammenfassen-und-abschicken',
+        path: 'zusammenfassung',
         component: SubmissionOverviewComponent
       }
     ]

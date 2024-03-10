@@ -1,5 +1,9 @@
-<div class="step-box">
-  <fieldset [formGroup]="participantForm">
+<app-form-card
+  prevStep="kurs"
+  nextStep="auslagen"
+  [nextDisabled]="form.invalid"
+>
+  <fieldset [formGroup]="form">
     <h1>Angaben zu Dir</h1>
 
     <p style="font-size: small">
@@ -24,7 +28,6 @@
         Bitte gib deinen Vornamen ein.
       </div>
     </div>
-
     <div class="form-group">
       <label for="familyName">Nachname</label>
       <input
@@ -41,7 +44,6 @@
         Bitte gib deinen Nachnamen ein.
       </div>
     </div>
-
     <div class="form-group">
       <label for="section">Sektion</label>
       <ng-select
@@ -64,6 +66,7 @@
       </div>
     </div>
 
+    <h2>Wohnort</h2>
     <div class="form-group">
       <label for="zipCode">PLZ</label>
       <input
@@ -87,9 +90,8 @@
         Bitte gib eine gültige Postleitzahl ein.
       </div>
     </div>
-
     <div class="form-group">
-      <label for="city">Wohnort</label>
+      <label for="city">Ort</label>
       <input
         type="text"
         id="city"
@@ -104,71 +106,48 @@
         Bitte gib deinen Wohnort ein.
       </div>
     </div>
-  </fieldset>
 
-  <fieldset [formGroup]="courseForm">
-    <h1>Angaben zum Kurs</h1>
-
+    <h2>Kontodaten</h2>
     <div class="form-group">
-      <label for="courseName">Kursname</label>
+      <label for="iban">IBAN</label>
       <input
         type="text"
-        id="courseName"
-        formControlName="name"
         class="form-control"
+        formControlName="iban"
+        id="iban"
         required
       />
       <div
-        *ngIf="courseName.hasError('required') && courseName.touched"
+        *ngIf="iban.hasError('required') && iban.touched"
         class="error-message"
       >
-        Bitte gib den Kursnamen ein.
+        Bitte gib deine IBAN ein.
+      </div>
+      <div
+        *ngIf="iban.hasError('ibanInvalid') && iban.touched"
+        class="error-message"
+      >
+        Bitte gib eine gültige IBAN ein.
       </div>
     </div>
-
-    <div class="form-group">
-      <label for="courseCode">Kursnummer</label>
+    <div class="form-group" *ngIf="bic.enabled">
+      <label for="bic">BIC</label>
       <input
         type="text"
-        id="courseCode"
-        formControlName="code"
         class="form-control"
+        formControlName="bic"
+        id="bic"
         required
       />
       <div
-        *ngIf="courseCode.hasError('required') && courseCode.touched"
+        *ngIf="bic.hasError('required') && bic.touched"
         class="error-message"
       >
-        Bitte gib die Kursnummer ein.
+        Bitte gib deine BIC ein.
       </div>
-      <div
-        *ngIf="courseCode.hasError('unknownCourse') && courseCode.touched"
-        class="error-message"
-      >
-        <p>Bitte gib eine gültige Kursnummer an.</p>
-        <p>
-          Kursnummern der JDAV Bayern haben das Format BXXXGA, BXXXFB oder
-          BXXXAM mit einer dreistelligen Zahl. Bitte stelle sicher, dass du
-          einen Kurs der JDAV Bayern besucht hast.
-        </p>
-      </div>
-      <div *ngIf="courseCode.hasError('federalCourse')" class="error-message">
-        Diese Kursnummer (JXXX) sieht nach einem Kurs des Bundesverbands aus.
-        Diese können nicht über dieses Formular abgerechnet werden.
+      <div *ngIf="bic.hasError('pattern') && bic.touched" class="error-message">
+        Bitte gib eine gültige BIC ein.
       </div>
     </div>
   </fieldset>
-</div>
-
-<div class="button-container">
-  <div class="right-button-container">
-    <button
-      [class.green-button]="participantForm.valid && courseForm.valid"
-      [class.disabled-button]="participantForm.invalid || courseForm.invalid"
-      [disabled]="participantForm.invalid || courseForm.invalid"
-      (click)="next()"
-    >
-      Weiter
-    </button>
-  </div>
-</div>
+</app-form-card>

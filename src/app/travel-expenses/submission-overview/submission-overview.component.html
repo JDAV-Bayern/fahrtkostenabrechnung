@@ -1,60 +1,13 @@
-<div class="step-box">
-  <fieldset [formGroup]="form">
-    <h2>Kontodaten</h2>
-
-    <div class="form-group">
-      <label for="iban">IBAN</label>
-      <input
-        type="text"
-        class="form-control"
-        formControlName="iban"
-        id="iban"
-        required
-      />
-      <div
-        *ngIf="iban.hasError('required') && iban.touched"
-        class="error-message"
-      >
-        Bitte gib deine IBAN ein.
-      </div>
-      <div
-        *ngIf="iban.hasError('ibanInvalid') && iban.touched"
-        class="error-message"
-      >
-        Bitte gib eine gültige IBAN ein.
-      </div>
-    </div>
-
-    <div class="form-group" *ngIf="bic.enabled">
-      <label for="bic">BIC</label>
-      <input
-        type="text"
-        class="form-control"
-        formControlName="bic"
-        id="bic"
-        required
-      />
-      <div
-        *ngIf="bic.hasError('required') && bic.touched"
-        class="error-message"
-      >
-        Bitte gib deine BIC ein.
-      </div>
-      <div *ngIf="bic.hasError('pattern') && bic.touched" class="error-message">
-        Bitte gib eine gültige BIC ein.
-      </div>
-    </div>
-
-    <div class="form-group">
-      <label for="note">Bemerkung zu deiner Abrechnung</label>
-      <textarea
-        class="form-control textarea"
-        rows="4"
-        formControlName="note"
-        id="note"
-      ></textarea>
-    </div>
-  </fieldset>
+<app-form-card prevStep="auslagen">
+  <div class="form-group">
+    <label for="note">Bemerkung zu deiner Abrechnung</label>
+    <textarea
+      class="form-control textarea"
+      rows="4"
+      formControlName="note"
+      id="note"
+    ></textarea>
+  </div>
 
   <h2>Zusammenfassung</h2>
   Erstattungsbetrag: {{ getTotal() }}€<br />
@@ -71,7 +24,7 @@
         ngx-file-drop-content-tmp
         let-openFileSelector="openFileSelector"
       >
-        <button type="button" class="fileupload" (click)="openFileSelector()">
+        <button class="fileupload" (click)="openFileSelector()">
           <span class="material-symbols-outlined">&#xe9fc;</span>
           Beleg hinzufügen
         </button>
@@ -90,25 +43,13 @@
       </p>
     </fieldset>
   </div>
-</div>
-
-<div class="button-container">
-  <div class="left-button-container">
-    <button (click)="back()" class="gray-button">Zurück</button>
-  </div>
-  <div class="right-button-container">
+  <button submitButton type="submit" [disabled]="loading || form.parent?.invalid" (click)="onSubmit()">
     <app-progress-indicator *ngIf="loading"></app-progress-indicator>
-    <button
-      (click)="continue()"
-      *ngIf="!loading"
-      [class.green-button]="form.parent?.valid"
-      [class.disabled-button]="form.parent?.invalid"
-      [disabled]="form.parent?.invalid"
-    >
-      PDF herunterladen
-    </button>
-  </div>
-</div>
+    <span *ngIf="!loading">PDF herunterladen</span>
+  </button>
+</app-form-card>
+
+
 
 <div style="position: absolute; top: 2000px">
   <app-pdf-view

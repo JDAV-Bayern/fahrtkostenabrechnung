@@ -1,4 +1,8 @@
-<div class="step-box">
+<app-form-card
+  prevStep="teilnehmer-in"
+  nextStep="zusammenfassung"
+  [nextDisabled]="form.invalid"
+>
   <fieldset [formGroup]="form">
     <h1>Auslagen für Fahrtkosten</h1>
     <p><b>Summe:</b> {{ getTotal() }}€</p>
@@ -25,20 +29,4 @@
       Bitte gib mindestens eine Auslage an.
     </div>
   </fieldset>
-</div>
-
-<div class="button-container">
-  <div class="left-button-container">
-    <button (click)="back()" class="gray-button">Zurück</button>
-  </div>
-  <div class="right-button-container">
-    <button
-      (click)="continue()"
-      [class.green-button]="form.valid"
-      [class.disabled-button]="form.invalid"
-      [disabled]="form.invalid"
-    >
-      Weiter
-    </button>
-  </div>
-</div>
+</app-form-card>

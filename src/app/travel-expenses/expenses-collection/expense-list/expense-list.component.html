@@ -1,18 +1,8 @@
 <fieldset [formGroup]="formGroup">
   <h3>{{ heading }}</h3>
-  <button (click)="openAddExpenseDialog()" class="add-button green-button mar">
-    Auslage hinzufügen
-  </button>
-  <button
-    *ngIf="extraButton"
-    (click)="onClickExtraButton($event)"
-    class="add-button green-button mar"
-  >
-    {{ extraButton }}
-  </button>
+
   <div
     [formArrayName]="direction"
-    class="drop-area"
     cdkDropList
     [cdkDropListData]="formArray"
     [cdkDropListEnterPredicate]="enterPredicate"
@@ -35,6 +25,13 @@
         (deleteRow)="deleteExpense($event)"
       />
     </div>
+  </div>
+
+  <div class="button-group">
+    <button (click)="openAddExpenseDialog()">Auslage hinzufügen</button>
+    <button *ngIf="extraButton" (click)="onClickExtraButton($event)">
+      {{ extraButton }}
+    </button>
   </div>
 
   <div *ngIf="formArray.hasError('maxPlanExpenses')" class="error-message">

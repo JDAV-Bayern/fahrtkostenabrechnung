@@ -30,6 +30,8 @@ import { TravelExpensesComponent } from './travel-expenses/travel-expenses.compo
 import { ExpenseListComponent } from './travel-expenses/expenses-collection/expense-list/expense-list.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FinishedDialogComponent } from './travel-expenses/submission-overview/finished-dialog/finished-dialog.component';
+import { CourseDataComponent } from './travel-expenses/course-data/course-data.component';
+import { FormCardComponent } from './form-card/form-card.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,9 @@ import { FinishedDialogComponent } from './travel-expenses/submission-overview/f
     ChevronRightIconComponent,
     TravelExpensesComponent,
     ExpenseListComponent,
-    FinishedDialogComponent
+    FinishedDialogComponent,
+    CourseDataComponent,
+    FormCardComponent
   ],
   imports: [
     BrowserModule,

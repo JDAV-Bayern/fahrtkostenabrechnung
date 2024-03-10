@@ -57,7 +57,9 @@ export class ReimbursementControlService {
       familyName: ['', Validators.required],
       sectionId: new FormControl<number | null>(null, Validators.required),
       zipCode: ['', [Validators.required, Validators.pattern(PLZ_PATTERN)]],
-      city: ['', Validators.required]
+      city: ['', Validators.required],
+      iban: ['', [Validators.required, validateIBAN]],
+      bic: ['', [Validators.required, Validators.pattern(BIC_PATTERN)]]
     }),
     expenses: this.formBuilder.group(
       {
@@ -74,8 +76,6 @@ export class ReimbursementControlService {
       { validators: anyRequired }
     ),
     overview: this.formBuilder.group({
-      iban: ['', [Validators.required, validateIBAN]],
-      bic: ['', [Validators.required, Validators.pattern(BIC_PATTERN)]],
       note: [''],
       file: [undefined]
     })
@@ -84,7 +84,7 @@ export class ReimbursementControlService {
   constructor(private formBuilder: NonNullableFormBuilder) {
     this.form.valueChanges.subscribe(() => this.saveForm());
 
-    const iban = this.form.get('overview.iban')!;
+    const iban = this.participantStep.controls.iban;
     iban.valueChanges.subscribe(value => this.onIbanChanged(value));
 
     this.loadForm();
@@ -200,9 +200,7 @@ export class ReimbursementControlService {
       course: v.course,
       participant: {
         ...v.participant,
-        sectionId: v.participant.sectionId || 0,
-        iban: v.overview.iban,
-        bic: v.overview.bic
+        sectionId: v.participant.sectionId || 0
       },
       expenses: {
         inbound: v.expenses.inbound.map(this.getExpense),
@@ -289,8 +287,8 @@ export class ReimbursementControlService {
   }
 
   private onIbanChanged(value: string) {
-    const iban = this.overviewStep.get('iban')!;
-    const bic = this.overviewStep.get('bic')!;
+    const iban = this.participantStep.controls.iban;
+    const bic = this.participantStep.controls.bic;
     const enable =
       iban.valid && (value.match(BIC_REQUIRED) || !value.match(SEPA_CODES));
     enable ? bic.enable() : bic.disable();

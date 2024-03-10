@@ -33,12 +33,4 @@ export class ExpensesCollectionComponent {
   completeReturnTrip() {
     this.controlService.completeReturnTrip();
   }
-
-  continue() {
-    this.router.navigate(['zusammenfassen-und-abschicken']);
-  }
-
-  back() {
-    this.router.navigate(['kurs-und-personen-infos']);
-  }
 }

@@ -41,14 +41,6 @@ export class SubmissionOverviewComponent {
     this.form = controlService.overviewStep;
   }
 
-  get iban() {
-    return this.form.controls.iban;
-  }
-
-  get bic() {
-    return this.form.controls.bic;
-  }
-
   get reimbursement() {
     return this.controlService.getReimbursement();
   }
@@ -158,7 +150,7 @@ export class SubmissionOverviewComponent {
     );
   }
 
-  async continue() {
+  async onSubmit() {
     this.loading = true;
     this.showPdf = true;
     await new Promise(resolve => setTimeout(resolve, 0));
@@ -185,7 +177,6 @@ export class SubmissionOverviewComponent {
         })
         .finally(() => resolve())
     );
-    //doc.addImage(logoBase64, 'JPEG', 374, 57, 164, 85);
 
     this.showPdf = false;
 
@@ -239,10 +230,6 @@ export class SubmissionOverviewComponent {
         courseCode: this.reimbursement.course.code
       }
     });
-  }
-
-  back() {
-    this.router.navigate(['auslagen']);
   }
 
   fileDropped(files: NgxFileDropEntry[]) {

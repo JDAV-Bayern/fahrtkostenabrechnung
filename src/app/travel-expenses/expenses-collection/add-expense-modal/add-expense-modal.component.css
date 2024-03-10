@@ -9,13 +9,14 @@
 
 .means-of-travel-buttons-container {
   display: flex;
-  justify-content: space-around;
   flex-direction: column;
-  text-align: center;
+  align-items: stretch;
+  gap: 10px;
 }
 
 .means-of-travel-buttons-container button {
-  display: inline-flex;
+  display: flex;
+  align-items: center;
 }
 
 .formcontainer {
