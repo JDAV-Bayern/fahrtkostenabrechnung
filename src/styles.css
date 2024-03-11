@@ -94,7 +94,8 @@ button:disabled {
 }
 
 input.form-control {
-  width: -webkit-fill-available;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .error-message {
