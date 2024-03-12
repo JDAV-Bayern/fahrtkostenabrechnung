@@ -9,7 +9,7 @@
 body,
 html {
   font-family: 'Tahoma', 'Helvetica Neue', sans-serif;
-  background-color: rgb(242,242,242);
+  background-color: rgb(242, 242, 242);
   color: var(--color-body);
   margin: 0;
   padding: 0;
@@ -45,7 +45,8 @@ fieldset {
 
 button {
   padding: 10px 20px;
-  background-color: rgb(105,172,68);
+  background-color: rgb(105, 172, 68);
+  text-transform: uppercase;
   color: #fff;
   font-weight: bold;
   border: none;
@@ -54,15 +55,15 @@ button {
     background-color 0.3s,
 
   &:hover {
-    background-color:rgb(81,132,52); 
+    background-color: rgb(81, 132, 52);
   }
 }
 .forward-icon {
-  font-size: small
+  font-size: small;
 }
 
 button.secondary {
-  background-color:rgba(0,0,0,0) ;
+  background-color: rgba(0, 0, 0, 0);
   padding: 8px 18px;
   border: 2px solid #afafaf;
   color: #afafaf;

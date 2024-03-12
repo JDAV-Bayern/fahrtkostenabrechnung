@@ -2,7 +2,7 @@ table {
   width: 100%;
 }
 
-.ng-select.combo-box ::ng-deep .ng-select-container{
+.ng-select.combo-box ::ng-deep .ng-select-container {
   width: 100%;
   border-radius: 0px;
   font-size: inherit;

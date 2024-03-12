@@ -1,7 +1,3 @@
-.drop-area {
-  min-height: 20px;
-}
-
 .cdk-drag-placeholder {
   opacity: 0.5;
 }
@@ -19,7 +15,6 @@
   align-items: center;
 }
 
-
 .add-button#span {
   text-align: center;
   vertical-align: middle;
@@ -27,7 +22,7 @@
   padding: 0;
 }
 
-.extra-button{
+.extra-button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -35,5 +30,6 @@
 }
 
 .heading {
-  display: flex; align-items: center
+  display: flex;
+  align-items: center;
 }
