@@ -17,12 +17,18 @@ import { MeetingCommitteeStepComponent } from './reimbursement/meeting-committee
 import { ExpensesExtraStepComponent } from './reimbursement/expenses-extra-step/expenses-extra-step.component';
 import { ExpenseRatesComponent } from './info/expense-rates/expense-rates.component';
 import { disabledStepGuard } from './reimbursement/shared/disabled-step.guard';
+import { InviteCreatorComponent } from './invite-creator/invite-creator.component';
 
 export const routes: Routes = [
   {
     path: '',
     redirectTo: 'kurs',
     pathMatch: 'full'
+  },
+  {
+    path: 'kurslink-erstellen',
+    title: 'Kurslink erstellen',
+    component: InviteCreatorComponent,
   },
   {
     path: '',

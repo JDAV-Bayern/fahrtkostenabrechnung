@@ -1,0 +1,42 @@
+<div class="form-content">
+  <form [formGroup]="form">
+    <h2>Kurslink erstellen</h2>
+    <p>
+      Wird das Formular über diesen Link aufgerufen, wird der Kurs automatisch
+      ausgefüllt.
+    </p>
+    <div class="form-group">
+      <label for="courseCode">Kursnummer</label>
+      <input
+        type="text"
+        id="courseCode"
+        class="form-control"
+        formControlName="courseCode"
+        required
+      />
+    </div>
+    <div class="form-group">
+      <label for="courseName">Kurstitel</label>
+      <input
+        type="text"
+        id="courseName"
+        class="form-control"
+        formControlName="courseName"
+        required
+      />
+    </div>
+  </form>
+  <div class="form-group">
+    <label for="url">Kurslink</label>
+    <input
+      type="text"
+      id="url"
+      class="form-control"
+      [formControl]="output"
+      readonly
+      placeholder="Bitte gebe die Kursdaten ein!"
+      (click)="onClickUrl($event)"
+    />
+    <button [disabled]="form.invalid" (click)="copyURL()">Kopieren</button>
+  </div>
+</div>
