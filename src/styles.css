@@ -1,15 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
 :root {
-  --color-primary: #007bff;
-  --color-body: #333;
-  --color-footer: #333;
-  --bg-gray: #f4f4f4;
+  --color-primary: #52ae32;
+  --color-primary-light: #ddefd6;
+  --color-primary-darken: #609e66;
+  --color-body: #51565d;
+  --color-footer: #66797f;
+  --bg-gray: #f3f4f6;
 }
 
 body,
 html {
   font-family: 'Tahoma', 'Helvetica Neue', sans-serif;
-  background-color: rgb(242, 242, 242);
+  background-color: var(--bg-gray);
   color: var(--color-body);
   margin: 0;
   padding: 0;
@@ -24,7 +26,7 @@ a {
 }
 
 a:hover {
-  color: #0056b3;
+  color: var(--color-primary-darken);
 }
 
 fieldset {
@@ -43,30 +45,37 @@ fieldset {
   display: inline;
 }
 
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  margin-top: 20px;
+}
+
+.forward-icon {
+  font-size: small;
+}
+
 button {
+  box-sizing: border-box;
   padding: 10px 20px;
-  background-color: rgb(105, 172, 68);
+  background-color: var(--color-primary);
   text-transform: uppercase;
   color: #fff;
   font-weight: bold;
   border: none;
   cursor: pointer;
-  transition:
-    background-color 0.3s,
+  transition: background-color 0.3s;
 
   &:hover {
-    background-color: rgb(81, 132, 52);
+    background-color: var(--color-primary-darken);
   }
-}
-.forward-icon {
-  font-size: small;
 }
 
 button.secondary {
-  background-color: rgba(0, 0, 0, 0);
-  padding: 8px 18px;
-  border: 2px solid #afafaf;
-  color: #afafaf;
+  background-color: transparent;
+  border: 2px solid var(--color-body);
+  color: var(--color-body);
   font-weight: bold;
 
   &:hover {
@@ -78,18 +87,8 @@ button:disabled {
   background-color: #ccc;
   color: #fff;
   cursor: not-allowed;
-  box-shadow: none;
 }
 
-/* Style form labels */
-.form-group label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-  margin-top: 20px;
-}
-
-/* Style form inputs */
 .form-control {
   box-sizing: border-box;
   width: 100%;
@@ -100,9 +99,18 @@ button:disabled {
   font-size: inherit;
 }
 
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%23999'><polygon points='5,5 15,5 10,12'/></svg>")
+    no-repeat right 10px center;
+}
+
 .form-control:disabled {
-  background-color: #f4f4f4;
-  color: #999;
+  background-color: var(--bg-gray);
+  color: #ccc;
   cursor: not-allowed;
 }
 
@@ -127,7 +135,7 @@ button:disabled {
 }
 
 .error-message {
-  color: #ff0000;
+  color: #b60000;
   font-size: 12px;
   margin-top: 5px;
   margin-bottom: 20px;
@@ -157,29 +165,4 @@ button:disabled {
   word-wrap: normal;
   white-space: nowrap;
   direction: ltr;
-}
-
-select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  cursor: pointer;
-  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%23999'><polygon points='5,5 15,5 10,12'/></svg>")
-    no-repeat right 10px center;
-}
-
-/* Optional: Style for option elements */
-select option {
-  background-color: #fff;
-  /* Background color for options */
-  color: #333;
-  /* Text color for options */
-}
-
-/* Optional: Hover effect for option elements */
-select option:hover {
-  background-color: #007bff;
-  /* Background color on hover */
-  color: #fff;
-  /* Text color on hover */
 }

@@ -1,5 +1,5 @@
 footer {
-  background-color: rgb(72, 89, 99);
+  background-color: var(--color-footer);
   color: #fff;
   flex-basis: content;
 }
