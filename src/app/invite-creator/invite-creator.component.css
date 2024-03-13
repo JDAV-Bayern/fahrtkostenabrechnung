@@ -1,0 +1,6 @@
+.form-content {
+  max-width: min(95vw, 600px);
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+}
