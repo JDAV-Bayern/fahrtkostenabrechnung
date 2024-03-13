@@ -91,17 +91,39 @@ button:disabled {
 
 /* Style form inputs */
 .form-control {
+  box-sizing: border-box;
+  width: 100%;
   padding: 10px;
   margin-bottom: 3px;
   border: 1px solid #ccc;
   border-radius: 0;
-  font-family: inherit;
   font-size: inherit;
 }
 
-input.form-control {
-  box-sizing: border-box;
-  width: 100%;
+.form-control:disabled {
+  background-color: #f4f4f4;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.ng-select.form-select .ng-select-container {
+  height: auto;
+  padding: 10px;
+  margin-bottom: 3px;
+  border-radius: 0;
+
+  & .ng-value-container {
+    padding: 0;
+    & .ng-input {
+      top: auto;
+      & input {
+        font-size: inherit;
+      }
+    }
+  }
+  & .ng-arrow-wrapper {
+    padding: 0;
+  }
 }
 
 .error-message {
@@ -137,60 +159,13 @@ input.form-control {
   direction: ltr;
 }
 
-/* Reset default styles */
 select {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  background: transparent;
-  border: none;
-  outline: none;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  width: 100%;
   cursor: pointer;
-  background-color: #fff;
-  /* Background color for the select box */
-  color: #333;
-  /* Text color */
-  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%23333'><polygon points='5,5 15,5 10,12'/></svg>")
-    no-repeat right center;
-  background-size: 20px 20px;
-  /* Adjust the size of the icon */
-}
-
-/* Custom dropdown arrow */
-select::after {
-  content: '\25BC';
-  /* Downward arrow character */
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  color: #555;
-  /* Arrow color */
-}
-
-/* Hover effect */
-select:hover {
-  border-color: #999;
-  /* Border color on hover */
-}
-
-/* Focus effect */
-select:focus {
-  border-color: #007bff;
-  /* Border color on focus */
-}
-
-/* Disabled style */
-select:disabled {
-  background-color: #f4f4f4;
-  /* Disabled background color */
-  color: #999;
-  /* Disabled text color */
-  cursor: not-allowed;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%23999'><polygon points='5,5 15,5 10,12'/></svg>")
+    no-repeat right 10px center;
 }
 
 /* Optional: Style for option elements */
