@@ -9,27 +9,9 @@
 .cdk-drop-list-receiving:empty {
   border: 2px dashed #ccc;
 }
-.add-button {
-  display: flex;
-  justify-self: center;
-  align-items: center;
-}
-
-.add-button#span {
-  text-align: center;
-  vertical-align: middle;
-  margin: auto;
-  padding: 0;
-}
-
-.extra-button {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-left: 30px;
-}
 
 .heading {
   display: flex;
   align-items: center;
+  gap: 30px;
 }

@@ -4,14 +4,9 @@
     <button
       *ngIf="extraButton"
       (click)="onClickExtraButton($event)"
-      class="mar extra-button"
+      class="icon"
     >
-      <span
-        style="margin-right: 10px; font-size: 11px"
-        class="material-symbols-outlined"
-      >
-        swap_horiz
-      </span>
+      <span class="material-symbols-outlined">swap_horiz</span>
       {{ extraButton }}
     </button>
   </h3>
@@ -40,13 +35,8 @@
       />
     </div>
   </div>
-  <button (click)="openAddExpenseDialog()" class="add-button">
-    <span
-      style="margin-right: 10px; font-size: 11px"
-      class="material-symbols-outlined"
-    >
-      add
-    </span>
+  <button (click)="openAddExpenseDialog()" class="icon">
+    <span class="material-symbols-outlined">add</span>
     Auslage hinzufügen
   </button>
 

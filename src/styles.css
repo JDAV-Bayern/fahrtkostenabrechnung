@@ -52,10 +52,6 @@ fieldset {
   margin-top: 20px;
 }
 
-.forward-icon {
-  font-size: small;
-}
-
 button {
   box-sizing: border-box;
   padding: 10px 20px;
@@ -70,6 +66,13 @@ button {
   &:hover {
     background-color: var(--color-primary-darken);
   }
+}
+
+button.icon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 20px;
 }
 
 button.secondary {
