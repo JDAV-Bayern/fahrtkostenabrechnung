@@ -43,13 +43,16 @@
       </p>
     </fieldset>
   </div>
-  <button submitButton type="submit" [disabled]="loading || form.parent?.invalid" (click)="onSubmit()">
+  <button
+    submitButton
+    type="submit"
+    [disabled]="loading || form.parent?.invalid"
+    (click)="onSubmit()"
+  >
     <app-progress-indicator *ngIf="loading"></app-progress-indicator>
     <span *ngIf="!loading">PDF herunterladen</span>
   </button>
 </app-form-card>
-
-
 
 <div style="position: absolute; top: 2000px">
   <app-pdf-view

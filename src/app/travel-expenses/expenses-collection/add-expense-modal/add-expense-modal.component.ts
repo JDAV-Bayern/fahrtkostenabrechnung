@@ -15,6 +15,7 @@ import { Direction, ExpenseType } from 'src/domain/expense';
 
 export interface ExpenseDialogData {
   direction: Direction;
+  showPlan: boolean;
   form?: FormGroup;
 }
 
@@ -26,6 +27,7 @@ export interface ExpenseDialogData {
 export class AddExpenseModalComponent {
   direction: Direction;
   form: FormGroup<ExpenseForm>;
+  showPlan: boolean;
 
   constructor(
     private controlService: ReimbursementControlService,
@@ -34,6 +36,7 @@ export class AddExpenseModalComponent {
     private formBuilder: NonNullableFormBuilder
   ) {
     this.direction = data.direction;
+    this.showPlan = data.showPlan;
     this.form = data.form || this.controlService.getExpenseFormGroup();
   }
 

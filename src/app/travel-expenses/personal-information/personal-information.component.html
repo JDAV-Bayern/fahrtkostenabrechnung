@@ -48,7 +48,7 @@
       <label for="section">Sektion</label>
       <ng-select
         id="section"
-        class="combo-box"
+        class="form-select"
         formControlName="sectionId"
         required
         [items]="sections"
@@ -56,7 +56,6 @@
         bindLabel="name"
         [groupBy]="groupByFn"
         [editableSearchTerm]="true"
-        [inputAttrs]="{ style: 'margin-top: 4px' }"
       />
       <div
         *ngIf="sectionId.hasError('required') && sectionId.touched"

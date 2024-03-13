@@ -1,14 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 :root {
-  --color-primary: #007bff;
-  --color-body: #333;
-  --color-footer: #333;
-  --bg-gray: #f4f4f4;
+  --color-primary: #52ae32;
+  --color-primary-light: #ddefd6;
+  --color-primary-darken: #609e66;
+  --color-body: #51565d;
+  --color-footer: #66797f;
+  --bg-gray: #f3f4f6;
 }
 
 body,
 html {
-  font-family: 'Helvetica Neue', sans-serif;
+  font-family: 'Tahoma', 'Helvetica Neue', sans-serif;
   background-color: var(--bg-gray);
   color: var(--color-body);
   margin: 0;
@@ -24,7 +26,7 @@ a {
 }
 
 a:hover {
-  color: #0056b3;
+  color: var(--color-primary-darken);
 }
 
 fieldset {
@@ -43,27 +45,41 @@ fieldset {
   display: inline;
 }
 
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  margin-top: 20px;
+}
+
 button {
+  box-sizing: border-box;
   padding: 10px 20px;
-  background-color: #4caf50;
+  background-color: var(--color-primary);
+  text-transform: uppercase;
   color: #fff;
+  font-weight: bold;
   border: none;
-  border-radius: 5px;
   cursor: pointer;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition:
-    background-color 0.3s,
-    box-shadow 0.3s;
+  transition: background-color 0.3s;
 
   &:hover {
-    background-color: #45a049;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    background-color: var(--color-primary-darken);
   }
 }
 
+button.icon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 20px;
+}
+
 button.secondary {
-  background-color: #e3e3e3;
-  color: #171717;
+  background-color: transparent;
+  border: 2px solid var(--color-body);
+  color: var(--color-body);
+  font-weight: bold;
 
   &:hover {
     background-color: #d8d8d8;
@@ -74,32 +90,55 @@ button:disabled {
   background-color: #ccc;
   color: #fff;
   cursor: not-allowed;
-  box-shadow: none;
 }
 
-/* Style form labels */
-.form-group label {
-  display: block;
-  font-weight: bold;
-  margin-bottom: 5px;
-  margin-top: 20px;
-}
-
-/* Style form inputs */
 .form-control {
+  box-sizing: border-box;
+  width: 100%;
   padding: 10px;
   margin-bottom: 3px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 0;
+  font-size: inherit;
 }
 
-input.form-control {
-  box-sizing: border-box;
-  width: 100%;
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%23999'><polygon points='5,5 15,5 10,12'/></svg>")
+    no-repeat right 10px center;
+}
+
+.form-control:disabled {
+  background-color: var(--bg-gray);
+  color: #ccc;
+  cursor: not-allowed;
+}
+
+.ng-select.form-select .ng-select-container {
+  height: auto;
+  padding: 10px;
+  margin-bottom: 3px;
+  border-radius: 0;
+
+  & .ng-value-container {
+    padding: 0;
+    & .ng-input {
+      top: auto;
+      & input {
+        font-size: inherit;
+      }
+    }
+  }
+  & .ng-arrow-wrapper {
+    padding: 0;
+  }
 }
 
 .error-message {
-  color: #ff0000;
+  color: #b60000;
   font-size: 12px;
   margin-top: 5px;
   margin-bottom: 20px;
@@ -129,76 +168,4 @@ input.form-control {
   word-wrap: normal;
   white-space: nowrap;
   direction: ltr;
-}
-
-/* Reset default styles */
-select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background: transparent;
-  border: none;
-  outline: none;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  cursor: pointer;
-  background-color: #fff;
-  /* Background color for the select box */
-  color: #333;
-  /* Text color */
-  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%23333'><polygon points='5,5 15,5 10,12'/></svg>")
-    no-repeat right center;
-  background-size: 20px 20px;
-  /* Adjust the size of the icon */
-}
-
-/* Custom dropdown arrow */
-select::after {
-  content: '\25BC';
-  /* Downward arrow character */
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  color: #555;
-  /* Arrow color */
-}
-
-/* Hover effect */
-select:hover {
-  border-color: #999;
-  /* Border color on hover */
-}
-
-/* Focus effect */
-select:focus {
-  border-color: #007bff;
-  /* Border color on focus */
-}
-
-/* Disabled style */
-select:disabled {
-  background-color: #f4f4f4;
-  /* Disabled background color */
-  color: #999;
-  /* Disabled text color */
-  cursor: not-allowed;
-}
-
-/* Optional: Style for option elements */
-select option {
-  background-color: #fff;
-  /* Background color for options */
-  color: #333;
-  /* Text color for options */
-}
-
-/* Optional: Hover effect for option elements */
-select option:hover {
-  background-color: #007bff;
-  /* Background color on hover */
-  color: #fff;
-  /* Text color on hover */
 }

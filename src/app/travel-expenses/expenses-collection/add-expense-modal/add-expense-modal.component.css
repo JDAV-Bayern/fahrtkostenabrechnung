@@ -7,6 +7,12 @@
   align-items: center;
 }
 
+.model-content .button-container {
+  display: flex;
+  justify-content: right;
+  margin-top: 20px;
+}
+
 .means-of-travel-buttons-container {
   display: flex;
   flex-direction: column;
@@ -22,15 +28,18 @@
 .formcontainer {
   width: 100%;
 }
+
 .passengers-container {
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-bottom: 20px;
 }
+
 .passengers-container input {
   margin-left: 10px;
 }
+
 .passengers-container span {
   margin-left: 10px;
   margin-top: 0;
