@@ -1,27 +1,26 @@
 header {
-  background-color: #fff;
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
-  padding: 10px 10px;
+  gap: 10px;
+  background-color: #fff;
   flex-basis: content;
+  padding: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .logo img {
   max-height: 80px;
-  max-width: 40vw;
+  max-width: 30vw;
 }
 
-.user-info {
-  font-weight: bold;
-  font-size: x-large;
-  padding-left: 10px;
-  padding-right: 10px;
-  display: flex;
+.heading {
+  font-size: large;
 }
 
 .delete-data {
+  margin: 0;
   font-weight: normal;
   font-size: small;
   display: flex;
@@ -29,4 +28,10 @@ header {
   align-items: center;
   cursor: pointer;
   font-style: italic;
+}
+
+@media (min-width: 640px) {
+  .heading {
+    font-size: x-large;
+  }
 }
