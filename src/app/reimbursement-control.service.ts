@@ -59,7 +59,10 @@ export class ReimbursementControlService {
       zipCode: ['', [Validators.required, Validators.pattern(PLZ_PATTERN)]],
       city: ['', Validators.required],
       iban: ['', [Validators.required, validateIBAN]],
-      bic: ['', [Validators.required, Validators.pattern(BIC_PATTERN)]]
+      bic: [
+        { value: '', disabled: true },
+        [Validators.required, Validators.pattern(BIC_PATTERN)]
+      ]
     }),
     expenses: this.formBuilder.group(
       {
@@ -185,8 +188,11 @@ export class ReimbursementControlService {
   }
 
   deleteStoredData(): void {
-    localStorage.removeItem('travelExpenses');
     this.form.reset();
+    Object.values(this.expensesStep.controls).forEach(expenses =>
+      expenses.clear()
+    );
+    localStorage.removeItem('travelExpenses');
   }
 
   getExpense(value: ExpenseFormValue): Expense {
