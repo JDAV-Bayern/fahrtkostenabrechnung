@@ -209,6 +209,8 @@ export class SubmissionOverviewComponent {
       }
     }
 
+    combinedPdfDocument.setSubject(JSON.stringify(this.reimbursement));
+
     const pdfBytes = await combinedPdfDocument.save();
     const file = new Blob([pdfBytes], { type: 'application/ pdf' });
     const fileURL = URL.createObjectURL(file);
