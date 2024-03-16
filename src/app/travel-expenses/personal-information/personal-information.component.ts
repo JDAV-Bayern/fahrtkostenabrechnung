@@ -41,6 +41,12 @@ export class PersonalInformationComponent {
     });
   }
 
+  ngOnInit() {
+    if (!this.controlService.courseStep.valid) {
+      this.router.navigate(['kurs']);
+    }
+  }
+
   get givenName() {
     return this.form.controls.givenName;
   }

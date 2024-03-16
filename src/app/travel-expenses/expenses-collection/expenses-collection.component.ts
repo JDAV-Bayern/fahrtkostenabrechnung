@@ -21,6 +21,15 @@ export class ExpensesCollectionComponent {
     this.form = this.controlService.expensesStep;
   }
 
+  ngOnInit() {
+    if (!this.controlService.courseStep.valid) {
+      this.router.navigate(['kurs']);
+    }
+    if (!this.controlService.participantStep.valid) {
+      this.router.navigate(['teilnehmer-in']);
+    }
+  }
+
   getTotal() {
     const reimbursement = this.controlService.getReimbursement();
     return this.expenseService.getTotal(reimbursement).toFixed(2);
