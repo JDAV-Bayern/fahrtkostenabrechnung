@@ -9,9 +9,10 @@ import {
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   ExpenseForm,
+  ExpenseFormValue,
   ReimbursementControlService
 } from 'src/app/reimbursement-control.service';
-import { Direction, ExpenseType } from 'src/domain/expense';
+import { Direction, Expense, ExpenseType } from 'src/domain/expense';
 
 export interface ExpenseDialogData {
   direction: Direction;
@@ -29,6 +30,8 @@ export class AddExpenseModalComponent {
   form: FormGroup<ExpenseForm>;
   showPlan: boolean;
 
+  initialFormValue: ExpenseFormValue;
+
   constructor(
     private controlService: ReimbursementControlService,
     private dialogRef: MatDialogRef<AddExpenseModalComponent>,
@@ -38,6 +41,14 @@ export class AddExpenseModalComponent {
     this.direction = data.direction;
     this.showPlan = data.showPlan;
     this.form = data.form || this.controlService.getExpenseFormGroup();
+
+    this.initialFormValue = this.form.getRawValue();
+
+    this.dialogRef.afterClosed().subscribe(() => {
+      if (!this.form.valid) {
+        this.form.reset(this.initialFormValue);
+      }
+    });
   }
 
   get type() {
