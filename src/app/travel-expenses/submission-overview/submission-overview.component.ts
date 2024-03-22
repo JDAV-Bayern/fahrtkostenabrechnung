@@ -41,18 +41,6 @@ export class SubmissionOverviewComponent {
     this.form = controlService.overviewStep;
   }
 
-  ngOnInit() {
-    if (!this.controlService.courseStep.valid) {
-      this.router.navigate(['kurs']);
-    }
-    if (!this.controlService.participantStep.valid) {
-      this.router.navigate(['teilnehmer-in']);
-    }
-    if (!this.controlService.expensesStep.valid) {
-      this.router.navigate(['auslagen']);
-    }
-  }
-
   get reimbursement() {
     return this.controlService.getReimbursement();
   }
