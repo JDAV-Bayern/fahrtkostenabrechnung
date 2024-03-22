@@ -7,6 +7,7 @@ import { DataProtectionComponent } from './info/data-protection/data-protection.
 import { InfoComponent } from './info/info.component';
 import { TravelExpensesComponent } from './travel-expenses/travel-expenses.component';
 import { CourseDataComponent } from './travel-expenses/course-data/course-data.component';
+import { courseGuard, expensesGuard, participantGuard } from './route-guards';
 
 const routes: Routes = [
   {
@@ -38,15 +39,18 @@ const routes: Routes = [
       },
       {
         path: 'teilnehmer-in',
-        component: PersonalInformationComponent
+        component: PersonalInformationComponent,
+        canActivate: [courseGuard]
       },
       {
         path: 'auslagen',
-        component: ExpensesCollectionComponent
+        component: ExpensesCollectionComponent,
+        canActivate: [courseGuard, participantGuard]
       },
       {
         path: 'zusammenfassung',
-        component: SubmissionOverviewComponent
+        component: SubmissionOverviewComponent,
+        canActivate: [courseGuard, participantGuard, expensesGuard]
       }
     ]
   }
