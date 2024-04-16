@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import jsPDF from 'jspdf';
 import * as imageprocessor from 'ts-image-processor';
 import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
@@ -7,7 +6,7 @@ import { PDFDocument } from 'pdf-lib';
 import { ReimbursementValidationService } from 'src/app/reimbursement.validation.service';
 import { NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
 import { ExpenseService } from 'src/app/expense.service';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { FinishedDialogComponent } from './finished-dialog/finished-dialog.component';
 import { NgFor, NgIf } from '@angular/common';
 import { FormCardComponent } from 'src/app/form-card/form-card.component';
@@ -24,7 +23,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     NgIf,
     NgFor,
     ReactiveFormsModule,
-    MatDialogModule,
+    DialogModule,
     NgxFileDropModule,
     FormCardComponent,
     ProgressIndicatorComponent,
@@ -48,11 +47,10 @@ export class SubmissionOverviewComponent {
   });
 
   constructor(
-    private readonly router: Router,
     private readonly expenseService: ExpenseService,
     private readonly controlService: ReimbursementControlService,
     private readonly validationService: ReimbursementValidationService,
-    private readonly dialog: MatDialog
+    private readonly dialog: Dialog
   ) {
     this.form = controlService.overviewStep;
   }
@@ -241,7 +239,6 @@ export class SubmissionOverviewComponent {
     this.loading = false;
 
     this.dialog.open(FinishedDialogComponent, {
-      width: 'min(95vw, 700px)',
       data: {
         givenName: this.reimbursement.participant.givenName,
         courseName: this.reimbursement.course.name,

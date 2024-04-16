@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import {
   ExpenseForm,
   ReimbursementControlService
@@ -25,7 +25,7 @@ import { ExpenseListRowComponent } from '../expense-list-row/expense-list-row.co
     ReactiveFormsModule,
     CdkDrag,
     CdkDropList,
-    MatDialogModule,
+    DialogModule,
     ExpenseListRowComponent
   ]
 })
@@ -49,7 +49,7 @@ export class ExpenseListComponent {
   formArray!: FormArray<FormGroup<ExpenseForm>>;
 
   constructor(
-    public dialog: MatDialog,
+    public dialog: Dialog,
     private readonly controlService: ReimbursementControlService
   ) {}
 
@@ -80,12 +80,8 @@ export class ExpenseListComponent {
       showPlan: this.showPlan
     };
     this.dialog
-      .open(AddExpenseModalComponent, {
-        data,
-        width: 'min(95vw, 700px)'
-      })
-      .afterClosed()
-      .subscribe((result: FormGroup<ExpenseForm>) => {
+      .open<FormGroup<ExpenseForm>>(AddExpenseModalComponent, { data })
+      .closed.subscribe(result => {
         if (result) {
           this.formArray.push(result);
         }

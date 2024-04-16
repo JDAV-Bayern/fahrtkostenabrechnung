@@ -6,25 +6,5 @@
 
 .file-list-entry {
   display: flex;
-  flex-direction: row;
   align-items: center;
-}
-
-.fileupload {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
-  text-transform: none;
-}
-
-.textarea {
-  width: -webkit-fill-available;
-}
-
-::-webkit-resizer {
-  display: none;
 }

@@ -1,12 +1,8 @@
 <app-form-card prevStep="auslagen" [formGroup]="form">
   <div class="form-group">
     <label for="note">Bemerkung zu deiner Abrechnung</label>
-    <textarea
-      class="form-control textarea"
-      rows="4"
-      formControlName="note"
-      id="note"
-    ></textarea>
+    <textarea class="form-control" rows="4" formControlName="note" id="note">
+    </textarea>
   </div>
 
   <h2>Zusammenfassung</h2>
@@ -24,7 +20,7 @@
         ngx-file-drop-content-tmp
         let-openFileSelector="openFileSelector"
       >
-        <button class="fileupload" (click)="openFileSelector()">
+        <button class="tertiary icon" (click)="openFileSelector()">
           <span class="material-symbols-outlined">&#xe9fc;</span>
           Beleg hinzufügen
         </button>
@@ -34,12 +30,10 @@
     <fieldset *ngIf="files.length" class="files-list">
       <legend style="color: #999">Belege</legend>
       <p class="file-list-entry" *ngFor="let file of files">
-        <span
-          style="cursor: pointer"
-          class="material-symbols-outlined"
-          (click)="removeFile(file.name)"
-          >&#xe872;</span
-        >{{ file.name }}
+        <button class="tertiary icon" (click)="removeFile(file.name)">
+          <span class="material-symbols-outlined">&#xe872;</span>
+        </button>
+        {{ file.name }}
       </p>
     </fieldset>
   </div>

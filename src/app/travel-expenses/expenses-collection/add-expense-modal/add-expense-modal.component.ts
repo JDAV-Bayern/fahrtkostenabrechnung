@@ -8,10 +8,10 @@ import {
   ReactiveFormsModule
 } from '@angular/forms';
 import {
-  MAT_DIALOG_DATA,
-  MatDialogModule,
-  MatDialogRef
-} from '@angular/material/dialog';
+  DIALOG_DATA,
+  DialogModule,
+  DialogRef
+} from '@angular/cdk/dialog';
 import {
   ExpenseForm,
   ExpenseFormValue,
@@ -30,7 +30,7 @@ export interface ExpenseDialogData {
   templateUrl: './add-expense-modal.component.html',
   styleUrls: ['./add-expense-modal.component.css'],
   standalone: true,
-  imports: [NgIf, ReactiveFormsModule, MatDialogModule]
+  imports: [NgIf, ReactiveFormsModule, DialogModule]
 })
 export class AddExpenseModalComponent {
   direction: Direction;
@@ -41,8 +41,8 @@ export class AddExpenseModalComponent {
 
   constructor(
     private controlService: ReimbursementControlService,
-    private dialogRef: MatDialogRef<AddExpenseModalComponent>,
-    @Inject(MAT_DIALOG_DATA) data: ExpenseDialogData,
+    private dialogRef: DialogRef<FormGroup<ExpenseForm>>,
+    @Inject(DIALOG_DATA) data: ExpenseDialogData,
     private formBuilder: NonNullableFormBuilder
   ) {
     this.direction = data.direction;
@@ -51,7 +51,7 @@ export class AddExpenseModalComponent {
 
     this.initialFormValue = this.form.getRawValue();
 
-    this.dialogRef.afterClosed().subscribe(() => {
+    this.dialogRef.closed.subscribe(() => {
       if (!this.form.valid) {
         this.form.reset(this.initialFormValue);
       }

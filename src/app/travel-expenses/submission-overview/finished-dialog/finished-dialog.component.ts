@@ -1,11 +1,12 @@
 import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { DIALOG_DATA, DialogModule } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'app-finished-dialog',
   templateUrl: './finished-dialog.component.html',
   styleUrls: ['./finished-dialog.component.css'],
-  standalone: true
+  standalone: true,
+  imports: [DialogModule]
 })
 export class FinishedDialogComponent {
   private givenName: string;
@@ -13,7 +14,7 @@ export class FinishedDialogComponent {
   private courseName: string;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA)
+    @Inject(DIALOG_DATA)
     {
       courseName,
       courseCode,
