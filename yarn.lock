@@ -1321,6 +1321,13 @@
   resolved "https://registry.yarnpkg.com/@colors/colors/-/colors-1.5.0.tgz#bb504579c1cae923e6576a4f5da43d25f97bdbd9"
   integrity sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==
 
+"@danielmoncada/angular-datetime-picker@^16.1.0":
+  version "16.1.0"
+  resolved "https://registry.yarnpkg.com/@danielmoncada/angular-datetime-picker/-/angular-datetime-picker-16.1.0.tgz#83a5d336fe9d4a885ad57f858eeba18bf53dcddd"
+  integrity sha512-zxBZcwKceuOSHbmtVRIoFPDO1cH4QmXaQxGVOq+hyQ4ll5H23K2QvqQvwxcJYrC8DloiLBdAENKSWVv5BCjRvw==
+  dependencies:
+    tslib "^2.3.1"
+
 "@discoveryjs/json-ext@0.5.7":
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
@@ -2326,10 +2333,10 @@
     "@material/theme" "15.0.0-canary.bc9ae6c9c.0"
     tslib "^2.1.0"
 
-"@ng-select/ng-select@^12.0.7":
-  version "12.0.7"
-  resolved "https://registry.yarnpkg.com/@ng-select/ng-select/-/ng-select-12.0.7.tgz#c3cb0b2a701c405a3b2e3ed40b1d081e0795b763"
-  integrity sha512-Eht1zlLP0DJxiXcKnq3aY/EJ8odomgU0hM0BJoPY6oX3XFHndtFtdPxlZfhVtQn+FwyDEh7306rRx6digxVssA==
+"@ng-select/ng-select@^11.2.0":
+  version "11.2.0"
+  resolved "https://registry.yarnpkg.com/@ng-select/ng-select/-/ng-select-11.2.0.tgz#33048ddeb6a524078f3134167d75137239bf1c6e"
+  integrity sha512-lTyw93kFdKGecp9eKmOP0PQSCaAJS8DCt4D60ns055+ixvRSp2fuXAuJUvn1e3gAsvpZor37osmYlOJ4LYwYIA==
   dependencies:
     tslib "^2.3.1"
 
