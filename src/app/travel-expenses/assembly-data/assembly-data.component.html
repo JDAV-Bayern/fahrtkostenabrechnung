@@ -1,0 +1,16 @@
+<app-form-card>
+  <fieldset [formGroup]="form">
+    <h2>Fahrtkostenerstattung Landesjugendversammlung</h2>
+    <p>
+      Du füllst gerade eine Fahrtkostenerstattung für die
+      Landesjugendversammlung (LJV) aus. Wenn das nicht richtig ist, kannst du
+      stattdessen zum Formular für Kurse wechseln und eine Kursnummmer eingeben.
+    </p>
+    <div class="button-group">
+      <button routerLink="/teilnehmer_in">Fahrtkostenformular beginnen</button>
+      <button class="secondary" routerLink="/kurs" (click)="onSecondarClick()">
+        Zu Kurs wechseln
+      </button>
+    </div>
+  </fieldset>
+</app-form-card>

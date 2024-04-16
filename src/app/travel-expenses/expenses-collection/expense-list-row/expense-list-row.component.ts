@@ -2,11 +2,9 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { AddExpenseModalComponent } from '../add-expense-modal/add-expense-modal.component';
 import { FormGroup } from '@angular/forms';
-import {
-  ExpenseForm,
-  ReimbursementControlService
-} from 'src/app/reimbursement-control.service';
+import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
 import { ExpenseService } from 'src/app/expense.service';
+import { ExpenseForm } from 'src/app/reimbursement-forms';
 
 @Component({
   selector: 'app-expense-list-row',

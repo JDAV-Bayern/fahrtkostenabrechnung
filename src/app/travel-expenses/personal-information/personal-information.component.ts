@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
 import { PlzService } from 'src/app/plz.service';
 import { Section } from 'src/domain/section';
@@ -27,7 +27,6 @@ export class PersonalInformationComponent {
   sections: Section[] = [];
 
   constructor(
-    private readonly router: Router,
     private readonly plzService: PlzService,
     private readonly sectionService: SectionService,
     public controlService: ReimbursementControlService
@@ -79,6 +78,19 @@ export class PersonalInformationComponent {
 
   get bic() {
     return this.form.controls.bic;
+  }
+
+  get prevStep() {
+    switch (this.controlService.meetingStep.value.type) {
+      case 'course':
+        return 'kurs';
+      case 'assembly':
+        return 'ljv';
+      case 'committee':
+        return 'gremium';
+      default:
+        return 'kurs';
+    }
   }
 
   groupByFn(item: Section) {

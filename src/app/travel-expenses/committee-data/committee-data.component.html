@@ -1,0 +1,71 @@
+<app-form-card nextStep="teilnehmer_in" [nextDisabled]="form.invalid">
+  <fieldset [formGroup]="form">
+    <h1>Angaben zur Reise</h1>
+    <p>
+      <b>Hinweis:</b> Dieses Formular ist nur für Gremien der JDAV Bayern und
+      ihrer Bezirke (Landesjugendleitung, Landesjugendausschuss,
+      Bezirksjugendleitung, ...) gültig. Über dieses Formular eingereichte Kurse
+      können nicht berücksichtigt werden. Bitte verwende stattdessen das
+      <a routerLink="/kurs">Formular für Kurse</a>.
+    </p>
+
+    <div class="form-group">
+      <label for="purpose">Zweck der Reise</label>
+      <input
+        type="text"
+        id="purpose"
+        formControlName="name"
+        class="form-control"
+        required
+      />
+      <div
+        *ngIf="name.hasError('required') && name.touched"
+        class="error-message"
+      >
+        Bitte gib den Zweck deiner Reise an.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="location">Ort der Reise</label>
+      <input
+        type="text"
+        id="location"
+        formControlName="location"
+        class="form-control"
+        required
+      />
+      <div
+        *ngIf="location.hasError('required') && location.touched"
+        class="error-message"
+      >
+        Bitte gib den Zielort deiner Reise an.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="period">Zeitraum</label>
+      <input
+        type="text"
+        id="period"
+        formControlName="period"
+        class="form-control"
+        [owlDateTime]="dt"
+        [owlDateTimeTrigger]="dt"
+        selectMode="range"
+        required
+      />
+      <owl-date-time
+        pickerMode="dialog"
+        [firstDayOfWeek]="1"
+        #dt
+      ></owl-date-time>
+      <div
+        *ngIf="period.hasError('owlRequiredDateTimeRange') && period.touched"
+        class="error-message"
+      >
+        Bitte gib den Zeitraum deiner Reise an.
+      </div>
+    </div>
+  </fieldset>
+</app-form-card>

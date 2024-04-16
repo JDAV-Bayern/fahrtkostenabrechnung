@@ -13,6 +13,13 @@ import { Reimbursement } from 'src/domain/reimbursement';
 import { anyRequired } from './forms/validators/any-required.validator';
 import { maxPlanExpenses } from './forms/validators/max-plan-expenses.validator';
 import { validateCourseCode } from './forms/validators/course-code.validator';
+import {
+  DateRange,
+  ExpenseForm,
+  FormValue,
+  MeetingForm
+} from './reimbursement-forms';
+import { Meeting, MeetingType } from 'src/domain/meeting';
 
 const PLZ_PATTERN = /^[0-9]{5}$/;
 const BIC_PATTERN = /^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/;
@@ -21,36 +28,27 @@ const SEPA_CODES =
   /^(BE|BG|DK|DE|EE|FI|FR|GR|GB|IE|IS|IT|HR|LV|LI|LT|LU|MT|MC|NL|NO|AT|PL|PT|RO|SM|SE|CH|SK|SI|ES|CZ|HU|CY)/;
 const BIC_REQUIRED = /^(MC|SM|CH)/;
 
-export type ExpenseForm = {
-  type: FormControl<ExpenseType | ''>;
-  origin: FormControl<string>;
-  destination: FormControl<string>;
-  distance?: FormControl<number>;
-  price?: FormControl<number>;
-  discountCard?: FormControl<string>;
-  carType?: FormControl<string>;
-  passengers?: FormArray<FormControl<string>>;
-};
-
-export type ExpenseFormValue = {
-  [K in keyof ExpenseForm]: Exclude<
-    ExpenseForm[K],
-    undefined
-  > extends FormControl<infer T>
-    ? T
-    : Exclude<ExpenseForm[K], undefined> extends FormArray<FormControl<infer T>>
-      ? T[]
-      : never;
-};
-
 @Injectable({
   providedIn: 'root'
 })
 export class ReimbursementControlService {
+  private courseCodeControl = this.formBuilder.control('', [
+    Validators.required,
+    validateCourseCode
+  ]);
   form = this.formBuilder.group({
-    course: this.formBuilder.group({
-      code: ['', [Validators.required, validateCourseCode]],
-      name: ['', Validators.required]
+    meeting: this.formBuilder.group<MeetingForm>({
+      type: this.formBuilder.control<MeetingType>(
+        'course',
+        Validators.required
+      ),
+      name: this.formBuilder.control('', Validators.required),
+      location: this.formBuilder.control('', Validators.required),
+      period: this.formBuilder.control<DateRange>(
+        [null, null],
+        Validators.required
+      ),
+      code: this.courseCodeControl
     }),
     participant: this.formBuilder.group({
       givenName: ['', Validators.required],
@@ -97,8 +95,8 @@ export class ReimbursementControlService {
     return this.form.controls.participant;
   }
 
-  get courseStep() {
-    return this.form.controls.course;
+  get meetingStep() {
+    return this.form.controls.meeting;
   }
 
   get expensesStep() {
@@ -113,8 +111,33 @@ export class ReimbursementControlService {
     return this.expensesStep.controls[direction];
   }
 
+  updateMeetingFormGroup(type: MeetingType) {
+    const form = this.meetingStep;
+    form.controls.type.setValue(type);
+
+    switch (type) {
+      case 'course':
+        form.addControl('code', this.courseCodeControl);
+        form.controls.location.disable();
+        form.controls.period.disable();
+        break;
+      case 'assembly':
+        form.removeControl('code');
+        form.controls.location.disable();
+        form.controls.period.disable();
+
+        form.controls.name.setValue('Landesjugendversammlung');
+        break;
+      case 'committee':
+        form.removeControl('code');
+        form.controls.location.enable();
+        form.controls.period.enable();
+        break;
+    }
+  }
+
   getExpenseFormGroup(type?: ExpenseType | '') {
-    const form = new FormGroup<ExpenseForm>({
+    const form = this.formBuilder.group<ExpenseForm>({
       type: this.formBuilder.control(type || '', Validators.required),
       origin: this.formBuilder.control('', Validators.required),
       destination: this.formBuilder.control('', Validators.required)
@@ -153,29 +176,38 @@ export class ReimbursementControlService {
     // parse JSON from local storage
     const storedData = localStorage.getItem('travelExpenses') || '{}';
     const storedValue = JSON.parse(storedData);
-    this.form.patchValue(storedValue);
+
+    // update meeting form group
+    if (storedValue.meeting?.type) {
+      this.updateMeetingFormGroup(storedValue.meeting.type);
+    }
 
     // create controls for form arrays
     if (storedValue.expenses) {
       for (let direction of ['inbound', 'onsite', 'outbound'] as Direction[]) {
         const expenses = storedValue.expenses[direction];
         if (expenses) {
-          const formArray = this.getExpenses(direction);
-          formArray.clear();
-          for (let expense of expenses) {
-            const formRecord = this.getExpenseFormGroup(expense.type);
-            formRecord.patchValue(expense);
-            if (expense.type === 'car') {
-              formRecord.setControl(
-                'passengers',
-                this.formBuilder.array(expense.passengers)
-              );
-            }
-            formArray.push(formRecord);
-          }
+          this.expensesStep.setControl(
+            direction,
+            this.formBuilder.array<FormGroup<ExpenseForm>>(
+              expenses.map((expense: any) => {
+                const formRecord = this.getExpenseFormGroup(expense.type);
+                formRecord.patchValue(expense);
+                if (expense.type === 'car') {
+                  formRecord.setControl(
+                    'passengers',
+                    this.formBuilder.array(expense.passengers)
+                  );
+                }
+                return formRecord;
+              })
+            )
+          );
         }
       }
     }
+
+    this.form.patchValue(storedValue);
 
     // mark controls with values as touched
     this.deepMarkAsDirty(this.form);
@@ -195,25 +227,26 @@ export class ReimbursementControlService {
     localStorage.removeItem('travelExpenses');
   }
 
-  getExpense(value: ExpenseFormValue): Expense {
+  getExpense(value: FormValue<ExpenseForm>): Expense {
     return value as Expense;
   }
 
   getReimbursement(): Reimbursement {
-    const v = this.form.getRawValue();
+    const participant = this.participantStep.getRawValue();
+    const expenses = this.expensesStep.getRawValue();
 
     return {
-      course: v.course,
+      meeting: this.meetingStep.value as Meeting,
       participant: {
-        ...v.participant,
-        sectionId: v.participant.sectionId || 0
+        ...participant,
+        sectionId: participant.sectionId || 0
       },
       expenses: {
-        inbound: v.expenses.inbound.map(this.getExpense),
-        onsite: v.expenses.onsite.map(this.getExpense),
-        outbound: v.expenses.outbound.map(this.getExpense)
+        inbound: expenses.inbound.map(this.getExpense),
+        onsite: expenses.onsite.map(this.getExpense),
+        outbound: expenses.outbound.map(this.getExpense)
       },
-      note: v.overview.note
+      note: this.overviewStep.controls.note.value
     };
   }
 

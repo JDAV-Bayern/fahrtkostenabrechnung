@@ -8,6 +8,7 @@ import { NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
 import { ExpenseService } from 'src/app/expense.service';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { FinishedDialogComponent } from './finished-dialog/finished-dialog.component';
+import { formatDate } from '@angular/common';
 import { NgFor, NgIf } from '@angular/common';
 import { FormCardComponent } from 'src/app/form-card/form-card.component';
 import { ProgressIndicatorComponent } from 'src/app/icons/progress-indicator/progress-indicator.component';
@@ -229,11 +230,26 @@ export class SubmissionOverviewComponent {
     const file = new Blob([pdfBytes], { type: 'application/ pdf' });
     const fileURL = URL.createObjectURL(file);
 
-    const link = document.createElement('a');
+    let fileName;
+    const meeting = this.reimbursement.meeting;
     const lastName = this.reimbursement.participant.familyName;
-    const courseCode = this.reimbursement.course.code;
+
+    switch (meeting.type) {
+      case 'course':
+        fileName = `Fahrtkostenabrechnung_${meeting.code}_${lastName}.pdf`;
+        break;
+      case 'assembly':
+        fileName = `Fahrtkostenabrechnung_LJV_${lastName}.pdf`;
+        break;
+      case 'committee':
+        const timestamp = formatDate(meeting.period[0], 'yyyyMMdd', 'de-DE');
+        fileName = `Fahrtkostenabrechnung_${lastName}_${timestamp}.pdf`;
+        break;
+    }
+
+    const link = document.createElement('a');
     link.href = fileURL;
-    link.download = `fka_${courseCode}_${lastName}.pdf`;
+    link.download = fileName;
     link.click();
     link.remove();
     this.loading = false;
@@ -241,8 +257,7 @@ export class SubmissionOverviewComponent {
     this.dialog.open(FinishedDialogComponent, {
       data: {
         givenName: this.reimbursement.participant.givenName,
-        courseName: this.reimbursement.course.name,
-        courseCode: this.reimbursement.course.code
+        meeting: this.reimbursement.meeting
       }
     });
   }

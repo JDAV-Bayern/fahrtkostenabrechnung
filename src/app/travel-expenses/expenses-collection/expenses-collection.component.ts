@@ -1,7 +1,6 @@
 import { CdkDrag, CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
 import { ExpenseService } from 'src/app/expense.service';
 import { NgIf } from '@angular/common';
@@ -25,7 +24,6 @@ export class ExpensesCollectionComponent {
   form;
 
   constructor(
-    private readonly router: Router,
     private readonly expenseService: ExpenseService,
     private readonly controlService: ReimbursementControlService
   ) {

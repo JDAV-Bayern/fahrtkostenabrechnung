@@ -1,9 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import {
-  ExpenseForm,
-  ReimbursementControlService
-} from 'src/app/reimbursement-control.service';
+import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
 import {
   AddExpenseModalComponent,
   ExpenseDialogData
@@ -11,6 +8,7 @@ import {
 import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Direction } from 'src/domain/expense';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
+import { ExpenseForm } from 'src/app/reimbursement-forms';
 import { NgFor, NgIf } from '@angular/common';
 import { ExpenseListRowComponent } from '../expense-list-row/expense-list-row.component';
 

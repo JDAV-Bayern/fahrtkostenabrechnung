@@ -8,11 +8,8 @@ import {
   ReactiveFormsModule
 } from '@angular/forms';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
-import {
-  ExpenseForm,
-  ExpenseFormValue,
-  ReimbursementControlService
-} from 'src/app/reimbursement-control.service';
+import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
+import { ExpenseForm, FormValue } from 'src/app/reimbursement-forms';
 import { Direction, ExpenseType } from 'src/domain/expense';
 
 export interface ExpenseDialogData {
@@ -33,7 +30,7 @@ export class AddExpenseModalComponent {
   form: FormGroup<ExpenseForm>;
   showPlan: boolean;
 
-  initialFormValue: ExpenseFormValue;
+  initialFormValue: FormValue<ExpenseForm>;
 
   constructor(
     private controlService: ReimbursementControlService,

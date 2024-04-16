@@ -20,7 +20,9 @@ export class CourseDataComponent {
     public route: ActivatedRoute,
     public controlService: ReimbursementControlService
   ) {
-    this.form = controlService.courseStep;
+    this.form = controlService.meetingStep;
+    this.controlService.updateMeetingFormGroup('course');
+
     const params = this.route.snapshot.queryParamMap;
     if (params.has('nummer') || params.has('name')) {
       this.form.patchValue({

@@ -1,7 +1,7 @@
 <div id="pdf-container">
-  <h1>Fahrtkostenabrechnung</h1>
+  <h1>Fahrtkostenabrechnung {{ meeting.type | meetingType }}</h1>
   <p>
-    <b>Datum: {{ getDate() }}</b>
+    <b>Datum: {{ now | date }}</b>
   </p>
   <img class="logo" src="data:image/png;base64,{{ getLogo() }}" />
   <p style="width: 312px">
@@ -11,16 +11,37 @@
   </p>
   <table style="width: 100%">
     <tr>
-      <td style="width: 50%">
+      <td *ngIf="meeting.type === 'course'" style="width: 50%">
         <h2>Kursdaten</h2>
         <table class="detailstable">
           <tr>
             <td>Kurs:</td>
-            <td>{{ course.name }}</td>
+            <td>{{ meeting.name }}</td>
           </tr>
           <tr>
             <td>Kursnummer:</td>
-            <td>{{ course.code }}</td>
+            <td>{{ meeting.code }}</td>
+          </tr>
+        </table>
+      </td>
+      <td *ngIf="meeting.type === 'committee'" style="width: 50%">
+        <h2>Reisedaten</h2>
+        <table class="detailstable">
+          <tr>
+            <td>Zweck:</td>
+            <td>{{ meeting.name }}</td>
+          </tr>
+          <tr>
+            <td>Ort:</td>
+            <td>{{ meeting.location }}</td>
+          </tr>
+          <tr>
+            <td>Beginn:</td>
+            <td>{{ meeting.period[0] | date: 'short' }}</td>
+          </tr>
+          <tr>
+            <td>Ende:</td>
+            <td>{{ meeting.period[1] | date: 'short' }}</td>
           </tr>
         </table>
       </td>

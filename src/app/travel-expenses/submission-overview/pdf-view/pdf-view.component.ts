@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common';
+import { DatePipe, NgFor, NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ExpenseService } from 'src/app/expense.service';
 import { SectionService } from 'src/app/section.service';
@@ -6,13 +6,14 @@ import { logoBase64 } from 'src/assets/logoBase64';
 import { Reimbursement } from 'src/domain/reimbursement';
 import { Section } from 'src/domain/section';
 import { PdfExpenseLineItemComponent } from '../pdf-expense-line-item/pdf-expense-line-item.component';
+import { MeetingTypePipe } from 'src/app/pipes/meeting-type.pipe';
 
 @Component({
   selector: 'app-pdf-view',
   templateUrl: './pdf-view.component.html',
   styleUrls: ['./pdf-view.component.css'],
   standalone: true,
-  imports: [NgIf, NgFor, PdfExpenseLineItemComponent]
+  imports: [NgIf, NgFor, DatePipe, MeetingTypePipe, PdfExpenseLineItemComponent]
 })
 export class PdfViewComponent {
   @Input({ required: true })
@@ -29,12 +30,16 @@ export class PdfViewComponent {
     private readonly sectionService: SectionService
   ) {}
 
-  get course() {
-    return this.reimbursement.course;
+  get meeting() {
+    return this.reimbursement.meeting;
   }
 
   get participant() {
     return this.reimbursement.participant;
+  }
+
+  get now() {
+    return new Date();
   }
 
   ngOnInit() {
@@ -47,16 +52,6 @@ export class PdfViewComponent {
 
   ngAfterViewInit() {
     this.fullyRendered.emit();
-  }
-
-  getDate() {
-    //Get date in the format DD.MM.YYYY
-    const date = new Date();
-    return date.toLocaleDateString('de-DE', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit'
-    });
   }
 
   getLogo() {

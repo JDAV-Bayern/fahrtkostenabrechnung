@@ -1,38 +1,54 @@
-import { Inject, Injectable, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   ActivatedRouteSnapshot,
   CanActivateFn,
-  UrlTree,
   createUrlTreeFromSnapshot
 } from '@angular/router';
 import { ReimbursementControlService } from './reimbursement-control.service';
+import { MeetingType } from 'src/domain/meeting';
 
 type FormKey =
-  | 'courseStep'
+  | 'meetingStep'
   | 'participantStep'
   | 'expensesStep'
   | 'overviewStep';
+
+type RouteOptions = string | { [key in MeetingType]: string };
 
 @Injectable({ providedIn: 'root' })
 class FormFinishedGuard {
   constructor(
     private readonly reimbursementControlService: ReimbursementControlService
   ) {}
-  canActivate(route: ActivatedRouteSnapshot, form: FormKey, routeTo: string) {
+  canActivate(
+    route: ActivatedRouteSnapshot,
+    form: FormKey,
+    routeTo: RouteOptions
+  ) {
     if (this.reimbursementControlService[form].valid) {
       return true;
     } else {
-      return createUrlTreeFromSnapshot(route, ['..', routeTo]);
+      let resolvedRoute = '';
+      if (typeof routeTo === 'string') {
+        resolvedRoute = routeTo;
+      } else {
+        const type =
+          this.reimbursementControlService.meetingStep.value.type || 'course';
+        resolvedRoute = routeTo[type];
+      }
+      return createUrlTreeFromSnapshot(route, ['..', resolvedRoute]);
     }
   }
 }
 
-function createGuard(form: FormKey, routeTo: string): CanActivateFn {
-  return (route, state) => {
-    return inject(FormFinishedGuard).canActivate(route, form, routeTo);
-  };
+function createGuard(form: FormKey, routeTo: RouteOptions): CanActivateFn {
+  return route => inject(FormFinishedGuard).canActivate(route, form, routeTo);
 }
 
-export const courseGuard = createGuard('courseStep', 'kurs');
-export const participantGuard = createGuard('participantStep', 'teilnehmer-in');
+export const meetingGuard = createGuard('meetingStep', {
+  course: 'kurs',
+  assembly: 'ljv',
+  committee: 'gremium'
+});
+export const participantGuard = createGuard('participantStep', 'teilnehmer_in');
 export const expensesGuard = createGuard('expensesStep', 'auslagen');

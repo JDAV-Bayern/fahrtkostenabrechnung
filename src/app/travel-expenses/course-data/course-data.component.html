@@ -1,4 +1,4 @@
-<app-form-card nextStep="teilnehmer-in" [nextDisabled]="form.invalid">
+<app-form-card nextStep="teilnehmer_in" [nextDisabled]="form.invalid">
   <fieldset [formGroup]="form">
     <h1>Angaben zum Kurs</h1>
     <div class="form-group">
@@ -11,13 +11,13 @@
         required
       />
       <div
-        *ngIf="code.hasError('required') && code.touched"
+        *ngIf="code?.hasError('required') && code?.touched"
         class="error-message"
       >
         Bitte gib die Kursnummer ein.
       </div>
       <div
-        *ngIf="code.hasError('unknownCourse') && code.touched"
+        *ngIf="code?.hasError('unknownCourse') && code?.touched"
         class="error-message"
       >
         <p>Bitte gib eine gültige Kursnummer an.</p>
@@ -27,7 +27,7 @@
           einen Kurs der JDAV Bayern besucht hast.
         </p>
       </div>
-      <div *ngIf="code.hasError('federalCourse')" class="error-message">
+      <div *ngIf="code?.hasError('federalCourse')" class="error-message">
         Diese Kursnummer (JXXX) sieht nach einem Kurs des Bundesverbands aus.
         Diese können nicht über dieses Formular abgerechnet werden.
       </div>
