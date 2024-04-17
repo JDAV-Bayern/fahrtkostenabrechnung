@@ -1,5 +1,7 @@
-export type ExpenseType = 'bike' | 'car' | 'train' | 'plan';
 export type Direction = 'inbound' | 'onsite' | 'outbound';
+export type ExpenseType = 'bike' | 'car' | 'train' | 'plan';
+export type DiscountCard = 'BC25' | 'BC50' | 'none';
+export type CarType = 'combustion' | 'electric' | 'plug-in-hybrid';
 
 export interface BaseExpense {
   type: ExpenseType;
@@ -15,13 +17,13 @@ export interface BikeExpense extends BaseExpense {
 export interface CarExpense extends BaseExpense {
   type: 'car';
   distance: number;
-  carType: 'combustion' | 'electric' | 'plug-in-hybrid';
+  carType: CarType;
   passengers: string[];
 }
 
 export interface TrainExpense extends BaseExpense {
   type: 'train';
-  discountCard: 'BC25' | 'BC50' | 'none';
+  discountCard: DiscountCard;
   price: number;
 }
 

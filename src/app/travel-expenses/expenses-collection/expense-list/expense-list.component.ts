@@ -11,6 +11,7 @@ import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { ExpenseForm } from 'src/app/reimbursement-forms';
 import { NgFor, NgIf } from '@angular/common';
 import { ExpenseListRowComponent } from '../expense-list-row/expense-list-row.component';
+import { DirectionPipe } from 'src/app/pipes/direction.pipe';
 
 @Component({
   selector: 'app-expense-list',
@@ -24,15 +25,13 @@ import { ExpenseListRowComponent } from '../expense-list-row/expense-list-row.co
     CdkDrag,
     CdkDropList,
     DialogModule,
+    DirectionPipe,
     ExpenseListRowComponent
   ]
 })
 export class ExpenseListComponent {
   @Input({ required: true })
   direction!: Direction;
-
-  @Input({ required: true })
-  heading!: string;
 
   @Input()
   extraButton?: string;
@@ -57,19 +56,11 @@ export class ExpenseListComponent {
   }
 
   get showPlan() {
-    console.log(
-      this.direction,
-      this.controlService.getExpenses(this.direction).controls
-    );
     const directionOkay = this.direction !== 'onsite';
-    const planExists = this.controlService
-      .getExpenses(this.direction)
-      .controls.some(
-        (expense: FormGroup<ExpenseForm>) => expense.value.type === 'plan'
-      );
-    const showPlan = directionOkay && !planExists;
-    console.log(directionOkay, planExists, showPlan);
-    return showPlan;
+    const planExists = this.formArray.value.some(
+      expense => expense.type === 'plan'
+    );
+    return directionOkay && !planExists;
   }
 
   openAddExpenseDialog() {
@@ -77,6 +68,7 @@ export class ExpenseListComponent {
       direction: this.direction,
       showPlan: this.showPlan
     };
+
     this.dialog
       .open<FormGroup<ExpenseForm>>(AddExpenseModalComponent, { data })
       .closed.subscribe(result => {

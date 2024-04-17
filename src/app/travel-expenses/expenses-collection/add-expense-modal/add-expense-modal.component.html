@@ -1,5 +1,5 @@
 <form [formGroup]="form" (ngSubmit)="submitForm()" class="model-content">
-  <h2>Auslage erfassen - {{ getDirectionName() }}</h2>
+  <h2 *ngIf="direction">Auslage erfassen - {{ direction | direction }}</h2>
 
   <div *ngIf="type.invalid" class="means-of-travel-buttons-container">
     <button class="secondary icon" (click)="chooseExpense('car')">
@@ -29,7 +29,7 @@
   </div>
 
   <div *ngIf="type.valid" class="formcontainer">
-    <h3>{{ getExpenseName() }} hinzufügen</h3>
+    <h3 *ngIf="type.value">{{ type.value | expenseType }} hinzufügen</h3>
 
     <div class="form-group">
       <label for="origin">Von</label>

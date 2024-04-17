@@ -1,6 +1,6 @@
 <fieldset [formGroup]="formGroup">
   <h3 class="heading">
-    {{ heading }}
+    {{ direction | direction }}
     <button
       *ngIf="extraButton"
       (click)="onClickExtraButton($event)"

@@ -4,14 +4,17 @@
       <td class="tleft">
         von <b>{{ expense.origin }}</b>
       </td>
-      <td class="tmid">{{ this.getTitle() }}</td>
-      <th class="tright">{{ getAmount() }} €</th>
+      <td class="tmid">{{ expense.type | expenseType }}</td>
+      <th class="tright">{{ expense | expenseAmount | currency }}</th>
     </tr>
     <tr>
       <td class="tleft">
         nach <b>{{ expense.destination }}</b>
       </td>
-      <td class="tmid">{{ this.getDetails() }}</td>
+      <td class="tmid">
+        <app-expense-details [expense]="expense" />
+      </td>
+
       <td class="tright">
         <span
           style="cursor: pointer"

@@ -1,9 +1,9 @@
 import { CdkDrag, CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
 import { ExpenseService } from 'src/app/expense.service';
-import { NgIf } from '@angular/common';
+import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
+import { CurrencyPipe, NgIf } from '@angular/common';
 import { ExpenseListComponent } from './expense-list/expense-list.component';
 import { FormCardComponent } from 'src/app/form-card/form-card.component';
 
@@ -15,6 +15,7 @@ import { FormCardComponent } from 'src/app/form-card/form-card.component';
   imports: [
     NgIf,
     ReactiveFormsModule,
+    CurrencyPipe,
     CdkDropListGroup,
     FormCardComponent,
     ExpenseListComponent
@@ -24,15 +25,15 @@ export class ExpensesCollectionComponent {
   form;
 
   constructor(
-    private readonly expenseService: ExpenseService,
-    private readonly controlService: ReimbursementControlService
+    private readonly controlService: ReimbursementControlService,
+    private readonly expenseService: ExpenseService
   ) {
     this.form = this.controlService.expensesStep;
   }
 
-  getTotal() {
+  get total() {
     const reimbursement = this.controlService.getReimbursement();
-    return this.expenseService.getTotal(reimbursement).toFixed(2);
+    return this.expenseService.getSummary(reimbursement).uncappedTotal;
   }
 
   onsitePredicate(item: CdkDrag<FormControl>) {

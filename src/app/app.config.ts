@@ -1,5 +1,5 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, DEFAULT_CURRENCY_CODE } from '@angular/core';
 import { provideRouter, withHashLocation } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
@@ -15,6 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withHashLocation()),
     provideAnimations(),
     { provide: APP_BASE_HREF, useValue: '/fahrtkostenabrechnung/' },
+    { provide: DEFAULT_CURRENCY_CODE, useValue: 'EUR' },
     {
       provide: DEFAULT_DIALOG_CONFIG,
       useValue: {

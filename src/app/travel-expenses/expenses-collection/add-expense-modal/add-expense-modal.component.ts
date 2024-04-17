@@ -11,9 +11,11 @@ import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
 import { ExpenseForm, FormValue } from 'src/app/reimbursement-forms';
 import { Direction, ExpenseType } from 'src/domain/expense';
+import { DirectionPipe } from 'src/app/pipes/direction.pipe';
+import { ExpenseTypePipe } from 'src/app/pipes/expense.pipe';
 
 export interface ExpenseDialogData {
-  direction: Direction;
+  direction?: Direction;
   showPlan: boolean;
   form?: FormGroup;
 }
@@ -23,10 +25,16 @@ export interface ExpenseDialogData {
   templateUrl: './add-expense-modal.component.html',
   styleUrls: ['./add-expense-modal.component.css'],
   standalone: true,
-  imports: [NgIf, NgFor, ReactiveFormsModule]
+  imports: [
+    NgIf,
+    NgFor,
+    ReactiveFormsModule,
+    DirectionPipe,
+    ExpenseTypePipe
+  ]
 })
 export class AddExpenseModalComponent {
-  direction: Direction;
+  direction?: Direction;
   form: FormGroup<ExpenseForm>;
   showPlan: boolean;
 
@@ -102,38 +110,14 @@ export class AddExpenseModalComponent {
     passengersControl.removeAt(index);
   }
 
-  getDirectionName() {
-    switch (this.direction) {
-      case 'inbound':
-        return 'Hinfahrt';
-      case 'outbound':
-        return 'Rückfahrt';
-      case 'onsite':
-        return 'Vor Ort';
-    }
-  }
-
-  getExpenseName() {
-    switch (this.type.value) {
-      case 'car':
-        return 'Autofahrt';
-      case 'train':
-        return 'Zugfahrt';
-      case 'plan':
-        return 'Abonutzung';
-      case 'bike':
-        return 'Fahrradfahrt';
-      default:
-        return;
-    }
-  }
-
   chooseExpense(type: ExpenseType) {
     this.type.setValue(type);
     this.form = this.controlService.getExpenseFormGroup(type);
 
     // autofill some fields
-    const origin = this.controlService.getOriginCompletion(this.direction);
+    const origin = this.direction
+      ? this.controlService.getOriginCompletion(this.direction)
+      : '';
     const carType = this.controlService.getCarTypeCompletion();
     const discountCard = this.controlService.getDiscountCompletion();
     this.form.patchValue({ origin, carType, discountCard });

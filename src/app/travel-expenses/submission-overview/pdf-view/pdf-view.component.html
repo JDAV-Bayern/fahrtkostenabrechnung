@@ -9,92 +9,125 @@
     PDF per E-Mail an lgs&#64;jdav-bayern.de oder ausgedruckt in die
     Landesgeschäftsstelle, Preysingstr. 71, 81667 München schicken.
   </p>
-  <table style="width: 100%">
-    <tr>
-      <td *ngIf="meeting.type === 'course'" style="width: 50%">
-        <h2>Kursdaten</h2>
-        <table class="detailstable">
-          <tr>
-            <td>Kurs:</td>
-            <td>{{ meeting.name }}</td>
-          </tr>
-          <tr>
-            <td>Kursnummer:</td>
-            <td>{{ meeting.code }}</td>
-          </tr>
-        </table>
-      </td>
-      <td *ngIf="meeting.type === 'committee'" style="width: 50%">
-        <h2>Reisedaten</h2>
-        <table class="detailstable">
-          <tr>
-            <td>Zweck:</td>
-            <td>{{ meeting.name }}</td>
-          </tr>
-          <tr>
-            <td>Ort:</td>
-            <td>{{ meeting.location }}</td>
-          </tr>
-          <tr>
-            <td>Beginn:</td>
-            <td>{{ meeting.period[0] | date: 'short' }}</td>
-          </tr>
-          <tr>
-            <td>Ende:</td>
-            <td>{{ meeting.period[1] | date: 'short' }}</td>
-          </tr>
-        </table>
-      </td>
-      <td style="width: 50%">
-        <h2>Teilnehmer*innendaten</h2>
-        <table>
-          <tr>
-            <td>Name:</td>
-            <td>{{ participant.givenName }} {{ participant.familyName }}</td>
-          </tr>
-          <tr>
-            <td>Sektion:</td>
-            <td>{{ section?.name }} (JDAV {{ section?.jdavState?.name }})</td>
-          </tr>
-          <tr>
-            <td>Wohnort:</td>
-            <td>{{ participant.zipCode }} {{ participant.city }}</td>
-          </tr>
-          <tr>
-            <td>IBAN:</td>
-            <td>{{ participant.iban }}</td>
-          </tr>
-          <tr *ngIf="participant.bic?.length">
-            <td>BIC:</td>
-            <td>{{ participant.bic }}</td>
-          </tr>
-        </table>
-      </td>
-    </tr>
-  </table>
+
+  <div class="info">
+    <div *ngIf="meeting.type === 'course'">
+      <h2>Kursdaten</h2>
+      <table class="detailstable">
+        <tr>
+          <td>Kurs:</td>
+          <td>{{ meeting.name }}</td>
+        </tr>
+        <tr>
+          <td>Kursnummer:</td>
+          <td>{{ meeting.code }}</td>
+        </tr>
+      </table>
+    </div>
+    <div *ngIf="meeting.type === 'committee'">
+      <h2>Reisedaten</h2>
+      <table class="detailstable">
+        <tr>
+          <td>Zweck:</td>
+          <td>{{ meeting.name }}</td>
+        </tr>
+        <tr>
+          <td>Ort:</td>
+          <td>{{ meeting.location }}</td>
+        </tr>
+        <tr>
+          <td>Beginn:</td>
+          <td>{{ meeting.period[0] | date: 'short' }}</td>
+        </tr>
+        <tr>
+          <td>Ende:</td>
+          <td>{{ meeting.period[1] | date: 'short' }}</td>
+        </tr>
+      </table>
+    </div>
+    <div>
+      <h2>Teilnehmer*innendaten</h2>
+      <table class="detailstable">
+        <tr>
+          <td>Name:</td>
+          <td>{{ participant.givenName }} {{ participant.familyName }}</td>
+        </tr>
+        <tr>
+          <td>Sektion:</td>
+          <td>{{ section?.name }} (JDAV {{ section?.jdavState?.name }})</td>
+        </tr>
+        <tr>
+          <td>Wohnort:</td>
+          <td>{{ participant.zipCode }} {{ participant.city }}</td>
+        </tr>
+        <tr>
+          <td>IBAN:</td>
+          <td>{{ participant.iban }}</td>
+        </tr>
+        <tr *ngIf="participant.bic?.length">
+          <td>BIC:</td>
+          <td>{{ participant.bic }}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
   <p *ngIf="reimbursement.note !== ''"><b>Bemerkung:</b></p>
   <p *ngFor="let line of reimbursement.note.split('\n')">{{ line }}</p>
-  <div class="table-title">
-    <span>Abrechnungspositionen</span>
-    <span class="sum">Summe: {{ getTotal() }}€</span><br />
-  </div>
-  <hr />
-  <h3>Hinfahrt</h3>
-  <app-pdf-expense-line-item
-    *ngFor="let expense of reimbursement.expenses.inbound; index as i"
-    [expense]="expense"
-    [index]="i"
-  ></app-pdf-expense-line-item>
-  <h3>Vor Ort</h3>
-  <app-pdf-expense-line-item
-    *ngFor="let expense of reimbursement.expenses.onsite; index as i"
-    [expense]="expense"
-    [index]="i"
-  ></app-pdf-expense-line-item>
-  <h3>Rückfahrt</h3>
-  <app-pdf-expense-line-item
-    *ngFor="let expense of reimbursement.expenses.outbound; index as i"
-    [expense]="expense"
-    [index]="i"
-  ></app-pdf-expense-line-item>
+
+  <h2>Abrechnungspositionen</h2>
+
+  <table class="expenses">
+    <colgroup>
+      <col style="width: 20px" />
+      <col style="width: 155px" />
+      <col style="width: auto" />
+      <col style="width: 40px" />
+    </colgroup>
+
+    <tbody *ngFor="let direction of directions">
+      <tr>
+        <th scope="rowgroup" colspan="4" class="direction-header">
+          {{ direction | direction }}
+        </th>
+      </tr>
+
+      <tr *ngFor="let expense of reimbursement.expenses[direction]">
+        <td class="align-right">
+          <p>von</p>
+          <p>nach</p>
+        </td>
+        <th scope="row">
+          <p>{{ expense.origin }}</p>
+          <p>{{ expense.destination }}</p>
+        </th>
+        <td>
+          <p>
+            <b>{{ expense.type | expenseType }}</b>
+          </p>
+          <p class="details">
+            <app-expense-details [expense]="expense" />
+          </p>
+        </td>
+        <td class="align-right">{{ expense | expenseAmount | currency }}</td>
+      </tr>
+    </tbody>
+
+    <tfoot class="align-right">
+      <tr *ngIf="summary.capped">
+        <td colspan="3">Zwischensumme</td>
+        <td>{{ summary.uncappedTotal | currency }}</td>
+      </tr>
+      <tr *ngIf="summary.capped">
+        <td colspan="3">Deckelung für nicht-bayrische Teilnehmer</td>
+        <td class="sum">
+          {{ summary.total - summary.uncappedTotal | currency }}
+        </td>
+      </tr>
+      <tr class="total">
+        <td colspan="3">Erstattungsbetrag</td>
+        <td>{{ summary.total | currency }}</td>
+      </tr>
+    </tfoot>
+  </table>
 </div>

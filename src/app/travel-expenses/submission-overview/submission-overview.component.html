@@ -6,7 +6,14 @@
   </div>
 
   <h2>Zusammenfassung</h2>
-  Erstattungsbetrag: {{ getTotal() }}€<br />
+  Erstattungsbetrag: {{ summary.total | currency }}<br />
+  <p *ngIf="summary.capped">
+    <b
+      >Da deine Sektion nicht in Bayern liegt, ist der Erstattungsbetrag gemäß
+      unserer Reisekostenrichtlinien auf
+      {{ summary.total | currency }} begrenzt.</b
+    >
+  </p>
   <p *ngFor="let warning of getWarnings()"><b>Warnung</b> {{ warning }}</p>
   <p *ngFor="let info of getInfos()"><b>Info</b> {{ info }}</p>
 

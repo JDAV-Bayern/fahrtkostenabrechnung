@@ -5,7 +5,8 @@ table {
   margin-bottom: 3px;
 }
 
-table * {
+td,
+th {
   padding: 3px;
 }
 

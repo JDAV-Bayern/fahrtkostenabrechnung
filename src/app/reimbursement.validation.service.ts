@@ -23,23 +23,13 @@ export class ReimbursementValidationService {
   ): ValidationFinding[] {
     const findings: ValidationFinding[] = [];
 
-    // Check if section is in Bavaria
-    const sectionId = reimbursement.participant.sectionId;
-    const section = this.sectionService.getSection(sectionId);
-    if (section && !this.sectionService.isBavarian(section)) {
-      findings.push({
-        type: 'info',
-        message: `Deine Sektion (${section.name}) liegt nicht in Bayern. Wir begrenzen daher den Erstattungsbetrag gemäß unserer Reisekostenrichtlinien auf 75,-€`
-      });
-    }
-
     // Check if zip code exists and if it is in bavaria
     const plz = reimbursement.participant.zipCode;
     const city = reimbursement.participant.city;
     if (!this.plzService.exists(plz, city)) {
       findings.push({
         type: 'warning',
-        message: `Dein Wohnort (${plz} ${city}) ist uns unbekannt. Bitte überprüfe sie noch einmal.`
+        message: `Dein Wohnort (${plz} ${city}) ist uns unbekannt. Bitte überprüfe deine Angaben noch einmal.`
       });
     }
 

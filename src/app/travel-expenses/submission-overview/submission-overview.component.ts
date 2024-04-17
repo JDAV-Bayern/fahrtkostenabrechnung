@@ -8,7 +8,7 @@ import { NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
 import { ExpenseService } from 'src/app/expense.service';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { FinishedDialogComponent } from './finished-dialog/finished-dialog.component';
-import { formatDate } from '@angular/common';
+import { CurrencyPipe, formatDate } from '@angular/common';
 import { NgFor, NgIf } from '@angular/common';
 import { FormCardComponent } from 'src/app/form-card/form-card.component';
 import { ProgressIndicatorComponent } from 'src/app/icons/progress-indicator/progress-indicator.component';
@@ -24,6 +24,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     NgIf,
     NgFor,
     ReactiveFormsModule,
+    CurrencyPipe,
     DialogModule,
     NgxFileDropModule,
     FormCardComponent,
@@ -66,8 +67,8 @@ export class SubmissionOverviewComponent {
       .some(e => ['train', 'plan'].includes(e.type));
   }
 
-  getTotal(): string {
-    return this.expenseService.getTotal(this.reimbursement).toFixed(2);
+  get summary() {
+    return this.expenseService.getSummary(this.reimbursement);
   }
 
   getWarnings(): string[] {

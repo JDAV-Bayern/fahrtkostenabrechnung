@@ -1,17 +1,28 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import { AddExpenseModalComponent } from '../add-expense-modal/add-expense-modal.component';
+import {
+  AddExpenseModalComponent,
+  ExpenseDialogData
+} from '../add-expense-modal/add-expense-modal.component';
 import { FormGroup } from '@angular/forms';
 import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
-import { ExpenseService } from 'src/app/expense.service';
 import { ExpenseForm } from 'src/app/reimbursement-forms';
+import { CurrencyPipe } from '@angular/common';
+import { ExpenseAmountPipe, ExpenseTypePipe } from 'src/app/pipes/expense.pipe';
+import { ExpenseDetailsComponent } from '../../expense-details/expense-details.component';
 
 @Component({
   selector: 'app-expense-list-row',
   templateUrl: './expense-list-row.component.html',
   styleUrls: ['./expense-list-row.component.css'],
   standalone: true,
-  imports: [DialogModule]
+  imports: [
+    CurrencyPipe,
+    DialogModule,
+    ExpenseTypePipe,
+    ExpenseAmountPipe,
+    ExpenseDetailsComponent
+  ]
 })
 export class ExpenseListRowComponent {
   @Output()
@@ -24,7 +35,6 @@ export class ExpenseListRowComponent {
   index!: number;
 
   constructor(
-    private expenseService: ExpenseService,
     private controlService: ReimbursementControlService,
     private readonly dialog: Dialog
   ) {}
@@ -34,24 +44,11 @@ export class ExpenseListRowComponent {
   }
 
   editMe() {
-    this.dialog.open(AddExpenseModalComponent, {
-      data: { form: this.form, showPlan: false }
-    });
+    const data: ExpenseDialogData = { form: this.form, showPlan: false };
+    this.dialog.open(AddExpenseModalComponent, { data });
   }
 
   deleteMe() {
     this.deleteRow.emit(this.index);
-  }
-
-  getTitle() {
-    return this.expenseService.getName(this.expense);
-  }
-
-  getAmount() {
-    return this.expenseService.getAmount(this.expense).toFixed(2);
-  }
-
-  getDetails() {
-    return this.expenseService.getDescription(this.expense);
   }
 }
