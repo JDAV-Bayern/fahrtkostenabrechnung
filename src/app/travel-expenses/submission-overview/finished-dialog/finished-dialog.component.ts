@@ -1,10 +1,11 @@
-import { Component, Inject, Input } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-finished-dialog',
   templateUrl: './finished-dialog.component.html',
-  styleUrls: ['./finished-dialog.component.css']
+  styleUrls: ['./finished-dialog.component.css'],
+  standalone: true
 })
 export class FinishedDialogComponent {
   private givenName: string;

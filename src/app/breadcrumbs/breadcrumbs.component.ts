@@ -1,7 +1,14 @@
+import { NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterLink
+} from '@angular/router';
 import { filter } from 'rxjs';
+import { ChevronRightIconComponent } from '../icons/chevron-right-icon/chevron-right-icon.component';
 
 export interface Breadcrumb {
   label: string;
@@ -11,7 +18,9 @@ export interface Breadcrumb {
 @Component({
   selector: 'app-breadcrumbs',
   templateUrl: './breadcrumbs.component.html',
-  styleUrls: ['./breadcrumbs.component.css']
+  styleUrls: ['./breadcrumbs.component.css'],
+  standalone: true,
+  imports: [NgIf, NgFor, RouterLink, ChevronRightIconComponent]
 })
 export class BreadcrumbsComponent {
   breadcrumbs: Breadcrumb[] = [];

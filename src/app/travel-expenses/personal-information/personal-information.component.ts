@@ -1,14 +1,26 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
 import { PlzService } from 'src/app/plz.service';
 import { Section } from 'src/domain/section';
 import { SectionService } from 'src/app/section.service';
+import { FormCardComponent } from 'src/app/form-card/form-card.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { NgIf } from '@angular/common';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @Component({
   selector: 'app-personal-information',
   templateUrl: './personal-information.component.html',
-  styleUrls: ['./personal-information.component.css']
+  styleUrls: ['./personal-information.component.css'],
+  standalone: true,
+  imports: [
+    NgIf,
+    RouterLink,
+    ReactiveFormsModule,
+    NgSelectModule,
+    FormCardComponent
+  ]
 })
 export class PersonalInformationComponent {
   form;

@@ -5,15 +5,31 @@ import * as imageprocessor from 'ts-image-processor';
 import { ReimbursementControlService } from 'src/app/reimbursement-control.service';
 import { PDFDocument } from 'pdf-lib';
 import { ReimbursementValidationService } from 'src/app/reimbursement.validation.service';
-import { NgxFileDropEntry } from 'ngx-file-drop';
+import { NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
 import { ExpenseService } from 'src/app/expense.service';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FinishedDialogComponent } from './finished-dialog/finished-dialog.component';
+import { NgFor, NgIf } from '@angular/common';
+import { FormCardComponent } from 'src/app/form-card/form-card.component';
+import { ProgressIndicatorComponent } from 'src/app/icons/progress-indicator/progress-indicator.component';
+import { PdfViewComponent } from './pdf-view/pdf-view.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-submission-overview',
   templateUrl: './submission-overview.component.html',
-  styleUrls: ['./submission-overview.component.css']
+  styleUrls: ['./submission-overview.component.css'],
+  standalone: true,
+  imports: [
+    NgIf,
+    NgFor,
+    ReactiveFormsModule,
+    MatDialogModule,
+    NgxFileDropModule,
+    FormCardComponent,
+    ProgressIndicatorComponent,
+    PdfViewComponent
+  ]
 })
 export class SubmissionOverviewComponent {
   form;

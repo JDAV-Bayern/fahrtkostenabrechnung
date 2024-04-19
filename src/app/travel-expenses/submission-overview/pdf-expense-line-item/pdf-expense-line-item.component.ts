@@ -5,7 +5,8 @@ import { Expense } from 'src/domain/expense';
 @Component({
   selector: 'app-pdf-expense-line-item',
   templateUrl: './pdf-expense-line-item.component.html',
-  styleUrls: ['./pdf-expense-line-item.component.css']
+  styleUrls: ['./pdf-expense-line-item.component.css'],
+  standalone: true
 })
 export class PdfExpenseLineItemComponent {
   @Input({ required: true })

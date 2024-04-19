@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import {
   ExpenseForm,
   ReimbursementControlService
@@ -8,14 +8,26 @@ import {
   AddExpenseModalComponent,
   ExpenseDialogData
 } from '../add-expense-modal/add-expense-modal.component';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Direction } from 'src/domain/expense';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
+import { NgFor, NgIf } from '@angular/common';
+import { ExpenseListRowComponent } from '../expense-list-row/expense-list-row.component';
 
 @Component({
   selector: 'app-expense-list',
   templateUrl: './expense-list.component.html',
-  styleUrls: ['./expense-list.component.css']
+  styleUrls: ['./expense-list.component.css'],
+  standalone: true,
+  imports: [
+    NgIf,
+    NgFor,
+    ReactiveFormsModule,
+    CdkDrag,
+    CdkDropList,
+    MatDialogModule,
+    ExpenseListRowComponent
+  ]
 })
 export class ExpenseListComponent {
   @Input({ required: true })

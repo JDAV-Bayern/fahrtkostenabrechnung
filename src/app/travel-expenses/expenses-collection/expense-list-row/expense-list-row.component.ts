@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AddExpenseModalComponent } from '../add-expense-modal/add-expense-modal.component';
 import { FormGroup } from '@angular/forms';
 import {
@@ -11,7 +11,9 @@ import { ExpenseService } from 'src/app/expense.service';
 @Component({
   selector: 'app-expense-list-row',
   templateUrl: './expense-list-row.component.html',
-  styleUrls: ['./expense-list-row.component.css']
+  styleUrls: ['./expense-list-row.component.css'],
+  standalone: true,
+  imports: [MatDialogModule]
 })
 export class ExpenseListRowComponent {
   @Output()

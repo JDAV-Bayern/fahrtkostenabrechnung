@@ -1,18 +1,23 @@
+import { NgIf } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import {
   FormGroup,
   FormArray,
   Validators,
-  FormControl,
-  NonNullableFormBuilder
+  NonNullableFormBuilder,
+  ReactiveFormsModule
 } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef
+} from '@angular/material/dialog';
 import {
   ExpenseForm,
   ExpenseFormValue,
   ReimbursementControlService
 } from 'src/app/reimbursement-control.service';
-import { Direction, Expense, ExpenseType } from 'src/domain/expense';
+import { Direction, ExpenseType } from 'src/domain/expense';
 
 export interface ExpenseDialogData {
   direction: Direction;
@@ -23,7 +28,9 @@ export interface ExpenseDialogData {
 @Component({
   selector: 'app-add-expense-modal',
   templateUrl: './add-expense-modal.component.html',
-  styleUrls: ['./add-expense-modal.component.css']
+  styleUrls: ['./add-expense-modal.component.css'],
+  standalone: true,
+  imports: [NgIf, ReactiveFormsModule, MatDialogModule]
 })
 export class AddExpenseModalComponent {
   direction: Direction;
