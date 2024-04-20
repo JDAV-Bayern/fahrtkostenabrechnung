@@ -1,0 +1,31 @@
+<app-form-card
+  prevStep="auslagen"
+  nextStep="zusammenfassung"
+  [nextDisabled]="foodForm.invalid || materialForm.invalid"
+>
+  <fieldset [formGroup]="parentForm">
+    <app-expense-list
+      expenseType="food"
+      [form]="foodForm"
+      [openDialog]="getOpenFoodDialogFn()"
+    >
+      <h2>Tagegelder</h2>
+    </app-expense-list>
+    <p class="subtotal">
+      Summe:
+      <span>{{ summary.food | currency }}</span>
+    </p>
+
+    <app-expense-list
+      expenseType="material"
+      [form]="materialForm"
+      [openDialog]="getOpenMaterialDialogFn()"
+    >
+      <h2>Sonstige Auslagen</h2>
+    </app-expense-list>
+    <p class="subtotal">
+      Summe:
+      <span>{{ summary.material | currency }}</span>
+    </p>
+  </fieldset>
+</app-form-card>

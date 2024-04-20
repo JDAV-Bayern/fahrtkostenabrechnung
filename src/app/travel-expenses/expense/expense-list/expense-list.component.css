@@ -9,9 +9,3 @@
 .cdk-drop-list-receiving:empty {
   border: 2px dashed #ccc;
 }
-
-.heading {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-}

@@ -6,9 +6,16 @@ import { DataProtectionComponent } from './info/data-protection/data-protection.
 import { InfoComponent } from './info/info.component';
 import { TravelExpensesComponent } from './travel-expenses/travel-expenses.component';
 import { CourseDataComponent } from './travel-expenses/course-data/course-data.component';
-import { meetingGuard, expensesGuard, participantGuard } from './route-guards';
+import {
+  meetingGuard,
+  transportExpensesGuard,
+  participantGuard,
+  foodExpensesGuard,
+  materialExpensesGuard
+} from './route-guards';
 import { AssemblyDataComponent } from './travel-expenses/assembly-data/assembly-data.component';
 import { CommitteeDataComponent } from './travel-expenses/committee-data/committee-data.component';
+import { CommitteeExpensesComponent } from './travel-expenses/committee-expenses/committee-expenses.component';
 
 export const routes: Routes = [
   {
@@ -57,9 +64,20 @@ export const routes: Routes = [
         canActivate: [meetingGuard, participantGuard]
       },
       {
+        path: 'auslagen-gremium',
+        component: CommitteeExpensesComponent,
+        canActivate: [meetingGuard, participantGuard, transportExpensesGuard]
+      },
+      {
         path: 'zusammenfassung',
         component: SubmissionOverviewComponent,
-        canActivate: [meetingGuard, participantGuard, expensesGuard]
+        canActivate: [
+          meetingGuard,
+          participantGuard,
+          transportExpensesGuard,
+          foodExpensesGuard,
+          materialExpensesGuard
+        ]
       }
     ]
   }

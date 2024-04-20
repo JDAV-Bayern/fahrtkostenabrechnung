@@ -1,6 +1,6 @@
 <app-form-card
   prevStep="teilnehmer_in"
-  nextStep="zusammenfassung"
+  [nextStep]="nextStep"
   [nextDisabled]="form.invalid"
 >
   <fieldset [formGroup]="form">
@@ -11,13 +11,37 @@
     </p>
 
     <div cdkDropListGroup>
-      <app-expense-list direction="inbound" />
-      <app-expense-list direction="onsite" [enterPredicate]="onsitePredicate" />
       <app-expense-list
-        direction="outbound"
-        extraButton="Rückfahrt wie Hinfahrt"
-        (clickExtraButton)="completeReturnTrip()"
-      />
+        expenseType="transport"
+        [form]="form.controls.inbound"
+        [openDialog]="getOpenDialogFn('inbound')"
+        [enterPredicate]="getPredicateFn('inbound')"
+      >
+        <h3>Hinfahrt</h3>
+      </app-expense-list>
+
+      <app-expense-list
+        expenseType="transport"
+        [form]="form.controls.onsite"
+        [openDialog]="getOpenDialogFn('onsite')"
+        [enterPredicate]="getPredicateFn('onsite')"
+      >
+        <h3>Vor Ort</h3>
+      </app-expense-list>
+      <app-expense-list
+        expenseType="transport"
+        [form]="form.controls.outbound"
+        [openDialog]="getOpenDialogFn('outbound')"
+        [enterPredicate]="getPredicateFn('outbound')"
+      >
+        <div class="heading">
+          <h3>Rückfahrt</h3>
+          <button class="icon" (click)="completeReturnTrip()">
+            <span class="material-symbols-outlined">swap_horiz</span>
+            Rückfahrt wie Hinfahrt
+          </button>
+        </div>
+      </app-expense-list>
     </div>
 
     <div *ngIf="form.hasError('anyRequired')" class="error-message margin-top">

@@ -1,3 +1,21 @@
+table {
+  margin-bottom: 16px;
+}
+
+tr,
+td {
+  padding: 4px;
+}
+
+.expenses tr:last-child {
+  font-weight: bold;
+}
+
+.expenses td:last-child {
+  padding-left: 20px;
+  text-align: right;
+}
+
 .files-list {
   border: 1px solid #ccc;
   border-radius: 3px;

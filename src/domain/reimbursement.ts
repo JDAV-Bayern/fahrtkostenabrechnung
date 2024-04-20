@@ -1,10 +1,19 @@
 import { Meeting } from './meeting';
-import { Direction, Expense } from './expense';
+import {
+  TransportExpense,
+  FoodExpense,
+  MaterialExpense,
+  Direction
+} from './expense';
 import { Participant } from './participant';
 
 export interface Reimbursement {
   meeting: Meeting;
   participant: Participant;
-  expenses: { [key in Direction]: Expense[] };
+  expenses: {
+    transport: { [key in Direction]: TransportExpense[] };
+    food: FoodExpense[];
+    material: MaterialExpense[];
+  };
   note: string;
 }

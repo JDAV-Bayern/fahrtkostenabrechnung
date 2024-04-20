@@ -61,10 +61,17 @@ export class SubmissionOverviewComponent {
     return this.controlService.getReimbursement();
   }
 
-  get anyTrainTravel() {
-    return this.expenseService
-      .getAllExpenses(this.controlService.getReimbursement())
-      .some(e => ['train', 'plan'].includes(e.type));
+  get meeting() {
+    return this.reimbursement.meeting;
+  }
+
+  get participant() {
+    return this.reimbursement.participant;
+  }
+
+  get prevStep() {
+    const meeting = this.controlService.meetingStep.controls.type.value;
+    return meeting === 'committee' ? 'auslagen-gremium' : 'auslagen';
   }
 
   get summary() {
@@ -72,16 +79,7 @@ export class SubmissionOverviewComponent {
   }
 
   getWarnings(): string[] {
-    return this.validationService
-      .validateReimbursement(this.reimbursement)
-      .filter(f => f.type === 'warning')
-      .map(f => f.message);
-  }
-  getInfos(): string[] {
-    return this.validationService
-      .validateReimbursement(this.reimbursement)
-      .filter(f => f.type === 'info')
-      .map(f => f.message);
+    return this.validationService.validateReimbursement(this.reimbursement);
   }
 
   async addImageToPdf(imageFile: File, pdf: jsPDF) {

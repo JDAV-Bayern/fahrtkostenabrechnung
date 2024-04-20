@@ -10,30 +10,30 @@ import { MeetingType } from 'src/domain/meeting';
 type FormKey =
   | 'meetingStep'
   | 'participantStep'
-  | 'expensesStep'
+  | 'transportExpensesStep'
+  | 'foodExpensesStep'
+  | 'materialExpensesStep'
   | 'overviewStep';
 
 type RouteOptions = string | { [key in MeetingType]: string };
 
 @Injectable({ providedIn: 'root' })
 class FormFinishedGuard {
-  constructor(
-    private readonly reimbursementControlService: ReimbursementControlService
-  ) {}
+  constructor(private controlService: ReimbursementControlService) {}
+
   canActivate(
     route: ActivatedRouteSnapshot,
     form: FormKey,
     routeTo: RouteOptions
   ) {
-    if (this.reimbursementControlService[form].valid) {
+    if (this.controlService[form].valid) {
       return true;
     } else {
       let resolvedRoute = '';
       if (typeof routeTo === 'string') {
         resolvedRoute = routeTo;
       } else {
-        const type =
-          this.reimbursementControlService.meetingStep.value.type || 'course';
+        const type = this.controlService.meetingStep.value.type || 'course';
         resolvedRoute = routeTo[type];
       }
       return createUrlTreeFromSnapshot(route, ['..', resolvedRoute]);
@@ -51,4 +51,15 @@ export const meetingGuard = createGuard('meetingStep', {
   committee: 'gremium'
 });
 export const participantGuard = createGuard('participantStep', 'teilnehmer_in');
-export const expensesGuard = createGuard('expensesStep', 'auslagen');
+export const transportExpensesGuard = createGuard(
+  'transportExpensesStep',
+  'auslagen'
+);
+export const foodExpensesGuard = createGuard(
+  'foodExpensesStep',
+  'auslagen-gremium'
+);
+export const materialExpensesGuard = createGuard(
+  'materialExpensesStep',
+  'auslagen-gremium'
+);

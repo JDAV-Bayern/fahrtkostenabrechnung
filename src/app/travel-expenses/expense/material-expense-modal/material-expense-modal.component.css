@@ -1,0 +1,13 @@
+.model-content {
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+}
+
+.button-container {
+  display: flex;
+  justify-content: right;
+  margin-top: 20px;
+}

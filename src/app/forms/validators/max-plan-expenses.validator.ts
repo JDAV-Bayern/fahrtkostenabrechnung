@@ -1,5 +1,4 @@
 import { AbstractControl, ValidationErrors } from '@angular/forms';
-import { Expense } from 'src/domain/expense';
 
 export function maxPlanExpenses(
   control: AbstractControl

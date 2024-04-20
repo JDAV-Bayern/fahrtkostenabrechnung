@@ -9,7 +9,7 @@ import { Section } from 'src/domain/section';
 import { MeetingTypePipe } from 'src/app/pipes/meeting-type.pipe';
 import { DirectionPipe } from 'src/app/pipes/direction.pipe';
 import { ExpenseAmountPipe, ExpenseTypePipe } from 'src/app/pipes/expense.pipe';
-import { ExpenseDetailsComponent } from '../../expense-details/expense-details.component';
+import { ExpenseDetailsComponent } from '../../expense/expense-details/expense-details.component';
 
 @Component({
   selector: 'app-pdf-view',

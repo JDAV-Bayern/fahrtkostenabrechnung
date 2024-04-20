@@ -85,25 +85,84 @@
       <col style="width: 40px" />
     </colgroup>
 
-    <tbody *ngFor="let direction of directions">
+    <tbody>
       <tr>
-        <th scope="rowgroup" colspan="4" class="direction-header">
-          {{ direction | direction }}
+        <th scope="col" colspan="3" class="category-header">Fahrtkosten</th>
+        <th scope="col" class="align-right">
+          {{ summary.transport | currency }}
+        </th>
+      </tr>
+      <ng-container *ngFor="let direction of directions">
+        <tr>
+          <td></td>
+          <td scope="rowgroup" colspan="3" class="category-header">
+            {{ direction | direction }}
+          </td>
+        </tr>
+
+        <tr *ngFor="let expense of reimbursement.expenses.transport[direction]">
+          <td class="align-right">
+            <p>von</p>
+            <p>nach</p>
+          </td>
+          <th scope="row">
+            <p>{{ expense.origin }}</p>
+            <p>{{ expense.destination }}</p>
+          </th>
+          <td>
+            <p>
+              <b>{{ expense | expenseTitle }}</b>
+            </p>
+            <p class="details">
+              <app-expense-details [expense]="expense" />
+            </p>
+          </td>
+          <td class="align-right">{{ expense | expenseAmount | currency }}</td>
+        </tr>
+      </ng-container>
+    </tbody>
+
+    <tbody>
+      <tr>
+        <th scope="col" colspan="3" class="category-header">Tagegeld</th>
+        <th scope="col" class="align-right">
+          {{ summary.food | currency }}
         </th>
       </tr>
 
-      <tr *ngFor="let expense of reimbursement.expenses[direction]">
-        <td class="align-right">
-          <p>von</p>
-          <p>nach</p>
-        </td>
-        <th scope="row">
-          <p>{{ expense.origin }}</p>
-          <p>{{ expense.destination }}</p>
+      <tr *ngFor="let expense of reimbursement.expenses.food">
+        <th scope="row" colspan="2">
+          {{ expense.date | date }}
         </th>
         <td>
           <p>
-            <b>{{ expense.type | expenseType }}</b>
+            <b>{{ expense | expenseTitle }}</b>
+          </p>
+          <p class="details">
+            <app-expense-details [expense]="expense" />
+          </p>
+        </td>
+        <td class="align-right">{{ expense | expenseAmount | currency }}</td>
+      </tr>
+    </tbody>
+
+    <tbody>
+      <tr>
+        <th scope="col" colspan="3" class="category-header">
+          Sonstige Auslagen
+        </th>
+        <th scope="col" class="align-right">
+          {{ summary.material | currency }}
+        </th>
+      </tr>
+
+      <tr *ngFor="let expense of reimbursement.expenses.material">
+        <th scope="row" colspan="2">
+          {{ expense.date | date }}
+        </th>
+        <td>
+          <p>
+            <b>{{ expense | expenseTitle }}</b>
           </p>
           <p class="details">
             <app-expense-details [expense]="expense" />
@@ -116,12 +175,12 @@
     <tfoot class="align-right">
       <tr *ngIf="summary.capped">
         <td colspan="3">Zwischensumme</td>
-        <td>{{ summary.uncappedTotal | currency }}</td>
+        <td>{{ summary.subtotal | currency }}</td>
       </tr>
       <tr *ngIf="summary.capped">
         <td colspan="3">Deckelung für nicht-bayrische Teilnehmer</td>
         <td class="sum">
-          {{ summary.total - summary.uncappedTotal | currency }}
+          {{ summary.total - summary.subtotal | currency }}
         </td>
       </tr>
       <tr class="total">

@@ -1,28 +1,62 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import {
+  Absence,
   CarType,
   DiscountCard,
   Expense,
-  ExpenseType
+  Meal,
+  TransportMode
 } from 'src/domain/expense';
 import { ExpenseService } from '../expense.service';
 
+export function formatTransportMode(value: TransportMode) {
+  switch (value) {
+    case 'car':
+      return 'Autofahrt';
+    case 'train':
+      return 'Zugfahrt';
+    case 'plan':
+      return 'Fahrt mit ÖPNV-Abo';
+    case 'bike':
+      return 'Fahrradfahrt';
+  }
+}
+
+export function formatAbsence(value: Absence) {
+  switch (value) {
+    case 'fullDay':
+      return 'ganze 24 Stunden';
+    case 'travelDay':
+      return 'am An- oder Abreisetag';
+    case 'workDay':
+      return 'mehr als acht Stunden';
+  }
+}
+
 @Pipe({
-  name: 'expenseType',
+  name: 'expenseTitle',
   standalone: true
 })
 export class ExpenseTypePipe implements PipeTransform {
-  transform(value: ExpenseType): string {
-    switch (value) {
-      case 'car':
-        return 'Autofahrt';
-      case 'train':
-        return 'Zugfahrt';
-      case 'plan':
-        return 'Fahrt mit ÖPNV-Abo';
-      case 'bike':
-        return 'Fahrradfahrt';
+  transform(value: Expense): string {
+    switch (value.type) {
+      case 'transport':
+        return formatTransportMode(value.mode);
+      case 'food':
+        return 'Abwesenheit ' + formatAbsence(value.absence);
+      case 'material':
+        return value.purpose;
     }
+  }
+}
+
+@Pipe({
+  name: 'transportMode',
+  standalone: true
+})
+export class TransportModePipe implements PipeTransform {
+  transform(value: TransportMode): string {
+    return formatTransportMode(value);
   }
 }
 
@@ -57,6 +91,35 @@ export class CarTypePipe implements PipeTransform {
       case 'plug-in-hybrid':
         return 'Plug-In Hybrid';
     }
+  }
+}
+
+@Pipe({
+  name: 'absence',
+  standalone: true
+})
+export class AbsencePipe implements PipeTransform {
+  transform(value: Absence): string {
+    return formatAbsence(value);
+  }
+}
+
+@Pipe({
+  name: 'meals',
+  standalone: true
+})
+export class MealsPipe implements PipeTransform {
+  transform(value: Meal[]): string[] {
+    return value.map(meal => {
+      switch (meal) {
+        case 'breakfast':
+          return 'Frühstück';
+        case 'lunch':
+          return 'Mittag';
+        case 'dinner':
+          return 'Abend';
+      }
+    });
   }
 }
 

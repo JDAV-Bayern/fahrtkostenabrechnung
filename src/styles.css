@@ -79,10 +79,10 @@ button {
 }
 
 button.icon {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 6px 20px;
+  gap: 8px;
+  padding: 8px;
 }
 
 button.secondary {

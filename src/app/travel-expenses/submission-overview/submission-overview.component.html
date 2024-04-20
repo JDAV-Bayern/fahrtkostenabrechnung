@@ -1,12 +1,45 @@
-<app-form-card prevStep="auslagen" [formGroup]="form">
-  <div class="form-group">
-    <label for="note">Bemerkung zu deiner Abrechnung</label>
-    <textarea class="form-control" rows="4" formControlName="note" id="note">
-    </textarea>
-  </div>
-
+<app-form-card [prevStep]="prevStep" [formGroup]="form">
   <h2>Zusammenfassung</h2>
-  Erstattungsbetrag: {{ summary.total | currency }}<br />
+
+  <table>
+    <tr>
+      <td>Veranstaltung:</td>
+      <td>
+        <span *ngIf="meeting.type === 'course'">
+          {{ meeting.code }} &ndash;
+        </span>
+        {{ meeting.name }}
+      </td>
+    </tr>
+    <tr>
+      <td>Teilnehmer:</td>
+      <td>{{ participant.givenName }} {{ participant.familyName }}</td>
+    </tr>
+    <tr>
+      <td>IBAN:</td>
+      <td>{{ participant.iban }}</td>
+    </tr>
+  </table>
+
+  <table class="expenses">
+    <tr *ngIf="meeting.type === 'committee' || summary.capped">
+      <td>Fahrtkosten:</td>
+      <td>{{ summary.transport | currency }}</td>
+    </tr>
+    <tr *ngIf="meeting.type === 'committee'">
+      <td>Tagegelder:</td>
+      <td>{{ summary.food | currency }}</td>
+    </tr>
+    <tr *ngIf="meeting.type === 'committee'">
+      <td>Sonstige Auslagen:</td>
+      <td>{{ summary.material | currency }}</td>
+    </tr>
+    <tr>
+      <td>Erstattungsbetrag:</td>
+      <td>{{ summary.total | currency }}</td>
+    </tr>
+  </table>
+
   <p *ngIf="summary.capped">
     <b
       >Da deine Sektion nicht in Bayern liegt, ist der Erstattungsbetrag gemäß
@@ -15,10 +48,18 @@
     >
   </p>
   <p *ngFor="let warning of getWarnings()"><b>Warnung</b> {{ warning }}</p>
-  <p *ngFor="let info of getInfos()"><b>Info</b> {{ info }}</p>
 
-  <div *ngIf="anyTrainTravel">
-    <h2>Belege für Zugfahrten</h2>
+  <div class="form-group">
+    <label for="note">Bemerkung zu deiner Abrechnung</label>
+    <textarea class="form-control" rows="4" formControlName="note" id="note">
+    </textarea>
+  </div>
+
+  <div *ngIf="summary.requireReceipts">
+    <h2>Belege</h2>
+    <p>
+      Bitte denke daran, dass wir die Belege für deine Zugtickets benötigen.
+    </p>
     <ngx-file-drop
       (onFileDrop)="fileDropped($event)"
       [accept]="'.pdf,.jpg,.png,.jpeg,.JPG,.JPEG,.PDF,.PNG'"
@@ -44,6 +85,7 @@
       </p>
     </fieldset>
   </div>
+
   <button
     submitButton
     type="submit"

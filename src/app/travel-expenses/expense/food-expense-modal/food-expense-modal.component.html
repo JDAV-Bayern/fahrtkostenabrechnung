@@ -1,0 +1,70 @@
+<form [formGroup]="form" (ngSubmit)="submitForm()" class="model-content">
+  <h2>Tagegeld erfassen</h2>
+
+  <div class="form-group">
+    <label for="date">Datum</label>
+    <input
+      type="text"
+      id="date"
+      formControlName="date"
+      class="form-control"
+      [owlDateTime]="dt"
+      [owlDateTimeTrigger]="dt"
+      required
+    />
+    <owl-date-time
+      pickerType="calendar"
+      pickerMode="dialog"
+      [firstDayOfWeek]="1"
+      #dt
+    ></owl-date-time>
+    <div
+      *ngIf="date.hasError('owlRequiredDateTimeRange') && date.touched"
+      class="error-message"
+    >
+      Bitte gib das Datum dieser Auslage an.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="absence">Anwesenheit</label>
+    <select
+      id="absence"
+      formControlName="absence"
+      class="form-control"
+      required
+    >
+      <option value="fullDay">ganze 24 Stunden</option>
+      <option value="travelDay">am An- oder Abreisetag</option>
+      <option value="workDay">mehr als acht Stunden</option>
+    </select>
+    <div
+      *ngIf="absence.hasError('required') && absence.touched"
+      class="error-message"
+    >
+      Bitte gib die Dauer deiner Anwesenheit an.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="meals">Mahlzeiten</label>
+    <fieldset id="meals" [formGroup]="meals">
+      <div class="checkbox">
+        <input type="checkbox" id="breakfast" formControlName="breakfast" />
+        <label for="breakfast">Frühstück</label>
+      </div>
+      <div class="checkbox">
+        <input type="checkbox" id="lunch" formControlName="lunch" />
+        <label for="lunch">Mittagessen</label>
+      </div>
+      <div class="checkbox">
+        <input type="checkbox" id="dinner" formControlName="dinner" />
+        <label for="dinner">Abendessen</label>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="button-container">
+    <button type="submit" [disabled]="!form.valid">Speichern</button>
+  </div>
+</form>
