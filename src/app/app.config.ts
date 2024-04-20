@@ -1,6 +1,7 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter, withHashLocation } from '@angular/router';
+import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
 import {
   OWL_DATE_TIME_LOCALE,
@@ -12,6 +13,7 @@ import { DEFAULT_DIALOG_CONFIG } from '@angular/cdk/dialog';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes, withHashLocation()),
+    provideAnimations(),
     { provide: APP_BASE_HREF, useValue: '/fahrtkostenabrechnung/' },
     {
       provide: DEFAULT_DIALOG_CONFIG,

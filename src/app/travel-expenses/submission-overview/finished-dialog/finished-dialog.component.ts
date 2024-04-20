@@ -1,12 +1,11 @@
 import { Component, Inject } from '@angular/core';
-import { DIALOG_DATA, DialogModule } from '@angular/cdk/dialog';
+import { DIALOG_DATA } from '@angular/cdk/dialog';
 
 @Component({
   selector: 'app-finished-dialog',
   templateUrl: './finished-dialog.component.html',
   styleUrls: ['./finished-dialog.component.css'],
-  standalone: true,
-  imports: [DialogModule]
+  standalone: true
 })
 export class FinishedDialogComponent {
   private givenName: string;

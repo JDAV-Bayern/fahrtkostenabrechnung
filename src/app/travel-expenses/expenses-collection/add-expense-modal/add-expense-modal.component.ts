@@ -1,4 +1,4 @@
-import { NgIf } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import {
   FormGroup,
@@ -7,11 +7,7 @@ import {
   NonNullableFormBuilder,
   ReactiveFormsModule
 } from '@angular/forms';
-import {
-  DIALOG_DATA,
-  DialogModule,
-  DialogRef
-} from '@angular/cdk/dialog';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import {
   ExpenseForm,
   ExpenseFormValue,
@@ -30,7 +26,7 @@ export interface ExpenseDialogData {
   templateUrl: './add-expense-modal.component.html',
   styleUrls: ['./add-expense-modal.component.css'],
   standalone: true,
-  imports: [NgIf, ReactiveFormsModule, DialogModule]
+  imports: [NgIf, NgFor, ReactiveFormsModule]
 })
 export class AddExpenseModalComponent {
   direction: Direction;

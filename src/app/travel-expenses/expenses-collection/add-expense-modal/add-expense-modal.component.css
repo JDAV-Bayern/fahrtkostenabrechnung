@@ -17,6 +17,10 @@
   gap: 10px;
 }
 
+.formcontainer {
+  width: 100%;
+}
+
 .passengers-container {
   display: flex;
   flex-direction: row;
