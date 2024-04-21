@@ -7,8 +7,10 @@ import {
   OWL_DATE_TIME_LOCALE,
   OwlDateTimeIntl
 } from '@danielmoncada/angular-datetime-picker';
-import { DefaultIntl } from './datetime-intl';
+import { DateTimeIntl } from './core/date-time-intl';
 import { DEFAULT_DIALOG_CONFIG } from '@angular/cdk/dialog';
+import { NgSelectConfig } from '@ng-select/ng-select';
+import { SelectConfig } from './core/ng-select.config';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -26,7 +28,8 @@ export const appConfig: ApplicationConfig = {
         width: '700px'
       }
     },
+    { provide: NgSelectConfig, useClass: SelectConfig },
     { provide: OWL_DATE_TIME_LOCALE, useValue: 'de' },
-    { provide: OwlDateTimeIntl, useClass: DefaultIntl }
+    { provide: OwlDateTimeIntl, useClass: DateTimeIntl }
   ]
 };
