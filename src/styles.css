@@ -45,6 +45,16 @@ fieldset {
   display: inline;
 }
 
+.dialog {
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow:
+    0px 11px 15px -7px rgba(0, 0, 0, 0.2),
+    0px 24px 38px 3px rgba(0, 0, 0, 0.14),
+    0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+  overflow-y: scroll;
+}
+
 .form-group label {
   display: block;
   font-weight: bold;
@@ -86,6 +96,13 @@ button.secondary {
   }
 }
 
+button.tertiary {
+  border: none;
+  background-color: transparent;
+  text-transform: none;
+  color: var(--color-body);
+}
+
 button:disabled {
   background-color: #ccc;
   color: #fff;
@@ -100,6 +117,10 @@ button:disabled {
   border: 1px solid #ccc;
   border-radius: 0;
   font-size: inherit;
+}
+
+textarea {
+  resize: vertical;
 }
 
 select {

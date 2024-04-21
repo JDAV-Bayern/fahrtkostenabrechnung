@@ -2,21 +2,29 @@
   <h2>Auslage erfassen - {{ getDirectionName() }}</h2>
 
   <div *ngIf="type.invalid" class="means-of-travel-buttons-container">
-    <button class="secondary" (click)="chooseExpense('car')">
-      <span class="material-symbols-outlined">&#xe531;</span>&nbsp;Autofahrt
+    <button class="secondary icon" (click)="chooseExpense('car')">
+      <span class="material-symbols-outlined">&#xe531;</span>
+      Autofahrt
     </button>
-    <button class="secondary" (click)="chooseExpense('train')">
-      <span class="material-symbols-outlined">&#xe570;</span>&nbsp;Zugfahrt
+    <button class="secondary icon" (click)="chooseExpense('train')">
+      <span class="material-symbols-outlined">&#xe570;</span>
+      Zugfahrt
     </button>
-    <button *ngIf="showPlan" class="secondary" (click)="chooseExpense('plan')">
-      <span class="material-symbols-outlined">&#xe8f8;</span>&nbsp;Öffis Abo
+    <button
+      *ngIf="showPlan"
+      class="secondary icon"
+      (click)="chooseExpense('plan')"
+    >
+      <span class="material-symbols-outlined">&#xe8f8;</span>
+      Öffis Abo
     </button>
     <button
       *ngIf="direction !== 'onsite'"
-      class="secondary"
+      class="secondary icon"
       (click)="chooseExpense('bike')"
     >
-      <span class="material-symbols-outlined">&#xeb29;</span>&nbsp;Fahrrad
+      <span class="material-symbols-outlined">&#xeb29;</span>
+      Fahrrad
     </button>
   </div>
 
@@ -153,12 +161,9 @@
         formArrayName="passengers"
         *ngFor="let passenger of passengers.controls; let i = index"
       >
-        <span
-          style="cursor: pointer"
-          class="material-symbols-outlined"
-          (click)="removePassenger(i)"
-          >&#xe872;</span
-        >
+        <button class="tertiary icon" (click)="removePassenger(i)">
+          <span class="material-symbols-outlined">&#xe872;</span>
+        </button>
         <input class="form-control not-filled" formControlName="{{ i }}" />
         <span
           *ngIf="passenger.hasError('required') && passengers.touched"
@@ -166,9 +171,14 @@
           >Bitte gib einen Namen für deine*n Mitfahrer*in an</span
         >
       </div>
-      <a style="cursor: pointer" (click)="addPassenger()"
-        >+ Mitfahrer*in hinzufügen</a
+      <button
+        class="tertiary icon"
+        style="color: var(--color-primary)"
+        (click)="addPassenger()"
       >
+        <span class="material-symbols-outlined">&#xe145;</span>
+        Mitfahrer*in hinzufügen
+      </button>
     </div>
     <div class="button-container">
       <button type="submit" [disabled]="!form.valid">Speichern</button>

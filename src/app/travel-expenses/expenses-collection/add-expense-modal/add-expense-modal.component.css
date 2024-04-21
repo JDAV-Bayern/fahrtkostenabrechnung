@@ -1,7 +1,5 @@
 .model-content {
   padding: 20px;
-  max-height: 90vh;
-  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,13 +14,7 @@
 .means-of-travel-buttons-container {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
   gap: 10px;
-}
-
-.means-of-travel-buttons-container button {
-  display: flex;
-  align-items: center;
 }
 
 .formcontainer {
@@ -34,16 +26,6 @@
   flex-direction: row;
   align-items: center;
   margin-bottom: 20px;
-}
-
-.passengers-container input {
-  margin-left: 10px;
-}
-
-.passengers-container span {
-  margin-left: 10px;
-  margin-top: 0;
-  margin-bottom: 0;
 }
 
 .not-filled {

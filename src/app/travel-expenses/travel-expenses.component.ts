@@ -1,11 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ReimbursementControlService } from '../reimbursement-control.service';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-travel-expenses',
   templateUrl: './travel-expenses.component.html',
-  styleUrls: ['./travel-expenses.component.css']
+  styleUrls: ['./travel-expenses.component.css'],
+  standalone: true,
+  imports: [RouterOutlet, ReactiveFormsModule]
 })
 export class TravelExpensesComponent {
   form: FormGroup;

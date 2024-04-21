@@ -1,18 +1,19 @@
+import { NgFor, NgIf } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import {
   FormGroup,
   FormArray,
   Validators,
-  FormControl,
-  NonNullableFormBuilder
+  NonNullableFormBuilder,
+  ReactiveFormsModule
 } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import {
   ExpenseForm,
   ExpenseFormValue,
   ReimbursementControlService
 } from 'src/app/reimbursement-control.service';
-import { Direction, Expense, ExpenseType } from 'src/domain/expense';
+import { Direction, ExpenseType } from 'src/domain/expense';
 
 export interface ExpenseDialogData {
   direction: Direction;
@@ -23,7 +24,9 @@ export interface ExpenseDialogData {
 @Component({
   selector: 'app-add-expense-modal',
   templateUrl: './add-expense-modal.component.html',
-  styleUrls: ['./add-expense-modal.component.css']
+  styleUrls: ['./add-expense-modal.component.css'],
+  standalone: true,
+  imports: [NgIf, NgFor, ReactiveFormsModule]
 })
 export class AddExpenseModalComponent {
   direction: Direction;
@@ -34,8 +37,8 @@ export class AddExpenseModalComponent {
 
   constructor(
     private controlService: ReimbursementControlService,
-    private dialogRef: MatDialogRef<AddExpenseModalComponent>,
-    @Inject(MAT_DIALOG_DATA) data: ExpenseDialogData,
+    private dialogRef: DialogRef<FormGroup<ExpenseForm>>,
+    @Inject(DIALOG_DATA) data: ExpenseDialogData,
     private formBuilder: NonNullableFormBuilder
   ) {
     this.direction = data.direction;
@@ -44,7 +47,7 @@ export class AddExpenseModalComponent {
 
     this.initialFormValue = this.form.getRawValue();
 
-    this.dialogRef.afterClosed().subscribe(() => {
+    this.dialogRef.closed.subscribe(() => {
       if (!this.form.valid) {
         this.form.reset(this.initialFormValue);
       }

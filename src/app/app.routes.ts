@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 import { PersonalInformationComponent } from './travel-expenses/personal-information/personal-information.component';
 import { SubmissionOverviewComponent } from './travel-expenses/submission-overview/submission-overview.component';
 import { ExpensesCollectionComponent } from './travel-expenses/expenses-collection/expenses-collection.component';
@@ -9,7 +8,7 @@ import { TravelExpensesComponent } from './travel-expenses/travel-expenses.compo
 import { CourseDataComponent } from './travel-expenses/course-data/course-data.component';
 import { courseGuard, expensesGuard, participantGuard } from './route-guards';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     redirectTo: 'kurs',
@@ -55,9 +54,3 @@ const routes: Routes = [
     ]
   }
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes, { useHash: true })],
-  exports: [RouterModule]
-})
-export class AppRoutingModule {}

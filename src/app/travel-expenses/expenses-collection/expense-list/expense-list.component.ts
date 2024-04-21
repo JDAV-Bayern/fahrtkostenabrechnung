@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import {
   ExpenseForm,
   ReimbursementControlService
@@ -8,14 +8,26 @@ import {
   AddExpenseModalComponent,
   ExpenseDialogData
 } from '../add-expense-modal/add-expense-modal.component';
-import { FormArray, FormGroup } from '@angular/forms';
+import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Direction } from 'src/domain/expense';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
+import { NgFor, NgIf } from '@angular/common';
+import { ExpenseListRowComponent } from '../expense-list-row/expense-list-row.component';
 
 @Component({
   selector: 'app-expense-list',
   templateUrl: './expense-list.component.html',
-  styleUrls: ['./expense-list.component.css']
+  styleUrls: ['./expense-list.component.css'],
+  standalone: true,
+  imports: [
+    NgIf,
+    NgFor,
+    ReactiveFormsModule,
+    CdkDrag,
+    CdkDropList,
+    DialogModule,
+    ExpenseListRowComponent
+  ]
 })
 export class ExpenseListComponent {
   @Input({ required: true })
@@ -37,7 +49,7 @@ export class ExpenseListComponent {
   formArray!: FormArray<FormGroup<ExpenseForm>>;
 
   constructor(
-    public dialog: MatDialog,
+    public dialog: Dialog,
     private readonly controlService: ReimbursementControlService
   ) {}
 
@@ -68,12 +80,8 @@ export class ExpenseListComponent {
       showPlan: this.showPlan
     };
     this.dialog
-      .open(AddExpenseModalComponent, {
-        data,
-        width: 'min(95vw, 700px)'
-      })
-      .afterClosed()
-      .subscribe((result: FormGroup<ExpenseForm>) => {
+      .open<FormGroup<ExpenseForm>>(AddExpenseModalComponent, { data })
+      .closed.subscribe(result => {
         if (result) {
           this.formArray.push(result);
         }

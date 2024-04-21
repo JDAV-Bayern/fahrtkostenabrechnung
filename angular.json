@@ -20,8 +20,8 @@
             "tsConfig": "tsconfig.app.json",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              "@angular/material/prebuilt-themes/deeppurple-amber.css",
               "@ng-select/ng-select/themes/default.theme.css",
+              "@danielmoncada/angular-datetime-picker/assets/style/picker.min.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -78,7 +78,8 @@
             "tsConfig": "tsconfig.spec.json",
             "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              "@angular/material/prebuilt-themes/deeppurple-amber.css",
+              "@ng-select/ng-select/themes/default.theme.css",
+              "@danielmoncada/angular-datetime-picker/assets/style/picker.min.css",
               "src/styles.css"
             ],
             "scripts": []

@@ -1,7 +1,5 @@
 .dialog-content {
   padding: 20px;
-  max-height: 90vh;
-  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   align-items: center;

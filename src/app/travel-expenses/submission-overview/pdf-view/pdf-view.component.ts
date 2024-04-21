@@ -1,14 +1,18 @@
+import { NgFor, NgIf } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ExpenseService } from 'src/app/expense.service';
 import { SectionService } from 'src/app/section.service';
 import { logoBase64 } from 'src/assets/logoBase64';
 import { Reimbursement } from 'src/domain/reimbursement';
 import { Section } from 'src/domain/section';
+import { PdfExpenseLineItemComponent } from '../pdf-expense-line-item/pdf-expense-line-item.component';
 
 @Component({
   selector: 'app-pdf-view',
   templateUrl: './pdf-view.component.html',
-  styleUrls: ['./pdf-view.component.css']
+  styleUrls: ['./pdf-view.component.css'],
+  standalone: true,
+  imports: [NgIf, NgFor, PdfExpenseLineItemComponent]
 })
 export class PdfViewComponent {
   @Input({ required: true })

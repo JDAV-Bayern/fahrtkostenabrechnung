@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { AddExpenseModalComponent } from '../add-expense-modal/add-expense-modal.component';
 import { FormGroup } from '@angular/forms';
 import {
@@ -11,7 +11,9 @@ import { ExpenseService } from 'src/app/expense.service';
 @Component({
   selector: 'app-expense-list-row',
   templateUrl: './expense-list-row.component.html',
-  styleUrls: ['./expense-list-row.component.css']
+  styleUrls: ['./expense-list-row.component.css'],
+  standalone: true,
+  imports: [DialogModule]
 })
 export class ExpenseListRowComponent {
   @Output()
@@ -26,7 +28,7 @@ export class ExpenseListRowComponent {
   constructor(
     private expenseService: ExpenseService,
     private controlService: ReimbursementControlService,
-    private readonly dialog: MatDialog
+    private readonly dialog: Dialog
   ) {}
 
   get expense() {
@@ -35,8 +37,7 @@ export class ExpenseListRowComponent {
 
   editMe() {
     this.dialog.open(AddExpenseModalComponent, {
-      data: { form: this.form, showPlan: false },
-      width: '80%'
+      data: { form: this.form, showPlan: false }
     });
   }
 
