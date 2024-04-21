@@ -1,4 +1,4 @@
-footer {
+:host {
   background-color: var(--color-footer);
   color: #fff;
   flex-basis: content;

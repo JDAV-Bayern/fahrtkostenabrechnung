@@ -1,7 +1,7 @@
 import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { TravelControlService } from 'src/app/travel/shared/travel-control.service';
 
@@ -16,20 +16,20 @@ export class MeetingCourseStepComponent {
   form;
 
   constructor(
-    public router: Router,
     public route: ActivatedRoute,
     public controlService: TravelControlService
   ) {
     this.form = controlService.meetingStep;
     this.form.controls.type.setValue('course');
 
-    const params = this.route.snapshot.queryParamMap;
-    if (params.has('nummer') || params.has('name')) {
-      this.form.patchValue({
-        code: params.get('nummer') || '',
-        name: params.get('name') || ''
-      });
-    }
+    this.route.queryParamMap.subscribe(params => {
+      if (params.has('nummer') || params.has('name')) {
+        this.form.patchValue({
+          code: params.get('nummer') || '',
+          name: params.get('name') || ''
+        });
+      }
+    });
   }
 
   get code() {

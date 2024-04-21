@@ -26,6 +26,11 @@ h2 {
   margin-bottom: 20px;
 }
 
+.add-passenger {
+  color: var(--color-primary);
+  font-weight: normal;
+}
+
 .not-filled {
   width: auto;
 }

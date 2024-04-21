@@ -11,7 +11,6 @@
 body,
 html {
   font-family: 'Tahoma', 'Helvetica Neue', sans-serif;
-  background-color: var(--bg-gray);
   color: var(--color-body);
   margin: 0;
   padding: 0;
@@ -34,17 +33,6 @@ fieldset {
   padding: 0;
 }
 
-.base-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.content {
-  flex-grow: 1;
-  display: inline;
-}
-
 .dialog {
   background-color: #fff;
   border-radius: 4px;
@@ -63,8 +51,9 @@ fieldset {
 }
 
 button {
+  font-size: inherit;
   box-sizing: border-box;
-  padding: 10px 20px;
+  padding: 8px 16px;
   background-color: var(--color-primary);
   text-transform: uppercase;
   color: #fff;

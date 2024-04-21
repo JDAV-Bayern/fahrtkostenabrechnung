@@ -6,7 +6,7 @@ import { ExpenseConfig, expenseConfig } from '../expense.config';
   providedIn: 'root'
 })
 export class ExpenseService {
-  config: ExpenseConfig = expenseConfig.course;
+  config = expenseConfig.course;
 
   getAmount(expense: Expense) {
     switch (expense.type) {

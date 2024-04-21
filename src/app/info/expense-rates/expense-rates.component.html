@@ -1,1 +1,133 @@
-<p>expense-rates works!</p>
+<h1>Erstattungssätze</h1>
+
+<div *ngIf="meetingType !== 'committee'">
+  <p>
+    Fahrtkosten zur Schulung werden von der JDAV Bayern wie in der Tabelle
+    dargestellt erstattet. Der Betrag wird dir nach der Schulung auf dein Konto
+    überwiesen.
+  </p>
+  <p>
+    Die Fahrtkosten zur Landesjugendversammlung werden wie bei Schulungen
+    erstattet.
+  </p>
+</div>
+
+<div *ngIf="meetingType === 'committee'">
+  <p>
+    Für Gremien gelten die folgenden Erstattungssätze. Details kannst du dem
+    Leitfaden für Abrechnungen für Gremien entnehmen. Die angepassten Sätze
+    werden hier angezeigt.
+  </p>
+  <p class="explanation">
+    Bitte beachte, dass die BahnCard für Gremien durch das Formular nicht
+    berücksichtigt werden kann. Bitte hänge die Rechnung deiner BahnCard an, der
+    Betrag wird dann durch die LGS entsprechend zusätzlich erstattet.
+  </p>
+</div>
+
+<p *ngIf="config.maxTotal" class="important">
+  Für nicht-bayerische Teilnehmer*innen werden maximal
+  {{ config.maxTotal | currency }} erstattet.
+</p>
+
+<div *ngIf="config.allowed.includes('transport') && config.transport">
+  <h2>Fahrtkosten</h2>
+
+  <p>
+    Die Erstattung der Fahrtkosten erfolgt abhängig vom Verkehrsmittel nach den
+    folgenden Sätzen.
+  </p>
+
+  <h3>Autofahrt</h3>
+
+  <p class="explanation">
+    Die Erstattung von Autofahrten erfolgt abhängig von der Anzahl der
+    Mitfahrer*innen.
+  </p>
+  <p class="explanation">
+    Zur CO2-Bilanzierung erfragen wir zusätzlich, welchen Antrieb euer Fahrzeug
+    hat. Diese Angabe hat keinen Einfluss auf die Erstattung.
+  </p>
+  <table>
+    <tr *ngFor="let entry of config.transport.car; index as i">
+      <td>{{ i + 1 }} Personen</td>
+      <td>{{ entry | currency }} pro km</td>
+    </tr>
+  </table>
+
+  <h3>Zugfahrt</h3>
+
+  <p class="explanation">
+    Die Erstattung von Zugfahrten erfolgt abhängig vom (ermäßigten) Ticketpreis
+    und der genutzten BahnCard.
+  </p>
+  <p class="important">Bitte eine Kopie der Fahrkarte anhängen!</p>
+  <table>
+    <tr *ngFor="let entry of config.transport.train | keyvalue">
+      <td>{{ entry.key | discountCard }}</td>
+      <td>{{ entry.value | percent }} des Ticketpreis</td>
+    </tr>
+  </table>
+
+  <h3>Fahrt mit Aboticket</h3>
+
+  <p class="explanation">
+    Für die Nutzung von Abotickets (Deutschlandticket, Semesterticket, o.ä.)
+    wird je Fahrtstrecke (Hin- oder Rückfahrt) eine Pauschale erstattet.
+  </p>
+  <p class="important">Bitte eine Kopie der Fahrkarte anhängen!</p>
+
+  <table>
+    <tr>
+      <td>pauschal {{ config.transport.plan | currency }} pro Strecke</td>
+    </tr>
+  </table>
+
+  <h3>Fahrrad</h3>
+
+  <table>
+    <tr>
+      <td>{{ config.transport.bike | currency }} pro Kilometer</td>
+    </tr>
+  </table>
+</div>
+
+<div *ngIf="config.allowed.includes('food') && config.food">
+  <h2>Tagegeld</h2>
+
+  <p>
+    Bei Geschäftsreisen für die JDAV können Tagegelder für den entstehenden
+    Mehraufwand für Verpflegung nach folgenden Sätzen abgerechnet werden:
+  </p>
+  <table>
+    <tr *ngFor="let entry of config.food.allowance | keyvalue">
+      <td>{{ entry.key | absence }}</td>
+      <td>{{ entry.value | currency }}</td>
+    </tr>
+  </table>
+
+  <p>
+    Bei Gewährung unentgeltlicher Verpflegung werden folgende Beträge abgezogen:
+  </p>
+  <table>
+    <tr *ngFor="let entry of config.food.meals | keyvalue">
+      <td>{{ entry.key | meals }}</td>
+      <td>{{ entry.value | currency }}</td>
+    </tr>
+  </table>
+
+  <p class="explanation">
+    Bei Reisen ins Ausland gelten abweichende Sätze, die bei Bedarf in der LGS
+    erfragt werden können.
+  </p>
+</div>
+
+<div *ngIf="config.allowed.includes('material')">
+  <h2>Sachkosten</h2>
+
+  <p class="important">Bitte eine Kopie der Belege anhängen!</p>
+  <p>
+    Ausgenommen hiervon ist die Erstattung im Rahmen der Sachkostenpauschale,
+    wie sie im Leitfaden für Abrechnungen für Gremien beschrieben ist.
+  </p>
+</div>

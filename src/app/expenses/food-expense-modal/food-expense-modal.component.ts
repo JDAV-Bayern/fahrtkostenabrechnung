@@ -7,7 +7,7 @@ import {
   OwlNativeDateTimeModule
 } from '@danielmoncada/angular-datetime-picker';
 import { FoodExpenseForm } from 'src/app/expenses/shared/expense-form';
-import { FormValue } from 'src/app/shared/form-value';
+import { RawFormValue } from 'src/app/shared/form-value';
 
 @Component({
   selector: 'app-food-expense-modal',
@@ -24,7 +24,7 @@ import { FormValue } from 'src/app/shared/form-value';
 export class FoodExpenseModalComponent {
   form: FormGroup<FoodExpenseForm>;
 
-  initialFormValue: FormValue<FoodExpenseForm>;
+  initialFormValue: RawFormValue<FoodExpenseForm>;
 
   constructor(
     private dialogRef: DialogRef<FormGroup<FoodExpenseForm>>,

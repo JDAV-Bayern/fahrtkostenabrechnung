@@ -21,7 +21,7 @@ import {
   FormControl,
   NonNullableFormBuilder
 } from '@angular/forms';
-import { FormValue } from 'src/app/shared/form-value';
+import { RawFormValue } from 'src/app/shared/form-value';
 
 @Injectable({
   providedIn: 'root'
@@ -57,34 +57,9 @@ export class ExpenseControlService {
     }) as FormGroup<TransportExpenseForm>;
 
     form.controls.mode.valueChanges.subscribe(value =>
-      value ? this.updateTransportForm(form, value) : undefined
+      this.onTransportModeChanged(form, value)
     );
     return form;
-  }
-
-  updateTransportForm(
-    form: FormGroup<TransportExpenseForm>,
-    mode: TransportMode
-  ) {
-    form.controls.mode.setValue(mode);
-    switch (mode) {
-      case 'car':
-        form.removeControl('train');
-        break;
-      case 'train':
-        form.removeControl('distance');
-        form.removeControl('car');
-        break;
-      case 'plan':
-        form.removeControl('distance');
-        form.removeControl('car');
-        form.removeControl('train');
-        break;
-      case 'bike':
-        form.removeControl('car');
-        form.removeControl('train');
-        break;
-    }
   }
 
   createFoodForm(): FormGroup<FoodExpenseForm> {
@@ -119,7 +94,7 @@ export class ExpenseControlService {
   }
 
   getTransportExpense(
-    value: FormValue<TransportExpenseForm>
+    value: RawFormValue<TransportExpenseForm>
   ): TransportExpense {
     switch (value.mode) {
       case 'car':
@@ -161,7 +136,7 @@ export class ExpenseControlService {
     }
   }
 
-  getFoodExpense(value: FormValue<FoodExpenseForm>): FoodExpense {
+  getFoodExpense(value: RawFormValue<FoodExpenseForm>): FoodExpense {
     let meals: Meal[] = [];
     for (let entry of Object.entries(value.meals)) {
       if (entry[1] === true) {
@@ -177,11 +152,37 @@ export class ExpenseControlService {
     };
   }
 
-  getMaterialExpense(value: FormValue<MaterialExpenseForm>): MaterialExpense {
+  getMaterialExpense(
+    value: RawFormValue<MaterialExpenseForm>
+  ): MaterialExpense {
     return {
       type: 'material',
       ...value,
       date: value.date || new Date()
     };
+  }
+
+  private onTransportModeChanged(
+    form: FormGroup<TransportExpenseForm>,
+    value: TransportMode | ''
+  ) {
+    switch (value) {
+      case 'car':
+        form.removeControl('train');
+        break;
+      case 'train':
+        form.removeControl('distance');
+        form.removeControl('car');
+        break;
+      case 'plan':
+        form.removeControl('distance');
+        form.removeControl('car');
+        form.removeControl('train');
+        break;
+      case 'bike':
+        form.removeControl('car');
+        form.removeControl('train');
+        break;
+    }
   }
 }

@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Absence, CarType, DiscountCard, Meal } from 'src/domain/expense.model';
+import { Absence, Meal } from 'src/domain/expense.model';
 
-export function formatAbsence(value: Absence) {
+export function formatAbsence(value: string): string | null {
   switch (value) {
     case 'fullDay':
       return 'ganze 24 Stunden';
@@ -9,6 +9,21 @@ export function formatAbsence(value: Absence) {
       return 'am An- oder Abreisetag';
     case 'workDay':
       return 'mehr als acht Stunden';
+    default:
+      return null;
+  }
+}
+
+export function formatMeal(value: string): string | null {
+  switch (value) {
+    case 'breakfast':
+      return 'Frühstück';
+    case 'lunch':
+      return 'Mittag';
+    case 'dinner':
+      return 'Abend';
+    default:
+      return null;
   }
 }
 
@@ -17,7 +32,7 @@ export function formatAbsence(value: Absence) {
   standalone: true
 })
 export class DiscountCardPipe implements PipeTransform {
-  transform(value: DiscountCard): string {
+  transform(value: string): string | null {
     switch (value) {
       case 'none':
         return 'Keine BahnCard';
@@ -25,6 +40,8 @@ export class DiscountCardPipe implements PipeTransform {
         return 'BahnCard 25';
       case 'BC50':
         return 'BahnCard 50';
+      default:
+        return null;
     }
   }
 }
@@ -34,7 +51,7 @@ export class DiscountCardPipe implements PipeTransform {
   standalone: true
 })
 export class CarTypePipe implements PipeTransform {
-  transform(value: CarType): string {
+  transform(value: string): string | null {
     switch (value) {
       case 'combustion':
         return 'Verbrenner';
@@ -42,6 +59,8 @@ export class CarTypePipe implements PipeTransform {
         return 'Elektro';
       case 'plug-in-hybrid':
         return 'Plug-In Hybrid';
+      default:
+        return null;
     }
   }
 }
@@ -51,7 +70,7 @@ export class CarTypePipe implements PipeTransform {
   standalone: true
 })
 export class AbsencePipe implements PipeTransform {
-  transform(value: Absence): string {
+  transform(value: string): string | null {
     return formatAbsence(value);
   }
 }
@@ -61,16 +80,14 @@ export class AbsencePipe implements PipeTransform {
   standalone: true
 })
 export class MealsPipe implements PipeTransform {
-  transform(value: Meal[]): string[] {
-    return value.map(meal => {
-      switch (meal) {
-        case 'breakfast':
-          return 'Frühstück';
-        case 'lunch':
-          return 'Mittag';
-        case 'dinner':
-          return 'Abend';
-      }
-    });
+  transform(value: string): string | null;
+  transform(value: string[]): (string | null)[];
+
+  transform(value: string | string[]) {
+    if (typeof value === 'string') {
+      return formatMeal(value);
+    } else {
+      return value.map(meal => formatMeal(meal));
+    }
   }
 }

@@ -1,3 +1,8 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
 .breadcrumbs-container {
   max-width: 1200px;
   margin: 1.25rem auto;

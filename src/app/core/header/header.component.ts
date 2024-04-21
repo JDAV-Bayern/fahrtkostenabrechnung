@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { TravelControlService } from 'src/app/travel/shared/travel-control.service';
 
 @Component({
-  selector: 'app-header',
+  selector: 'header[appHeader]',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
   standalone: true

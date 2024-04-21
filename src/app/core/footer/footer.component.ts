@@ -4,7 +4,7 @@ import { GithubIconComponent } from 'src/app/shared/icons/github-icon/github-ico
 import { InstagramIconComponent } from 'src/app/shared/icons/instagram-icon/instagram-icon.component';
 
 @Component({
-  selector: 'app-footer',
+  selector: 'footer[appFooter]',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.css'],
   standalone: true,

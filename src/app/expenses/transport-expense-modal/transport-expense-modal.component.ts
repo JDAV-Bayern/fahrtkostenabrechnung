@@ -11,7 +11,7 @@ import { TransportExpenseForm } from 'src/app/expenses/shared/expense-form';
 import { TransportMode } from 'src/domain/expense.model';
 import { ExpenseTitlePipe } from '../shared/expense-title.pipe';
 import { TransportModePipe } from '../shared/transport-mode.pipe';
-import { FormValue } from 'src/app/shared/form-value';
+import { RawFormValue } from 'src/app/shared/form-value';
 
 export interface TransportExpenseDialogData {
   allowedModes: TransportMode[];
@@ -35,7 +35,7 @@ export class TransportExpenseModalComponent {
   form: FormGroup<TransportExpenseForm>;
   allowedModes: TransportMode[];
 
-  initialFormValue: FormValue<TransportExpenseForm>;
+  initialFormValue: RawFormValue<TransportExpenseForm>;
 
   constructor(
     private dialogRef: DialogRef<FormGroup<TransportExpenseForm>>,

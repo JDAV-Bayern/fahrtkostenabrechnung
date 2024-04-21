@@ -8,10 +8,7 @@ import {
   Validators
 } from '@angular/forms';
 import { validateIBAN } from 'ngx-iban-validator';
-import {
-  Direction,
-  TransportMode
-} from 'src/domain/expense.model';
+import { Direction } from 'src/domain/expense.model';
 import { Travel } from 'src/domain/travel.model';
 import { maxPlanExpenses } from './max-plan-expenses.validator';
 import { validateCourseCode } from './course-code.validator';
@@ -19,8 +16,13 @@ import { Meeting, MeetingType } from 'src/domain/meeting.model';
 import { MeetingForm, DateRange } from './meeting-form';
 import { TravelService } from './travel.service';
 import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.service';
-import { TransportExpenseForm, FoodExpenseForm, MaterialExpenseForm } from 'src/app/expenses/shared/expense-form';
+import {
+  TransportExpenseForm,
+  FoodExpenseForm,
+  MaterialExpenseForm
+} from 'src/app/expenses/shared/expense-form';
 import { anyRequired } from 'src/app/shared/any-required.validator';
+import { FormValue } from 'src/app/shared/form-value';
 
 const PLZ_PATTERN = /^[0-9]{5}$/;
 const BIC_PATTERN = /^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/;
@@ -99,7 +101,7 @@ export class TravelControlService {
 
     const meetingType = this.meetingStep.controls.type;
     meetingType.valueChanges.subscribe(value => {
-      this.updateMeetingFormGroup(value);
+      this.onMeetingTypeChanged(value);
       this.travelService.meetingType = value;
     });
 
@@ -134,37 +136,12 @@ export class TravelControlService {
     return this.transportExpensesStep.controls[direction];
   }
 
-  updateMeetingFormGroup(type: MeetingType) {
-    const form = this.meetingStep;
-    form.controls.type.setValue(type);
-
-    switch (type) {
-      case 'course':
-        form.addControl('code', this.courseCodeControl);
-        form.controls.location.disable();
-        form.controls.period.disable();
-        break;
-      case 'assembly':
-        form.removeControl('code');
-        form.controls.location.disable();
-        form.controls.period.disable();
-
-        form.controls.name.setValue('Landesjugendversammlung');
-        break;
-      case 'committee':
-        form.removeControl('code');
-        form.controls.location.enable();
-        form.controls.period.enable();
-        break;
-    }
-  }
-
   loadForm() {
     console.log('Loading form values from local storage...');
 
     // parse JSON from local storage
     const storedData = localStorage.getItem('travelExpenses') || '{}';
-    const storedValue = JSON.parse(storedData);
+    const storedValue: FormValue<typeof this.form> = JSON.parse(storedData);
 
     // add transport expense controls
     if (storedValue.expenses?.transport) {
@@ -174,22 +151,7 @@ export class TravelControlService {
           this.transportExpensesStep.setControl(
             direction,
             this.formBuilder.array<FormGroup<TransportExpenseForm>>(
-              expenses.map((expense: any) => {
-                const formRecord =
-                  this.expenseControlService.createTransportForm();
-
-                if (expense.mode === 'car' && expense.car?.passengers) {
-                  formRecord.controls.car?.setControl(
-                    'passengers',
-                    this.formBuilder.array(
-                      expense.car.passengers.map(
-                        () => new FormControl('', Validators.required)
-                      )
-                    )
-                  );
-                }
-                return formRecord;
-              })
+              expenses.map(expense => this.copyTransportForm(expense))
             )
           );
         }
@@ -333,19 +295,8 @@ export class TravelControlService {
       value.origin = value.destination;
       value.destination = temp;
 
-      const control = this.expenseControlService.createTransportForm();
-      this.expenseControlService.updateTransportForm(
-        control,
-        value.mode as TransportMode
-      );
+      const control = this.copyTransportForm(value);
       control.patchValue(value);
-
-      if (value.mode === 'car') {
-        control.controls.car?.setControl(
-          'passengers',
-          this.formBuilder.array(value.car?.passengers!)
-        );
-      }
       outbound.push(control);
     }
   }
@@ -361,11 +312,52 @@ export class TravelControlService {
     return lastExpense.destination;
   }
 
+  private onMeetingTypeChanged(value: MeetingType) {
+    const form = this.meetingStep;
+    switch (value) {
+      case 'course':
+        form.addControl('code', this.courseCodeControl);
+        form.controls.location.disable();
+        form.controls.period.disable();
+        break;
+      case 'assembly':
+        form.removeControl('code');
+        form.controls.location.disable();
+        form.controls.period.disable();
+
+        form.controls.name.setValue('Landesjugendversammlung');
+        break;
+      case 'committee':
+        form.removeControl('code');
+        form.controls.location.enable();
+        form.controls.period.enable();
+        break;
+    }
+  }
+
   private onIbanChanged(value: string) {
     const iban = this.participantStep.controls.iban;
     const bic = this.participantStep.controls.bic;
     const enable =
       iban.valid && (value.match(BIC_REQUIRED) || !value.match(SEPA_CODES));
     enable ? bic.enable() : bic.disable();
+  }
+
+  private copyTransportForm(original: FormValue<TransportExpenseForm>) {
+    const form = this.expenseControlService.createTransportForm();
+
+    // create passenger controls
+    if (original.mode === 'car' && original.car?.passengers) {
+      form.controls.car?.setControl(
+        'passengers',
+        this.formBuilder.array(
+          original.car.passengers.map(() =>
+            this.formBuilder.control('', Validators.required)
+          )
+        )
+      );
+    }
+
+    return form;
   }
 }

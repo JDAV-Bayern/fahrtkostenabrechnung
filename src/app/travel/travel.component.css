@@ -1,6 +1,11 @@
-/* Center the content vertically and horizontally */
+:host {
+  display: block;
+  width: 100%;
+  background-color: var(--bg-gray);
+}
+
 .step-content {
   margin: 20px auto;
-  max-width: min(95vw, 600px);
-  min-width: 50%;
+  max-width: 95vw;
+  width: 600px;
 }

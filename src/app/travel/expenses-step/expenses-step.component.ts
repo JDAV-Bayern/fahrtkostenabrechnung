@@ -10,7 +10,11 @@ import { TravelService } from '../shared/travel.service';
 import { TransportExpenseForm } from 'src/app/expenses/shared/expense-form';
 import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.service';
 import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
-import { TransportExpenseDialogData, TransportExpenseModalComponent } from 'src/app/expenses/transport-expense-modal/transport-expense-modal.component';
+import {
+  TransportExpenseDialogData,
+  TransportExpenseModalComponent
+} from 'src/app/expenses/transport-expense-modal/transport-expense-modal.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-expenses-step',
@@ -19,6 +23,7 @@ import { TransportExpenseDialogData, TransportExpenseModalComponent } from 'src/
   standalone: true,
   imports: [
     NgIf,
+    RouterLink,
     ReactiveFormsModule,
     CurrencyPipe,
     CdkDropListGroup,
@@ -39,9 +44,25 @@ export class ExpensesStepComponent {
     this.form = this.travelControlService.transportExpensesStep;
   }
 
+  get meetingType() {
+    return this.travelControlService.meetingStep.controls.type.value;
+  }
+
+  get queryParams() {
+    switch (this.meetingType) {
+      case 'course':
+        return { veranstaltung: 'kurs' };
+      case 'assembly':
+        return { veranstaltung: 'ljv' };
+      case 'committee':
+        return { veranstaltung: 'gremium' };
+    }
+  }
+
   get nextStep() {
-    const meeting = this.travelControlService.meetingStep.controls.type.value;
-    return meeting === 'committee' ? 'auslagen-gremium' : 'zusammenfassung';
+    return this.meetingType === 'committee'
+      ? 'auslagen-gremium'
+      : 'zusammenfassung';
   }
 
   get total() {

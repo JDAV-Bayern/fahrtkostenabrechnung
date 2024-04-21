@@ -1,13 +1,17 @@
-header {
+:host {
+  position: relative;
+  z-index: 1;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.container {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: center;
   gap: 10px;
-  background-color: #fff;
-  flex-basis: content;
   padding: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .logo img {
@@ -20,13 +24,8 @@ header {
 }
 
 .delete-data {
-  margin: 0;
   font-weight: normal;
   font-size: small;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  cursor: pointer;
   font-style: italic;
 }
 

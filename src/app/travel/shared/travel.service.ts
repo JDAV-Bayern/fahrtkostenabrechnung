@@ -20,7 +20,7 @@ export type TravelSummary = {
   providedIn: 'root'
 })
 export class TravelService {
-  config: ExpenseConfig = expenseConfig.course;
+  config = expenseConfig.course;
 
   constructor(
     private expenseService: ExpenseService,

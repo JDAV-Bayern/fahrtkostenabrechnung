@@ -6,26 +6,25 @@ import {
 } from 'src/domain/expense.model';
 import { MeetingType } from 'src/domain/meeting.model';
 
-export interface ExpenseConfig {
-  allowed: ExpenseType[];
-  transport?: {
-    car: number[];
-    train: { [key in DiscountCard]: number };
-    plan: number;
-    bike: number;
-  };
-  food?: {
-    allowance: { [key in Absence]: number };
-    meals: { [key in Meal]: number };
-  };
-  maxTotal?: number;
-}
+export type ExpenseConfig = Record<
+  MeetingType,
+  {
+    allowed: ExpenseType[];
+    transport?: {
+      car: number[];
+      train: Record<DiscountCard, number>;
+      plan: number;
+      bike: number;
+    };
+    food?: {
+      allowance: Record<Absence, number>;
+      meals: Record<Meal, number>;
+    };
+    maxTotal?: number;
+  }
+>;
 
-export type ExpenseConfigSelection = {
-  [key in MeetingType]: ExpenseConfig;
-};
-
-export const expenseConfig: ExpenseConfigSelection = {
+export const expenseConfig: ExpenseConfig = {
   course: {
     allowed: ['transport'],
     transport: {
