@@ -4,7 +4,6 @@ import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { NgFor, NgIf } from '@angular/common';
 import { ExpenseCardComponent } from '../expense-card/expense-card.component';
-import { DirectionPipe } from 'src/app/travel/shared/direction.pipe';
 import { ExpenseType } from 'src/domain/expense.model';
 import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.service';
 
@@ -19,7 +18,6 @@ import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.s
     ReactiveFormsModule,
     CdkDrag,
     CdkDropList,
-    DirectionPipe,
     ExpenseCardComponent
   ]
 })

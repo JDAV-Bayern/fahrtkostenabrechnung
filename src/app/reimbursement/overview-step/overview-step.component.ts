@@ -1,19 +1,20 @@
 import { Component } from '@angular/core';
 import jsPDF from 'jspdf';
 import * as imageprocessor from 'ts-image-processor';
-import { TravelControlService } from 'src/app/travel/shared/travel-control.service';
+import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { PDFDocument } from 'pdf-lib';
-import { TravelValidatorService } from 'src/app/travel/shared/travel-validator.service';
+import { ReimbursementValidatorService } from 'src/app/reimbursement/shared/reimbursemen-validator.service';
 import { NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { FinishedDialogComponent } from './finished-dialog/finished-dialog.component';
-import { CurrencyPipe, formatDate } from '@angular/common';
+import { CurrencyPipe, KeyValuePipe, formatDate } from '@angular/common';
 import { NgFor, NgIf } from '@angular/common';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ProgressIndicatorComponent } from 'src/app/shared/icons/progress-indicator/progress-indicator.component';
 import { PdfViewComponent } from './pdf-view/pdf-view.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { TravelService } from '../shared/travel.service';
+import { ReimbursementService } from '../shared/reimbursement.service';
+import { ExpenseTypePipe } from '../../expenses/shared/expense-type.pipe';
 
 @Component({
   selector: 'app-overview-step',
@@ -25,11 +26,13 @@ import { TravelService } from '../shared/travel.service';
     NgFor,
     ReactiveFormsModule,
     CurrencyPipe,
+    KeyValuePipe,
     DialogModule,
     NgxFileDropModule,
     FormCardComponent,
     ProgressIndicatorComponent,
-    PdfViewComponent
+    PdfViewComponent,
+    ExpenseTypePipe
   ]
 })
 export class OverviewStepComponent {
@@ -49,24 +52,24 @@ export class OverviewStepComponent {
   });
 
   constructor(
-    private readonly travelService: TravelService,
-    private readonly controlService: TravelControlService,
-    private readonly validationService: TravelValidatorService,
+    private readonly reimbursementService: ReimbursementService,
+    private readonly controlService: ReimbursementControlService,
+    private readonly validationService: ReimbursementValidatorService,
     private readonly dialog: Dialog
   ) {
     this.form = controlService.overviewStep;
   }
 
-  get travel() {
-    return this.controlService.getTravel();
+  get reimbursement() {
+    return this.controlService.getReimbursement();
   }
 
   get meeting() {
-    return this.travel.meeting;
+    return this.reimbursement.meeting;
   }
 
   get participant() {
-    return this.travel.participant;
+    return this.reimbursement.participant;
   }
 
   get prevStep() {
@@ -74,12 +77,12 @@ export class OverviewStepComponent {
     return meeting === 'committee' ? 'auslagen-gremium' : 'auslagen';
   }
 
-  get summary() {
-    return this.travelService.getSummary(this.travel);
+  get report() {
+    return this.reimbursementService.getReport(this.reimbursement);
   }
 
   getWarnings(): string[] {
-    return this.validationService.validateTravel(this.travel);
+    return this.validationService.validateReimbursement(this.reimbursement);
   }
 
   async addImageToPdf(imageFile: File, pdf: jsPDF) {
@@ -223,15 +226,15 @@ export class OverviewStepComponent {
       }
     }
 
-    combinedPdfDocument.setSubject(JSON.stringify(this.travel));
+    combinedPdfDocument.setSubject(JSON.stringify(this.reimbursement));
 
     const pdfBytes = await combinedPdfDocument.save();
     const file = new Blob([pdfBytes], { type: 'application/ pdf' });
     const fileURL = URL.createObjectURL(file);
 
     let fileName;
-    const meeting = this.travel.meeting;
-    const lastName = this.travel.participant.familyName;
+    const meeting = this.reimbursement.meeting;
+    const lastName = this.reimbursement.participant.familyName;
 
     switch (meeting.type) {
       case 'course':
@@ -255,8 +258,8 @@ export class OverviewStepComponent {
 
     this.dialog.open(FinishedDialogComponent, {
       data: {
-        givenName: this.travel.participant.givenName,
-        meeting: this.travel.meeting
+        givenName: this.reimbursement.participant.givenName,
+        meeting: this.reimbursement.meeting
       }
     });
   }

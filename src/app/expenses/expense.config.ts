@@ -57,7 +57,7 @@ export const expenseConfig: ExpenseConfig = {
     transport: {
       car: [0.2, 0.27, 0.3],
       train: {
-        // for committee travel, the discount card is not handled by the form
+        // for committee reimbursement, the discount card is not handled by the form
         none: 1,
         BC25: 1,
         BC50: 1

@@ -9,12 +9,12 @@ import {
 } from '@angular/forms';
 import { validateIBAN } from 'ngx-iban-validator';
 import { Direction } from 'src/domain/expense.model';
-import { Travel } from 'src/domain/travel.model';
+import { Reimbursement } from 'src/domain/reimbursement.model';
 import { maxPlanExpenses } from './max-plan-expenses.validator';
 import { validateCourseCode } from './course-code.validator';
 import { Meeting, MeetingType } from 'src/domain/meeting.model';
 import { MeetingForm, DateRange } from './meeting-form';
-import { TravelService } from './travel.service';
+import { ReimbursementService } from './reimbursement.service';
 import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.service';
 import {
   TransportExpenseForm,
@@ -34,7 +34,7 @@ const BIC_REQUIRED = /^(MC|SM|CH)/;
 @Injectable({
   providedIn: 'root'
 })
-export class TravelControlService {
+export class ReimbursementControlService {
   private courseCodeControl = this.formBuilder.control('', [
     Validators.required,
     validateCourseCode
@@ -67,17 +67,20 @@ export class TravelControlService {
     }),
     expenses: this.formBuilder.group(
       {
-        transport: this.formBuilder.group({
-          inbound: this.formBuilder.array<FormGroup<TransportExpenseForm>>(
-            [],
-            maxPlanExpenses
-          ),
-          onsite: this.formBuilder.array<FormGroup<TransportExpenseForm>>([]),
-          outbound: this.formBuilder.array<FormGroup<TransportExpenseForm>>(
-            [],
-            maxPlanExpenses
-          )
-        }),
+        transport: this.formBuilder.group(
+          {
+            inbound: this.formBuilder.array<FormGroup<TransportExpenseForm>>(
+              [],
+              maxPlanExpenses
+            ),
+            onsite: this.formBuilder.array<FormGroup<TransportExpenseForm>>([]),
+            outbound: this.formBuilder.array<FormGroup<TransportExpenseForm>>(
+              [],
+              maxPlanExpenses
+            )
+          },
+          { validators: anyRequired }
+        ),
         food: this.formBuilder.array<FormGroup<FoodExpenseForm>>([]),
         material: this.formBuilder.array<FormGroup<MaterialExpenseForm>>([])
       },
@@ -92,7 +95,7 @@ export class TravelControlService {
   constructor(
     private formBuilder: NonNullableFormBuilder,
     private expenseControlService: ExpenseControlService,
-    private travelService: TravelService
+    private reimbursementService: ReimbursementService
   ) {
     this.form.valueChanges.subscribe(() => this.saveForm());
 
@@ -102,29 +105,33 @@ export class TravelControlService {
     const meetingType = this.meetingStep.controls.type;
     meetingType.valueChanges.subscribe(value => {
       this.onMeetingTypeChanged(value);
-      this.travelService.meetingType = value;
+      this.reimbursementService.meetingType = value;
     });
 
     this.loadForm();
-  }
-
-  get participantStep() {
-    return this.form.controls.participant;
   }
 
   get meetingStep() {
     return this.form.controls.meeting;
   }
 
+  get participantStep() {
+    return this.form.controls.participant;
+  }
+
+  get expensesStep() {
+    return this.form.controls.expenses;
+  }
+
   get transportExpensesStep() {
     return this.form.controls.expenses.controls.transport;
   }
 
-  get foodExpensesStep() {
+  get foodExpenses() {
     return this.form.controls.expenses.controls.food;
   }
 
-  get materialExpensesStep() {
+  get materialExpenses() {
     return this.form.controls.expenses.controls.material;
   }
 
@@ -140,7 +147,7 @@ export class TravelControlService {
     console.log('Loading form values from local storage...');
 
     // parse JSON from local storage
-    const storedData = localStorage.getItem('travelExpenses') || '{}';
+    const storedData = localStorage.getItem('reimbursement') || '{}';
     const storedValue: FormValue<typeof this.form> = JSON.parse(storedData);
 
     // add transport expense controls
@@ -189,7 +196,7 @@ export class TravelControlService {
   saveForm() {
     // TODO: exclude file field?
     const data = JSON.stringify(this.form.value);
-    localStorage.setItem('travelExpenses', data);
+    localStorage.setItem('reimbursement', data);
   }
 
   deleteStoredData(): void {
@@ -197,14 +204,14 @@ export class TravelControlService {
     Object.values(this.transportExpensesStep.controls).forEach(expenses =>
       expenses.clear()
     );
-    localStorage.removeItem('travelExpenses');
+    localStorage.removeItem('reimbursement');
   }
 
-  getTravel(): Travel {
+  getReimbursement(): Reimbursement {
     const participant = this.participantStep.getRawValue();
     const transport = this.transportExpensesStep.getRawValue();
-    const food = this.foodExpensesStep.getRawValue();
-    const material = this.materialExpensesStep.getRawValue();
+    const food = this.foodExpenses.getRawValue();
+    const material = this.materialExpenses.getRawValue();
 
     return {
       meeting: this.meetingStep.value as Meeting,
@@ -314,16 +321,19 @@ export class TravelControlService {
 
   private onMeetingTypeChanged(value: MeetingType) {
     const form = this.meetingStep;
+    const transport = this.transportExpensesStep;
     switch (value) {
       case 'course':
         form.addControl('code', this.courseCodeControl);
         form.controls.location.disable();
         form.controls.period.disable();
+        transport.setValidators(anyRequired);
         break;
       case 'assembly':
         form.removeControl('code');
         form.controls.location.disable();
         form.controls.period.disable();
+        transport.setValidators(anyRequired);
 
         form.controls.name.setValue('Landesjugendversammlung');
         break;
@@ -331,6 +341,7 @@ export class TravelControlService {
         form.removeControl('code');
         form.controls.location.enable();
         form.controls.period.enable();
+        transport.clearValidators();
         break;
     }
   }

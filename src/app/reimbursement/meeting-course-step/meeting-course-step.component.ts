@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
-import { TravelControlService } from 'src/app/travel/shared/travel-control.service';
+import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 
 @Component({
   selector: 'app-meeting-course-step',
@@ -17,7 +17,7 @@ export class MeetingCourseStepComponent {
 
   constructor(
     public route: ActivatedRoute,
-    public controlService: TravelControlService
+    public controlService: ReimbursementControlService
   ) {
     this.form = controlService.meetingStep;
     this.form.controls.type.setValue('course');

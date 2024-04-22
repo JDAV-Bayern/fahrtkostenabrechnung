@@ -9,7 +9,10 @@
       class="secondary icon"
       (click)="chooseExpense(modeOption)"
     >
-      <span class="material-symbols-outlined">{{ getIcon(modeOption) }}</span>
+      <span
+        class="material-symbols-outlined"
+        [innerHtml]="getIcon(modeOption)"
+      ></span>
       {{ modeOption | transportMode }}
     </button>
   </div>
@@ -73,7 +76,7 @@
     <!-- train expenses -->
     <fieldset *ngIf="train" [formGroup]="train">
       <div class="form-group">
-        <label for="price">Preis <b>nach</b> Rabatten</label>
+        <label for="price">Ticketpreis (ermäßigt)</label>
         <input
           type="number"
           id="price"

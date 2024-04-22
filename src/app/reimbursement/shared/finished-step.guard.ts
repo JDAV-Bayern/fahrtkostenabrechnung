@@ -4,22 +4,21 @@ import {
   CanActivateFn,
   createUrlTreeFromSnapshot
 } from '@angular/router';
-import { TravelControlService } from './travel-control.service';
+import { ReimbursementControlService } from './reimbursement-control.service';
 import { MeetingType } from 'src/domain/meeting.model';
 
 type FormKey =
   | 'meetingStep'
   | 'participantStep'
   | 'transportExpensesStep'
-  | 'foodExpensesStep'
-  | 'materialExpensesStep'
+  | 'expensesStep'
   | 'overviewStep';
 
 type RouteOptions = string | { [key in MeetingType]: string };
 
 @Injectable({ providedIn: 'root' })
-class TravelGuard {
-  constructor(private controlService: TravelControlService) {}
+class FinishedStepGuard {
+  constructor(private controlService: ReimbursementControlService) {}
 
   canActivate(
     route: ActivatedRouteSnapshot,
@@ -42,7 +41,7 @@ class TravelGuard {
 }
 
 function createGuard(form: FormKey, routeTo: RouteOptions): CanActivateFn {
-  return route => inject(TravelGuard).canActivate(route, form, routeTo);
+  return route => inject(FinishedStepGuard).canActivate(route, form, routeTo);
 }
 
 export const meetingGuard = createGuard('meetingStep', {
@@ -55,11 +54,8 @@ export const transportExpensesGuard = createGuard(
   'transportExpensesStep',
   'auslagen'
 );
-export const foodExpensesGuard = createGuard(
-  'foodExpensesStep',
-  'auslagen-gremium'
-);
-export const materialExpensesGuard = createGuard(
-  'materialExpensesStep',
-  'auslagen-gremium'
-);
+export const expensesGuard = createGuard('expensesStep', {
+  course: 'auslagen',
+  assembly: 'auslagen',
+  committee: 'auslagen-gremium'
+});

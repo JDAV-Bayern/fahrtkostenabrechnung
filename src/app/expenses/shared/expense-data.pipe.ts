@@ -1,5 +1,4 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Absence, Meal } from 'src/domain/expense.model';
 
 export function formatAbsence(value: string): string | null {
   switch (value) {

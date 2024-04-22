@@ -7,7 +7,7 @@ import {
 } from './expense.model';
 import { Participant } from './participant.model';
 
-export interface Travel {
+export interface Reimbursement {
   meeting: Meeting;
   participant: Participant;
   expenses: {

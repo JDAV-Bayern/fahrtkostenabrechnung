@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Expense } from 'src/domain/expense.model';
-import { ExpenseConfig, expenseConfig } from '../expense.config';
+import { expenseConfig } from '../expense.config';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +9,10 @@ export class ExpenseService {
   config = expenseConfig.course;
 
   getAmount(expense: Expense) {
+    if (!this.config.allowed.includes(expense.type)) {
+      return 0;
+    }
+
     switch (expense.type) {
       case 'transport':
         if (!this.config.transport) {

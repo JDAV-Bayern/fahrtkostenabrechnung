@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { logoBase64 } from 'src/assets/logoBase64';
 import { Router } from '@angular/router';
-import { TravelControlService } from 'src/app/travel/shared/travel-control.service';
+import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 
 @Component({
   selector: 'header[appHeader]',
@@ -11,7 +11,7 @@ import { TravelControlService } from 'src/app/travel/shared/travel-control.servi
 })
 export class HeaderComponent {
   constructor(
-    private readonly controlService: TravelControlService,
+    private readonly controlService: ReimbursementControlService,
     private readonly router: Router
   ) {}
 

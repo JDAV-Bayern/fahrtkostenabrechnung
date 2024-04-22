@@ -42,16 +42,16 @@
             Rückfahrt wie Hinfahrt
           </button>
         </div>
-      </app-expense-list>
-    </div>
-
-    <div *ngIf="form.hasError('anyRequired')" class="error-message margin-top">
-      Bitte gib mindestens eine Auslage an.
+      </app-expense-list>    
     </div>
 
     <p class="subtotal">
       Summe:
       <span>{{ total | currency }}</span>
     </p>
+
+    <div *ngIf="form.hasError('anyRequired')" class="error-message">
+      Bitte gib mindestens eine Auslage an.
+    </div>
   </fieldset>
 </app-form-card>

@@ -1,7 +1,7 @@
 <app-form-card
   prevStep="auslagen"
   nextStep="zusammenfassung"
-  [nextDisabled]="foodForm.invalid || materialForm.invalid"
+  [nextDisabled]="parentForm.invalid"
 >
   <fieldset [formGroup]="parentForm">
     <app-expense-list
@@ -13,7 +13,7 @@
     </app-expense-list>
     <p class="subtotal">
       Summe:
-      <span>{{ summary.food | currency }}</span>
+      <span>{{ report.categories.food | currency }}</span>
     </p>
 
     <app-expense-list
@@ -25,7 +25,11 @@
     </app-expense-list>
     <p class="subtotal">
       Summe:
-      <span>{{ summary.material | currency }}</span>
+      <span>{{ report.categories.material | currency }}</span>
     </p>
+
+    <div *ngIf="parentForm.hasError('anyRequired')" class="error-message">
+      Bitte gib mindestens eine Auslage an.
+    </div>
   </fieldset>
 </app-form-card>

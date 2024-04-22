@@ -22,29 +22,21 @@
   </table>
 
   <table class="expenses">
-    <tr *ngIf="meeting.type === 'committee' || summary.totalReduced">
-      <td>Fahrtkosten:</td>
-      <td>{{ summary.transport | currency }}</td>
-    </tr>
-    <tr *ngIf="meeting.type === 'committee'">
-      <td>Tagegelder:</td>
-      <td>{{ summary.food | currency }}</td>
-    </tr>
-    <tr *ngIf="meeting.type === 'committee'">
-      <td>Sonstige Auslagen:</td>
-      <td>{{ summary.material | currency }}</td>
+    <tr *ngFor="let entry of report.categories | keyvalue">
+      <td>{{ entry.key | expenseType }}:</td>
+      <td>{{ entry.value | currency }}</td>
     </tr>
     <tr>
       <td>Erstattungsbetrag:</td>
-      <td>{{ summary.total | currency }}</td>
+      <td>{{ report.total | currency }}</td>
     </tr>
   </table>
 
-  <p *ngIf="summary.totalReduced">
+  <p *ngIf="report.totalReduced">
     <b
       >Da deine Sektion nicht in Bayern liegt, ist der Erstattungsbetrag gemäß
       unserer Reisekostenrichtlinien auf
-      {{ summary.total | currency }} begrenzt.</b
+      {{ report.total | currency }} begrenzt.</b
     >
   </p>
   <p *ngFor="let warning of getWarnings()"><b>Warnung</b> {{ warning }}</p>
@@ -55,7 +47,7 @@
     </textarea>
   </div>
 
-  <div *ngIf="summary.receiptsRequired">
+  <div *ngIf="report.receiptsRequired">
     <h2>Belege</h2>
     <p>
       Bitte denke daran, dass wir die Belege für deine Zugtickets benötigen.
@@ -100,7 +92,7 @@
 <div style="position: absolute; top: 2000px">
   <app-pdf-view
     *ngIf="showPdf"
-    [travel]="travel"
+    [reimbursement]="reimbursement"
     (fullyRendered)="pdfFullyRendered()"
   ></app-pdf-view>
 </div>

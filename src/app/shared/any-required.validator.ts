@@ -1,20 +1,20 @@
 import { AbstractControl, FormGroup, ValidationErrors } from '@angular/forms';
 
-function isEmptyInputValue(value: any): boolean {
-  return (
-    value === null ||
-    ((typeof value === 'string' || Array.isArray(value)) && value.length === 0)
-  );
+function isEmptyInput(control: AbstractControl): boolean {
+  if (control instanceof FormGroup) {
+    return Object.values(control.controls).every(isEmptyInput);
+  }
+
+  const value = control.value;
+  if (value === null) {
+    return true;
+  }
+  if (typeof value === 'string' || Array.isArray(value)) {
+    return value.length === 0;
+  }
+  return false;
 }
 
 export function anyRequired(control: AbstractControl): ValidationErrors | null {
-  let check;
-
-  if (control instanceof FormGroup) {
-    check = Object.values(control.value).some(v => !isEmptyInputValue(v));
-  } else {
-    check = !isEmptyInputValue(control.value);
-  }
-
-  return check ? null : { anyRequired: true };
+  return !isEmptyInput(control) ? null : { anyRequired: true };
 }

@@ -72,8 +72,8 @@
     </div>
   </div>
 
-  <p *ngIf="travel.note !== ''"><b>Bemerkung:</b></p>
-  <p *ngFor="let line of travel.note.split('\n')">{{ line }}</p>
+  <p *ngIf="reimbursement.note !== ''"><b>Bemerkung:</b></p>
+  <p *ngFor="let line of reimbursement.note.split('\n')">{{ line }}</p>
 
   <h2>Abrechnungspositionen</h2>
 
@@ -85,11 +85,11 @@
       <col style="width: 40px" />
     </colgroup>
 
-    <tbody>
+    <tbody *ngIf="report.categories.transport">
       <tr>
         <th scope="col" colspan="3" class="category-header">Fahrtkosten</th>
         <th scope="col" class="align-right">
-          {{ summary.transport | currency }}
+          {{ report.categories.transport | currency }}
         </th>
       </tr>
       <ng-container *ngFor="let direction of directions">
@@ -100,7 +100,7 @@
           </td>
         </tr>
 
-        <tr *ngFor="let expense of travel.expenses.transport[direction]">
+        <tr *ngFor="let expense of reimbursement.expenses.transport[direction]">
           <td class="align-right">
             <p>von</p>
             <p>nach</p>
@@ -122,15 +122,15 @@
       </ng-container>
     </tbody>
 
-    <tbody>
+    <tbody *ngIf="report.categories.food">
       <tr>
         <th scope="col" colspan="3" class="category-header">Tagegeld</th>
         <th scope="col" class="align-right">
-          {{ summary.food | currency }}
+          {{ report.categories.food | currency }}
         </th>
       </tr>
 
-      <tr *ngFor="let expense of travel.expenses.food">
+      <tr *ngFor="let expense of reimbursement.expenses.food">
         <th scope="row" colspan="2">
           {{ expense.date | date }}
         </th>
@@ -146,17 +146,17 @@
       </tr>
     </tbody>
 
-    <tbody>
+    <tbody *ngIf="report.categories.material">
       <tr>
         <th scope="col" colspan="3" class="category-header">
           Sonstige Auslagen
         </th>
         <th scope="col" class="align-right">
-          {{ summary.material | currency }}
+          {{ report.categories.material | currency }}
         </th>
       </tr>
 
-      <tr *ngFor="let expense of travel.expenses.material">
+      <tr *ngFor="let expense of reimbursement.expenses.material">
         <th scope="row" colspan="2">
           {{ expense.date | date }}
         </th>
@@ -173,19 +173,9 @@
     </tbody>
 
     <tfoot class="align-right">
-      <tr *ngIf="summary.totalReduced">
-        <td colspan="3">Zwischensumme</td>
-        <td>{{ summary.subtotal | currency }}</td>
-      </tr>
-      <tr *ngIf="summary.totalReduced">
-        <td colspan="3">Deckelung für nicht-bayrische Teilnehmer</td>
-        <td class="sum">
-          {{ summary.total - summary.subtotal | currency }}
-        </td>
-      </tr>
       <tr class="total">
         <td colspan="3">Erstattungsbetrag</td>
-        <td>{{ summary.total | currency }}</td>
+        <td>{{ report.total | currency }}</td>
       </tr>
     </tfoot>
   </table>

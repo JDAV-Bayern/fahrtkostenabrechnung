@@ -1,12 +1,12 @@
 import { CdkDrag, CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { Component } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { TravelControlService } from 'src/app/travel/shared/travel-control.service';
+import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { CurrencyPipe, NgIf } from '@angular/common';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { Direction, TransportMode } from 'src/domain/expense.model';
-import { TravelService } from '../shared/travel.service';
+import { ReimbursementService } from '../shared/reimbursement.service';
 import { TransportExpenseForm } from 'src/app/expenses/shared/expense-form';
 import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.service';
 import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
@@ -36,16 +36,16 @@ export class ExpensesStepComponent {
   form;
 
   constructor(
-    private readonly travelService: TravelService,
-    private readonly travelControlService: TravelControlService,
+    private readonly reimbursementService: ReimbursementService,
+    private readonly reimbursementControlService: ReimbursementControlService,
     private readonly expenseControlService: ExpenseControlService,
     private dialog: Dialog
   ) {
-    this.form = this.travelControlService.transportExpensesStep;
+    this.form = this.reimbursementControlService.transportExpensesStep;
   }
 
   get meetingType() {
-    return this.travelControlService.meetingStep.controls.type.value;
+    return this.reimbursementControlService.meetingStep.controls.type.value;
   }
 
   get queryParams() {
@@ -66,8 +66,9 @@ export class ExpensesStepComponent {
   }
 
   get total() {
-    const travel = this.travelControlService.getTravel();
-    return this.travelService.getSummary(travel).transport;
+    const reimbursement = this.reimbursementControlService.getReimbursement();
+    const report = this.reimbursementService.getReport(reimbursement);
+    return report.categories.transport;
   }
 
   getAllowedModes(direction: Direction) {
@@ -77,7 +78,7 @@ export class ExpensesStepComponent {
       allowedModes.push('bike');
 
       const expenses =
-        this.travelControlService.getTransportExpenses(direction);
+        this.reimbursementControlService.getTransportExpenses(direction);
       const planExists = expenses.value.some(
         expense => expense.mode === 'plan'
       );
@@ -94,7 +95,10 @@ export class ExpensesStepComponent {
     return (expense?: FormGroup<TransportExpenseForm>) => {
       const form = expense || this.expenseControlService.createTransportForm();
       const sub = form.controls.mode.valueChanges.subscribe(() =>
-        this.travelControlService.completeTransportExpense(direction, form)
+        this.reimbursementControlService.completeTransportExpense(
+          direction,
+          form
+        )
       );
 
       const allowedModes = this.getAllowedModes(direction);
@@ -117,6 +121,6 @@ export class ExpensesStepComponent {
   }
 
   completeReturnTrip() {
-    this.travelControlService.completeReturnTrip();
+    this.reimbursementControlService.completeReturnTrip();
   }
 }

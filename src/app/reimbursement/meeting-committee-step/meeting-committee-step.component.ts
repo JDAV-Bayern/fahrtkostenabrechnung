@@ -7,7 +7,7 @@ import {
   OwlNativeDateTimeModule
 } from '@danielmoncada/angular-datetime-picker';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
-import { TravelControlService } from 'src/app/travel/shared/travel-control.service';
+import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 
 @Component({
   selector: 'app-meeting-committee-step',
@@ -26,7 +26,7 @@ import { TravelControlService } from 'src/app/travel/shared/travel-control.servi
 export class MeetingCommitteeStepComponent {
   form;
 
-  constructor(public controlService: TravelControlService) {
+  constructor(public controlService: ReimbursementControlService) {
     this.form = controlService.meetingStep;
     this.form.controls.type.setValue('committee');
   }

@@ -1,4 +1,4 @@
-import { Travel } from 'src/domain/travel.model';
+import { Reimbursement } from 'src/domain/reimbursement.model';
 import { Injectable } from '@angular/core';
 import { TransportExpense } from 'src/domain/expense.model';
 import { PlzService } from 'src/app/core/plz.service';
@@ -6,15 +6,15 @@ import { PlzService } from 'src/app/core/plz.service';
 @Injectable({
   providedIn: 'root'
 })
-export class TravelValidatorService {
+export class ReimbursementValidatorService {
   constructor(private readonly plzService: PlzService) {}
 
-  public validateTravel(travel: Travel): string[] {
+  public validateReimbursement(reimbursement: Reimbursement): string[] {
     const findings: string[] = [];
 
     // Check if zip code exists and if it is in bavaria
-    const plz = travel.participant.zipCode;
-    const city = travel.participant.city;
+    const plz = reimbursement.participant.zipCode;
+    const city = reimbursement.participant.city;
     if (!this.plzService.exists(plz, city)) {
       findings.push(
         `Dein Wohnort (${plz} ${city}) ist uns unbekannt. Bitte überprüfe deine Angaben noch einmal.`
@@ -22,7 +22,7 @@ export class TravelValidatorService {
     }
 
     // check that the route is complete
-    const transportExpenses = travel.expenses.transport;
+    const transportExpenses = reimbursement.expenses.transport;
     findings.push(
       ...this.checkValidityOfRoute([
         ...transportExpenses.inbound,

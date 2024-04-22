@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TravelControlService } from 'src/app/travel/shared/travel-control.service';
+import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { PlzService } from 'src/app/core/plz.service';
 import { Section } from 'src/domain/section.model';
 import { SectionService } from 'src/app/core/section.service';
@@ -29,7 +29,7 @@ export class ParticipantStepComponent {
   constructor(
     private readonly plzService: PlzService,
     private readonly sectionService: SectionService,
-    public controlService: TravelControlService
+    public controlService: ReimbursementControlService
   ) {
     this.form = controlService.participantStep;
 
