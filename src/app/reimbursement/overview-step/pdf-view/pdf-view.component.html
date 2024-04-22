@@ -85,10 +85,16 @@
       <col style="width: 40px" />
     </colgroup>
 
+    <thead>
+      <tr>
+        <th scope="row" colspan="3" class="category-header">Erstattungsbetrag</th>
+        <th scope="row" class="align-right">{{ report.total | currency }}</th>
+      </tr>
+    </thead>
     <tbody *ngIf="report.categories.transport">
       <tr>
-        <th scope="col" colspan="3" class="category-header">Fahrtkosten</th>
-        <th scope="col" class="align-right">
+        <th scope="rowgroup" colspan="3" class="category-header">Fahrtkosten</th>
+        <th scope="rowgroup" class="align-right">
           {{ report.categories.transport | currency }}
         </th>
       </tr>
@@ -171,12 +177,5 @@
         <td class="align-right">{{ expense | expenseAmount | currency }}</td>
       </tr>
     </tbody>
-
-    <tfoot class="align-right">
-      <tr class="total">
-        <td colspan="3">Erstattungsbetrag</td>
-        <td>{{ report.total | currency }}</td>
-      </tr>
-    </tfoot>
   </table>
 </div>
