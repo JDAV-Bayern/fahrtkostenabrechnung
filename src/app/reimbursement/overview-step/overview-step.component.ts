@@ -38,11 +38,11 @@ import { ExpenseTypePipe } from '../../expenses/shared/expense-type.pipe';
 export class OverviewStepComponent {
   form;
 
-  public files: File[] = [];
-
+  files: File[] = [];
   showPdf = false;
-
   loading = false;
+
+  readonly originalOrder = () => 0;
 
   pdfFullyRendered = () => {
     console.error('pdfFullyRendered not set');

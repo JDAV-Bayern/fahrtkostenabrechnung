@@ -35,6 +35,8 @@ export class ExpenseRatesComponent {
   config = expenseConfig.course;
   meetingType: MeetingType = 'course';
 
+  readonly originalOrder = () => 0;
+
   constructor(private route: ActivatedRoute) {
     this.route.queryParamMap.subscribe(params => {
       const param = params.get('veranstaltung')!;

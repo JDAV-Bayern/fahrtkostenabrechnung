@@ -22,7 +22,7 @@
   </table>
 
   <table class="expenses">
-    <tr *ngFor="let entry of report.categories | keyvalue">
+    <tr *ngFor="let entry of report.categories | keyvalue : originalOrder">
       <td>{{ entry.key | expenseType }}:</td>
       <td>{{ entry.value | currency }}</td>
     </tr>

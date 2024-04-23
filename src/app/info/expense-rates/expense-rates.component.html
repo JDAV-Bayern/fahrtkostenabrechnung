@@ -63,7 +63,7 @@
   </p>
   <p class="important">Bitte eine Kopie der Fahrkarte anhängen!</p>
   <table>
-    <tr *ngFor="let entry of config.transport.train | keyvalue">
+    <tr *ngFor="let entry of config.transport.train | keyvalue : originalOrder">
       <td>{{ entry.key | discountCard }}</td>
       <td>{{ entry.value | percent }} des Ticketpreis</td>
     </tr>
@@ -100,7 +100,7 @@
     Mehraufwand für Verpflegung nach folgenden Sätzen abgerechnet werden:
   </p>
   <table>
-    <tr *ngFor="let entry of config.food.allowance | keyvalue">
+    <tr *ngFor="let entry of config.food.allowance | keyvalue : originalOrder">
       <td>{{ entry.key | absence }}</td>
       <td>{{ entry.value | currency }}</td>
     </tr>
@@ -110,7 +110,7 @@
     Bei Gewährung unentgeltlicher Verpflegung werden folgende Beträge abgezogen:
   </p>
   <table>
-    <tr *ngFor="let entry of config.food.meals | keyvalue">
+    <tr *ngFor="let entry of config.food.meals | keyvalue : originalOrder">
       <td>{{ entry.key | meals }}</td>
       <td>{{ entry.value | currency }}</td>
     </tr>
