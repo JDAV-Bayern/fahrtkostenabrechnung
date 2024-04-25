@@ -18,7 +18,12 @@
   color: #000;
 }
 
-.breadcrumbs-level {
-  padding: 0 1rem;
+.breadcrumbs li {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumbs .material-symbols-outlined {
+  margin: 0 1rem;
   color: #000;
 }

@@ -87,13 +87,17 @@
 
     <thead>
       <tr>
-        <th scope="row" colspan="3" class="category-header">Erstattungsbetrag</th>
+        <th scope="row" colspan="3" class="category-header">
+          Erstattungsbetrag
+        </th>
         <th scope="row" class="align-right">{{ report.total | currency }}</th>
       </tr>
     </thead>
     <tbody *ngIf="report.categories.transport">
       <tr>
-        <th scope="rowgroup" colspan="3" class="category-header">Fahrtkosten</th>
+        <th scope="rowgroup" colspan="3" class="category-header">
+          Fahrtkosten
+        </th>
         <th scope="rowgroup" class="align-right">
           {{ report.categories.transport | currency }}
         </th>

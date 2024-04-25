@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { OwlDateTimeIntl } from '@danielmoncada/angular-datetime-picker';
 
 @Injectable({ providedIn: 'root' })
-export class DateTimeIntl extends OwlDateTimeIntl {
+export class JdavDateTimeIntl extends OwlDateTimeIntl {
   /** A label for the up second button (used by screen readers).  */
   override upSecondLabel = 'Plus eine Sekunde';
 

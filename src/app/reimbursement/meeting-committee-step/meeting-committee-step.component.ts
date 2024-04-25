@@ -3,11 +3,12 @@ import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import {
-  OwlDateTimeModule,
-  OwlNativeDateTimeModule
+  OwlDateTimeIntl,
+  OwlDateTimeModule
 } from '@danielmoncada/angular-datetime-picker';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
+import { JdavDateTimeIntl } from 'src/app/core/date-time-intl';
 
 @Component({
   selector: 'app-meeting-committee-step',
@@ -19,9 +20,10 @@ import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbu
     RouterLink,
     ReactiveFormsModule,
     OwlDateTimeModule,
-    OwlNativeDateTimeModule,
     FormCardComponent
-  ]
+  ],
+  // cannot be provided in app config as it will be overwritten by the module import
+  providers: [{ provide: OwlDateTimeIntl, useClass: JdavDateTimeIntl }]
 })
 export class MeetingCommitteeStepComponent {
   form;

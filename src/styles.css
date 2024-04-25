@@ -147,6 +147,34 @@ select {
   }
 }
 
+.owl-dt-calendar-table .owl-dt-calendar-cell-selected {
+  background-color: var(--color-primary);
+}
+
+.owl-dt-calendar-table .owl-dt-calendar-cell-in-range {
+  background: var(--color-primary-light);
+}
+
+.owl-dt-container-info .owl-dt-container-range .owl-dt-container-range-content {
+  font-size: 16px;
+}
+
+.owl-dt-container-info .owl-dt-container-info-active {
+  color: var(--color-primary);
+}
+
+.owl-dt-container-buttons {
+  color: var(--color-primary);
+}
+
+.owl-dt-control-button {
+  text-transform: none;
+}
+
+.owl-dt-control-button:hover {
+  background-color: var(--bg-gray);
+}
+
 .error-message {
   color: #b60000;
   font-size: 12px;

@@ -3,16 +3,13 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import {
-  OwlDateTimeModule,
-  OwlNativeDateTimeModule
-} from '@danielmoncada/angular-datetime-picker';
 import { CurrencyPipe, NgIf } from '@angular/common';
 import { ReimbursementService } from '../shared/reimbursement.service';
 import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.service';
 import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
 import { FoodExpenseModalComponent } from 'src/app/expenses/food-expense-modal/food-expense-modal.component';
 import { MaterialExpenseModalComponent } from 'src/app/expenses/material-expense-modal/material-expense-modal.component';
+import { OwlDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 
 @Component({
   selector: 'app-expenses-extra-step',
@@ -26,8 +23,8 @@ import { MaterialExpenseModalComponent } from 'src/app/expenses/material-expense
     DialogModule,
     FormCardComponent,
     ExpenseListComponent,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule
+    // needs to be imported here so it works properly in modals
+    OwlDateTimeModule
   ]
 })
 export class ExpensesExtraStepComponent {

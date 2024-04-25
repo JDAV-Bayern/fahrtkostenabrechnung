@@ -19,10 +19,20 @@
       #dt
     ></owl-date-time>
     <div
-      *ngIf="date.hasError('owlRequiredDateTimeRange') && date.touched"
+      *ngIf="
+        date.hasError('required') &&
+        !date.hasError('owlDateTimeParse') &&
+        date.touched
+      "
       class="error-message"
     >
       Bitte gib das Datum dieser Auslage an.
+    </div>
+    <div
+      *ngIf="date.hasError('owlDateTimeParse') && date.touched"
+      class="error-message"
+    >
+      Bitte gib ein gültiges Datum an.
     </div>
   </div>
 

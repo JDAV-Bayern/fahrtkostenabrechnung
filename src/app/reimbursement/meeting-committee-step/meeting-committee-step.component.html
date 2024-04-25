@@ -61,10 +61,20 @@
         #dt
       ></owl-date-time>
       <div
-        *ngIf="period.hasError('owlRequiredDateTimeRange') && period.touched"
+        *ngIf="
+          period.hasError('owlRequiredDateTimeRange') &&
+          !period.hasError('owlDateTimeParse') &&
+          period.touched
+        "
         class="error-message"
       >
         Bitte gib den Zeitraum deiner Reise an.
+      </div>
+      <div
+        *ngIf="period.hasError('owlDateTimeParse') && period.touched"
+        class="error-message"
+      >
+        Bitte gib einen gültigen Zeitraum an.
       </div>
     </div>
   </fieldset>

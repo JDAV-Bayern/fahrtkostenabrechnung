@@ -8,7 +8,6 @@ import {
   RouterLink
 } from '@angular/router';
 import { filter } from 'rxjs';
-import { ChevronRightIconComponent } from '../icons/chevron-right-icon/chevron-right-icon.component';
 
 export interface Breadcrumb {
   label: string;
@@ -20,7 +19,7 @@ export interface Breadcrumb {
   templateUrl: './breadcrumbs.component.html',
   styleUrls: ['./breadcrumbs.component.css'],
   standalone: true,
-  imports: [NgIf, NgFor, RouterLink, ChevronRightIconComponent]
+  imports: [NgIf, NgFor, RouterLink]
 })
 export class BreadcrumbsComponent {
   breadcrumbs: Breadcrumb[] = [];

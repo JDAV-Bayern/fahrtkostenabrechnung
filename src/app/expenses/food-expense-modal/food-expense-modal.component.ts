@@ -3,9 +3,10 @@ import { NgIf } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import {
-  OwlDateTimeModule,
-  OwlNativeDateTimeModule
+  OwlDateTimeIntl,
+  OwlDateTimeModule
 } from '@danielmoncada/angular-datetime-picker';
+import { JdavDateTimeIntl } from 'src/app/core/date-time-intl';
 import { FoodExpenseForm } from 'src/app/expenses/shared/expense-form';
 import { RawFormValue } from 'src/app/shared/form-value';
 
@@ -14,12 +15,9 @@ import { RawFormValue } from 'src/app/shared/form-value';
   templateUrl: './food-expense-modal.component.html',
   styleUrls: ['./food-expense-modal.component.css'],
   standalone: true,
-  imports: [
-    NgIf,
-    ReactiveFormsModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule
-  ]
+  imports: [NgIf, ReactiveFormsModule, OwlDateTimeModule],
+  // cannot be provided in app config as it will be overwritten by the module import
+  providers: [{ provide: OwlDateTimeIntl, useClass: JdavDateTimeIntl }]
 })
 export class FoodExpenseModalComponent {
   form: FormGroup<FoodExpenseForm>;

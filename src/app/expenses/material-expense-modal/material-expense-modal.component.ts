@@ -2,10 +2,7 @@ import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { NgIf } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import {
-  OwlDateTimeModule,
-  OwlNativeDateTimeModule
-} from '@danielmoncada/angular-datetime-picker';
+import { OwlDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 import { MaterialExpenseForm } from 'src/app/expenses/shared/expense-form';
 import { RawFormValue } from 'src/app/shared/form-value';
 
@@ -14,12 +11,7 @@ import { RawFormValue } from 'src/app/shared/form-value';
   templateUrl: './material-expense-modal.component.html',
   styleUrls: ['./material-expense-modal.component.css'],
   standalone: true,
-  imports: [
-    NgIf,
-    ReactiveFormsModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule
-  ]
+  imports: [NgIf, ReactiveFormsModule, OwlDateTimeModule]
 })
 export class MaterialExpenseModalComponent {
   form: FormGroup<MaterialExpenseForm>;
