@@ -51,9 +51,9 @@ fieldset {
 }
 
 button {
-  font-size: inherit;
+  font-size: 13px;
   box-sizing: border-box;
-  padding: 8px 16px;
+  padding: 10px 20px;
   background-color: var(--color-primary);
   text-transform: uppercase;
   color: #fff;
