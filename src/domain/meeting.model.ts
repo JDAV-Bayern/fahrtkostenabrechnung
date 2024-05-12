@@ -17,7 +17,10 @@ export interface Assembly extends MeetingBase {
 export interface Committee extends MeetingBase {
   type: 'committee';
   location: string;
-  period: [Date, Date];
+  time: {
+    start: Date;
+    end: Date;
+  };
 }
 
 export type Meeting = Course | Assembly | Committee;

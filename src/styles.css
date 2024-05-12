@@ -50,7 +50,7 @@ fieldset {
   margin-top: 20px;
 }
 
-button {
+button.jdav-btn {
   font-size: 13px;
   box-sizing: border-box;
   padding: 10px 20px;
@@ -67,14 +67,14 @@ button {
   }
 }
 
-button.icon {
+button.jdav-btn.icon {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 8px;
 }
 
-button.secondary {
+button.jdav-btn.secondary {
   background-color: transparent;
   border: 2px solid var(--color-body);
   color: var(--color-body);
@@ -85,14 +85,14 @@ button.secondary {
   }
 }
 
-button.tertiary {
+button.jdav-btn.tertiary {
   border: none;
   background-color: transparent;
   text-transform: none;
   color: var(--color-body);
 }
 
-button:disabled {
+button.jdav-btn:disabled {
   background-color: #ccc;
   color: #fff;
   cursor: not-allowed;

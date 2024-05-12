@@ -43,39 +43,106 @@
       </div>
     </div>
 
-    <div class="form-group">
-      <label for="period">Zeitraum</label>
-      <input
-        type="text"
-        id="period"
-        formControlName="period"
-        class="form-control"
-        [owlDateTime]="dt"
-        [owlDateTimeTrigger]="dt"
-        selectMode="range"
-        required
-      />
-      <owl-date-time
-        pickerMode="dialog"
-        [firstDayOfWeek]="1"
-        #dt
-      ></owl-date-time>
-      <div
-        *ngIf="
-          period.hasError('owlRequiredDateTimeRange') &&
-          !period.hasError('owlDateTimeParse') &&
-          period.touched
-        "
-        class="error-message"
-      >
-        Bitte gib den Zeitraum deiner Reise an.
+    <fieldset [formGroup]="time">
+      <div class="form-group">
+        <label for="start">Beginn der Reise</label>
+        <fieldset id="start" class="datetime-group">
+          <input
+            type="text"
+            formControlName="startDate"
+            class="form-control"
+            required
+            [matDatepicker]="pickerStart"
+            (click)="pickerStart.open()"
+          />
+          <mat-datepicker touchUi #pickerStart></mat-datepicker>
+          <input
+            appTimeInput
+            type="text"
+            formControlName="startTime"
+            class="form-control time-control"
+            required
+          />
+        </fieldset>
+        <div
+          *ngIf="
+            startDate.hasError('required') &&
+            !startDate.hasError('matDatepickerParse') &&
+            startDate.touched
+          "
+          class="error-message"
+        >
+          Bitte gib das Startdatum deiner Reise an.
+        </div>
+        <div
+          *ngIf="startDate.hasError('matDatepickerParse') && startDate.touched"
+          class="error-message"
+        >
+          Bitte gib ein gültiges Datum an.
+        </div>
+        <div
+          *ngIf="startTime.hasError('required') && startTime.touched"
+          class="error-message"
+        >
+          Bitte gib die Startzeit deiner Reise an.
+        </div>
+        <div
+          *ngIf="startTime.hasError('invalidTime') && startTime.touched"
+          class="error-message"
+        >
+          Bitte gib eine gültige Zeit an.
+        </div>
       </div>
-      <div
-        *ngIf="period.hasError('owlDateTimeParse') && period.touched"
-        class="error-message"
-      >
-        Bitte gib einen gültigen Zeitraum an.
+
+      <div class="form-group">
+        <label for="end">Ende der Reise</label>
+        <fieldset id="end" class="datetime-group">
+          <input
+            type="text"
+            formControlName="endDate"
+            class="form-control"
+            required
+            [matDatepicker]="pickerEnd"
+            (click)="pickerEnd.open()"
+          />
+          <mat-datepicker touchUi #pickerEnd></mat-datepicker>
+          <input
+            appTimeInput
+            type="text"
+            formControlName="endTime"
+            class="form-control time-control"
+            required
+          />
+        </fieldset>
+        <div
+          *ngIf="
+            endDate.hasError('required') &&
+            !endDate.hasError('matDatepickerParse') &&
+            endDate.touched
+          "
+          class="error-message"
+        >
+          Bitte gib das Enddatum deiner Reise an.
+        </div>
+        <div
+          *ngIf="endDate.hasError('matDatepickerParse') && endDate.touched"
+          class="error-message"
+        >
+          Bitte gib ein gültiges Datum an.
+        </div>
+        <div
+          *ngIf="endTime.hasError('required') && endTime.touched"
+          class="error-message"
+        >
+          Bitte gib die Endzeit deiner Reise an.
+        </div>
+        <div
+          *ngIf="endTime.hasError('invalidTime') && endTime.touched"
+          class="error-message"
+        >
+          Bitte gib eine gültige Zeit an.
+        </div>
       </div>
-    </div>
+    </fieldset>
   </fieldset>
 </app-form-card>

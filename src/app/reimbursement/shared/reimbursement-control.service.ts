@@ -13,7 +13,7 @@ import { Reimbursement } from 'src/domain/reimbursement.model';
 import { maxPlanExpenses } from './max-plan-expenses.validator';
 import { validateCourseCode } from './course-code.validator';
 import { Meeting, MeetingType } from 'src/domain/meeting.model';
-import { MeetingForm, DateRange } from './meeting-form';
+import { MeetingForm } from './meeting-form';
 import { ReimbursementService } from './reimbursement.service';
 import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.service';
 import {
@@ -47,10 +47,12 @@ export class ReimbursementControlService {
       ),
       name: this.formBuilder.control('', Validators.required),
       location: this.formBuilder.control('', Validators.required),
-      period: this.formBuilder.control<DateRange>(
-        [null, null],
-        Validators.required
-      ),
+      time: this.formBuilder.group({
+        startDate: new FormControl<Date | null>(null, Validators.required),
+        startTime: [0, Validators.required],
+        endDate: new FormControl<Date | null>(null, Validators.required),
+        endTime: [0, Validators.required]
+      }),
       code: this.courseCodeControl
     }),
     participant: this.formBuilder.group({
@@ -148,7 +150,12 @@ export class ReimbursementControlService {
 
     // parse JSON from local storage
     const storedData = localStorage.getItem('reimbursement') || '{}';
-    const storedValue: FormValue<typeof this.form> = JSON.parse(storedData);
+    const storedValue: FormValue<typeof this.form> = JSON.parse(storedData, (key, value) => {
+      if (key === 'date' || key === 'startDate' || key === 'endDate') {
+        return new Date(value);
+      }
+      return value;
+    });
 
     // add transport expense controls
     if (storedValue.expenses?.transport) {
@@ -208,13 +215,32 @@ export class ReimbursementControlService {
   }
 
   getReimbursement(): Reimbursement {
+    const meetingValue = this.meetingStep.value;
     const participant = this.participantStep.getRawValue();
     const transport = this.transportExpensesStep.getRawValue();
     const food = this.foodExpenses.getRawValue();
     const material = this.materialExpenses.getRawValue();
 
+    let meeting;
+    if (meetingValue.time) {
+      const time = this.meetingStep.controls.time.getRawValue();
+
+      let start = time.startDate || new Date();
+      let end = time.endDate || new Date();
+      start = new Date(start.getTime() + time.startTime);
+      end = new Date(end.getTime() + time.endTime);
+
+      meeting = {
+        ...meetingValue,
+        time: { start, end }
+      };
+    } else {
+      meeting = meetingValue;
+    }
+
+
     return {
-      meeting: this.meetingStep.value as Meeting,
+      meeting: meeting as Meeting,
       participant: {
         ...participant,
         sectionId: participant.sectionId || 0
@@ -326,13 +352,13 @@ export class ReimbursementControlService {
       case 'course':
         form.addControl('code', this.courseCodeControl);
         form.controls.location.disable();
-        form.controls.period.disable();
+        form.controls.time.disable();
         transport.setValidators(anyRequired);
         break;
       case 'assembly':
         form.removeControl('code');
         form.controls.location.disable();
-        form.controls.period.disable();
+        form.controls.time.disable();
         transport.setValidators(anyRequired);
 
         form.controls.name.setValue('Landesjugendversammlung');
@@ -340,7 +366,7 @@ export class ReimbursementControlService {
       case 'committee':
         form.removeControl('code');
         form.controls.location.enable();
-        form.controls.period.enable();
+        form.controls.time.enable();
         transport.clearValidators();
         break;
     }

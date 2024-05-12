@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
-import { NativeDateTimeAdapter } from '@danielmoncada/angular-datetime-picker';
+import { NativeDateAdapter } from '@angular/material/core';
 
 @Injectable({ providedIn: 'root' })
-export class JdavDateTimeAdapter extends NativeDateTimeAdapter {
+export class JdavDateAdapter extends NativeDateAdapter {
+  override getFirstDayOfWeek(): number {
+    return 1;
+  }
+
   override parse(value: string | null, parseFormat?: any): Date | null {
     if (!value) {
       return null;
@@ -22,7 +26,7 @@ export class JdavDateTimeAdapter extends NativeDateTimeAdapter {
       match[3] = currentYear.toString().slice(0, -2) + match[3];
     }
 
-    const groups = match.slice(1).map(v => (v ? parseInt(v) : 0));
-    return new Date(groups[2], groups[1] - 1, groups[0], groups[3], groups[4]);
+    const groups = match.slice(1).map(v => parseInt(v));
+    return new Date(groups[2], groups[1] - 1, groups[0]);
   }
 }

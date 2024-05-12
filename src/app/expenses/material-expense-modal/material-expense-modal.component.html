@@ -8,20 +8,15 @@
       id="date"
       formControlName="date"
       class="form-control"
-      [owlDateTime]="dt"
-      [owlDateTimeTrigger]="dt"
       required
+      [matDatepicker]="picker"
+      (click)="picker.open()"
     />
-    <owl-date-time
-      pickerType="calendar"
-      pickerMode="dialog"
-      [firstDayOfWeek]="1"
-      #dt
-    ></owl-date-time>
+    <mat-datepicker touchUi #picker></mat-datepicker>
     <div
       *ngIf="
         date.hasError('required') &&
-        !date.hasError('owlDateTimeParse') &&
+        !date.hasError('matDatepickerParse') &&
         date.touched
       "
       class="error-message"
@@ -29,7 +24,7 @@
       Bitte gib das Datum dieser Auslage an.
     </div>
     <div
-      *ngIf="date.hasError('owlDateTimeParse') && date.touched"
+      *ngIf="date.hasError('matDatepickerParse') && date.touched"
       class="error-message"
     >
       Bitte gib ein gültiges Datum an.
@@ -74,6 +69,6 @@
   </div>
 
   <div class="button-container">
-    <button type="submit" [disabled]="!form.valid">Speichern</button>
+    <button type="submit" [disabled]="!form.valid" class="jdav-btn">Speichern</button>
   </div>
 </form>

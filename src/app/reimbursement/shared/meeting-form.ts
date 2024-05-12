@@ -1,12 +1,15 @@
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { MeetingType } from 'src/domain/meeting.model';
-
-export type DateRange = [Date | null, Date | null];
 
 export type MeetingForm = {
   type: FormControl<MeetingType>;
   name: FormControl<string>;
   location: FormControl<string>;
-  period: FormControl<DateRange>;
+  time: FormGroup<{
+    startDate: FormControl<Date | null>;
+    startTime: FormControl<number>;
+    endDate: FormControl<Date | null>;
+    endTime: FormControl<number>;
+  }>;
   code?: FormControl<string>;
 };

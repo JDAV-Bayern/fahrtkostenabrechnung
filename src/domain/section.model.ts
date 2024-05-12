@@ -3,6 +3,10 @@ export interface JdavOrganisation {
   name: string;
 }
 
+export interface JdavState extends JdavOrganisation {
+  sections: JdavOrganisation[];
+}
+
 export interface Section extends JdavOrganisation {
   jdavState: JdavOrganisation;
   jdavRegion: JdavOrganisation | null;

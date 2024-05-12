@@ -60,7 +60,7 @@
         ngx-file-drop-content-tmp
         let-openFileSelector="openFileSelector"
       >
-        <button class="tertiary icon" (click)="openFileSelector()">
+        <button class="jdav-btn tertiary icon" (click)="openFileSelector()">
           <span class="material-symbols-outlined">&#xe9fc;</span>
           Beleg hinzufügen
         </button>
@@ -70,7 +70,7 @@
     <fieldset *ngIf="files.length" class="files-list">
       <legend style="color: #999">Belege</legend>
       <p class="file-list-entry" *ngFor="let file of files">
-        <button class="tertiary icon" (click)="removeFile(file.name)">
+        <button class="jdav-btn tertiary icon" (click)="removeFile(file.name)">
           <span class="material-symbols-outlined">&#xe872;</span>
         </button>
         {{ file.name }}
@@ -83,6 +83,7 @@
     type="submit"
     [disabled]="loading || form.parent?.invalid"
     (click)="onSubmit()"
+    class="jdav-btn"
   >
     <app-progress-indicator *ngIf="loading"></app-progress-indicator>
     <span *ngIf="!loading">PDF herunterladen</span>

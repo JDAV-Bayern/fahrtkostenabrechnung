@@ -2,8 +2,7 @@ import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 import { NgIf } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { OwlDateTimeIntl, OwlDateTimeModule } from '@danielmoncada/angular-datetime-picker';
-import { JdavDateTimeIntl } from 'src/app/core/date-time-intl';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MaterialExpenseForm } from 'src/app/expenses/shared/expense-form';
 import { RawFormValue } from 'src/app/shared/form-value';
 
@@ -12,9 +11,7 @@ import { RawFormValue } from 'src/app/shared/form-value';
   templateUrl: './material-expense-modal.component.html',
   styleUrls: ['./material-expense-modal.component.css'],
   standalone: true,
-  imports: [NgIf, ReactiveFormsModule, OwlDateTimeModule],
-  // cannot be provided in app config as it will be overwritten by the module import
-  providers: [{ provide: OwlDateTimeIntl, useClass: JdavDateTimeIntl }]
+  imports: [NgIf, ReactiveFormsModule, MatDatepickerModule]
 })
 export class MaterialExpenseModalComponent {
   form: FormGroup<MaterialExpenseForm>;

@@ -1,25 +1,16 @@
 import { Injectable } from '@angular/core';
-import { OwlDateTimeIntl } from '@danielmoncada/angular-datetime-picker';
+import { MatDatepickerIntl } from '@angular/material/datepicker';
 
 @Injectable({ providedIn: 'root' })
-export class JdavDateTimeIntl extends OwlDateTimeIntl {
-  /** A label for the up second button (used by screen readers).  */
-  override upSecondLabel = 'Plus eine Sekunde';
+export class JdavDatepickerIntl extends MatDatepickerIntl {
+  /** A label for the calendar popup (used by screen readers). */
+  override calendarLabel = 'Kalender';
 
-  /** A label for the down second button (used by screen readers).  */
-  override downSecondLabel = 'Minus eine Sekunde';
+  /** A label for the button used to open the calendar popup (used by screen readers). */
+  override openCalendarLabel = 'Kalender öffnen';
 
-  /** A label for the up minute button (used by screen readers).  */
-  override upMinuteLabel = 'Plus eine Minute';
-
-  /** A label for the down minute button (used by screen readers).  */
-  override downMinuteLabel = 'Minus eine Minute';
-
-  /** A label for the up hour button (used by screen readers).  */
-  override upHourLabel = 'Plus eine Stunde';
-
-  /** A label for the down hour button (used by screen readers).  */
-  override downHourLabel = 'Minus eine Stunde';
+  /** Label for the button used to close the calendar popup. */
+  override closeCalendarLabel = 'Kalender schließen';
 
   /** A label for the previous month button (used by screen readers). */
   override prevMonthLabel = 'Vorheriger Monat';
@@ -34,26 +25,25 @@ export class JdavDateTimeIntl extends OwlDateTimeIntl {
   override nextYearLabel = 'Nächstes Jahr';
 
   /** A label for the previous multi-year button (used by screen readers). */
-  override prevMultiYearLabel = 'Vorherige 21 Jahre';
+  override prevMultiYearLabel = 'Vorherige 24 Jahre';
 
   /** A label for the next multi-year button (used by screen readers). */
-  override nextMultiYearLabel = 'Nächste 21 Jahre';
+  override nextMultiYearLabel = 'Nächste 24 Jahre';
 
   /** A label for the 'switch to month view' button (used by screen readers). */
-  override switchToMonthViewLabel = 'Zu Monatsansicht wechseln';
+  override switchToMonthViewLabel = 'Datum auswählen';
 
   /** A label for the 'switch to year view' button (used by screen readers). */
-  override switchToMultiYearViewLabel = 'Zu Jahresansicht wechseln';
+  override switchToMultiYearViewLabel = 'Monat und Jahr auswählen';
 
-  /** A label for the cancel button */
-  override cancelBtnLabel = 'Abbrechen';
+  /** A label for the first date of a range of dates (used by screen readers). */
+  override startDateLabel = 'Startdatum';
 
-  /** A label for the set button */
-  override setBtnLabel = 'Setzen';
+  /** A label for the last date of a range of dates (used by screen readers). */
+  override endDateLabel = 'Enddatum';
 
-  /** A label for the range 'from' in picker info */
-  override rangeFromLabel = 'Von';
-
-  /** A label for the range 'to' in picker info */
-  override rangeToLabel = 'Bis';
+  /** Formats a label for a range of years (used by screen readers). */
+  override formatYearRangeLabel(start: string, end: string): string {
+    return `${start} bis ${end}`;
+  }
 }

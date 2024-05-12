@@ -9,7 +9,6 @@ import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.s
 import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
 import { FoodExpenseModalComponent } from 'src/app/expenses/food-expense-modal/food-expense-modal.component';
 import { MaterialExpenseModalComponent } from 'src/app/expenses/material-expense-modal/material-expense-modal.component';
-import { OwlDateTimeModule } from '@danielmoncada/angular-datetime-picker';
 
 @Component({
   selector: 'app-expenses-extra-step',
@@ -22,9 +21,7 @@ import { OwlDateTimeModule } from '@danielmoncada/angular-datetime-picker';
     CurrencyPipe,
     DialogModule,
     FormCardComponent,
-    ExpenseListComponent,
-    // needs to be imported here so it works properly in modals
-    OwlDateTimeModule
+    ExpenseListComponent
   ]
 })
 export class ExpensesExtraStepComponent {

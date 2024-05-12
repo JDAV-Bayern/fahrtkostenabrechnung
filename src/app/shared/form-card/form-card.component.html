@@ -3,10 +3,10 @@
 </div>
 
 <div class="button-container">
-  <button *ngIf="prevStep" class="secondary" (click)="previous()">
+  <button *ngIf="prevStep" class="jdav-btn secondary" (click)="previous()">
     Zurück
   </button>
-  <button *ngIf="nextStep" [disabled]="nextDisabled" (click)="next()">
+  <button *ngIf="nextStep" class="jdav-btn" [disabled]="nextDisabled" (click)="next()">
     Weiter
   </button>
   <ng-content select="[submitButton]" />

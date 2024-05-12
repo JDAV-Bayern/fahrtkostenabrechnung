@@ -46,17 +46,34 @@
     </div>
     <div class="form-group">
       <label for="section">Sektion</label>
-      <ng-select
+      <input
+        #sectionInput
+        type="text"
         id="section"
-        class="form-select"
+        class="form-control"
         formControlName="sectionId"
         required
-        [items]="sections"
-        bindValue="id"
-        bindLabel="name"
-        [groupBy]="groupByFn"
-        [editableSearchTerm]="true"
+        [matAutocomplete]="auto"
+        (input)="filter()"
+        (focus)="filter()"
       />
+      <mat-autocomplete
+        requireSelection
+        [displayWith]="displayFn()"
+        #auto="matAutocomplete"
+      >
+        <mat-optgroup
+          *ngFor="let state of filteredStates"
+          [label]="'JDAV ' + state.name"
+        >
+          <mat-option
+            *ngFor="let section of state.sections"
+            [value]="section.id"
+          >
+            {{ section.name }}
+          </mat-option>
+        </mat-optgroup>
+      </mat-autocomplete>
       <div
         *ngIf="sectionId.hasError('required') && sectionId.touched"
         class="error-message"

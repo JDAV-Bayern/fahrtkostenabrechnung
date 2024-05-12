@@ -2,13 +2,11 @@ import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import {
-  OwlDateTimeIntl,
-  OwlDateTimeModule
-} from '@danielmoncada/angular-datetime-picker';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
-import { JdavDateTimeIntl } from 'src/app/core/date-time-intl';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { TimeInputDirective } from 'src/app/shared/time-input.directive';
 
 @Component({
   selector: 'app-meeting-committee-step',
@@ -19,11 +17,11 @@ import { JdavDateTimeIntl } from 'src/app/core/date-time-intl';
     NgIf,
     RouterLink,
     ReactiveFormsModule,
-    OwlDateTimeModule,
-    FormCardComponent
-  ],
-  // cannot be provided in app config as it will be overwritten by the module import
-  providers: [{ provide: OwlDateTimeIntl, useClass: JdavDateTimeIntl }]
+    FormCardComponent,
+    MatDatepickerModule,
+    MatAutocompleteModule,
+    TimeInputDirective
+  ]
 })
 export class MeetingCommitteeStepComponent {
   form;
@@ -41,7 +39,23 @@ export class MeetingCommitteeStepComponent {
     return this.form.controls.location;
   }
 
-  get period() {
-    return this.form.controls.period;
+  get time() {
+    return this.form.controls.time;
+  }
+
+  get startDate() {
+    return this.time.controls.startDate;
+  }
+
+  get startTime() {
+    return this.time.controls.startTime;
+  }
+
+  get endDate() {
+    return this.time.controls.endDate;
+  }
+
+  get endTime() {
+    return this.time.controls.endTime;
   }
 }

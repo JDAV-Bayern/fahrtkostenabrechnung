@@ -37,11 +37,11 @@
         </tr>
         <tr>
           <td>Beginn:</td>
-          <td>{{ meeting.period[0] | date: 'short' }}</td>
+          <td>{{ meeting.time.start | date: 'short' }}</td>
         </tr>
         <tr>
           <td>Ende:</td>
-          <td>{{ meeting.period[1] | date: 'short' }}</td>
+          <td>{{ meeting.time.end | date: 'short' }}</td>
         </tr>
       </table>
     </div>

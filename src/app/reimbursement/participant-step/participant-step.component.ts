@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { PlzService } from 'src/app/core/plz.service';
-import { Section } from 'src/domain/section.model';
 import { SectionService } from 'src/app/core/section.service';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
-import { NgSelectModule } from '@ng-select/ng-select';
+import { NgFor, NgIf } from '@angular/common';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { JdavState } from 'src/domain/section.model';
 
 @Component({
   selector: 'app-participant-step',
@@ -16,15 +16,20 @@ import { NgSelectModule } from '@ng-select/ng-select';
   standalone: true,
   imports: [
     NgIf,
+    NgFor,
     RouterLink,
     ReactiveFormsModule,
-    NgSelectModule,
+    MatAutocompleteModule,
     FormCardComponent
   ]
 })
 export class ParticipantStepComponent {
+  @ViewChild('sectionInput')
+  sectionInput!: ElementRef<HTMLInputElement>;
+
   form;
-  sections: Section[] = [];
+  states: JdavState[];
+  filteredStates: JdavState[];
 
   constructor(
     private readonly plzService: PlzService,
@@ -34,22 +39,25 @@ export class ParticipantStepComponent {
     this.form = controlService.participantStep;
 
     // load section autocompletions
-    this.sections = this.sectionService.getSections();
-    this.sections.sort((a, b) => {
-      const isBavarianA = this.sectionService.isBavarian(a);
-      const isBavarianB = this.sectionService.isBavarian(b);
-      /*
-       * Sort by multipe criteria with descending priority:
-       * 1. Sort Bavarian sections first
-       * 2. Sort other states alphabetically
-       * 3. Sort sections within the same state alphabetically
-       */
+    this.states = this.sectionService.getJdavStates();
+
+    // Sort states alphabetically while keeping Bavaria at the top
+    this.states.sort((a, b) => {
+      const isBavarianA = a.id === 2;
+      const isBavarianB = b.id === 2;
+
       return (
         Number(isBavarianB) - Number(isBavarianA) ||
-        a.jdavState.name.localeCompare(b.jdavState.name) ||
         a.name.localeCompare(b.name)
       );
     });
+
+    // Sort sections within the same state alphabetically
+    this.states.forEach(state => {
+      state.sections.sort((a, b) => a.name.localeCompare(b.name));
+    });
+
+    this.filteredStates = this.states.slice();
   }
 
   get givenName() {
@@ -93,8 +101,22 @@ export class ParticipantStepComponent {
     }
   }
 
-  groupByFn(item: Section) {
-    return 'JDAV ' + item.jdavState.name;
+  filter() {
+    const filterValue = this.sectionInput.nativeElement.value.toLowerCase();
+    const filteredStates = this.states.map(state => ({
+      id: state.id,
+      name: state.name,
+      sections: state.sections.filter(section =>
+        section.name.toLowerCase().includes(filterValue)
+      )
+    }));
+    this.filteredStates = filteredStates.filter(
+      state => state.sections.length > 0
+    );
+  }
+
+  displayFn() {
+    return (item: number) => this.sectionService.getSection(item)?.name || '';
   }
 
   plzChanged() {

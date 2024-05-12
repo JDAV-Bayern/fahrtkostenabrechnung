@@ -6,7 +6,7 @@
   <div *ngIf="mode.invalid" class="means-of-travel-buttons-container">
     <button
       *ngFor="let modeOption of allowedModes"
-      class="secondary icon"
+      class="jdav-btn secondary icon"
       (click)="chooseExpense(modeOption)"
     >
       <span
@@ -161,7 +161,7 @@
             let i = index
           "
         >
-          <button class="tertiary icon" (click)="removePassenger(i)">
+          <button class="jdav-btn tertiary icon" (click)="removePassenger(i)">
             <span class="material-symbols-outlined">&#xe872;</span>
           </button>
           <input class="form-control not-filled" formControlName="{{ i }}" />
@@ -171,7 +171,7 @@
             >Bitte gib einen Namen für deine*n Mitfahrer*in an</span
           >
         </div>
-        <button class="add-passenger tertiary icon" (click)="addPassenger()">
+        <button class="jdav-btn add-passenger tertiary icon" (click)="addPassenger()">
           <span class="material-symbols-outlined">&#xe145;</span>
           Mitfahrer*in hinzufügen
         </button>
@@ -179,7 +179,7 @@
     </fieldset>
 
     <div class="button-container">
-      <button type="submit" [disabled]="!form.valid">Speichern</button>
+      <button type="submit" [disabled]="!form.valid" class="jdav-btn">Speichern</button>
     </div>
   </div>
 </form>
