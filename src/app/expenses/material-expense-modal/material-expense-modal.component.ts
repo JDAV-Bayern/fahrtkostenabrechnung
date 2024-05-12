@@ -45,6 +45,10 @@ export class MaterialExpenseModalComponent {
     return this.form.controls.amount;
   }
 
+  get now() {
+    return new Date();
+  }
+
   submitForm() {
     if (this.form.valid) {
       this.dialogRef.close(this.form);

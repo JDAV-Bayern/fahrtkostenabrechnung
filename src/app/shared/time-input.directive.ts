@@ -69,11 +69,11 @@ export class TimeInputDirective implements ControlValueAccessor, Validator {
 
   handleInput(value: string) {
     const match = value.match(TIME_PATTERN);
-  
+
     if (match) {
       const hours = parseInt(match[1]);
       const minutes = match[2] ? parseInt(match[2]) : 0;
-      
+
       if (0 <= hours && hours < 24 && 0 <= minutes && minutes < 60) {
         this.lastValueValid = true;
         this.onChange((hours * 60 + minutes) * 60 * 1000);

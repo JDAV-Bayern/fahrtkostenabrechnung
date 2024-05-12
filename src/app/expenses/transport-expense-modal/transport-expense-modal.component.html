@@ -171,7 +171,10 @@
             >Bitte gib einen Namen für deine*n Mitfahrer*in an</span
           >
         </div>
-        <button class="jdav-btn add-passenger tertiary icon" (click)="addPassenger()">
+        <button
+          class="jdav-btn add-passenger tertiary icon"
+          (click)="addPassenger()"
+        >
           <span class="material-symbols-outlined">&#xe145;</span>
           Mitfahrer*in hinzufügen
         </button>
@@ -179,7 +182,9 @@
     </fieldset>
 
     <div class="button-container">
-      <button type="submit" [disabled]="!form.valid" class="jdav-btn">Speichern</button>
+      <button type="submit" [disabled]="!form.valid" class="jdav-btn">
+        Speichern
+      </button>
     </div>
   </div>
 </form>

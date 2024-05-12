@@ -66,4 +66,8 @@ export class ExpensesExtraStepComponent {
       });
     };
   }
+
+  completeFood() {
+    this.reimbursementControlService.completeFood();
+  }
 }

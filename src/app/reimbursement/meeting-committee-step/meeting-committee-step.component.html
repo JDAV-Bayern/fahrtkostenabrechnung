@@ -52,10 +52,15 @@
             formControlName="startDate"
             class="form-control"
             required
+            [max]="endDate.value || now"
             [matDatepicker]="pickerStart"
             (click)="pickerStart.open()"
           />
-          <mat-datepicker touchUi #pickerStart></mat-datepicker>
+          <mat-datepicker
+            touchUi
+            [dateClass]="dateClass"
+            #pickerStart
+          ></mat-datepicker>
           <input
             appTimeInput
             type="text"
@@ -81,6 +86,13 @@
           Bitte gib ein gültiges Datum an.
         </div>
         <div
+          *ngIf="startDate.hasError('matDatepickerMax')"
+          class="error-message"
+        >
+          Das Startdatum darf nicht nach dem Enddatum oder in der Zukunft
+          liegen.
+        </div>
+        <div
           *ngIf="startTime.hasError('required') && startTime.touched"
           class="error-message"
         >
@@ -102,10 +114,16 @@
             formControlName="endDate"
             class="form-control"
             required
+            [min]="startDate.value"
+            [max]="now"
             [matDatepicker]="pickerEnd"
             (click)="pickerEnd.open()"
           />
-          <mat-datepicker touchUi #pickerEnd></mat-datepicker>
+          <mat-datepicker
+            touchUi
+            [dateClass]="dateClass"
+            #pickerEnd
+          ></mat-datepicker>
           <input
             appTimeInput
             type="text"
@@ -129,6 +147,12 @@
           class="error-message"
         >
           Bitte gib ein gültiges Datum an.
+        </div>
+        <div *ngIf="endDate.hasError('matDatepickerMin')" class="error-message">
+          Das Enddatum darf nicht vor dem Startdatum liegen.
+        </div>
+        <div *ngIf="endDate.hasError('matDatepickerMax')" class="error-message">
+          Das Datum darf nicht in der Zukunft liegen.
         </div>
         <div
           *ngIf="endTime.hasError('required') && endTime.touched"

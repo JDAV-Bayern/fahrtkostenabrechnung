@@ -27,6 +27,7 @@
   <span *ngIf="expense.meals.length > 0">
     Abzüglich {{ expense.meals | meals | join }}
   </span>
+  <span *ngIf="expense.meals.length === 0"> Ohne Abzüge </span>
 </ng-container>
 
 <ng-container *ngIf="expense.type === 'material'"> </ng-container>

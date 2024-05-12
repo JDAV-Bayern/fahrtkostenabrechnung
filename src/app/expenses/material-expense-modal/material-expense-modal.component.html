@@ -9,6 +9,7 @@
       formControlName="date"
       class="form-control"
       required
+      [max]="now"
       [matDatepicker]="picker"
       (click)="picker.open()"
     />
@@ -28,6 +29,9 @@
       class="error-message"
     >
       Bitte gib ein gültiges Datum an.
+    </div>
+    <div *ngIf="date.hasError('matDatepickerMax')" class="error-message">
+      Das Datum darf nicht in der Zukunft liegen.
     </div>
   </div>
 
@@ -69,6 +73,8 @@
   </div>
 
   <div class="button-container">
-    <button type="submit" [disabled]="!form.valid" class="jdav-btn">Speichern</button>
+    <button type="submit" [disabled]="!form.valid" class="jdav-btn">
+      Speichern
+    </button>
   </div>
 </form>

@@ -4,7 +4,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
-import { MatDatepickerModule } from '@angular/material/datepicker';
+import {
+  MatCalendarCellClassFunction,
+  MatDatepickerModule
+} from '@angular/material/datepicker';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { TimeInputDirective } from 'src/app/shared/time-input.directive';
 
@@ -25,6 +28,36 @@ import { TimeInputDirective } from 'src/app/shared/time-input.directive';
 })
 export class MeetingCommitteeStepComponent {
   form;
+  dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
+    // Only highligh dates inside the month view.
+    if (view === 'month') {
+      const startDate = this.startDate.value;
+      const endDate = this.endDate.value;
+      const start = cellDate.getTime() === startDate?.getTime();
+      const end = cellDate.getTime() === endDate?.getTime();
+
+      if (start && end) {
+        return 'single-date';
+      }
+      if (start) {
+        return 'start-date';
+      }
+      if (end) {
+        return 'end-date';
+      }
+
+      if (startDate && endDate) {
+        if (
+          cellDate.getTime() > startDate.getTime() &&
+          cellDate.getTime() < endDate.getTime()
+        ) {
+          return 'range-date';
+        }
+      }
+    }
+
+    return '';
+  };
 
   constructor(public controlService: ReimbursementControlService) {
     this.form = controlService.meetingStep;
@@ -57,5 +90,9 @@ export class MeetingCommitteeStepComponent {
 
   get endTime() {
     return this.time.controls.endTime;
+  }
+
+  get now() {
+    return new Date();
   }
 }

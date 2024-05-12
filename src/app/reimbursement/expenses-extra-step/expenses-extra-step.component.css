@@ -8,3 +8,9 @@
   border-top: 3px double var(--color-body);
   padding: 4px 8px 0px;
 }
+
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}

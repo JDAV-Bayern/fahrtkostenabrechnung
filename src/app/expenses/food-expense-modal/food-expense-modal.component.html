@@ -9,7 +9,10 @@
       formControlName="date"
       class="form-control"
       required
+      [min]="meetingTime.startDate"
+      [max]="meetingTime.endDate"
       [matDatepicker]="picker"
+      [matDatepickerFilter]="filterDates"
       (click)="picker.open()"
     />
     <mat-datepicker touchUi #picker></mat-datepicker>
@@ -28,6 +31,14 @@
       class="error-message"
     >
       Bitte gib ein gültiges Datum an.
+    </div>
+    <div
+      *ngIf="
+        date.hasError('matDatepickerMin') || date.hasError('matDatepickerMax')
+      "
+      class="error-message"
+    >
+      Bitte gib ein Datum während der Veranstaltung an.
     </div>
   </div>
 
@@ -70,6 +81,8 @@
   </div>
 
   <div class="button-container">
-    <button type="submit" [disabled]="!form.valid" class="jdav-btn">Speichern</button>
+    <button type="submit" [disabled]="!form.valid" class="jdav-btn">
+      Speichern
+    </button>
   </div>
 </form>

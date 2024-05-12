@@ -6,12 +6,6 @@
     [cdkDropListEnterPredicate]="enterPredicate"
   >
     <!-- TODO: readd [formArrayName]="form" -->
-    <!--
-      @angular/cdk/drag-drop applies a transform style to list elements in
-      order to preview sorting while dragging.
-      For some reason, this style has no effect when directly applied to the
-      child component, so the expense component has to be wrapped in a div.
-    -->
     <div
       *ngFor="let expenseForm of form.controls; index as i"
       cdkDrag

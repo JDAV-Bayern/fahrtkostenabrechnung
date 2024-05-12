@@ -9,7 +9,13 @@
       [form]="foodForm"
       [openDialog]="getOpenFoodDialogFn()"
     >
-      <h2>Tagegelder</h2>
+      <div class="heading">
+        <h2>Tagegelder</h2>
+        <button class="jdav-btn icon" (click)="completeFood()">
+          <span class="material-symbols-outlined">restaurant</span>
+          Tagegelder abrechnen
+        </button>
+      </div>
     </app-expense-list>
     <p class="subtotal">
       Summe:

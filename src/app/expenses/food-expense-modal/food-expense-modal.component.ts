@@ -4,6 +4,7 @@ import { Component, Inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FoodExpenseForm } from 'src/app/expenses/shared/expense-form';
+import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { RawFormValue } from 'src/app/shared/form-value';
 
 @Component({
@@ -15,10 +16,16 @@ import { RawFormValue } from 'src/app/shared/form-value';
 })
 export class FoodExpenseModalComponent {
   form: FormGroup<FoodExpenseForm>;
-
   initialFormValue: RawFormValue<FoodExpenseForm>;
 
+  filterDates = (date: Date | null): boolean =>
+    this.initialFormValue.date?.getTime() == date?.getTime() ||
+    !this.controlService.foodExpenses.value.some(
+      expense => expense.date?.getTime() == date?.getTime()
+    );
+
   constructor(
+    private controlService: ReimbursementControlService,
     private dialogRef: DialogRef<FormGroup<FoodExpenseForm>>,
     @Inject(DIALOG_DATA) data: { form: FormGroup<FoodExpenseForm> }
   ) {
@@ -43,6 +50,10 @@ export class FoodExpenseModalComponent {
 
   get meals() {
     return this.form.controls.meals;
+  }
+
+  get meetingTime() {
+    return this.controlService.meetingStep.controls.time.getRawValue();
   }
 
   submitForm() {

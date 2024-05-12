@@ -8,7 +8,7 @@ import {
   Validators
 } from '@angular/forms';
 import { validateIBAN } from 'ngx-iban-validator';
-import { Direction } from 'src/domain/expense.model';
+import { Direction, FoodExpense } from 'src/domain/expense.model';
 import { Reimbursement } from 'src/domain/reimbursement.model';
 import { maxPlanExpenses } from './max-plan-expenses.validator';
 import { validateCourseCode } from './course-code.validator';
@@ -22,7 +22,7 @@ import {
   MaterialExpenseForm
 } from 'src/app/expenses/shared/expense-form';
 import { anyRequired } from 'src/app/shared/any-required.validator';
-import { FormValue } from 'src/app/shared/form-value';
+import { FormValue, RawFormValue } from 'src/app/shared/form-value';
 
 const PLZ_PATTERN = /^[0-9]{5}$/;
 const BIC_PATTERN = /^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/;
@@ -150,12 +150,15 @@ export class ReimbursementControlService {
 
     // parse JSON from local storage
     const storedData = localStorage.getItem('reimbursement') || '{}';
-    const storedValue: FormValue<typeof this.form> = JSON.parse(storedData, (key, value) => {
-      if (key === 'date' || key === 'startDate' || key === 'endDate') {
-        return new Date(value);
+    const storedValue: FormValue<typeof this.form> = JSON.parse(
+      storedData,
+      (key, value) => {
+        if (key === 'date' || key === 'startDate' || key === 'endDate') {
+          return new Date(value);
+        }
+        return value;
       }
-      return value;
-    });
+    );
 
     // add transport expense controls
     if (storedValue.expenses?.transport) {
@@ -211,6 +214,8 @@ export class ReimbursementControlService {
     Object.values(this.transportExpensesStep.controls).forEach(expenses =>
       expenses.clear()
     );
+    this.foodExpenses.clear();
+    this.materialExpenses.clear();
     localStorage.removeItem('reimbursement');
   }
 
@@ -237,7 +242,6 @@ export class ReimbursementControlService {
     } else {
       meeting = meetingValue;
     }
-
 
     return {
       meeting: meeting as Meeting,
@@ -331,6 +335,73 @@ export class ReimbursementControlService {
       const control = this.copyTransportForm(value);
       control.patchValue(value);
       outbound.push(control);
+    }
+  }
+
+  completeFood(): void {
+    this.foodExpenses.clear();
+    const time = this.meetingStep.controls.time.getRawValue();
+
+    if (!time.startDate || !time.endDate) {
+      return;
+    }
+
+    const ONE_HOUR = 60 * 60 * 1000;
+    const start = new Date(time.startDate.getTime() + time.startTime);
+    const end = new Date(time.endDate.getTime() + time.endTime);
+
+    if (end.getTime() - start.getTime() < 8 * ONE_HOUR) {
+      return;
+    }
+
+    let allowances: Pick<FoodExpense, 'date' | 'absence'>[] = [];
+
+    if (time.startDate.getTime() === time.endDate.getTime()) {
+      // single day
+      allowances.push({
+        date: time.startDate,
+        absence: 'workDay'
+      });
+    } else {
+      // multiple days
+      if (end.getTime() - start.getTime() < 16 * ONE_HOUR) {
+        // assume no overnight stay
+        const startTime = time.endDate.getTime() - start.getTime();
+        const endTime = end.getTime() - time.endDate.getTime();
+        const date = startTime >= endTime ? time.startDate : time.endDate;
+
+        allowances.push({
+          date,
+          absence: 'workDay'
+        });
+      } else {
+        allowances.push({
+          date: time.startDate,
+          absence: 'travelDay'
+        });
+
+        let date = new Date(time.startDate);
+        date.setDate(date.getDate() + 1);
+
+        while (date.getTime() < time.endDate.getTime()) {
+          allowances.push({
+            date: new Date(date),
+            absence: 'fullDay'
+          });
+          date.setDate(date.getDate() + 1);
+        }
+
+        allowances.push({
+          date: time.endDate,
+          absence: 'travelDay'
+        });
+      }
+    }
+
+    for (let allowance of allowances) {
+      const form = this.expenseControlService.createFoodForm();
+      form.patchValue(allowance);
+      this.foodExpenses.push(form);
     }
   }
 

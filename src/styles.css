@@ -127,59 +127,30 @@ select {
   cursor: not-allowed;
 }
 
-.ng-select.form-select .ng-select-container {
-  height: auto;
-  padding: 10px;
-  margin-bottom: 3px;
-  border-radius: 0;
-
-  & .ng-value-container {
-    padding: 0;
-    & .ng-input {
-      top: auto;
-      & input {
-        font-size: inherit;
-      }
-    }
-  }
-  & .ng-arrow-wrapper {
-    padding: 0;
-  }
-}
-
-.owl-dt-calendar-table .owl-dt-calendar-cell-selected {
-  background-color: var(--color-primary);
-}
-
-.owl-dt-calendar-table .owl-dt-calendar-cell-in-range {
-  background: var(--color-primary-light);
-}
-
-.owl-dt-container-info .owl-dt-container-range .owl-dt-container-range-content {
-  font-size: 16px;
-}
-
-.owl-dt-container-info .owl-dt-container-info-active {
-  color: var(--color-primary);
-}
-
-.owl-dt-container-buttons {
-  color: var(--color-primary);
-}
-
-.owl-dt-control-button {
-  text-transform: none;
-}
-
-.owl-dt-control-button:hover {
-  background-color: var(--bg-gray);
-}
-
 .error-message {
   color: #b60000;
   font-size: 12px;
   margin-top: 5px;
   margin-bottom: 20px;
+}
+
+button.start-date {
+  background-color: var(--color-primary-light);
+  border-radius: 100% 0 0 100%;
+}
+
+button.end-date {
+  background-color: var(--color-primary-light);
+  border-radius: 0 100% 100% 0;
+}
+
+button.single-date {
+  background-color: var(--color-primary-light);
+  border-radius: 100%;
+}
+
+button.range-date {
+  background-color: var(--color-primary-light);
 }
 
 @font-face {
