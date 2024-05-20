@@ -2,9 +2,9 @@
 
 <div *ngIf="meetingType !== 'committee'">
   <p>
-    Fahrtkosten zur Schulung werden von der JDAV Bayern wie in der Tabelle
-    dargestellt erstattet. Der Betrag wird dir nach der Schulung auf dein Konto
-    überwiesen.
+    Fahrtkosten zur Schulung werden von der JDAV Bayern nach den auf dieser
+    Seite angegebenen Sätzen erstattet. Der Betrag wird dir nach der Schulung
+    auf dein Konto überwiesen.
   </p>
   <p>
     Die Fahrtkosten zur Landesjugendversammlung werden wie bei Schulungen
@@ -14,14 +14,9 @@
 
 <div *ngIf="meetingType === 'committee'">
   <p>
-    Für Gremien gelten die folgenden Erstattungssätze. Details kannst du dem
-    Leitfaden für Abrechnungen für Gremien entnehmen. Die angepassten Sätze
-    werden hier angezeigt.
-  </p>
-  <p class="explanation">
-    Bitte beachte, dass die BahnCard für Gremien durch das Formular nicht
-    berücksichtigt werden kann. Bitte hänge die Rechnung deiner BahnCard an, der
-    Betrag wird dann durch die LGS entsprechend zusätzlich erstattet.
+    Fahrtkosten für Gremien werden nach den auf dieser Seite angegebenen Sätzen
+    erstattet. Details kannst du dem Leitfaden für Abrechnungen für Gremien
+    entnehmen.
   </p>
 </div>
 
@@ -62,12 +57,20 @@
     und der genutzten BahnCard.
   </p>
   <p class="important">Bitte eine Kopie der Fahrkarte anhängen!</p>
-  <table>
+
+  <table *ngIf="meetingType !== 'committee'">
     <tr *ngFor="let entry of config.transport.train | keyvalue: originalOrder">
       <td>{{ entry.key | discountCard }}</td>
       <td>{{ entry.value | percent }} des Ticketpreis</td>
     </tr>
   </table>
+  <p *ngIf="meetingType === 'committee'">
+    Bitte beachte, dass die BahnCard für Gremien durch das Formular aktuell
+    nicht berücksichtigt werden kann. Bitte wähle bei der Erfassung der
+    Fahrtkosten trotzdem deine BahnCard aus und füge den Belegen die Rechnung
+    deiner BahnCard an. Der Betrag wird dann durch die LGS entsprechend
+    zusätzlich erstattet.
+  </p>
 
   <h3>Fahrt mit Aboticket</h3>
 

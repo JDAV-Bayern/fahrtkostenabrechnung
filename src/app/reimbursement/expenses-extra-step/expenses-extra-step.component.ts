@@ -9,6 +9,8 @@ import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.s
 import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
 import { FoodExpenseModalComponent } from 'src/app/expenses/food-expense-modal/food-expense-modal.component';
 import { MaterialExpenseModalComponent } from 'src/app/expenses/material-expense-modal/material-expense-modal.component';
+import { toInterval } from 'src/app/shared/validators/date-range.validator';
+import { getFoodOptions } from '../shared/food.validator';
 
 @Component({
   selector: 'app-expenses-extra-step',
@@ -41,6 +43,13 @@ export class ExpensesExtraStepComponent {
     this.parentForm = reimbursementControlService.expensesStep;
     this.foodForm = reimbursementControlService.foodExpenses;
     this.materialForm = reimbursementControlService.materialExpenses;
+  }
+
+  get foodOptions() {
+    const time = this.rootForm.controls.meeting.controls.time;
+    const interval = toInterval(time);
+    const foodOpts = interval ? getFoodOptions(interval) : [];
+    return foodOpts;
   }
 
   get report() {

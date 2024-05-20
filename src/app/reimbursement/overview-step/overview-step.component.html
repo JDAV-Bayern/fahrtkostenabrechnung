@@ -52,6 +52,12 @@
     <p>
       Bitte denke daran, dass wir die Belege für deine Zugtickets benötigen.
     </p>
+    <p *ngIf="reimbursement.meeting.type === 'committee'">
+      Falls du eine BahnCard benutzt hast, hänge bitte die Rechnung für diese
+      an. Die BahnCard wird für Gremien im angezeigten Betrag aktuell nicht
+      berücksichtigt, wird jedoch durch die LGS entsprechend zusätzlich
+      erstattet.
+    </p>
     <ngx-file-drop
       (onFileDrop)="fileDropped($event)"
       [accept]="'.pdf,.jpg,.png,.jpeg,.JPG,.JPEG,.PDF,.PNG'"

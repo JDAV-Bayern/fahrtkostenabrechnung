@@ -8,53 +8,59 @@
   "
 >
   <fieldset [formGroup]="parentForm">
-    <app-expense-list
-      expenseType="food"
-      [form]="foodForm"
-      [openDialog]="getOpenFoodDialogFn()"
-    >
-      <div class="heading">
-        <h2>Tagegelder</h2>
-        <button class="jdav-btn icon" (click)="completeFood()">
-          <span class="material-symbols-outlined">restaurant</span>
-          Tagegelder abrechnen
-        </button>
+    <div *ngIf="foodOptions.length !== 0 || foodForm.length !== 0">
+      <app-expense-list
+        expenseType="food"
+        [form]="foodForm"
+        formArrayName="food"
+        [openDialog]="getOpenFoodDialogFn()"
+      >
+        <div class="heading">
+          <h2>Tagegelder</h2>
+          <button class="jdav-btn icon" (click)="completeFood()">
+            <span class="material-symbols-outlined">restaurant</span>
+            Tagegelder abrechnen
+          </button>
+        </div>
+      </app-expense-list>
+      <p class="subtotal">
+        Summe:
+        <span>{{ report.categories.food | currency }}</span>
+      </p>
+      <div *ngIf="foodForm.hasError('foodExpenseUnique')" class="error-message">
+        Bitte gib nur eine Auslage für den
+        {{ rootForm.getError('foodExpenseUnique').date | date }} an.
       </div>
-    </app-expense-list>
-    <p class="subtotal">
-      Summe:
-      <span>{{ report.categories.food | currency }}</span>
-    </p>
-    <div *ngIf="foodForm.hasError('foodExpenseUnique')" class="error-message">
-      Bitte gib nur eine Auslage für den
-      {{ rootForm.getError('foodExpenseUnique').date | date }} an.
-    </div>
-    <div *ngIf="foodForm.hasError('foodExpenseWorkDay')" class="error-message">
-      Bitte gib bei Reisen ohne Übernachtung nur für den Tag mit längerer
-      Abwesenheit eine Auslage an.
-    </div>
-    <div *ngIf="rootForm.hasError('foodExpenseDate')" class="error-message">
-      Die Auslage für den
-      {{ rootForm.getError('foodExpenseDate').date | date }} liegt außerhalb
-      deines Reisezeitraums.
-    </div>
-    <div *ngIf="rootForm.hasError('foodExpenseAbsence')" class="error-message">
-      Die Abwesenheitsdauer für den
-      {{ rootForm.getError('foodExpenseAbsence').date | date }} stimmt nicht mit
-      deinem Reisezeitraum überein.
+      <div *ngIf="foodForm.hasError('foodExpenseWorkDay')" class="error-message">
+        Bitte gib bei Reisen ohne Übernachtung nur für den Tag mit längerer
+        Abwesenheit eine Auslage an.
+      </div>
+      <div *ngIf="rootForm.hasError('foodExpenseDate')" class="error-message">
+        Die Auslage für den
+        {{ rootForm.getError('foodExpenseDate').date | date }} liegt außerhalb
+        deines Reisezeitraums.
+      </div>
+      <div *ngIf="rootForm.hasError('foodExpenseAbsence')" class="error-message">
+        Die Abwesenheitsdauer für den
+        {{ rootForm.getError('foodExpenseAbsence').date | date }} stimmt nicht mit
+        deinem Reisezeitraum überein.
+      </div>
     </div>
 
-    <app-expense-list
-      expenseType="material"
-      [form]="materialForm"
-      [openDialog]="getOpenMaterialDialogFn()"
-    >
-      <h2>Sonstige Auslagen</h2>
-    </app-expense-list>
-    <p class="subtotal">
-      Summe:
-      <span>{{ report.categories.material | currency }}</span>
-    </p>
+    <div>
+      <app-expense-list
+        expenseType="material"
+        [form]="materialForm"
+        formArrayName="material"
+        [openDialog]="getOpenMaterialDialogFn()"
+      >
+        <h2>Sonstige Auslagen</h2>
+      </app-expense-list>
+      <p class="subtotal">
+        Summe:
+        <span>{{ report.categories.material | currency }}</span>
+      </p>
+    </div>
 
     <div *ngIf="parentForm.hasError('anyRequired')" class="error-message">
       Bitte gib mindestens eine Auslage an.
