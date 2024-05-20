@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
 import {
-  AbstractControl,
-  FormArray,
   FormControl,
   FormGroup,
   NonNullableFormBuilder,
   Validators
 } from '@angular/forms';
 import { validateIBAN } from 'ngx-iban-validator';
-import { Direction, FoodExpense } from 'src/domain/expense.model';
+import { Direction } from 'src/domain/expense.model';
 import { Reimbursement } from 'src/domain/reimbursement.model';
-import { maxPlanExpenses } from './max-plan-expenses.validator';
-import { validateCourseCode } from './course-code.validator';
+import {
+  allowedTransportModes,
+  limitedTransportMode
+} from './transport-mode.validator';
+import { validateCourseCode } from '../../shared/validators/course-code.validator';
 import { Meeting, MeetingType } from 'src/domain/meeting.model';
 import { MeetingForm } from './meeting-form';
 import { ReimbursementService } from './reimbursement.service';
@@ -21,8 +22,23 @@ import {
   FoodExpenseForm,
   MaterialExpenseForm
 } from 'src/app/expenses/shared/expense-form';
-import { anyRequired } from 'src/app/shared/any-required.validator';
-import { FormValue, RawFormValue } from 'src/app/shared/form-value';
+import { anyRequired } from 'src/app/shared/validators/any-required.validator';
+import {
+  orderedDateRange,
+  pastDateRange,
+  toInterval
+} from '../../shared/validators/date-range.validator';
+import {
+  getFoodOptions,
+  validateFoodExpenseInterval,
+  validateFoodExpenseUnique,
+  validateFoodExpenseWorkDay
+} from './food.validator';
+import {
+  deepMarkAsDirty,
+  reviveDate,
+  reviveFormArrays
+} from 'src/app/shared/form-util';
 
 const PLZ_PATTERN = /^[0-9]{5}$/;
 const BIC_PATTERN = /^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/;
@@ -30,6 +46,8 @@ const BIC_PATTERN = /^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/;
 const SEPA_CODES =
   /^(BE|BG|DK|DE|EE|FI|FR|GR|GB|IE|IS|IT|HR|LV|LI|LT|LU|MT|MC|NL|NO|AT|PL|PT|RO|SM|SE|CH|SK|SI|ES|CZ|HU|CY)/;
 const BIC_REQUIRED = /^(MC|SM|CH)/;
+
+const DATE_KEYS = ['date', 'startDate', 'endDate'];
 
 @Injectable({
   providedIn: 'root'
@@ -39,60 +57,72 @@ export class ReimbursementControlService {
     Validators.required,
     validateCourseCode
   ]);
-  form = this.formBuilder.group({
-    meeting: this.formBuilder.group<MeetingForm>({
-      type: this.formBuilder.control<MeetingType>(
-        'course',
-        Validators.required
-      ),
-      name: this.formBuilder.control('', Validators.required),
-      location: this.formBuilder.control('', Validators.required),
-      time: this.formBuilder.group({
-        startDate: new FormControl<Date | null>(null, Validators.required),
-        startTime: [0, Validators.required],
-        endDate: new FormControl<Date | null>(null, Validators.required),
-        endTime: [0, Validators.required]
-      }),
-      code: this.courseCodeControl
-    }),
-    participant: this.formBuilder.group({
-      givenName: ['', Validators.required],
-      familyName: ['', Validators.required],
-      sectionId: new FormControl<number | null>(null, Validators.required),
-      zipCode: ['', [Validators.required, Validators.pattern(PLZ_PATTERN)]],
-      city: ['', Validators.required],
-      iban: ['', [Validators.required, validateIBAN]],
-      bic: [
-        { value: '', disabled: true },
-        [Validators.required, Validators.pattern(BIC_PATTERN)]
-      ]
-    }),
-    expenses: this.formBuilder.group(
-      {
-        transport: this.formBuilder.group(
-          {
-            inbound: this.formBuilder.array<FormGroup<TransportExpenseForm>>(
-              [],
-              maxPlanExpenses
-            ),
-            onsite: this.formBuilder.array<FormGroup<TransportExpenseForm>>([]),
-            outbound: this.formBuilder.array<FormGroup<TransportExpenseForm>>(
-              [],
-              maxPlanExpenses
-            )
-          },
-          { validators: anyRequired }
+  form = this.formBuilder.group(
+    {
+      meeting: this.formBuilder.group<MeetingForm>({
+        type: this.formBuilder.control<MeetingType>(
+          'course',
+          Validators.required
         ),
-        food: this.formBuilder.array<FormGroup<FoodExpenseForm>>([]),
-        material: this.formBuilder.array<FormGroup<MaterialExpenseForm>>([])
-      },
-      { validators: anyRequired }
-    ),
-    overview: this.formBuilder.group({
-      note: [''],
-      file: [undefined]
-    })
-  });
+        name: this.formBuilder.control('', Validators.required),
+        location: this.formBuilder.control('', Validators.required),
+        time: this.formBuilder.group(
+          {
+            startDate: new FormControl<Date | null>(null, Validators.required),
+            startTime: [0, Validators.required],
+            endDate: new FormControl<Date | null>(null, Validators.required),
+            endTime: [0, Validators.required]
+          },
+          { validators: [orderedDateRange, pastDateRange] }
+        ),
+        code: this.courseCodeControl
+      }),
+      participant: this.formBuilder.group({
+        givenName: ['', Validators.required],
+        familyName: ['', Validators.required],
+        sectionId: new FormControl<number | null>(null, Validators.required),
+        zipCode: ['', [Validators.required, Validators.pattern(PLZ_PATTERN)]],
+        city: ['', Validators.required],
+        iban: ['', [Validators.required, validateIBAN]],
+        bic: [
+          { value: '', disabled: true },
+          [Validators.required, Validators.pattern(BIC_PATTERN)]
+        ]
+      }),
+      expenses: this.formBuilder.group(
+        {
+          transport: this.formBuilder.group(
+            {
+              inbound: this.formBuilder.array<FormGroup<TransportExpenseForm>>(
+                [],
+                limitedTransportMode('plan', 1)
+              ),
+              onsite: this.formBuilder.array<FormGroup<TransportExpenseForm>>(
+                [],
+                allowedTransportModes(['car', 'train'])
+              ),
+              outbound: this.formBuilder.array<FormGroup<TransportExpenseForm>>(
+                [],
+                limitedTransportMode('plan', 1)
+              )
+            },
+            { validators: anyRequired }
+          ),
+          food: this.formBuilder.array<FormGroup<FoodExpenseForm>>(
+            [],
+            [validateFoodExpenseUnique, validateFoodExpenseWorkDay]
+          ),
+          material: this.formBuilder.array<FormGroup<MaterialExpenseForm>>([])
+        },
+        { validators: anyRequired }
+      ),
+      overview: this.formBuilder.group({
+        note: [''],
+        file: [undefined]
+      })
+    },
+    { validators: validateFoodExpenseInterval }
+  );
 
   constructor(
     private formBuilder: NonNullableFormBuilder,
@@ -150,57 +180,36 @@ export class ReimbursementControlService {
 
     // parse JSON from local storage
     const storedData = localStorage.getItem('reimbursement') || '{}';
-    const storedValue: FormValue<typeof this.form> = JSON.parse(
-      storedData,
-      (key, value) => {
-        if (key === 'date' || key === 'startDate' || key === 'endDate') {
-          return new Date(value);
-        }
-        return value;
-      }
-    );
+    const storedValue = JSON.parse(storedData, reviveDate(DATE_KEYS));
 
-    // add transport expense controls
-    if (storedValue.expenses?.transport) {
-      for (let direction of ['inbound', 'onsite', 'outbound'] as Direction[]) {
-        const expenses = storedValue.expenses.transport[direction];
-        if (expenses) {
-          this.transportExpensesStep.setControl(
-            direction,
-            this.formBuilder.array<FormGroup<TransportExpenseForm>>(
-              expenses.map(expense => this.copyTransportForm(expense))
-            )
-          );
-        }
-      }
-    }
-
-    // add food expense controls
-    if (storedValue.expenses?.food) {
-      const expenses = storedValue.expenses.food;
-      this.form.controls.expenses.setControl(
-        'food',
-        this.formBuilder.array<FormGroup<FoodExpenseForm>>(
-          expenses.map(() => this.expenseControlService.createFoodForm())
-        )
-      );
-    }
-
-    // add material expense controls
-    if (storedValue.expenses?.material) {
-      const expenses = storedValue.expenses.material;
-      this.form.controls.expenses.setControl(
-        'material',
-        this.formBuilder.array<FormGroup<MaterialExpenseForm>>(
-          expenses.map(() => this.expenseControlService.createMaterialForm())
-        )
-      );
-    }
+    // add controls for form arrays
+    reviveFormArrays(this.form, storedValue, key => this.createForm(key));
 
     this.form.patchValue(storedValue);
 
     // mark controls with values as touched
-    this.deepMarkAsDirty(this.form);
+    deepMarkAsDirty(this.form);
+  }
+
+  createForm(key?: string) {
+    switch (key) {
+      case 'inbound':
+      case 'onsite':
+      case 'outbound':
+        return this.expenseControlService.createTransportForm();
+      case 'food':
+        return this.expenseControlService.createFoodForm();
+      case 'material':
+        return this.expenseControlService.createMaterialForm();
+      case 'passengers':
+        return this.formBuilder.control('', Validators.required);
+      default:
+        console.warn(
+          'Could not create FormControl for FormArray with key',
+          key
+        );
+        return undefined;
+    }
   }
 
   saveForm() {
@@ -228,16 +237,10 @@ export class ReimbursementControlService {
 
     let meeting;
     if (meetingValue.time) {
-      const time = this.meetingStep.controls.time.getRawValue();
-
-      let start = time.startDate || new Date();
-      let end = time.endDate || new Date();
-      start = new Date(start.getTime() + time.startTime);
-      end = new Date(end.getTime() + time.endTime);
-
+      const interval = toInterval(this.meetingStep.controls.time);
       meeting = {
         ...meetingValue,
-        time: { start, end }
+        time: interval || { start: new Date(), end: new Date() }
       };
     } else {
       meeting = meetingValue;
@@ -270,19 +273,6 @@ export class ReimbursementControlService {
       },
       note: this.overviewStep.controls.note.value
     };
-  }
-
-  deepMarkAsDirty(parent: AbstractControl) {
-    if (parent instanceof FormGroup) {
-      Object.values(parent.controls).forEach(child =>
-        this.deepMarkAsDirty(child)
-      );
-    } else if (parent instanceof FormArray) {
-      parent.controls.forEach(child => this.deepMarkAsDirty(child));
-    } else if (parent.value) {
-      parent.markAsDirty();
-      parent.markAsTouched();
-    }
   }
 
   completeTransportExpense(
@@ -332,7 +322,8 @@ export class ReimbursementControlService {
       value.origin = value.destination;
       value.destination = temp;
 
-      const control = this.copyTransportForm(value);
+      const control = this.expenseControlService.createTransportForm();
+      reviveFormArrays(control, value, key => this.createForm(key));
       control.patchValue(value);
       outbound.push(control);
     }
@@ -340,68 +331,15 @@ export class ReimbursementControlService {
 
   completeFood(): void {
     this.foodExpenses.clear();
-    const time = this.meetingStep.controls.time.getRawValue();
+    const interval = toInterval(this.meetingStep.controls.time);
+    const foodOpts = interval ? getFoodOptions(interval) : [];
 
-    if (!time.startDate || !time.endDate) {
-      return;
-    }
-
-    const ONE_HOUR = 60 * 60 * 1000;
-    const start = new Date(time.startDate.getTime() + time.startTime);
-    const end = new Date(time.endDate.getTime() + time.endTime);
-
-    if (end.getTime() - start.getTime() < 8 * ONE_HOUR) {
-      return;
-    }
-
-    let allowances: Pick<FoodExpense, 'date' | 'absence'>[] = [];
-
-    if (time.startDate.getTime() === time.endDate.getTime()) {
-      // single day
-      allowances.push({
-        date: time.startDate,
-        absence: 'workDay'
-      });
-    } else {
-      // multiple days
-      if (end.getTime() - start.getTime() < 16 * ONE_HOUR) {
-        // assume no overnight stay
-        const startTime = time.endDate.getTime() - start.getTime();
-        const endTime = end.getTime() - time.endDate.getTime();
-        const date = startTime >= endTime ? time.startDate : time.endDate;
-
-        allowances.push({
-          date,
-          absence: 'workDay'
-        });
-      } else {
-        allowances.push({
-          date: time.startDate,
-          absence: 'travelDay'
-        });
-
-        let date = new Date(time.startDate);
-        date.setDate(date.getDate() + 1);
-
-        while (date.getTime() < time.endDate.getTime()) {
-          allowances.push({
-            date: new Date(date),
-            absence: 'fullDay'
-          });
-          date.setDate(date.getDate() + 1);
-        }
-
-        allowances.push({
-          date: time.endDate,
-          absence: 'travelDay'
-        });
+    for (let foodOpt of foodOpts) {
+      if (foodOpt.absence !== null) {
+        const form = this.expenseControlService.createFoodForm();
+        form.patchValue({ date: foodOpt.date, absence: foodOpt.absence });
+        this.foodExpenses.push(form);
       }
-    }
-
-    for (let allowance of allowances) {
-      const form = this.expenseControlService.createFoodForm();
-      form.patchValue(allowance);
-      this.foodExpenses.push(form);
     }
   }
 
@@ -449,23 +387,5 @@ export class ReimbursementControlService {
     const enable =
       iban.valid && (value.match(BIC_REQUIRED) || !value.match(SEPA_CODES));
     enable ? bic.enable() : bic.disable();
-  }
-
-  private copyTransportForm(original: FormValue<TransportExpenseForm>) {
-    const form = this.expenseControlService.createTransportForm();
-
-    // create passenger controls
-    if (original.mode === 'car' && original.car?.passengers) {
-      form.controls.car?.setControl(
-        'passengers',
-        this.formBuilder.array(
-          original.car.passengers.map(() =>
-            this.formBuilder.control('', Validators.required)
-          )
-        )
-      );
-    }
-
-    return form;
   }
 }

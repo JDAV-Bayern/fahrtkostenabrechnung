@@ -3,7 +3,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import { CurrencyPipe, NgIf } from '@angular/common';
+import { CurrencyPipe, DatePipe, NgIf } from '@angular/common';
 import { ReimbursementService } from '../shared/reimbursement.service';
 import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.service';
 import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
@@ -19,12 +19,14 @@ import { MaterialExpenseModalComponent } from 'src/app/expenses/material-expense
     NgIf,
     ReactiveFormsModule,
     CurrencyPipe,
+    DatePipe,
     DialogModule,
     FormCardComponent,
     ExpenseListComponent
   ]
 })
 export class ExpensesExtraStepComponent {
+  rootForm;
   parentForm;
   foodForm;
   materialForm;
@@ -35,6 +37,7 @@ export class ExpensesExtraStepComponent {
     private expenseControlService: ExpenseControlService,
     private dialog: Dialog
   ) {
+    this.rootForm = reimbursementControlService.form;
     this.parentForm = reimbursementControlService.expensesStep;
     this.foodForm = reimbursementControlService.foodExpenses;
     this.materialForm = reimbursementControlService.materialExpenses;

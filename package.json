@@ -1,6 +1,6 @@
 {
   "name": "terf-jdav-by",
-  "version": "0.0.0",
+  "version": "0.2.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -18,9 +18,11 @@
     "@angular/forms": "^16.2.0",
     "@angular/localize": "^16.2.0",
     "@angular/material": "~16.2.14",
+    "@angular/material-date-fns-adapter": "^16.2.14",
     "@angular/platform-browser": "^16.2.0",
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
+    "date-fns": "^2.23.0",
     "jspdf": "^2.5.1",
     "ngx-file-drop": "^16.0.0",
     "ngx-iban-validator": "^1.1.8",

@@ -48,6 +48,18 @@ export class ExpensesStepComponent {
     return this.reimbursementControlService.meetingStep.controls.type.value;
   }
 
+  get inbound() {
+    return this.form.controls.inbound;
+  }
+
+  get onsite() {
+    return this.form.controls.onsite;
+  }
+
+  get outbound() {
+    return this.form.controls.outbound;
+  }
+
   get queryParams() {
     switch (this.meetingType) {
       case 'course':

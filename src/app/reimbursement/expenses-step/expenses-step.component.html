@@ -14,24 +14,40 @@
     <div cdkDropListGroup>
       <app-expense-list
         expenseType="transport"
-        [form]="form.controls.inbound"
+        [form]="inbound"
+        formArrayName="inbound"
         [openDialog]="getOpenDialogFn('inbound')"
         [enterPredicate]="getPredicateFn('inbound')"
       >
         <h3>Hinfahrt</h3>
       </app-expense-list>
+      <div
+        *ngIf="inbound.hasError('transportModeLimited')"
+        class="error-message"
+      >
+        Du kannst pro Fahrtrichtung maximal eine Auslage für Abotickets angeben.
+      </div>
 
       <app-expense-list
         expenseType="transport"
-        [form]="form.controls.onsite"
+        [form]="onsite"
+        formArrayName="onsite"
         [openDialog]="getOpenDialogFn('onsite')"
         [enterPredicate]="getPredicateFn('onsite')"
       >
         <h3>Vor Ort</h3>
       </app-expense-list>
+      <div
+        *ngIf="onsite.hasError('transportModesAllowed')"
+        class="error-message"
+      >
+        Vor Ort können keine Fahrradfahrten oder Abotickets abgerechnet werden.
+      </div>
+
       <app-expense-list
         expenseType="transport"
         [form]="form.controls.outbound"
+        formArrayName="outbound"
         [openDialog]="getOpenDialogFn('outbound')"
         [enterPredicate]="getPredicateFn('outbound')"
       >
@@ -43,6 +59,12 @@
           </button>
         </div>
       </app-expense-list>
+      <div
+        *ngIf="outbound.hasError('transportModeLimited')"
+        class="error-message"
+      >
+        Du kannst pro Fahrtrichtung maximal eine Auslage für Abotickets angeben.
+      </div>
     </div>
 
     <p class="subtotal">

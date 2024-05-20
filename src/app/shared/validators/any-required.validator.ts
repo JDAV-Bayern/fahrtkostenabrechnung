@@ -1,4 +1,4 @@
-import { AbstractControl, FormGroup, ValidationErrors } from '@angular/forms';
+import { AbstractControl, FormGroup, ValidatorFn } from '@angular/forms';
 
 function isEmptyInput(control: AbstractControl): boolean {
   if (control instanceof FormGroup) {
@@ -15,6 +15,6 @@ function isEmptyInput(control: AbstractControl): boolean {
   return false;
 }
 
-export function anyRequired(control: AbstractControl): ValidationErrors | null {
-  return !isEmptyInput(control) ? null : { anyRequired: true };
-}
+export const anyRequired: ValidatorFn = control => {
+  return isEmptyInput(control) ? { anyRequired: true } : null;
+};

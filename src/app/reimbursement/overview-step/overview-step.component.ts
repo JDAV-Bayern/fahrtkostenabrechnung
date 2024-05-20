@@ -3,7 +3,7 @@ import jsPDF from 'jspdf';
 import * as imageprocessor from 'ts-image-processor';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { PDFDocument } from 'pdf-lib';
-import { ReimbursementValidatorService } from 'src/app/reimbursement/shared/reimbursemen-validator.service';
+import { ReimbursementValidatorService } from 'src/app/reimbursement/shared/reimbursement-validator.service';
 import { NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { FinishedDialogComponent } from './finished-dialog/finished-dialog.component';

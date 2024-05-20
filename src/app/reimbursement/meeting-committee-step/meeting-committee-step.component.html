@@ -86,13 +86,6 @@
           Bitte gib ein gültiges Datum an.
         </div>
         <div
-          *ngIf="startDate.hasError('matDatepickerMax')"
-          class="error-message"
-        >
-          Das Startdatum darf nicht nach dem Enddatum oder in der Zukunft
-          liegen.
-        </div>
-        <div
           *ngIf="startTime.hasError('required') && startTime.touched"
           class="error-message"
         >
@@ -148,12 +141,6 @@
         >
           Bitte gib ein gültiges Datum an.
         </div>
-        <div *ngIf="endDate.hasError('matDatepickerMin')" class="error-message">
-          Das Enddatum darf nicht vor dem Startdatum liegen.
-        </div>
-        <div *ngIf="endDate.hasError('matDatepickerMax')" class="error-message">
-          Das Datum darf nicht in der Zukunft liegen.
-        </div>
         <div
           *ngIf="endTime.hasError('required') && endTime.touched"
           class="error-message"
@@ -166,6 +153,13 @@
         >
           Bitte gib eine gültige Zeit an.
         </div>
+      </div>
+
+      <div *ngIf="time.hasError('dateRangeOrder')" class="error-message">
+        Das Ende der Reise darf nicht vor dem Start liegen.
+      </div>
+      <div *ngIf="time.hasError('dateRangePast')" class="error-message">
+        Die Reise muss bereits vollständig abgeschlossen sein.
       </div>
     </fieldset>
   </fieldset>

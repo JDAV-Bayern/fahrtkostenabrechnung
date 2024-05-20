@@ -14,6 +14,7 @@
       [matDatepicker]="picker"
       [matDatepickerFilter]="filterDates"
       (click)="picker.open()"
+      (dateChange)="onDateChange()"
     />
     <mat-datepicker touchUi #picker></mat-datepicker>
     <div
@@ -50,9 +51,9 @@
       class="form-control"
       required
     >
-      <option value="fullDay">ganze 24 Stunden</option>
-      <option value="travelDay">am An- oder Abreisetag</option>
-      <option value="workDay">mehr als acht Stunden</option>
+      <option *ngFor="let absence of options" [value]="absence">
+        {{ absence | absence }}
+      </option>
     </select>
     <div
       *ngIf="absence.hasError('required') && absence.touched"
