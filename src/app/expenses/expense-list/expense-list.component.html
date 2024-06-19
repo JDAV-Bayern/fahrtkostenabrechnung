@@ -1,0 +1,26 @@
+<fieldset [formGroup]="parent">
+  <ng-content></ng-content>
+  <div
+    cdkDropList
+    [cdkDropListData]="form"
+    [cdkDropListEnterPredicate]="enterPredicate"
+  >
+    <!-- TODO: readd [formArrayName]="form" -->
+    <div
+      *ngFor="let expenseForm of form.controls; index as i"
+      cdkDrag
+      [cdkDragData]="expenseForm"
+      (cdkDragDropped)="drop($event)"
+    >
+      <app-expense-card
+        [expense]="getExpense(expenseForm)"
+        (editRow)="openExpenseDialog(expenseForm)"
+        (deleteRow)="deleteExpense(i)"
+      />
+    </div>
+  </div>
+  <button (click)="openExpenseDialog()" class="jdav-btn icon">
+    <span class="material-symbols-outlined">add</span>
+    Auslage hinzufügen
+  </button>
+</fieldset>

@@ -1,0 +1,35 @@
+<div class="card">
+  <table>
+    <tr>
+      <td class="tleft">
+        <span *ngIf="expense.type === 'transport'">
+          von <b>{{ expense.origin }}</b>
+        </span>
+        <span *ngIf="expense.type !== 'transport'">
+          <b>{{ expense.date | date }}</b>
+        </span>
+      </td>
+      <td class="tmid">{{ expense | expenseTitle }}</td>
+      <th class="tright">{{ expense | expenseAmount | currency }}</th>
+    </tr>
+    <tr>
+      <td class="tleft">
+        <span *ngIf="expense.type === 'transport'">
+          nach <b>{{ expense.destination }}</b>
+        </span>
+      </td>
+      <td class="tmid">
+        <app-expense-details [expense]="expense" />
+      </td>
+
+      <td class="tright">
+        <button class="jdav-btn tertiary icon" (click)="editMe()">
+          <span class="material-symbols-outlined">&#xe3c9;</span>
+        </button>
+        <button class="jdav-btn tertiary icon" (click)="deleteMe()">
+          <span class="material-symbols-outlined">&#xe872;</span>
+        </button>
+      </td>
+    </tr>
+  </table>
+</div>

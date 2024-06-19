@@ -1,0 +1,67 @@
+#pdf-container {
+  width: 595px;
+  box-sizing: border-box;
+  height: fit-content;
+  overflow: none;
+  position: relative;
+  padding: 57px;
+  text-align: left;
+  font-family: Helvetica;
+  font-size: 6pt;
+}
+
+#pdf-container .logo {
+  position: absolute;
+  border: 0;
+  top: 57px;
+  right: 57px;
+  height: 85px;
+  width: 164px;
+}
+
+table {
+  color: #000;
+}
+
+.info {
+  display: flex;
+}
+
+.info div {
+  width: 50%;
+}
+
+.detailstable td {
+  padding: 2px;
+}
+
+.expenses {
+  table-layout: fixed;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.expenses tr {
+  border-bottom: 1px solid var(--color-body);
+}
+
+.expenses td {
+  padding: 4px 0;
+}
+
+.expenses p {
+  margin: 4px 0;
+}
+
+.category-header {
+  color: var(--color-body);
+  padding: 8px 0 4px;
+}
+
+.align-right {
+  text-align: right;
+}
+
+.details {
+  font-size: 5pt;
+}

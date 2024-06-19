@@ -1,0 +1,16 @@
+.button-group {
+  display: flex;
+  flex-direction: column;
+  margin-top: 3rem;
+  gap: 10px;
+}
+
+.button-group button {
+  flex: 1 1 0px;
+}
+
+@media (min-width: 768px) {
+  .button-group {
+    flex-direction: row;
+  }
+}

@@ -1,0 +1,22 @@
+table {
+  width: 400px;
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+}
+
+tr:nth-child(even) {
+  background-color: var(--bg-gray);
+}
+
+td {
+  text-align: center;
+  padding: 0.5rem 1rem;
+}
+
+.explanation {
+  font-style: italic;
+}
+
+.important {
+  font-weight: bold;
+}

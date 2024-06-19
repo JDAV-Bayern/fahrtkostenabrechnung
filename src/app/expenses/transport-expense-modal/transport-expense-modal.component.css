@@ -1,0 +1,37 @@
+.model-content {
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+}
+
+.model-content .button-container {
+  display: flex;
+  justify-content: right;
+  margin-top: 20px;
+}
+
+.means-of-travel-buttons-container {
+  display: flex;
+  width: fit-content;
+  margin: 0 auto;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.passengers-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.add-passenger {
+  color: var(--color-primary);
+  font-weight: normal;
+  font-size: 16px;
+}
+
+.not-filled {
+  width: auto;
+}

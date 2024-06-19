@@ -1,0 +1,16 @@
+.cdk-drag-placeholder {
+  opacity: 0.5;
+}
+
+.cdk-drop-list {
+  min-height: 100px;
+  margin-bottom: 10px;
+}
+
+.cdk-drop-list div {
+  margin-bottom: 10px;
+}
+
+.cdk-drop-list-receiving:empty {
+  border: 2px dashed #ccc;
+}

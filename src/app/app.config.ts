@@ -1,31 +1,53 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { ApplicationConfig } from '@angular/core';
+import {
+  ApplicationConfig,
+  DEFAULT_CURRENCY_CODE,
+  importProvidersFrom
+} from '@angular/core';
 import { provideRouter, withHashLocation } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
+import { DateFnsModule } from '@angular/material-date-fns-adapter';
 import {
-  OWL_DATE_TIME_LOCALE,
-  OwlDateTimeIntl
-} from '@danielmoncada/angular-datetime-picker';
-import { DefaultIntl } from './datetime-intl';
-import { DEFAULT_DIALOG_CONFIG } from '@angular/cdk/dialog';
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE,
+  MatDateFormats
+} from '@angular/material/core';
+import { DEFAULT_DIALOG_CONFIG, DialogConfig } from '@angular/cdk/dialog';
+import { MatDatepickerIntl } from '@angular/material/datepicker';
+import { JdavDatepickerIntl } from './core/date-time-intl';
+import { de } from 'date-fns/locale';
+
+export const DIALOG_CONFIG: DialogConfig = {
+  panelClass: 'dialog',
+  hasBackdrop: true,
+  maxWidth: '80vw',
+  maxHeight: '90vh',
+  width: '700px'
+};
+
+export const DATE_FORMATS: MatDateFormats = {
+  parse: {
+    dateInput: 'd.M.yy'
+  },
+  display: {
+    dateInput: 'P',
+    monthYearLabel: 'LLL uuuu',
+    dateA11yLabel: 'PP',
+    monthYearA11yLabel: 'LLLL uuuu'
+  }
+};
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes, withHashLocation()),
     provideAnimations(),
+    importProvidersFrom(DateFnsModule),
     { provide: APP_BASE_HREF, useValue: '/fahrtkostenabrechnung/' },
-    {
-      provide: DEFAULT_DIALOG_CONFIG,
-      useValue: {
-        panelClass: 'dialog',
-        hasBackdrop: true,
-        maxWidth: '80vw',
-        maxHeight: '90vh',
-        width: '700px'
-      }
-    },
-    { provide: OWL_DATE_TIME_LOCALE, useValue: 'de' },
-    { provide: OwlDateTimeIntl, useClass: DefaultIntl }
+    { provide: DEFAULT_CURRENCY_CODE, useValue: 'EUR' },
+    { provide: DEFAULT_DIALOG_CONFIG, useValue: DIALOG_CONFIG },
+    { provide: MAT_DATE_LOCALE, useValue: de },
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMATS },
+    { provide: MatDatepickerIntl, useClass: JdavDatepickerIntl }
   ]
 };

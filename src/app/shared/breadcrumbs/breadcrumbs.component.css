@@ -1,0 +1,29 @@
+.breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  font-size: 0.875rem;
+  list-style-type: none;
+}
+
+.breadcrumbs a {
+  color: var(--color-body);
+}
+
+.breadcrumbs a:hover {
+  color: var(--color-primary);
+}
+
+.breadcrumbs li:last-child a {
+  color: #000;
+}
+
+.breadcrumbs li {
+  display: flex;
+  align-items: center;
+}
+
+.breadcrumbs .material-symbols-outlined {
+  margin: 0 1rem;
+  color: #000;
+}

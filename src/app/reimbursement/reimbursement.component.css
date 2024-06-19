@@ -1,0 +1,11 @@
+:host {
+  display: block;
+  width: 100%;
+  background-color: var(--bg-gray);
+}
+
+.step-content {
+  margin: 20px auto;
+  max-width: 95vw;
+  width: 600px;
+}

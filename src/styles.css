@@ -11,7 +11,6 @@
 body,
 html {
   font-family: 'Tahoma', 'Helvetica Neue', sans-serif;
-  background-color: var(--bg-gray);
   color: var(--color-body);
   margin: 0;
   padding: 0;
@@ -34,17 +33,6 @@ fieldset {
   padding: 0;
 }
 
-.base-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.content {
-  flex-grow: 1;
-  display: inline;
-}
-
 .dialog {
   background-color: #fff;
   border-radius: 4px;
@@ -62,7 +50,8 @@ fieldset {
   margin-top: 20px;
 }
 
-button {
+button.jdav-btn {
+  font-size: 13px;
   box-sizing: border-box;
   padding: 10px 20px;
   background-color: var(--color-primary);
@@ -78,14 +67,14 @@ button {
   }
 }
 
-button.icon {
-  display: flex;
+button.jdav-btn.icon {
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 6px 20px;
+  gap: 8px;
+  padding: 8px;
 }
 
-button.secondary {
+button.jdav-btn.secondary {
   background-color: transparent;
   border: 2px solid var(--color-body);
   color: var(--color-body);
@@ -96,14 +85,14 @@ button.secondary {
   }
 }
 
-button.tertiary {
+button.jdav-btn.tertiary {
   border: none;
   background-color: transparent;
   text-transform: none;
   color: var(--color-body);
 }
 
-button:disabled {
+button.jdav-btn:disabled {
   background-color: #ccc;
   color: #fff;
   cursor: not-allowed;
@@ -138,31 +127,30 @@ select {
   cursor: not-allowed;
 }
 
-.ng-select.form-select .ng-select-container {
-  height: auto;
-  padding: 10px;
-  margin-bottom: 3px;
-  border-radius: 0;
-
-  & .ng-value-container {
-    padding: 0;
-    & .ng-input {
-      top: auto;
-      & input {
-        font-size: inherit;
-      }
-    }
-  }
-  & .ng-arrow-wrapper {
-    padding: 0;
-  }
-}
-
 .error-message {
   color: #b60000;
   font-size: 12px;
   margin-top: 5px;
   margin-bottom: 20px;
+}
+
+button.start-date {
+  background-color: var(--color-primary-light);
+  border-radius: 100% 0 0 100%;
+}
+
+button.end-date {
+  background-color: var(--color-primary-light);
+  border-radius: 0 100% 100% 0;
+}
+
+button.single-date {
+  background-color: var(--color-primary-light);
+  border-radius: 100%;
+}
+
+button.range-date {
+  background-color: var(--color-primary-light);
 }
 
 @font-face {

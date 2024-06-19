@@ -1,0 +1,80 @@
+<form [formGroup]="form" (ngSubmit)="submitForm()" class="model-content">
+  <h2>Sachkosten erfassen</h2>
+
+  <div class="form-group">
+    <label for="date">Datum</label>
+    <input
+      type="text"
+      id="date"
+      formControlName="date"
+      class="form-control"
+      required
+      [max]="now"
+      [matDatepicker]="picker"
+      (click)="picker.open()"
+    />
+    <mat-datepicker touchUi #picker></mat-datepicker>
+    <div
+      *ngIf="
+        date.hasError('required') &&
+        !date.hasError('matDatepickerParse') &&
+        date.touched
+      "
+      class="error-message"
+    >
+      Bitte gib das Datum dieser Auslage an.
+    </div>
+    <div
+      *ngIf="date.hasError('matDatepickerParse') && date.touched"
+      class="error-message"
+    >
+      Bitte gib ein gültiges Datum an.
+    </div>
+    <div *ngIf="date.hasError('matDatepickerMax')" class="error-message">
+      Das Datum darf nicht in der Zukunft liegen.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="purpose">Zweck</label>
+    <input
+      type="text"
+      id="purpose"
+      formControlName="purpose"
+      class="form-control"
+      required
+    />
+    <div
+      *ngIf="purpose.hasError('required') && purpose.touched"
+      class="error-message"
+    >
+      Bitte gib den Zweck dieser Ausgabe an.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="amount">Betrag</label>
+    <input
+      type="number"
+      id="amount"
+      formControlName="amount"
+      class="form-control"
+      required
+    />
+    <div
+      *ngIf="amount.hasError('required') && amount.touched"
+      class="error-message"
+    >
+      Bitte gib einen Betrag ein.
+    </div>
+    <div *ngIf="amount.hasError('min')" class="error-message">
+      Bitte gib eine gültigen Betrag ein.
+    </div>
+  </div>
+
+  <div class="button-container">
+    <button type="submit" [disabled]="!form.valid" class="jdav-btn">
+      Speichern
+    </button>
+  </div>
+</form>

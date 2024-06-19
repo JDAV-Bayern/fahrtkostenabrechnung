@@ -1,6 +1,0 @@
-/* Center the content vertically and horizontally */
-.step-content {
-  margin: 20px auto;
-  max-width: min(95vw, 600px);
-  min-width: 50%;
-}

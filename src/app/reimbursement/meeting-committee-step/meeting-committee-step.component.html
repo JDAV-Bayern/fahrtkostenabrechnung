@@ -1,0 +1,166 @@
+<app-form-card nextStep="teilnehmer_in" [nextDisabled]="form.invalid">
+  <fieldset [formGroup]="form">
+    <h1>Angaben zur Reise</h1>
+    <p>
+      <b>Hinweis:</b> Dieses Formular ist nur für Gremien der JDAV Bayern und
+      ihrer Bezirke (Landesjugendleitung, Landesjugendausschuss,
+      Bezirksjugendleitung, ...) gültig. Über dieses Formular eingereichte Kurse
+      können nicht berücksichtigt werden. Bitte verwende stattdessen das
+      <a routerLink="/kurs">Formular für Kurse</a>.
+    </p>
+
+    <div class="form-group">
+      <label for="purpose">Zweck der Reise</label>
+      <input
+        type="text"
+        id="purpose"
+        formControlName="name"
+        class="form-control"
+        required
+      />
+      <div
+        *ngIf="name.hasError('required') && name.touched"
+        class="error-message"
+      >
+        Bitte gib den Zweck deiner Reise an.
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="location">Ort der Reise</label>
+      <input
+        type="text"
+        id="location"
+        formControlName="location"
+        class="form-control"
+        required
+      />
+      <div
+        *ngIf="location.hasError('required') && location.touched"
+        class="error-message"
+      >
+        Bitte gib den Zielort deiner Reise an.
+      </div>
+    </div>
+
+    <fieldset [formGroup]="time">
+      <div class="form-group">
+        <label for="start">Beginn der Reise</label>
+        <fieldset id="start" class="datetime-group">
+          <input
+            type="text"
+            formControlName="startDate"
+            class="form-control"
+            required
+            [max]="endDate.value || now"
+            [matDatepicker]="pickerStart"
+            (click)="pickerStart.open()"
+          />
+          <mat-datepicker
+            touchUi
+            [dateClass]="dateClass"
+            #pickerStart
+          ></mat-datepicker>
+          <input
+            appTimeInput
+            type="text"
+            formControlName="startTime"
+            class="form-control time-control"
+            required
+          />
+        </fieldset>
+        <div
+          *ngIf="
+            startDate.hasError('required') &&
+            !startDate.hasError('matDatepickerParse') &&
+            startDate.touched
+          "
+          class="error-message"
+        >
+          Bitte gib das Startdatum deiner Reise an.
+        </div>
+        <div
+          *ngIf="startDate.hasError('matDatepickerParse') && startDate.touched"
+          class="error-message"
+        >
+          Bitte gib ein gültiges Datum an.
+        </div>
+        <div
+          *ngIf="startTime.hasError('required') && startTime.touched"
+          class="error-message"
+        >
+          Bitte gib die Startzeit deiner Reise an.
+        </div>
+        <div
+          *ngIf="startTime.hasError('invalidTime') && startTime.touched"
+          class="error-message"
+        >
+          Bitte gib eine gültige Zeit an.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="end">Ende der Reise</label>
+        <fieldset id="end" class="datetime-group">
+          <input
+            type="text"
+            formControlName="endDate"
+            class="form-control"
+            required
+            [min]="startDate.value"
+            [max]="now"
+            [matDatepicker]="pickerEnd"
+            (click)="pickerEnd.open()"
+          />
+          <mat-datepicker
+            touchUi
+            [dateClass]="dateClass"
+            #pickerEnd
+          ></mat-datepicker>
+          <input
+            appTimeInput
+            type="text"
+            formControlName="endTime"
+            class="form-control time-control"
+            required
+          />
+        </fieldset>
+        <div
+          *ngIf="
+            endDate.hasError('required') &&
+            !endDate.hasError('matDatepickerParse') &&
+            endDate.touched
+          "
+          class="error-message"
+        >
+          Bitte gib das Enddatum deiner Reise an.
+        </div>
+        <div
+          *ngIf="endDate.hasError('matDatepickerParse') && endDate.touched"
+          class="error-message"
+        >
+          Bitte gib ein gültiges Datum an.
+        </div>
+        <div
+          *ngIf="endTime.hasError('required') && endTime.touched"
+          class="error-message"
+        >
+          Bitte gib die Endzeit deiner Reise an.
+        </div>
+        <div
+          *ngIf="endTime.hasError('invalidTime') && endTime.touched"
+          class="error-message"
+        >
+          Bitte gib eine gültige Zeit an.
+        </div>
+      </div>
+
+      <div *ngIf="time.hasError('dateRangeOrder')" class="error-message">
+        Das Ende der Reise darf nicht vor dem Start liegen.
+      </div>
+      <div *ngIf="time.hasError('dateRangePast')" class="error-message">
+        Die Reise muss bereits vollständig abgeschlossen sein.
+      </div>
+    </fieldset>
+  </fieldset>
+</app-form-card>

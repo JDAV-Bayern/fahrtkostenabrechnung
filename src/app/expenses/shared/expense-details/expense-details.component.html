@@ -1,0 +1,33 @@
+<ng-container *ngIf="expense.type === 'transport'">
+  <ng-container *ngIf="expense.mode === 'car'">
+    {{ expense.distance | number: '1.0-0' }} km, {{ expense.carType | carType }}
+    <span *ngIf="expense.passengers.length > 0">
+      &ndash; {{ expense.passengers.length }} Mitfahrer*innen:
+      {{ expense.passengers | join }}
+    </span>
+  </ng-container>
+
+  <ng-container *ngIf="expense.mode === 'train'">
+    <span *ngIf="expense.discountCard !== 'none'">
+      {{ expense.price | currency }} mit
+    </span>
+    {{ expense.discountCard | discountCard }}
+  </ng-container>
+
+  <ng-container *ngIf="expense.mode === 'plan'">
+    pauschal {{ 12.25 | currency }}
+  </ng-container>
+
+  <ng-container *ngIf="expense.mode === 'bike'">
+    {{ expense.distance | number: '1.0-0' }} km
+  </ng-container>
+</ng-container>
+
+<ng-container *ngIf="expense.type === 'food'">
+  <span *ngIf="expense.meals.length > 0">
+    Abzüglich {{ expense.meals | meals | join }}
+  </span>
+  <span *ngIf="expense.meals.length === 0"> Ohne Abzüge </span>
+</ng-container>
+
+<ng-container *ngIf="expense.type === 'material'"> </ng-container>
