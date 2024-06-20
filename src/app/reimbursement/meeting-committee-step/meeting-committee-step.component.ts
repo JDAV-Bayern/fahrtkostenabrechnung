@@ -59,6 +59,19 @@ export class MeetingCommitteeStepComponent {
     return '';
   };
 
+  /* Changing the min and max values in the template will change the validation
+   * state of the form after the component has been updated so we use filter
+   * functions as a workaround
+   */
+  filterStartDates = (date: Date | null): boolean =>
+    !date ||
+    !this.endDate.value ||
+    date?.getTime() <= this.endDate.value?.getTime();
+  filterEndDates = (date: Date | null): boolean =>
+    !date ||
+    !this.startDate.value ||
+    date?.getTime() >= this.startDate.value?.getTime();
+
   constructor(public controlService: ReimbursementControlService) {
     this.form = controlService.meetingStep;
     this.form.controls.type.setValue('committee');

@@ -31,7 +31,10 @@
         Bitte gib nur eine Auslage für den
         {{ rootForm.getError('foodExpenseUnique').date | date }} an.
       </div>
-      <div *ngIf="foodForm.hasError('foodExpenseWorkDay')" class="error-message">
+      <div
+        *ngIf="foodForm.hasError('foodExpenseWorkDay')"
+        class="error-message"
+      >
         Bitte gib bei Reisen ohne Übernachtung nur für den Tag mit längerer
         Abwesenheit eine Auslage an.
       </div>
@@ -40,10 +43,13 @@
         {{ rootForm.getError('foodExpenseDate').date | date }} liegt außerhalb
         deines Reisezeitraums.
       </div>
-      <div *ngIf="rootForm.hasError('foodExpenseAbsence')" class="error-message">
+      <div
+        *ngIf="rootForm.hasError('foodExpenseAbsence')"
+        class="error-message"
+      >
         Die Abwesenheitsdauer für den
-        {{ rootForm.getError('foodExpenseAbsence').date | date }} stimmt nicht mit
-        deinem Reisezeitraum überein.
+        {{ rootForm.getError('foodExpenseAbsence').date | date }} stimmt nicht
+        mit deinem Reisezeitraum überein.
       </div>
     </div>
 

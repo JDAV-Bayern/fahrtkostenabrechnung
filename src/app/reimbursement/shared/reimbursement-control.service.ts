@@ -379,6 +379,8 @@ export class ReimbursementControlService {
         transport.clearValidators();
         break;
     }
+
+    transport.updateValueAndValidity();
   }
 
   private onIbanChanged(value: string) {

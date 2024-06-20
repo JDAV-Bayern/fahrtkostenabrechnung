@@ -28,7 +28,7 @@ export const DIALOG_CONFIG: DialogConfig = {
 
 export const DATE_FORMATS: MatDateFormats = {
   parse: {
-    dateInput: 'd.M.yy'
+    dateInput: ['d.M.yy', 'd.M.yyyy']
   },
   display: {
     dateInput: 'P',

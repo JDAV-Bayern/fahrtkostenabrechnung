@@ -52,7 +52,8 @@
             formControlName="startDate"
             class="form-control"
             required
-            [max]="endDate.value || now"
+            [max]="now"
+            [matDatepickerFilter]="filterStartDates"
             [matDatepicker]="pickerStart"
             (click)="pickerStart.open()"
           />
@@ -107,8 +108,8 @@
             formControlName="endDate"
             class="form-control"
             required
-            [min]="startDate.value"
             [max]="now"
+            [matDatepickerFilter]="filterEndDates"
             [matDatepicker]="pickerEnd"
             (click)="pickerEnd.open()"
           />
