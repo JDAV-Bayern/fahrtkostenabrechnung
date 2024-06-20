@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "terf-jdav-by": {
+    "portal-jdav-bayern": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -20,7 +20,7 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": {
-              "base": "dist/terf-jdav-by"
+              "base": "dist/portal-jdav-bayern"
             },
             "index": "src/index.html",
             "polyfills": ["zone.js"],
@@ -62,10 +62,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "terf-jdav-by:build:production"
+              "buildTarget": "portal-jdav-bayern:build:production"
             },
             "development": {
-              "buildTarget": "terf-jdav-by:build:development"
+              "buildTarget": "portal-jdav-bayern:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -73,7 +73,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "terf-jdav-by:build"
+            "buildTarget": "portal-jdav-bayern:build"
           }
         },
         "test": {
