@@ -22,10 +22,10 @@
     "@angular/platform-browser": "^18.0.3",
     "@angular/platform-browser-dynamic": "^18.0.3",
     "@angular/router": "^18.0.3",
-    "date-fns": "^2.23.0",
+    "date-fns": "^3.6.0",
     "jspdf": "^2.5.1",
     "ngx-file-drop": "^16.0.0",
-    "ngx-iban-validator": "^1.1.8",
+    "ngx-iban-validator": "^1.2.0",
     "pdf-lib": "^1.17.1",
     "rxjs": "~7.8.0",
     "ts-image-processor": "^1.1.17",
@@ -43,7 +43,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "prettier": "^3.2.4",
+    "prettier": "^3.3.2",
     "typescript": "~5.4.5"
   }
 }
