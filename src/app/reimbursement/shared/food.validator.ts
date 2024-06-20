@@ -1,6 +1,7 @@
-import { FormArray, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { FormArray, FormGroup, ValidatorFn } from '@angular/forms';
 import { toInterval } from '../../shared/validators/date-range.validator';
 import {
+  Interval,
   closestIndexTo,
   differenceInHours,
   eachDayOfInterval,
