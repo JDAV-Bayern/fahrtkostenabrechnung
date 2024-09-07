@@ -17,6 +17,7 @@ import { DEFAULT_DIALOG_CONFIG, DialogConfig } from '@angular/cdk/dialog';
 import { MatDatepickerIntl } from '@angular/material/datepicker';
 import { JdavDatepickerIntl } from './core/date-time-intl';
 import { de } from 'date-fns/locale';
+import { environment } from 'src/environments/environment';
 
 export const DIALOG_CONFIG: DialogConfig = {
   panelClass: 'dialog',
@@ -40,10 +41,12 @@ export const DATE_FORMATS: MatDateFormats = {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideRouter(routes, withHashLocation()),
+    provideRouter(
+      routes,
+      ...(environment.useHashRouting ? [withHashLocation()] : [])
+    ),
     provideAnimations(),
     importProvidersFrom(DateFnsModule),
-    { provide: APP_BASE_HREF, useValue: '/fahrtkostenabrechnung/' },
     { provide: DEFAULT_CURRENCY_CODE, useValue: 'EUR' },
     { provide: DEFAULT_DIALOG_CONFIG, useValue: DIALOG_CONFIG },
     { provide: MAT_DATE_LOCALE, useValue: de },

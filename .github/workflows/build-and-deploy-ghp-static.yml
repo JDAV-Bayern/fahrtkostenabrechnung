@@ -38,7 +38,7 @@ jobs:
       - name: Build Application
         run: |
           yarn install --frozen-lockfile
-          yarn build
+          yarn build -c staging
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
