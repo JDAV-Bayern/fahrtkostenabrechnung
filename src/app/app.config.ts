@@ -43,6 +43,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withHashLocation()),
     provideAnimations(),
     importProvidersFrom(DateFnsModule),
+    { provide: APP_BASE_HREF, useValue: '/fahrtkostenabrechnung/' },
     { provide: DEFAULT_CURRENCY_CODE, useValue: 'EUR' },
     { provide: DEFAULT_DIALOG_CONFIG, useValue: DIALOG_CONFIG },
     { provide: MAT_DATE_LOCALE, useValue: de },
