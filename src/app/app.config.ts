@@ -18,6 +18,7 @@ import { MatDatepickerIntl } from '@angular/material/datepicker';
 import { JdavDatepickerIntl } from './core/date-time-intl';
 import { de } from 'date-fns/locale';
 import { environment } from 'src/environments/environment';
+import { provideHttpClient } from '@angular/common/http';
 
 export const DIALOG_CONFIG: DialogConfig = {
   panelClass: 'dialog',
@@ -46,6 +47,7 @@ export const appConfig: ApplicationConfig = {
       ...(environment.useHashRouting ? [withHashLocation()] : [])
     ),
     provideAnimations(),
+    provideHttpClient(),
     importProvidersFrom(DateFnsModule),
     { provide: DEFAULT_CURRENCY_CODE, useValue: 'EUR' },
     { provide: DEFAULT_DIALOG_CONFIG, useValue: DIALOG_CONFIG },
