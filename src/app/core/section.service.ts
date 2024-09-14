@@ -1,66 +1,66 @@
-import { Injectable } from '@angular/core';
-import { jdavRegions, jdavStates, sections } from 'src/data/sections';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { map, Observable } from 'rxjs';
 import {
-  JdavOrganisation,
-  JdavState,
+  Federation,
+  FederationDto,
   Section,
-  SectionData
+  SectionDto
 } from 'src/domain/section.model';
-
-function matchId(id: number) {
-  return (o: { id: number }) => o.id === id;
-}
-
-function mapStateData(data: JdavOrganisation): JdavState {
-  const children = sections
-    .filter(section => section.jdavStateId === data.id)
-    .map(child => ({ id: child.id, name: child.name }));
-  return {
-    id: data.id,
-    name: data.name,
-    sections: children
-  };
-}
-
-function mapSectionData(data: SectionData): Section {
-  const regionId = data.jdavRegionId;
-  return {
-    id: data.id,
-    name: data.name,
-    jdavState: jdavStates.find(matchId(data.jdavStateId))!,
-    jdavRegion: regionId ? jdavRegions.find(matchId(regionId))! : null
-  };
-}
 
 @Injectable({
   providedIn: 'root'
 })
 export class SectionService {
-  getJdavStates(): JdavState[] {
-    return jdavStates.map(mapStateData);
+  private readonly http = inject(HttpClient);
+
+  private mapFederationDto = (dto: FederationDto): Federation => ({
+    ...dto,
+    parent$: dto.parent ? this.getFederation(dto.parent) : null,
+    sections$: this.getSections(dto.id)
+  });
+
+  private mapSectionDto = (dto: SectionDto): Section => ({
+    ...dto,
+    state$: this.getFederation(dto.state),
+    district$: dto.district ? this.getFederation(dto.district) : null
+  });
+
+  getFederations(): Observable<Federation[]> {
+    return this.http
+      .get<FederationDto[]>('/api/federations')
+      .pipe(
+        map(federations =>
+          federations.map(federation => this.mapFederationDto(federation))
+        )
+      );
   }
 
-  getJdavState(id: number): JdavState | undefined {
-    const data = jdavStates.find(matchId(id));
-    if (!data) {
-      return undefined;
-    }
-    return mapStateData(data);
+  getFederation(id: number): Observable<Federation> {
+    return this.http
+      .get<FederationDto>(`/api/federations/${id}`)
+      .pipe(map(federation => this.mapFederationDto(federation)));
   }
 
-  getSections(): Section[] {
-    return sections.map(mapSectionData);
+  getSections(federationId?: number): Observable<Section[]> {
+    const url = federationId
+      ? `/api/federations/${federationId}/sections`
+      : '/api/sections';
+    return this.http
+      .get<SectionDto[]>(url)
+      .pipe(
+        map(sections => sections.map(section => this.mapSectionDto(section)))
+      );
   }
 
-  getSection(id: number): Section | undefined {
-    const data = sections.find(matchId(id));
-    if (!data) {
-      return undefined;
-    }
-    return mapSectionData(data);
+  getSection(id: number): Observable<Section> {
+    return this.http
+      .get<SectionDto>(`/api/sections/${id}`)
+      .pipe(map(section => this.mapSectionDto(section)));
   }
 
-  isBavarian(section: Section): boolean {
-    return section.jdavState.id === 2;
+  isBavarian(section: Section): Observable<boolean> {
+    // TODO make this database driven
+    return section.state$.pipe(map(state => state.name === 'Bayern'));
   }
 }
