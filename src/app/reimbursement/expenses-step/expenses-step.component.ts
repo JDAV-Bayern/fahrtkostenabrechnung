@@ -2,11 +2,14 @@ import { CdkDrag, CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { Component, inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
-import { CurrencyPipe } from '@angular/common';
+import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { Direction, TransportMode } from 'src/domain/expense.model';
-import { ReimbursementService } from '../shared/reimbursement.service';
+import {
+  ReimbursementReport,
+  ReimbursementService
+} from '../shared/reimbursement.service';
 import { TransportExpenseForm } from 'src/app/expenses/shared/expense-form';
 import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.service';
 import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
@@ -15,6 +18,7 @@ import {
   TransportExpenseModalComponent
 } from 'src/app/expenses/transport-expense-modal/transport-expense-modal.component';
 import { RouterLink } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-expenses-step',
@@ -23,6 +27,7 @@ import { RouterLink } from '@angular/router';
   imports: [
     RouterLink,
     ReactiveFormsModule,
+    AsyncPipe,
     CurrencyPipe,
     CdkDropListGroup,
     DialogModule,
@@ -39,6 +44,9 @@ export class ExpensesStepComponent {
   private readonly dialog = inject(Dialog);
 
   form = this.reimbursementControlService.transportExpensesStep;
+  report$ = this.reimbursementService.getReport(
+    this.reimbursementControlService.getReimbursement()
+  );
 
   get meetingType() {
     return this.reimbursementControlService.meetingStep.controls.type.value;
@@ -71,12 +79,6 @@ export class ExpensesStepComponent {
     return this.meetingType === 'committee'
       ? 'auslagen-gremium'
       : 'zusammenfassung';
-  }
-
-  get total() {
-    const reimbursement = this.reimbursementControlService.getReimbursement();
-    const report = this.reimbursementService.getReport(reimbursement);
-    return report.categories.transport;
   }
 
   getAllowedModes(direction: Direction) {

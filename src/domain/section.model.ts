@@ -1,21 +1,38 @@
-export interface JdavOrganisation {
+import { Observable } from 'rxjs';
+
+export enum FederationLevel {
+  NATIONAL,
+  STATE,
+  DISTRICT
+}
+
+export interface FederationDto {
   id: number;
+  type: number;
   name: string;
+  parent: number | null;
 }
 
-export interface JdavState extends JdavOrganisation {
-  sections: JdavOrganisation[];
-}
-
-export interface Section extends JdavOrganisation {
-  jdavState: JdavOrganisation;
-  jdavRegion: JdavOrganisation | null;
-}
-
-export interface SectionData {
+export interface Federation {
   id: number;
+  type: FederationLevel;
   name: string;
-  stateId: number;
-  jdavStateId: number;
-  jdavRegionId: number | null;
+  parent$: Observable<Federation> | null;
+  sections$: Observable<Section[]>;
+}
+
+export interface SectionDto {
+  id: number;
+  number: number;
+  name: string;
+  state: number;
+  district: number | null;
+}
+
+export interface Section {
+  id: number;
+  number: number;
+  name: string;
+  state$: Observable<Federation>;
+  district$: Observable<Federation> | null;
 }

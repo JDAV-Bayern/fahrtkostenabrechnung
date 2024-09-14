@@ -67,10 +67,12 @@
       }
     </div>
 
-    <p class="subtotal">
-      Summe:
-      <span>{{ total | currency }}</span>
-    </p>
+    @if (report$ | async; as report) {
+      <p class="subtotal">
+        Summe:
+        <span>{{ report.categories.transport | currency }}</span>
+      </p>
+    }
 
     @if (form.hasError('anyRequired')) {
       <div class="error-message">Bitte gib mindestens eine Auslage an.</div>

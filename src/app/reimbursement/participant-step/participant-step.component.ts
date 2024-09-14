@@ -13,7 +13,12 @@ import { FormCardComponent } from 'src/app/shared/form-card/form-card.component'
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { JdavState } from 'src/domain/section.model';
+import { Federation, FederationLevel, Section } from 'src/domain/section.model';
+import { forkJoin, map, switchMap } from 'rxjs';
+
+interface ResolvedFederation extends Federation {
+  sections: Section[];
+}
 
 @Component({
   selector: 'app-participant-step',
@@ -35,30 +40,42 @@ export class ParticipantStepComponent implements OnInit {
     viewChild.required<ElementRef<HTMLInputElement>>('sectionInput');
 
   form = this.controlService.participantStep;
-  states: JdavState[] = [];
-  filteredStates: JdavState[] = [];
+  states: ResolvedFederation[] = [];
+  filteredStates: ResolvedFederation[] = [];
 
   ngOnInit() {
     // load section autocompletions
-    this.states = this.sectionService.getJdavStates();
-
-    // Sort states alphabetically while keeping Bavaria at the top
-    this.states.sort((a, b) => {
-      const isBavarianA = a.id === 2;
-      const isBavarianB = b.id === 2;
-
-      return (
-        Number(isBavarianB) - Number(isBavarianA) ||
-        a.name.localeCompare(b.name)
-      );
-    });
-
-    // Sort sections within the same state alphabetically
-    this.states.forEach(state => {
-      state.sections.sort((a, b) => a.name.localeCompare(b.name));
-    });
-
-    this.filteredStates = this.states.slice();
+    this.sectionService
+      .getFederations()
+      .pipe(
+        map(federations =>
+          federations.filter(
+            federation => federation.type === FederationLevel.STATE
+          )
+        ),
+        map(states =>
+          states.sort((a, b) => {
+            // TODO make this database driven
+            const isBavarianA = a.name === 'Bayern';
+            const isBavarianB = a.name === 'Bayern';
+            return isBavarianA ? -1 : isBavarianB ? 1 : 0;
+          })
+        ),
+        switchMap(states =>
+          forkJoin(
+            // load sections for each state
+            states.map(state =>
+              state.sections$.pipe(
+                map(sections => ({ ...state, sections: sections }))
+              )
+            )
+          )
+        )
+      )
+      .subscribe(states => {
+        this.states = states;
+        this.filter();
+      });
   }
 
   get givenName() {
@@ -105,8 +122,7 @@ export class ParticipantStepComponent implements OnInit {
   filter() {
     const filterValue = this.sectionInput().nativeElement.value.toLowerCase();
     const filteredStates = this.states.map(state => ({
-      id: state.id,
-      name: state.name,
+      ...state,
       sections: state.sections.filter(section =>
         section.name.toLowerCase().includes(filterValue)
       )
@@ -117,7 +133,10 @@ export class ParticipantStepComponent implements OnInit {
   }
 
   displayFn() {
-    return (item: number) => this.sectionService.getSection(item)?.name || '';
+    return (value: number) =>
+      this.states
+        .flatMap(state => state.sections)
+        .find(section => section.id === value)?.name || '';
   }
 
   plzChanged() {

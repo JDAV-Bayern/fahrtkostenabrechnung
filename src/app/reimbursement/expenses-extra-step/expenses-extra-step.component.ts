@@ -3,14 +3,18 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import { CurrencyPipe, DatePipe } from '@angular/common';
-import { ReimbursementService } from '../shared/reimbursement.service';
+import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
+import {
+  ReimbursementReport,
+  ReimbursementService
+} from '../shared/reimbursement.service';
 import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.service';
 import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
 import { FoodExpenseModalComponent } from 'src/app/expenses/food-expense-modal/food-expense-modal.component';
 import { MaterialExpenseModalComponent } from 'src/app/expenses/material-expense-modal/material-expense-modal.component';
 import { toInterval } from 'src/app/shared/validators/date-range.validator';
 import { getFoodOptions } from '../shared/food.validator';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-expenses-extra-step',
@@ -18,6 +22,7 @@ import { getFoodOptions } from '../shared/food.validator';
   styleUrls: ['./expenses-extra-step.component.css'],
   imports: [
     ReactiveFormsModule,
+    AsyncPipe,
     CurrencyPipe,
     DatePipe,
     DialogModule,
@@ -38,16 +43,15 @@ export class ExpensesExtraStepComponent {
   foodForm = this.reimbursementControlService.foodExpenses;
   materialForm = this.reimbursementControlService.materialExpenses;
 
+  report$ = this.reimbursementService.getReport(
+    this.reimbursementControlService.getReimbursement()
+  );
+
   get foodOptions() {
     const time = this.rootForm.controls.meeting.controls.time;
     const interval = toInterval(time);
     const foodOpts = interval ? getFoodOptions(interval) : [];
     return foodOpts;
-  }
-
-  get report() {
-    const reimbursment = this.reimbursementControlService.getReimbursement();
-    return this.reimbursementService.getReport(reimbursment);
   }
 
   getOpenFoodDialogFn() {

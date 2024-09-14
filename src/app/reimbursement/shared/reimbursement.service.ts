@@ -1,4 +1,5 @@
 import { Injectable, inject } from '@angular/core';
+import { map, Observable, switchMap } from 'rxjs';
 import { SectionService } from 'src/app/core/section.service';
 import { expenseConfig } from 'src/app/expenses/expense.config';
 import { ExpenseService } from 'src/app/expenses/shared/expense.service';
@@ -52,7 +53,7 @@ export class ReimbursementService {
     }
   }
 
-  getReport(reimbursement: Reimbursement): ReimbursementReport {
+  getReport(reimbursement: Reimbursement): Observable<ReimbursementReport> {
     const reducer = (sum: number, expense: Expense) =>
       sum + this.expenseService.getAmount(expense);
 
@@ -64,30 +65,37 @@ export class ReimbursementService {
       );
     }
 
-    // check if total is reduced
-    let total = Object.values(categories).reduce((sum, item) => sum + item, 0);
-    let totalReduced = false;
+    const sectionId = reimbursement.participant.sectionId;
+    const section$ = this.sectionService.getSection(sectionId);
 
-    if (this.config.maxTotal && total > this.config.maxTotal) {
-      const sectionId = reimbursement.participant.sectionId;
-      const section = this.sectionService.getSection(sectionId);
-      const isBavarian = section
-        ? this.sectionService.isBavarian(section)
-        : false;
+    return section$.pipe(
+      switchMap(section => this.sectionService.isBavarian(section)),
+      map(isBavarian => {
+        let total = Object.values(categories).reduce(
+          (sum, item) => sum + item,
+          0
+        );
+        let totalReduced = false;
 
-      if (!isBavarian) {
-        total = this.config.maxTotal;
-        totalReduced = true;
-      }
-    }
+        // check if total is reduced
+        if (
+          !isBavarian &&
+          this.config.maxTotal &&
+          total > this.config.maxTotal
+        ) {
+          total = this.config.maxTotal;
+          totalReduced = true;
+        }
 
-    // check if receipt is required
-    const publicExpense = this.getExpenses('transport', reimbursement).some(e =>
-      ['public', 'plan'].includes(e.mode)
+        // check if receipt is required
+        const publicExpense = this.getExpenses('transport', reimbursement).some(
+          e => ['public', 'plan'].includes(e.mode)
+        );
+        const materialExpenses = (categories.material || 0) > 0;
+        const receiptsRequired = publicExpense || materialExpenses;
+
+        return { categories, total, totalReduced, receiptsRequired };
+      })
     );
-    const materialExpenses = (categories.material || 0) > 0;
-    const receiptsRequired = publicExpense || materialExpenses;
-
-    return { categories, total, totalReduced, receiptsRequired };
   }
 }
