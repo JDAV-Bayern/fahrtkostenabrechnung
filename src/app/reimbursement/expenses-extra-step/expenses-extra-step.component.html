@@ -23,10 +23,12 @@
           </button>
         </div>
       </app-expense-list>
-      <p class="subtotal">
-        Summe:
-        <span>{{ report.categories.food | currency }}</span>
-      </p>
+      @if (report$ | async; as report) {
+        <p class="subtotal">
+          Summe:
+          <span>{{ report.categories.food | currency }}</span>
+        </p>
+      }
       <div *ngIf="foodForm.hasError('foodExpenseUnique')" class="error-message">
         Bitte gib nur eine Auslage für den
         {{ rootForm.getError('foodExpenseUnique').date | date }} an.
@@ -62,10 +64,12 @@
       >
         <h2>Sonstige Auslagen</h2>
       </app-expense-list>
-      <p class="subtotal">
-        Summe:
-        <span>{{ report.categories.material | currency }}</span>
-      </p>
+      @if (report$ | async; as report) {
+        <p class="subtotal">
+          Summe:
+          <span>{{ report.categories.material | currency }}</span>
+        </p>
+      }
     </div>
 
     <div *ngIf="parentForm.hasError('anyRequired')" class="error-message">

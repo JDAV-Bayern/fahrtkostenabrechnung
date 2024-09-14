@@ -7,14 +7,32 @@ import { ReimbursementValidatorService } from 'src/app/reimbursement/shared/reim
 import { NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { FinishedDialogComponent } from './finished-dialog/finished-dialog.component';
-import { CurrencyPipe, KeyValuePipe, formatDate } from '@angular/common';
+import {
+  AsyncPipe,
+  CurrencyPipe,
+  KeyValuePipe,
+  formatDate
+} from '@angular/common';
 import { NgFor, NgIf } from '@angular/common';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ProgressIndicatorComponent } from 'src/app/shared/icons/progress-indicator/progress-indicator.component';
 import { PdfViewComponent } from './pdf-view/pdf-view.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ReimbursementService } from '../shared/reimbursement.service';
+import {
+  ReimbursementReport,
+  ReimbursementService
+} from '../shared/reimbursement.service';
 import { ExpenseTypePipe } from '../../expenses/shared/expense-type.pipe';
+import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
+import { SectionService } from 'src/app/core/section.service';
+import { Federation, Section } from 'src/domain/section.model';
+import { Reimbursement } from 'src/domain/reimbursement.model';
+
+export interface PdfContext {
+  reimbursement: Reimbursement;
+  report: ReimbursementReport;
+  section: Section & { state: Federation };
+}
 
 @Component({
   selector: 'app-overview-step',
@@ -25,6 +43,7 @@ import { ExpenseTypePipe } from '../../expenses/shared/expense-type.pipe';
     NgIf,
     NgFor,
     ReactiveFormsModule,
+    AsyncPipe,
     CurrencyPipe,
     KeyValuePipe,
     DialogModule,
@@ -39,8 +58,12 @@ export class OverviewStepComponent {
   form;
 
   files: File[] = [];
-  showPdf = false;
+
   loading = false;
+  showPdf = false;
+  pdfContext?: PdfContext;
+
+  report$: Observable<ReimbursementReport>;
 
   readonly originalOrder = () => 0;
 
@@ -55,9 +78,11 @@ export class OverviewStepComponent {
     private readonly reimbursementService: ReimbursementService,
     private readonly controlService: ReimbursementControlService,
     private readonly validationService: ReimbursementValidatorService,
+    private readonly sectionService: SectionService,
     private readonly dialog: Dialog
   ) {
     this.form = controlService.overviewStep;
+    this.report$ = this.reimbursementService.getReport(this.reimbursement);
   }
 
   get reimbursement() {
@@ -75,10 +100,6 @@ export class OverviewStepComponent {
   get prevStep() {
     const meeting = this.controlService.meetingStep.controls.type.value;
     return meeting === 'committee' ? 'auslagen-gremium' : 'auslagen';
-  }
-
-  get report() {
-    return this.reimbursementService.getReport(this.reimbursement);
   }
 
   getWarnings(): string[] {
@@ -169,8 +190,25 @@ export class OverviewStepComponent {
 
   async onSubmit() {
     this.loading = true;
+
+    const sectionId = this.reimbursement.participant.sectionId;
+    forkJoin({
+      reimbursement: of(this.reimbursement),
+      report: this.reimbursementService.getReport(this.reimbursement),
+      section: this.sectionService
+        .getSection(sectionId)
+        .pipe(
+          switchMap(section =>
+            section.state$.pipe(map(state => ({ ...section, state })))
+          )
+        )
+    }).subscribe(pdfContext => {
+      this.showPdf = true;
+      this.pdfContext = pdfContext;
+    });
+
     this.showPdf = true;
-    await new Promise(resolve => setTimeout(resolve, 0));
+
     await this.pdfFullyRenderedPromise;
 
     const htmlElement = document.getElementById('pdf-container');
@@ -179,7 +217,7 @@ export class OverviewStepComponent {
       this.showPdf = false;
       return;
     }
-    await new Promise(resolve => setTimeout(resolve, 0));
+
     const doc = new jsPDF('p', 'pt', [595, 822], true);
     //Add mailto link and logo
     doc.link(170, 57, 70, 10, {

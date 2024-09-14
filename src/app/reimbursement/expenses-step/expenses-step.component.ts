@@ -2,11 +2,14 @@ import { CdkDrag, CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { Component } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
-import { CurrencyPipe, NgIf } from '@angular/common';
+import { AsyncPipe, CurrencyPipe, NgIf } from '@angular/common';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { Direction, TransportMode } from 'src/domain/expense.model';
-import { ReimbursementService } from '../shared/reimbursement.service';
+import {
+  ReimbursementReport,
+  ReimbursementService
+} from '../shared/reimbursement.service';
 import { TransportExpenseForm } from 'src/app/expenses/shared/expense-form';
 import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.service';
 import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
@@ -15,6 +18,7 @@ import {
   TransportExpenseModalComponent
 } from 'src/app/expenses/transport-expense-modal/transport-expense-modal.component';
 import { RouterLink } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-expenses-step',
@@ -25,6 +29,7 @@ import { RouterLink } from '@angular/router';
     NgIf,
     RouterLink,
     ReactiveFormsModule,
+    AsyncPipe,
     CurrencyPipe,
     CdkDropListGroup,
     DialogModule,
@@ -34,6 +39,7 @@ import { RouterLink } from '@angular/router';
 })
 export class ExpensesStepComponent {
   form;
+  report$: Observable<ReimbursementReport>;
 
   constructor(
     private readonly reimbursementService: ReimbursementService,
@@ -42,6 +48,9 @@ export class ExpensesStepComponent {
     private dialog: Dialog
   ) {
     this.form = this.reimbursementControlService.transportExpensesStep;
+
+    const reimbursement = this.reimbursementControlService.getReimbursement();
+    this.report$ = this.reimbursementService.getReport(reimbursement);
   }
 
   get meetingType() {
@@ -75,12 +84,6 @@ export class ExpensesStepComponent {
     return this.meetingType === 'committee'
       ? 'auslagen-gremium'
       : 'zusammenfassung';
-  }
-
-  get total() {
-    const reimbursement = this.reimbursementControlService.getReimbursement();
-    const report = this.reimbursementService.getReport(reimbursement);
-    return report.categories.transport;
   }
 
   getAllowedModes(direction: Direction) {

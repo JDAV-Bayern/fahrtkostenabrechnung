@@ -67,10 +67,12 @@
       </div>
     </div>
 
-    <p class="subtotal">
-      Summe:
-      <span>{{ total | currency }}</span>
-    </p>
+    @if (report$ | async; as report) {
+      <p class="subtotal">
+        Summe:
+        <span>{{ report.categories.transport | currency }}</span>
+      </p>
+    }
 
     <div *ngIf="form.hasError('anyRequired')" class="error-message">
       Bitte gib mindestens eine Auslage an.

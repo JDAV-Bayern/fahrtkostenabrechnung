@@ -54,7 +54,7 @@
         </tr>
         <tr>
           <td>Sektion:</td>
-          <td>{{ section?.name }} (JDAV {{ section?.jdavState?.name }})</td>
+          <td>{{ section.name }} (JDAV {{ section.state.name }})</td>
         </tr>
         <tr>
           <td>Wohnort:</td>
@@ -127,7 +127,9 @@
               <app-expense-details [expense]="expense" />
             </p>
           </td>
-          <td class="align-right">{{ expense | expenseAmount | currency }}</td>
+          <td class="align-right">
+            {{ expense | expenseAmount | currency }}
+          </td>
         </tr>
       </ng-container>
     </tbody>

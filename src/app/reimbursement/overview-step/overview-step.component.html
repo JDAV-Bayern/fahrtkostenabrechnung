@@ -21,25 +21,27 @@
     </tr>
   </table>
 
-  <table class="expenses">
-    <tr *ngFor="let entry of report.categories | keyvalue: originalOrder">
-      <td>{{ entry.key | expenseType }}:</td>
-      <td>{{ entry.value | currency }}</td>
-    </tr>
-    <tr>
-      <td>Erstattungsbetrag:</td>
-      <td>{{ report.total | currency }}</td>
-    </tr>
-  </table>
+  @if (report$ | async; as report) {
+    <table class="expenses">
+      <tr *ngFor="let entry of report.categories | keyvalue: originalOrder">
+        <td>{{ entry.key | expenseType }}:</td>
+        <td>{{ entry.value | currency }}</td>
+      </tr>
+      <tr>
+        <td>Erstattungsbetrag:</td>
+        <td>{{ report.total | currency }}</td>
+      </tr>
+    </table>
 
-  <p *ngIf="report.totalReduced">
-    <b
-      >Da deine Sektion nicht in Bayern liegt, ist der Erstattungsbetrag gemäß
-      unserer Reisekostenrichtlinien auf
-      {{ report.total | currency }} begrenzt.</b
-    >
-  </p>
-  <p *ngFor="let warning of getWarnings()"><b>Warnung</b> {{ warning }}</p>
+    <p *ngIf="report.totalReduced">
+      <b
+        >Da deine Sektion nicht in Bayern liegt, ist der Erstattungsbetrag gemäß
+        unserer Reisekostenrichtlinien auf
+        {{ report.total | currency }} begrenzt.</b
+      >
+    </p>
+    <p *ngFor="let warning of getWarnings()"><b>Warnung</b> {{ warning }}</p>
+  }
 
   <div class="form-group">
     <label for="note">Bemerkung zu deiner Abrechnung</label>
@@ -47,42 +49,47 @@
     </textarea>
   </div>
 
-  <div *ngIf="report.receiptsRequired">
-    <h2>Belege</h2>
-    <p>
-      Bitte denke daran, dass wir die Belege für deine Zugtickets benötigen.
-    </p>
-    <p *ngIf="reimbursement.meeting.type === 'committee'">
-      Falls du eine BahnCard benutzt hast, hänge bitte die Rechnung für diese
-      an. Die BahnCard wird für Gremien im angezeigten Betrag aktuell nicht
-      berücksichtigt, wird jedoch durch die LGS entsprechend zusätzlich
-      erstattet.
-    </p>
-    <ngx-file-drop
-      (onFileDrop)="fileDropped($event)"
-      [accept]="'.pdf,.jpg,.png,.jpeg,.JPG,.JPEG,.PDF,.PNG'"
-    >
-      <ng-template
-        ngx-file-drop-content-tmp
-        let-openFileSelector="openFileSelector"
-      >
-        <button class="jdav-btn tertiary icon" (click)="openFileSelector()">
-          <span class="material-symbols-outlined">&#xe9fc;</span>
-          Beleg hinzufügen
-        </button>
-      </ng-template>
-    </ngx-file-drop>
-
-    <fieldset *ngIf="files.length" class="files-list">
-      <legend style="color: #999">Belege</legend>
-      <p class="file-list-entry" *ngFor="let file of files">
-        <button class="jdav-btn tertiary icon" (click)="removeFile(file.name)">
-          <span class="material-symbols-outlined">&#xe872;</span>
-        </button>
-        {{ file.name }}
+  @if (report$ | async; as report) {
+    <div *ngIf="report.receiptsRequired">
+      <h2>Belege</h2>
+      <p>
+        Bitte denke daran, dass wir die Belege für deine Zugtickets benötigen.
       </p>
-    </fieldset>
-  </div>
+      <p *ngIf="reimbursement.meeting.type === 'committee'">
+        Falls du eine BahnCard benutzt hast, hänge bitte die Rechnung für diese
+        an. Die BahnCard wird für Gremien im angezeigten Betrag aktuell nicht
+        berücksichtigt, wird jedoch durch die LGS entsprechend zusätzlich
+        erstattet.
+      </p>
+      <ngx-file-drop
+        (onFileDrop)="fileDropped($event)"
+        [accept]="'.pdf,.jpg,.png,.jpeg,.JPG,.JPEG,.PDF,.PNG'"
+      >
+        <ng-template
+          ngx-file-drop-content-tmp
+          let-openFileSelector="openFileSelector"
+        >
+          <button class="jdav-btn tertiary icon" (click)="openFileSelector()">
+            <span class="material-symbols-outlined">&#xe9fc;</span>
+            Beleg hinzufügen
+          </button>
+        </ng-template>
+      </ngx-file-drop>
+
+      <fieldset *ngIf="files.length" class="files-list">
+        <legend style="color: #999">Belege</legend>
+        <p class="file-list-entry" *ngFor="let file of files">
+          <button
+            class="jdav-btn tertiary icon"
+            (click)="removeFile(file.name)"
+          >
+            <span class="material-symbols-outlined">&#xe872;</span>
+          </button>
+          {{ file.name }}
+        </p>
+      </fieldset>
+    </div>
+  }
 
   <button
     submitButton
@@ -98,8 +105,10 @@
 
 <div style="position: absolute; top: 2000px">
   <app-pdf-view
-    *ngIf="showPdf"
-    [reimbursement]="reimbursement"
+    *ngIf="showPdf && pdfContext"
+    [reimbursement]="pdfContext.reimbursement"
+    [report]="pdfContext.report"
+    [section]="pdfContext.section"
     (fullyRendered)="pdfFullyRendered()"
   ></app-pdf-view>
 </div>
