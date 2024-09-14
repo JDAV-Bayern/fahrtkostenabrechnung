@@ -62,7 +62,7 @@
         </tr>
         <tr>
           <td>Sektion:</td>
-          <td>{{ section?.name }} (JDAV {{ section?.jdavState?.name }})</td>
+          <td>{{ section().name }} (JDAV {{ section().state.name }})</td>
         </tr>
         <tr>
           <td>Wohnort:</td>
@@ -104,17 +104,17 @@
         <th scope="row" colspan="3" class="category-header">
           Erstattungsbetrag
         </th>
-        <th scope="row" class="align-right">{{ report.total | currency }}</th>
+        <th scope="row" class="align-right">{{ report().total | currency }}</th>
       </tr>
     </thead>
-    @if (report.categories.transport) {
+    @if (report().categories.transport) {
       <tbody>
         <tr>
           <th scope="rowgroup" colspan="3" class="category-header">
             Fahrtkosten
           </th>
           <th scope="rowgroup" class="align-right">
-            {{ report.categories.transport | currency }}
+            {{ report().categories.transport | currency }}
           </th>
         </tr>
         @for (direction of directions; track direction) {
@@ -154,12 +154,12 @@
       </tbody>
     }
 
-    @if (report.categories.food) {
+    @if (report().categories.food) {
       <tbody>
         <tr>
           <th scope="col" colspan="3" class="category-header">Tagegeld</th>
           <th scope="col" class="align-right">
-            {{ report.categories.food | currency }}
+            {{ report().categories.food | currency }}
           </th>
         </tr>
         @for (expense of reimbursement().expenses.food; track expense) {
@@ -183,14 +183,14 @@
       </tbody>
     }
 
-    @if (report.categories.material) {
+    @if (report().categories.material) {
       <tbody>
         <tr>
           <th scope="col" colspan="3" class="category-header">
             Sonstige Auslagen
           </th>
           <th scope="col" class="align-right">
-            {{ report.categories.material | currency }}
+            {{ report().categories.material | currency }}
           </th>
         </tr>
         @for (expense of reimbursement().expenses.material; track expense) {

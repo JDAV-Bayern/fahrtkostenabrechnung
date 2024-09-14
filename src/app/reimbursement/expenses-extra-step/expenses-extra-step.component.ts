@@ -1,4 +1,4 @@
-import { CurrencyPipe } from '@angular/common';
+import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
@@ -13,6 +13,7 @@ import { ReimbursementService } from '../shared/reimbursement.service';
   styleUrls: ['./expenses-extra-step.component.css'],
   imports: [
     ReactiveFormsModule,
+    AsyncPipe,
     CurrencyPipe,
     FormCardComponent,
     ExpenseListComponent,
@@ -27,10 +28,9 @@ export class ExpensesExtraStepComponent {
   foodForm = this.controlService.foodExpenses;
   materialForm = this.controlService.materialExpenses;
 
-  get report() {
-    const reimbursment = this.controlService.getReimbursement();
-    return this.reimbursementService.getReport(reimbursment);
-  }
+  report$ = this.reimbursementService.getReport(
+    this.controlService.getReimbursement()
+  );
 
   get isFoodEnabled() {
     return this.controlService.foodSettings.controls.isEnabled;

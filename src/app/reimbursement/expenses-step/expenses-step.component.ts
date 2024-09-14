@@ -1,5 +1,5 @@
 import { CdkDrag, CdkDropListGroup } from '@angular/cdk/drag-drop';
-import { CurrencyPipe } from '@angular/common';
+import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -21,6 +21,7 @@ import { ReimbursementService } from '../shared/reimbursement.service';
   imports: [
     RouterLink,
     ReactiveFormsModule,
+    AsyncPipe,
     CurrencyPipe,
     CdkDropListGroup,
     FormCardComponent,
@@ -34,6 +35,9 @@ export class ExpensesStepComponent {
   );
 
   form = this.reimbursementControlService.transportExpensesStep;
+  report$ = this.reimbursementService.getReport(
+    this.reimbursementControlService.getReimbursement()
+  );
 
   get meetingType() {
     return this.reimbursementControlService.meetingStep.controls.type.value;
@@ -66,12 +70,6 @@ export class ExpensesStepComponent {
     return this.meetingType === 'committee'
       ? 'auslagen-gremium'
       : 'zusammenfassung';
-  }
-
-  get total() {
-    const reimbursement = this.reimbursementControlService.getReimbursement();
-    const report = this.reimbursementService.getReport(reimbursement);
-    return report.categories.transport;
   }
 
   getAllowedModes(direction: Direction) {

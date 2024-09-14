@@ -1,20 +1,37 @@
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import { CurrencyPipe, KeyValuePipe, formatDate } from '@angular/common';
+import {
+  AsyncPipe,
+  CurrencyPipe,
+  KeyValuePipe,
+  formatDate
+} from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import jsPDF from 'jspdf';
 import { NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
 import { PDFDocument } from 'pdf-lib';
+import { forkJoin, map, of, switchMap } from 'rxjs';
+import { SectionService } from 'src/app/core/section.service';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { ReimbursementValidatorService } from 'src/app/reimbursement/shared/reimbursement-validator.service';
-import * as imageprocessor from 'ts-image-processor';
-import { FinishedDialogComponent } from './finished-dialog/finished-dialog.component';
-
-import { ReactiveFormsModule } from '@angular/forms';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ProgressIndicatorComponent } from 'src/app/shared/progress-indicator/progress-indicator.component';
+import { Reimbursement } from 'src/domain/reimbursement.model';
+import { Federation, Section } from 'src/domain/section.model';
+import * as imageprocessor from 'ts-image-processor';
 import { ExpenseTypePipe } from '../../expenses/shared/expense-type.pipe';
-import { ReimbursementService } from '../shared/reimbursement.service';
+import {
+  ReimbursementReport,
+  ReimbursementService
+} from '../shared/reimbursement.service';
+import { FinishedDialogComponent } from './finished-dialog/finished-dialog.component';
 import { PdfViewComponent } from './pdf-view/pdf-view.component';
+
+export interface PdfContext {
+  reimbursement: Reimbursement;
+  report: ReimbursementReport;
+  section: Section & { state: Federation };
+}
 
 @Component({
   selector: 'app-overview-step',
@@ -22,6 +39,7 @@ import { PdfViewComponent } from './pdf-view/pdf-view.component';
   styleUrls: ['./overview-step.component.css'],
   imports: [
     ReactiveFormsModule,
+    AsyncPipe,
     CurrencyPipe,
     KeyValuePipe,
     DialogModule,
@@ -34,6 +52,7 @@ import { PdfViewComponent } from './pdf-view/pdf-view.component';
 })
 export class OverviewStepComponent {
   private readonly reimbursementService = inject(ReimbursementService);
+  private readonly sectionService = inject(SectionService);
   private readonly controlService = inject(ReimbursementControlService);
   private readonly validationService = inject(ReimbursementValidatorService);
   private readonly dialog = inject(Dialog);
@@ -41,8 +60,12 @@ export class OverviewStepComponent {
   form = this.controlService.overviewStep;
 
   files: File[] = [];
-  showPdf = false;
+
   loading = false;
+  showPdf = false;
+  pdfContext?: PdfContext;
+
+  report$ = this.reimbursementService.getReport(this.reimbursement);
 
   readonly originalOrder = () => 0;
 
@@ -68,10 +91,6 @@ export class OverviewStepComponent {
   get prevStep() {
     const meeting = this.controlService.meetingStep.controls.type.value;
     return meeting === 'committee' ? 'auslagen-gremium' : 'auslagen';
-  }
-
-  get report() {
-    return this.reimbursementService.getReport(this.reimbursement);
   }
 
   getWarnings(): string[] {
@@ -162,8 +181,25 @@ export class OverviewStepComponent {
 
   async onSubmit() {
     this.loading = true;
+
+    const sectionId = this.reimbursement.participant.sectionId;
+    forkJoin({
+      reimbursement: of(this.reimbursement),
+      report: this.reimbursementService.getReport(this.reimbursement),
+      section: this.sectionService
+        .getSection(sectionId)
+        .pipe(
+          switchMap(section =>
+            section.state$.pipe(map(state => ({ ...section, state })))
+          )
+        )
+    }).subscribe(pdfContext => {
+      this.showPdf = true;
+      this.pdfContext = pdfContext;
+    });
+
     this.showPdf = true;
-    await new Promise(resolve => setTimeout(resolve, 0));
+
     await this.pdfFullyRenderedPromise;
 
     const htmlElement = document.getElementById('pdf-container');
@@ -172,7 +208,7 @@ export class OverviewStepComponent {
       this.showPdf = false;
       return;
     }
-    await new Promise(resolve => setTimeout(resolve, 0));
+
     const doc = new jsPDF('p', 'pt', [595, 822], true);
     //Add mailto link and logo
     doc.link(170, 57, 70, 10, {
