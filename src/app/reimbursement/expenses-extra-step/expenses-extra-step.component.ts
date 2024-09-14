@@ -1,5 +1,5 @@
 import { DialogModule } from '@angular/cdk/dialog';
-import { CurrencyPipe, DatePipe } from '@angular/common';
+import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
@@ -15,6 +15,7 @@ import { ReimbursementService } from '../shared/reimbursement.service';
   styleUrls: ['./expenses-extra-step.component.css'],
   imports: [
     ReactiveFormsModule,
+    AsyncPipe,
     CurrencyPipe,
     DatePipe,
     DialogModule,
@@ -33,16 +34,15 @@ export class ExpensesExtraStepComponent {
   foodForm = this.reimbursementControlService.foodExpenses;
   materialForm = this.reimbursementControlService.materialExpenses;
 
+  report$ = this.reimbursementService.getReport(
+    this.reimbursementControlService.getReimbursement()
+  );
+
   get foodOptions() {
     const time = this.rootForm.controls.meeting.controls.time;
     const interval = toInterval(time);
     const foodOpts = interval ? getFoodOptions(interval) : [];
     return foodOpts;
-  }
-
-  get report() {
-    const reimbursment = this.reimbursementControlService.getReimbursement();
-    return this.reimbursementService.getReport(reimbursment);
   }
 
   completeFood() {

@@ -19,10 +19,12 @@
             </button>
           </div>
         </app-expense-list>
-        <p class="subtotal">
-          Summe:
-          <span>{{ report.categories.food | currency }}</span>
-        </p>
+        @if (report$ | async; as report) {
+          <p class="subtotal">
+            Summe:
+            <span>{{ report.categories.food | currency }}</span>
+          </p>
+        }
         @if (foodForm.hasError('foodExpenseUnique')) {
           <div class="error-message">
             Bitte gib nur eine Auslage für den
@@ -60,10 +62,12 @@
       >
         <h2>Sonstige Auslagen</h2>
       </app-expense-list>
-      <p class="subtotal">
-        Summe:
-        <span>{{ report.categories.material | currency }}</span>
-      </p>
+      @if (report$ | async; as report) {
+        <p class="subtotal">
+          Summe:
+          <span>{{ report.categories.material | currency }}</span>
+        </p>
+      }
     </div>
 
     @if (parentForm.hasError('anyRequired')) {
