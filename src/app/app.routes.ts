@@ -12,7 +12,6 @@ import {
   participantGuard,
   expensesGuard
 } from './reimbursement/shared/finished-step.guard';
-import { MeetingAssemblyStepComponent } from './reimbursement/meeting-assembly-step/meeting-assembly-step.component';
 import { MeetingCommitteeStepComponent } from './reimbursement/meeting-committee-step/meeting-committee-step.component';
 import { ExpensesExtraStepComponent } from './reimbursement/expenses-extra-step/expenses-extra-step.component';
 import { ExpenseRatesComponent } from './info/expense-rates/expense-rates.component';
@@ -51,10 +50,6 @@ export const routes: Routes = [
       {
         path: 'kurs',
         component: MeetingCourseStepComponent
-      },
-      {
-        path: 'ljv',
-        component: MeetingAssemblyStepComponent
       },
       {
         path: 'gremium',
