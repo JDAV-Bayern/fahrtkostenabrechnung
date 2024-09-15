@@ -16,11 +16,12 @@ import { MeetingCommitteeStepComponent } from './reimbursement/meeting-committee
 import { ExpensesExtraStepComponent } from './reimbursement/expenses-extra-step/expenses-extra-step.component';
 import { ExpenseRatesComponent } from './info/expense-rates/expense-rates.component';
 import { disabledStepGuard } from './reimbursement/shared/disabled-step.guard';
+import { PageNotFoundComponent } from './core/page-not-found/page-not-found.component';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'kurs',
+    redirectTo: 'fahrtkosten',
     pathMatch: 'full'
   },
   {
@@ -43,10 +44,15 @@ export const routes: Routes = [
     ]
   },
   {
-    path: '',
+    path: 'fahrtkosten',
     title: 'Fahrtkostenabrechnung JDAV Bayern',
     component: ReimbursementComponent,
     children: [
+      {
+        path: '',
+        redirectTo: 'kurs',
+        pathMatch: 'full'
+      },
       {
         path: 'kurs',
         component: MeetingCourseStepComponent
@@ -81,5 +87,9 @@ export const routes: Routes = [
         canActivate: [meetingGuard, participantGuard, expensesGuard]
       }
     ]
+  },
+  {
+    path: '**',
+    component: PageNotFoundComponent
   }
 ];
