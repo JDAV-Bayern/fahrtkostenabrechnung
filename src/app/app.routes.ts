@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { PageNotFoundComponent } from './core/page-not-found/page-not-found.component';
 import { DataProtectionComponent } from './info/data-protection/data-protection.component';
 import { ExpenseRatesComponent } from './info/expense-rates/expense-rates.component';
 import { InfoComponent } from './info/info.component';
@@ -20,7 +21,7 @@ import {
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'kurs',
+    redirectTo: 'fahrtkosten',
     pathMatch: 'full'
   },
   {
@@ -43,10 +44,15 @@ export const routes: Routes = [
     ]
   },
   {
-    path: '',
+    path: 'fahrtkosten',
     title: 'Fahrtkostenabrechnung JDAV Bayern',
     component: ReimbursementComponent,
     children: [
+      {
+        path: '',
+        redirectTo: 'kurs',
+        pathMatch: 'full'
+      },
       {
         path: 'kurs',
         component: MeetingCourseStepComponent
@@ -81,5 +87,9 @@ export const routes: Routes = [
         canActivate: [meetingGuard, participantGuard, expensesGuard]
       }
     ]
+  },
+  {
+    path: '**',
+    component: PageNotFoundComponent
   }
 ];
