@@ -1,0 +1,22 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.content-container {
+  max-width: 810px;
+  margin: 2.5rem auto 2.5rem;
+  padding: 0 1rem;
+  text-align: center;
+}
+
+img {
+  max-width: 70%;
+}
+
+.error-code {
+  margin: 1rem;
+  font-size: 5rem;
+  font-weight: bold;
+  color: #ddd;
+}

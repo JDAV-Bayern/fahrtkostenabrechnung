@@ -18,13 +18,13 @@ export class FormCardComponent {
 
   next() {
     if (this.nextStep && !this.nextDisabled) {
-      this.router.navigate([this.nextStep]);
+      this.router.navigate(['fahrtkosten', this.nextStep]);
     }
   }
 
   previous() {
     if (this.prevStep) {
-      this.router.navigate([this.prevStep]);
+      this.router.navigate(['fahrtkosten', this.prevStep]);
     }
   }
 }
