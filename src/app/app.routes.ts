@@ -4,7 +4,6 @@ import { ExpenseRatesComponent } from './info/expense-rates/expense-rates.compon
 import { InfoComponent } from './info/info.component';
 import { ExpensesExtraStepComponent } from './reimbursement/expenses-extra-step/expenses-extra-step.component';
 import { ExpensesStepComponent } from './reimbursement/expenses-step/expenses-step.component';
-import { MeetingAssemblyStepComponent } from './reimbursement/meeting-assembly-step/meeting-assembly-step.component';
 import { MeetingCommitteeStepComponent } from './reimbursement/meeting-committee-step/meeting-committee-step.component';
 import { MeetingCourseStepComponent } from './reimbursement/meeting-course-step/meeting-course-step.component';
 import { OverviewStepComponent } from './reimbursement/overview-step/overview-step.component';
@@ -51,10 +50,6 @@ export const routes: Routes = [
       {
         path: 'kurs',
         component: MeetingCourseStepComponent
-      },
-      {
-        path: 'ljv',
-        component: MeetingAssemblyStepComponent
       },
       {
         path: 'gremium',

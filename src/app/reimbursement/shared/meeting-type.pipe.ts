@@ -10,8 +10,6 @@ export class MeetingTypePipe implements PipeTransform {
     switch (value) {
       case 'course':
         return 'Kurs';
-      case 'assembly':
-        return 'LJV';
       case 'committee':
         return 'Gremium';
     }
