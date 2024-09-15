@@ -38,8 +38,6 @@ export class ExpenseRatesComponent implements OnInit {
     switch (param) {
       case 'kurs':
         return 'course';
-      case 'ljv':
-        return 'assembly';
       case 'gremium':
         return 'committee';
       default:
