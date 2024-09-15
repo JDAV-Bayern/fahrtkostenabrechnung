@@ -56,8 +56,6 @@ export class ExpenseRatesComponent {
     switch (param) {
       case 'kurs':
         return 'course';
-      case 'ljv':
-        return 'assembly';
       case 'gremium':
         return 'committee';
       default:

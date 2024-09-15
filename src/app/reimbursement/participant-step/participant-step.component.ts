@@ -109,8 +109,6 @@ export class ParticipantStepComponent {
     switch (this.controlService.meetingStep.value.type) {
       case 'course':
         return 'kurs';
-      case 'assembly':
-        return 'ljv';
       case 'committee':
         return 'gremium';
       default:

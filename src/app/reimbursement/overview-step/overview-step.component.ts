@@ -278,9 +278,6 @@ export class OverviewStepComponent {
       case 'course':
         fileName = `Fahrtkostenabrechnung_${meeting.code}_${lastName}.pdf`;
         break;
-      case 'assembly':
-        fileName = `Fahrtkostenabrechnung_LJV_${lastName}.pdf`;
-        break;
       case 'committee':
         const timestamp = formatDate(meeting.time.start, 'yyyyMMdd', 'de-DE');
         fileName = `Fahrtkostenabrechnung_${lastName}_${timestamp}.pdf`;

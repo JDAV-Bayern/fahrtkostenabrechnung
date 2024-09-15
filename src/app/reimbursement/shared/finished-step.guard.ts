@@ -46,7 +46,6 @@ function createGuard(form: FormKey, routeTo: RouteOptions): CanActivateFn {
 
 export const meetingGuard = createGuard('meetingStep', {
   course: 'kurs',
-  assembly: 'ljv',
   committee: 'gremium'
 });
 export const participantGuard = createGuard('participantStep', 'teilnehmer_in');
@@ -56,6 +55,5 @@ export const transportExpensesGuard = createGuard(
 );
 export const expensesGuard = createGuard('expensesStep', {
   course: 'auslagen',
-  assembly: 'auslagen',
   committee: 'auslagen-gremium'
 });
