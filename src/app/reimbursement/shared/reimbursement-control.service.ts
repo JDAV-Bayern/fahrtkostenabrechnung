@@ -15,9 +15,8 @@ import {
   MaterialExpense,
   TransportExpense
 } from 'src/domain/expense.model';
-import { Meeting, MeetingType } from 'src/domain/meeting.model';
+import { Committee, MeetingType } from 'src/domain/meeting.model';
 import { Reimbursement } from 'src/domain/reimbursement.model';
-import { validateCourseCode } from '../../shared/validators/course-code.validator';
 import {
   orderedDateRange,
   pastDateRange,
@@ -29,7 +28,6 @@ import {
   validateFoodExpenseUnique,
   validateFoodExpenseWorkDay
 } from './food.validator';
-import { MeetingForm } from './meeting-form';
 import { ReimbursementService } from './reimbursement.service';
 import {
   allowedTransportModes,
@@ -58,29 +56,30 @@ export class ReimbursementControlService {
   private readonly formBuilder = inject(NonNullableFormBuilder);
   private readonly reimbursementService = inject(ReimbursementService);
 
-  private courseCodeControl = this.formBuilder.control('', [
-    Validators.required,
-    validateCourseCode
-  ]);
   form = this.formBuilder.group(
     {
-      meeting: this.formBuilder.group<MeetingForm>({
+      meeting: this.formBuilder.group({
         type: this.formBuilder.control<MeetingType>(
           'course',
           Validators.required
         ),
-        name: this.formBuilder.control('', Validators.required),
-        location: this.formBuilder.control('', Validators.required),
-        time: this.formBuilder.group(
-          {
-            startDate: new FormControl<Date | null>(null, Validators.required),
-            startTime: [0, Validators.required],
-            endDate: new FormControl<Date | null>(null, Validators.required),
-            endTime: [0, Validators.required]
-          },
-          { validators: [orderedDateRange, pastDateRange] }
-        ),
-        code: this.courseCodeControl
+        course: new FormControl<number | null>(null, Validators.required),
+        committee: this.formBuilder.group({
+          name: this.formBuilder.control('', Validators.required),
+          location: this.formBuilder.control('', Validators.required),
+          time: this.formBuilder.group(
+            {
+              startDate: new FormControl<Date | null>(
+                null,
+                Validators.required
+              ),
+              startTime: [0, Validators.required],
+              endDate: new FormControl<Date | null>(null, Validators.required),
+              endTime: [0, Validators.required]
+            },
+            { validators: [orderedDateRange, pastDateRange] }
+          )
+        })
       }),
       participant: this.formBuilder.group({
         givenName: ['', Validators.required],
@@ -212,23 +211,21 @@ export class ReimbursementControlService {
     localStorage.removeItem('reimbursement');
   }
 
-  getReimbursement(): Reimbursement {
-    const meetingValue = this.meetingStep.value;
-    const participant = this.participantStep.getRawValue();
-
-    let meeting;
-    if (meetingValue.time) {
-      const interval = toInterval(this.meetingStep.controls.time);
-      meeting = {
-        ...meetingValue,
-        time: interval || { start: new Date(), end: new Date() }
-      };
-    } else {
-      meeting = meetingValue;
-    }
+  private getCommittee(): Committee {
+    const form = this.meetingStep.controls.committee;
+    const interval = toInterval(form.controls.time);
 
     return {
-      meeting: meeting as Meeting,
+      ...form.getRawValue(),
+      startDate: (interval?.start as Date) || new Date(),
+      endDate: (interval?.end as Date) || new Date()
+    };
+  }
+
+  getReimbursement(): Reimbursement {
+    const participant = this.participantStep.getRawValue();
+
+    const reimbursement = {
       participant: {
         ...participant,
         sectionId: participant.sectionId || 0
@@ -236,6 +233,22 @@ export class ReimbursementControlService {
       expenses: this.expensesStep.getRawValue(),
       note: this.overviewStep.controls.note.value
     };
+
+    const type = this.meetingStep.controls.type.value;
+    switch (type) {
+      case 'course':
+        return {
+          ...reimbursement,
+          type,
+          course: this.meetingStep.controls.course.value || 0
+        };
+      case 'committee':
+        return {
+          ...reimbursement,
+          type,
+          committee: this.getCommittee()
+        };
+    }
   }
 
   completeTransportExpense(direction: Direction): TransportExpenseCompletion {
@@ -271,7 +284,8 @@ export class ReimbursementControlService {
 
   completeFood(): void {
     this.foodExpenses.clear();
-    const interval = toInterval(this.meetingStep.controls.time);
+    const committee = this.meetingStep.controls.committee;
+    const interval = toInterval(committee.controls.time);
     const foodOpts = interval ? getFoodOptions(interval) : [];
 
     for (const foodOpt of foodOpts) {
@@ -306,15 +320,13 @@ export class ReimbursementControlService {
     const transport = this.transportExpensesStep;
     switch (value) {
       case 'course':
-        form.addControl('code', this.courseCodeControl);
-        form.controls.location.disable();
-        form.controls.time.disable();
+        form.controls.course.enable();
+        form.controls.committee.disable();
         transport.setValidators(anyRequired);
         break;
       case 'committee':
-        form.removeControl('code');
-        form.controls.location.enable();
-        form.controls.time.enable();
+        form.controls.course.disable();
+        form.controls.committee.enable();
         transport.clearValidators();
         break;
     }

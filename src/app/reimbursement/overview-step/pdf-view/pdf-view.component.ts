@@ -5,6 +5,7 @@ import { ExpenseDetailsComponent } from 'src/app/expenses/shared/expense-details
 import { ExpenseTitlePipe } from 'src/app/expenses/shared/expense-title.pipe';
 import { logoBase64 } from 'src/assets/logoBase64';
 import { Direction } from 'src/domain/expense.model';
+import { Meeting } from 'src/domain/meeting.model';
 import { Reimbursement } from 'src/domain/reimbursement.model';
 import { Federation, Section } from 'src/domain/section.model';
 import { DirectionPipe } from '../../shared/direction.pipe';
@@ -28,13 +29,10 @@ import { ReimbursementReport } from '../../shared/reimbursement.service';
 export class PdfViewComponent implements AfterViewInit {
   readonly reimbursement = input.required<Reimbursement>();
   readonly report = input.required<ReimbursementReport>();
+  readonly meeting = input.required<Meeting>();
   readonly section = input.required<Section & { state: Federation }>();
 
   readonly fullyRendered = output<void>();
-
-  get meeting() {
-    return this.reimbursement().meeting;
-  }
 
   get participant() {
     return this.reimbursement().participant;
@@ -54,5 +52,9 @@ export class PdfViewComponent implements AfterViewInit {
 
   getLogo() {
     return logoBase64;
+  }
+
+  getCourseNumber() {
+    return 'number' in this.meeting ? this.meeting.number : '';
   }
 }
