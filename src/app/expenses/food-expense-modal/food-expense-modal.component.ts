@@ -59,12 +59,11 @@ export class FoodExpenseModalComponent {
   }
 
   get meetingTime() {
-    return this.controlService.meetingStep.controls.time.getRawValue();
+    return this.controlService.meetingStep.controls.committee.controls.time;
   }
 
   onDateChange() {
-    const time = this.controlService.meetingStep.controls.time;
-    const interval = toInterval(time);
+    const interval = toInterval(this.meetingTime);
     const foodOpts = interval ? getFoodOptions(interval) : [];
     const entry = foodOpts.find(
       opt => opt.date.getTime() === this.date.value?.getTime()

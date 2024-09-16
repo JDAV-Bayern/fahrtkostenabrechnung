@@ -1,6 +1,5 @@
 import { Component, Inject } from '@angular/core';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
-import { Meeting } from 'src/domain/meeting.model';
 
 @Component({
   selector: 'app-finished-dialog',
@@ -10,31 +9,22 @@ import { Meeting } from 'src/domain/meeting.model';
 })
 export class FinishedDialogComponent {
   private givenName: string;
-  private meeting: Meeting;
+  private subject: string;
 
   constructor(
     @Inject(DIALOG_DATA)
     data: {
-      meeting: Meeting;
+      subject: string;
       givenName: string;
     }
   ) {
     this.givenName = data.givenName;
-    this.meeting = data.meeting;
+    this.subject = data.subject;
   }
 
   get emailHref(): string {
-    let subject;
-    switch (this.meeting.type) {
-      case 'committee':
-        subject = this.meeting.name;
-        break;
-      case 'course':
-        subject = this.meeting.code;
-        break;
-    }
-    const emailSubject = `Fahrtkostenabrechnung ${subject}`;
-    const emailBody = `Hallo liebe Landesgeschäftsstelle,\n\nanbei meine Reisekostenabrechnung für die Veranstaltung "${subject}".\n\nVielen Dank und beste Grüße\n\n${this.givenName}`;
+    const emailSubject = `Fahrtkostenabrechnung ${this.subject}`;
+    const emailBody = `Hallo liebe Landesgeschäftsstelle,\n\nanbei meine Reisekostenabrechnung für die Veranstaltung "${this.subject}".\n\nVielen Dank und beste Grüße\n${this.givenName}`;
     return `mailto:lgs@jdav-bayern.de?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
   }
 }

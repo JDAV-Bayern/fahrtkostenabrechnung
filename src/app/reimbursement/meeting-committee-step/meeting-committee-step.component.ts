@@ -28,6 +28,7 @@ import { TimeInputDirective } from 'src/app/shared/time-input.directive';
 })
 export class MeetingCommitteeStepComponent {
   form;
+
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
     // Only highligh dates inside the month view.
     if (view === 'month') {
@@ -72,9 +73,10 @@ export class MeetingCommitteeStepComponent {
     !this.startDate.value ||
     date?.getTime() >= this.startDate.value?.getTime();
 
-  constructor(public controlService: ReimbursementControlService) {
-    this.form = controlService.meetingStep;
-    this.form.controls.type.setValue('committee');
+  constructor(private controlService: ReimbursementControlService) {
+    const formGroup = this.controlService.meetingStep;
+    this.form = formGroup.controls.committee;
+    formGroup.controls.type.setValue('committee');
   }
 
   get name() {

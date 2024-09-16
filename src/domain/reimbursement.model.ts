@@ -1,4 +1,4 @@
-import { Meeting } from './meeting.model';
+import { Committee, MeetingType } from './meeting.model';
 import {
   TransportExpense,
   FoodExpense,
@@ -7,8 +7,8 @@ import {
 } from './expense.model';
 import { Participant } from './participant.model';
 
-export interface Reimbursement {
-  meeting: Meeting;
+export interface ReimbursementBase {
+  type: MeetingType;
   participant: Participant;
   expenses: {
     transport: { [key in Direction]: TransportExpense[] };
@@ -17,3 +17,15 @@ export interface Reimbursement {
   };
   note: string;
 }
+
+export interface CourseReimbursement extends ReimbursementBase {
+  type: 'course';
+  course: number;
+}
+
+export interface CommitteeReimbursement extends ReimbursementBase {
+  type: 'committee';
+  committee: Committee;
+}
+
+export type Reimbursement = CourseReimbursement | CommitteeReimbursement;

@@ -9,8 +9,8 @@
       formControlName="date"
       class="form-control"
       required
-      [min]="meetingTime.startDate"
-      [max]="meetingTime.endDate"
+      [min]="meetingTime.controls.startDate.value"
+      [max]="meetingTime.controls.endDate.value"
       [matDatepicker]="picker"
       [matDatepickerFilter]="filterDates"
       (click)="picker.open()"

@@ -2,15 +2,12 @@
   <h2>Zusammenfassung</h2>
 
   <table>
-    <tr>
-      <td>Veranstaltung:</td>
-      <td>
-        <span *ngIf="meeting.type === 'course'">
-          {{ meeting.code }} &ndash;
-        </span>
-        {{ meeting.name }}
-      </td>
-    </tr>
+    @if (name$ | async; as name) {
+      <tr>
+        <td>Veranstaltung:</td>
+        <td>{{ name }}</td>
+      </tr>
+    }
     <tr>
       <td>Teilnehmer:</td>
       <td>{{ participant.givenName }} {{ participant.familyName }}</td>
@@ -55,7 +52,7 @@
       <p>
         Bitte denke daran, dass wir die Belege für deine Zugtickets benötigen.
       </p>
-      <p *ngIf="reimbursement.meeting.type === 'committee'">
+      <p *ngIf="reimbursement.type === 'committee'">
         Falls du eine BahnCard benutzt hast, hänge bitte die Rechnung für diese
         an. Die BahnCard wird für Gremien im angezeigten Betrag aktuell nicht
         berücksichtigt, wird jedoch durch die LGS entsprechend zusätzlich
@@ -108,7 +105,8 @@
     *ngIf="showPdf && pdfContext"
     [reimbursement]="pdfContext.reimbursement"
     [report]="pdfContext.report"
+    [meeting]="pdfContext.meeting"
     [section]="pdfContext.section"
-    (fullyRendered)="pdfFullyRendered()"
+    (fullyRendered)="createPDF()"
   ></app-pdf-view>
 </div>

@@ -1,5 +1,5 @@
 <div id="pdf-container">
-  <h1>Fahrtkostenabrechnung {{ meeting.type | meetingType }}</h1>
+  <h1>Fahrtkostenabrechnung {{ reimbursement.type | meetingType }}</h1>
   <p>
     <b>Datum: {{ now | date }}</b>
   </p>
@@ -11,7 +11,7 @@
   </p>
 
   <div class="info">
-    <div *ngIf="meeting.type === 'course'">
+    <div *ngIf="reimbursement.type === 'course'">
       <h2>Kursdaten</h2>
       <table class="detailstable">
         <tr>
@@ -20,11 +20,21 @@
         </tr>
         <tr>
           <td>Kursnummer:</td>
-          <td>{{ meeting.code }}</td>
+          <td>{{ getCourseNumber() }}</td>
+        </tr>
+        <tr>
+          <td>Zeit:</td>
+          <td>
+            {{ meeting.startDate | date }} &ndash; {{ meeting.endDate | date }}
+          </td>
+        </tr>
+        <tr>
+          <td>Ort:</td>
+          <td>{{ meeting.location }}</td>
         </tr>
       </table>
     </div>
-    <div *ngIf="meeting.type === 'committee'">
+    <div *ngIf="reimbursement.type === 'committee'">
       <h2>Reisedaten</h2>
       <table class="detailstable">
         <tr>
@@ -37,11 +47,11 @@
         </tr>
         <tr>
           <td>Beginn:</td>
-          <td>{{ meeting.time.start | date: 'short' }}</td>
+          <td>{{ meeting.startDate | date: 'short' }}</td>
         </tr>
         <tr>
           <td>Ende:</td>
-          <td>{{ meeting.time.end | date: 'short' }}</td>
+          <td>{{ meeting.endDate | date: 'short' }}</td>
         </tr>
       </table>
     </div>
