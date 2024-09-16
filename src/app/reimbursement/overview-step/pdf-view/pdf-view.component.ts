@@ -10,6 +10,7 @@ import { ExpenseTitlePipe } from 'src/app/expenses/shared/expense-title.pipe';
 import { ExpenseAmountPipe } from 'src/app/expenses/shared/expense-amount.pipe';
 import { ExpenseDetailsComponent } from 'src/app/expenses/shared/expense-details/expense-details.component';
 import { ReimbursementReport } from '../../shared/reimbursement.service';
+import { Meeting } from 'src/domain/meeting.model';
 
 @Component({
   selector: 'app-pdf-view',
@@ -28,13 +29,10 @@ import { ReimbursementReport } from '../../shared/reimbursement.service';
 export class PdfViewComponent {
   readonly reimbursement = input.required<Reimbursement>();
   readonly report = input.required<ReimbursementReport>();
+  readonly meeting = input.required<Meeting>();
   readonly section = input.required<Section & { state: Federation }>();
 
   readonly fullyRendered = output<void>();
-
-  get meeting() {
-    return this.reimbursement().meeting;
-  }
 
   get participant() {
     return this.reimbursement().participant;
@@ -54,5 +52,9 @@ export class PdfViewComponent {
 
   getLogo() {
     return logoBase64;
+  }
+
+  getCourseNumber() {
+    return 'number' in this.meeting ? this.meeting.number : '';
   }
 }

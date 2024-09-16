@@ -26,7 +26,8 @@ import { TimeInputDirective } from 'src/app/shared/time-input.directive';
 export class MeetingCommitteeStepComponent implements OnInit {
   private readonly controlService = inject(ReimbursementControlService);
 
-  form = this.controlService.meetingStep;
+  form = this.controlService.meetingStep.controls.committee;
+
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
     // Only highligh dates inside the month view.
     if (view === 'month') {
@@ -72,7 +73,7 @@ export class MeetingCommitteeStepComponent implements OnInit {
     date?.getTime() >= this.startDate.value?.getTime();
 
   ngOnInit() {
-    this.form.controls.type.setValue('committee');
+    this.controlService.meetingStep.controls.type.setValue('committee');
   }
 
   get name() {

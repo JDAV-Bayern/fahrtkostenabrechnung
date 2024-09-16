@@ -48,7 +48,8 @@ export class ExpensesExtraStepComponent {
   );
 
   get foodOptions() {
-    const time = this.rootForm.controls.meeting.controls.time;
+    const time =
+      this.rootForm.controls.meeting.controls.committee.controls.time;
     const interval = toInterval(time);
     const foodOpts = interval ? getFoodOptions(interval) : [];
     return foodOpts;

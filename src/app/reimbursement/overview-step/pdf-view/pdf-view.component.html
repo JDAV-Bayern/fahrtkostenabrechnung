@@ -1,5 +1,5 @@
 <div id="pdf-container">
-  <h1>Fahrtkostenabrechnung {{ meeting.type | meetingType }}</h1>
+  <h1>Fahrtkostenabrechnung {{ reimbursement().type | meetingType }}</h1>
   <p>
     <b>Datum: {{ now | date }}</b>
   </p>
@@ -11,40 +11,51 @@
   </p>
 
   <div class="info">
-    @if (meeting.type === 'course') {
+    @if (reimbursement().type === 'course') {
       <div>
         <h2>Kursdaten</h2>
         <table class="detailstable">
           <tr>
             <td>Kurs:</td>
-            <td>{{ meeting.name }}</td>
+            <td>{{ meeting().name }}</td>
           </tr>
           <tr>
             <td>Kursnummer:</td>
-            <td>{{ meeting.code }}</td>
+            <td>{{ getCourseNumber() }}</td>
+          </tr>
+          <tr>
+            <td>Zeit:</td>
+            <td>
+              {{ meeting().startDate | date }} &ndash;
+              {{ meeting().endDate | date }}
+            </td>
+          </tr>
+          <tr>
+            <td>Ort:</td>
+            <td>{{ meeting().location }}</td>
           </tr>
         </table>
       </div>
     }
-    @if (meeting.type === 'committee') {
+    @if (reimbursement().type === 'committee') {
       <div>
         <h2>Reisedaten</h2>
         <table class="detailstable">
           <tr>
             <td>Zweck:</td>
-            <td>{{ meeting.name }}</td>
+            <td>{{ meeting().name }}</td>
           </tr>
           <tr>
             <td>Ort:</td>
-            <td>{{ meeting.location }}</td>
+            <td>{{ meeting().location }}</td>
           </tr>
           <tr>
             <td>Beginn:</td>
-            <td>{{ meeting.time.start | date: 'short' }}</td>
+            <td>{{ meeting().startDate | date: 'short' }}</td>
           </tr>
           <tr>
             <td>Ende:</td>
-            <td>{{ meeting.time.end | date: 'short' }}</td>
+            <td>{{ meeting().endDate | date: 'short' }}</td>
           </tr>
         </table>
       </div>
