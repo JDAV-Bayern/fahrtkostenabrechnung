@@ -20,10 +20,11 @@ import { FormDatetimeComponent } from 'src/app/shared/form-datetime/form-datetim
 })
 export class MeetingCommitteeStepComponent implements OnInit {
   private readonly controlService = inject(ReimbursementControlService);
-  form = this.controlService.meetingStep;
+  form = this.controlService.meetingStep.controls.committee;
+
 
   ngOnInit() {
-    this.form.controls.type.setValue('committee');
+    this.controlService.meetingStep.controls.type.setValue('committee');
   }
 
   get name() {
