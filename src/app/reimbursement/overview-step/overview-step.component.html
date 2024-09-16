@@ -2,15 +2,12 @@
   <h2>Zusammenfassung</h2>
 
   <table>
-    <tr>
-      <td>Veranstaltung:</td>
-      <td>
-        @if (meeting.type === 'course') {
-          {{ meeting.code }} &ndash;
-        }
-        {{ meeting.name }}
-      </td>
-    </tr>
+    @if (name$ | async; as name) {
+      <tr>
+        <td>Veranstaltung:</td>
+        <td>{{ name }}</td>
+      </tr>
+    }
     <tr>
       <td>Teilnehmer:</td>
       <td>{{ participant.givenName }} {{ participant.familyName }}</td>
@@ -62,7 +59,7 @@
     @if (report.receiptsRequired) {
       <h2>Belege</h2>
       <p>Bitte denke daran, dass wir die Belege für deine Tickets benötigen.</p>
-      @if (reimbursement.meeting.type === 'committee') {
+      @if (reimbursement.type === 'committee') {
         <p>
           Falls du eine BahnCard benutzt hast, hänge bitte die Rechnung für
           diese an. Die BahnCard wird für Gremien im angezeigten Betrag aktuell
@@ -123,8 +120,9 @@
     <app-pdf-view
       [reimbursement]="pdfContext.reimbursement"
       [report]="pdfContext.report"
+      [meeting]="pdfContext.meeting"
       [section]="pdfContext.section"
-      (fullyRendered)="pdfFullyRendered()"
+      (fullyRendered)="createPDF()"
     ></app-pdf-view>
   }
 </div>

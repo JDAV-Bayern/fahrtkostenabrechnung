@@ -2,20 +2,22 @@ import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import {
   AsyncPipe,
   CurrencyPipe,
-  KeyValuePipe,
-  formatDate
+  formatDate,
+  KeyValuePipe
 } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import jsPDF from 'jspdf';
 import { NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
 import { PDFDocument } from 'pdf-lib';
-import { forkJoin, map, of, switchMap } from 'rxjs';
+import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
+import { CourseService } from 'src/app/core/course.service';
 import { SectionService } from 'src/app/core/section.service';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { ReimbursementValidatorService } from 'src/app/reimbursement/shared/reimbursement-validator.service';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ProgressIndicatorComponent } from 'src/app/shared/progress-indicator/progress-indicator.component';
+import { Meeting } from 'src/domain/meeting.model';
 import { Reimbursement } from 'src/domain/reimbursement.model';
 import { Federation, Section } from 'src/domain/section.model';
 import * as imageprocessor from 'ts-image-processor';
@@ -30,6 +32,7 @@ import { PdfViewComponent } from './pdf-view/pdf-view.component';
 export interface PdfContext {
   reimbursement: Reimbursement;
   report: ReimbursementReport;
+  meeting: Meeting;
   section: Section & { state: Federation };
 }
 
@@ -53,6 +56,7 @@ export interface PdfContext {
 export class OverviewStepComponent {
   private readonly reimbursementService = inject(ReimbursementService);
   private readonly sectionService = inject(SectionService);
+  private readonly courseService = inject(CourseService);
   private readonly controlService = inject(ReimbursementControlService);
   private readonly validationService = inject(ReimbursementValidatorService);
   private readonly dialog = inject(Dialog);
@@ -69,19 +73,34 @@ export class OverviewStepComponent {
 
   readonly originalOrder = () => 0;
 
-  pdfFullyRendered = () => {
-    console.error('pdfFullyRendered not set');
-  };
-  pdfFullyRenderedPromise = new Promise<void>(resolve => {
-    this.pdfFullyRendered = resolve;
-  });
-
   get reimbursement() {
     return this.controlService.getReimbursement();
   }
 
-  get meeting() {
-    return this.reimbursement.meeting;
+  get name$() {
+    switch (this.reimbursement.type) {
+      case 'course':
+        return this.courseService
+          .getCourse(this.reimbursement.course)
+          .pipe(
+            map(course =>
+              course.number
+                ? `${course.number} \u2013 ${course.name}`
+                : course.name
+            )
+          );
+      case 'committee':
+        return of(this.reimbursement.committee.name);
+    }
+  }
+
+  get meeting$(): Observable<Meeting> {
+    switch (this.reimbursement.type) {
+      case 'course':
+        return this.courseService.getCourse(this.reimbursement.course);
+      case 'committee':
+        return of(this.reimbursement.committee);
+    }
   }
 
   get participant() {
@@ -179,13 +198,14 @@ export class OverviewStepComponent {
     );
   }
 
-  async onSubmit() {
+  onSubmit() {
     this.loading = true;
 
     const sectionId = this.reimbursement.participant.sectionId;
     forkJoin({
       reimbursement: of(this.reimbursement),
       report: this.reimbursementService.getReport(this.reimbursement),
+      meeting: this.meeting$,
       section: this.sectionService
         .getSection(sectionId)
         .pipe(
@@ -199,11 +219,12 @@ export class OverviewStepComponent {
     });
 
     this.showPdf = true;
+  }
 
-    await this.pdfFullyRenderedPromise;
-
+  async createPDF() {
     const htmlElement = document.getElementById('pdf-container');
     if (!htmlElement || !this.form.valid) {
+      console.error('Could not find PDF container or form is invalid');
       this.loading = false;
       this.showPdf = false;
       return;
@@ -262,16 +283,17 @@ export class OverviewStepComponent {
     const fileURL = URL.createObjectURL(file);
 
     let fileName;
-    const meeting = this.reimbursement.meeting;
+    const meeting = this.pdfContext!.meeting;
+    const subject = 'number' in meeting ? meeting.number : meeting.name;
     const lastName = this.reimbursement.participant.familyName;
 
-    switch (meeting.type) {
+    switch (this.reimbursement.type) {
       case 'course': {
-        fileName = `Fahrtkostenabrechnung_${meeting.code}_${lastName}.pdf`;
+        fileName = `Fahrtkostenabrechnung_${subject}_${lastName}.pdf`;
         break;
       }
       case 'committee': {
-        const timestamp = formatDate(meeting.time.start, 'yyyyMMdd', 'de-DE');
+        const timestamp = formatDate(meeting.startDate, 'yyyyMMdd', 'de-DE');
         fileName = `Fahrtkostenabrechnung_${lastName}_${timestamp}.pdf`;
         break;
       }
@@ -287,7 +309,7 @@ export class OverviewStepComponent {
     this.dialog.open(FinishedDialogComponent, {
       data: {
         givenName: this.reimbursement.participant.givenName,
-        meeting: this.reimbursement.meeting
+        subject
       }
     });
   }
