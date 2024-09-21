@@ -1,12 +1,15 @@
 {
   "name": "portal-jdav-bayern",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build --localize",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "release:patch": "yarn version --patch",
+    "release:minor": "yarn version --minor",
+    "release:major": "yarn version --major"
   },
   "private": true,
   "dependencies": {
