@@ -13,3 +13,18 @@ Das Fahrtkostenformular ist als reine Frontend-Anwendung konzipiert. Alle Daten 
 ## Mitentwickeln
 
 Gib gerne deinen Senf dazu und stell einen Pull request. Das Projekt ist in Angular geschrieben und hier findest Du die [Angular Dokumentation](https://angular.io/docs). Die Anwendung ist in [Github Pages](https://pages.github.com/) gehostet. Die Anwendung wird automatisch gebaut und deployed, wenn ein Pull request gemerged wird.
+
+## Ein neues Release erstellen
+
+Um ein neues Release zu erstellen einfach folgenden Befehl ausführen:
+
+```bash
+yarn release:<<patch|minor|major>>
+```
+
+Dadruch wird automatisch die Versionsnummer entprechend des Arguments (patch, minor oder major) in der `package.json` erhöht, ein Commit und ein Tag erstellt.
+Nach dem pushen des Tags wird automatisch eine neue Version des Containers gebaut und auf dem Github Container Registry veröffentlicht.
+
+```bash
+git push --follow-tags
+```
