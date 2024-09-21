@@ -94,7 +94,7 @@
             },
             "development": {
               "buildTarget": "portal-jdav-bayern:build:development"
-            }
+            },
             "staging": {
               "buildTarget": "portal-jdav-bayern:build:staging"
             }
