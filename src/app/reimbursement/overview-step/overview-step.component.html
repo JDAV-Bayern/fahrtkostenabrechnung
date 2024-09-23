@@ -36,16 +36,31 @@
     </table>
 
     @if (report.totalReduced) {
-      <p>
-        <b>
-          Da deine Sektion nicht in Bayern liegt, ist der Erstattungsbetrag
-          gemäß unserer Reisekostenrichtlinien auf
-          {{ report.total | currency }} begrenzt.
-        </b>
+      <p class="warning">
+        Da deine Sektion nicht in Bayern liegt, ist der Erstattungsbetrag gemäß
+        unserer Reisekostenrichtlinien auf
+        {{ report.total | currency }} begrenzt.
       </p>
     }
-    @for (warning of getWarnings(); track warning) {
-      <p><b>Warnung</b> {{ warning }}</p>
+  }
+
+  @if (warnings$ | async; as warnings) {
+    @if (warnings.unknownLocality; as locality) {
+      <p class="warning">
+        Dein Wohnort ({{ locality.postal_code }} {{ locality.name }}) ist uns
+        unbekannt. Bitte überprüfe deine Angaben noch einmal.
+      </p>
+    }
+
+    @if (warnings.incompleteRoute; as gaps) {
+      @for (gap of gaps; track $index) {
+        <p class="warning">
+          Deine Abrechnung weist eine Lücke auf. Wir wissen nicht, wie Du von
+          {{ gap.origin }} nach {{ gap.destination }} gekommen bist. Wenn Du
+          hier ein kostenfreies Verkehrsmittel benutzt hast, oder mitgefahren
+          bist, kannst Du diese Warnung ignorieren.
+        </p>
+      }
     }
   }
 
