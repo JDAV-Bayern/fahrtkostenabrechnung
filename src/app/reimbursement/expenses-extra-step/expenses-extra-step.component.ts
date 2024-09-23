@@ -2,6 +2,7 @@ import { DialogModule } from '@angular/cdk/dialog';
 import { AsyncPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { switchMap } from 'rxjs';
 import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
@@ -34,8 +35,10 @@ export class ExpensesExtraStepComponent {
   foodForm = this.reimbursementControlService.foodExpenses;
   materialForm = this.reimbursementControlService.materialExpenses;
 
-  report$ = this.reimbursementService.getReport(
-    this.reimbursementControlService.getReimbursement()
+  report$ = this.reimbursementControlService.reimbursement$.pipe(
+    switchMap(reimbursement =>
+      this.reimbursementService.getReport(reimbursement)
+    )
   );
 
   get foodOptions() {

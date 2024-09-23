@@ -6,14 +6,13 @@ import {
   viewChild
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { RouterLink } from '@angular/router';
+import { forkJoin, map, switchMap } from 'rxjs';
 import { LocalityService } from 'src/app/core/locality.service';
 import { SectionService } from 'src/app/core/section.service';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
-
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { forkJoin, map, switchMap } from 'rxjs';
 import { Federation, FederationLevel, Section } from 'src/domain/section.model';
 
 interface ResolvedFederation extends Federation {
@@ -41,7 +40,7 @@ export class ParticipantStepComponent implements OnInit {
 
   form = this.controlService.participantStep;
   states: ResolvedFederation[] = [];
-  filteredStates: ResolvedFederation[] = [];
+  filteredStates?: ResolvedFederation[];
 
   ngOnInit() {
     // autcomplete locality
@@ -128,24 +127,26 @@ export class ParticipantStepComponent implements OnInit {
   }
 
   filter() {
+    if (!this.sectionInput()) {
+      this.filteredStates = this.states;
+      return;
+    }
+
     const filterValue = this.sectionInput().nativeElement.value.toLowerCase();
-    const filteredStates = this.states.map(state => ({
-      ...state,
-      sections: state.sections.filter(section =>
-        section.name.toLowerCase().includes(filterValue)
-      )
-    }));
-    this.filteredStates = filteredStates.filter(
-      state => state.sections.length > 0
-    );
+    this.filteredStates = this.states
+      .map(state => ({
+        ...state,
+        sections: state.sections.filter(section =>
+          section.name.toLowerCase().includes(filterValue)
+        )
+      }))
+      .filter(state => state.sections.length > 0);
   }
 
-  displayFn() {
-    return (value: number) =>
-      this.states
-        .flatMap(state => state.sections)
-        .find(section => section.id === value)?.name || '';
-  }
+  displayFn = (value: number) =>
+    this.states
+      .flatMap(state => state.sections)
+      .find(section => section.id === value)?.name || '';
 
   ibanChanged() {
     const iban = this.iban.value;

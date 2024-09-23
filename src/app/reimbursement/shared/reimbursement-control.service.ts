@@ -1,10 +1,11 @@
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   FormControl,
   NonNullableFormBuilder,
   Validators
 } from '@angular/forms';
 import { validateIBAN } from 'ngx-iban-validator';
+import { map, Observable, startWith } from 'rxjs';
 import { deepMarkAsDirty, reviveFormArrays } from 'src/app/shared/form-util';
 import { anyRequired } from 'src/app/shared/validators/any-required.validator';
 import {
@@ -220,6 +221,13 @@ export class ReimbursementControlService {
       startDate: (interval?.start as Date) || new Date(),
       endDate: (interval?.end as Date) || new Date()
     };
+  }
+
+  get reimbursement$(): Observable<Reimbursement> {
+    return this.form.valueChanges.pipe(
+      startWith(this.getReimbursement()),
+      map(() => this.getReimbursement())
+    );
   }
 
   getReimbursement(): Reimbursement {
