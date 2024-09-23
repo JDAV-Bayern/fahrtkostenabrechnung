@@ -1,6 +1,7 @@
 import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
+import { switchMap } from 'rxjs';
 import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
@@ -28,8 +29,10 @@ export class ExpensesExtraStepComponent {
   foodForm = this.controlService.foodExpenses;
   materialForm = this.controlService.materialExpenses;
 
-  report$ = this.reimbursementService.getReport(
-    this.controlService.getReimbursement()
+  report$ = this.controlService.reimbursement$.pipe(
+    switchMap(reimbursement =>
+      this.reimbursementService.getReport(reimbursement)
+    )
   );
 
   get isFoodEnabled() {

@@ -21,6 +21,6 @@ export class HeaderComponent implements OnInit {
 
   deleteAllData() {
     this.controlService.deleteStoredData();
-    this.router.navigate(['kurs']);
+    this.router.navigate(['fahrtkosten', 'kurs']);
   }
 }
