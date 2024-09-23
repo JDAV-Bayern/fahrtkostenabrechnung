@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
-import { PlzService } from 'src/app/core/plz.service';
+import { LocalityService } from 'src/app/core/locality.service';
 import { SectionService } from 'src/app/core/section.service';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -37,11 +37,21 @@ export class ParticipantStepComponent {
   filteredStates: ResolvedFederation[] = [];
 
   constructor(
-    private readonly plzService: PlzService,
+    private readonly localityService: LocalityService,
     private readonly sectionService: SectionService,
     public controlService: ReimbursementControlService
   ) {
     this.form = controlService.participantStep;
+
+    // autcomplete locality
+    this.zipCode.valueChanges
+      .pipe(switchMap(value => this.localityService.search(value)))
+      .subscribe(results => {
+        if (results.length === 1) {
+          const city = results[0].name;
+          this.form.patchValue({ city });
+        }
+      });
 
     // load section autocompletions
     this.sectionService
@@ -134,14 +144,5 @@ export class ParticipantStepComponent {
       this.states
         .flatMap(state => state.sections)
         .find(section => section.id === value)?.name || '';
-  }
-
-  plzChanged() {
-    const plz = this.zipCode.value;
-    const results = this.plzService.search(plz);
-    if (results.length === 1) {
-      const city = results[0].city;
-      this.form.patchValue({ city });
-    }
   }
 }

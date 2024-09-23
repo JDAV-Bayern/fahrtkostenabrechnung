@@ -3,7 +3,10 @@ import jsPDF from 'jspdf';
 import * as imageprocessor from 'ts-image-processor';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { PDFDocument } from 'pdf-lib';
-import { ReimbursementValidatorService } from 'src/app/reimbursement/shared/reimbursement-validator.service';
+import {
+  ReimbursementValidatorService,
+  ValidationWarnings
+} from 'src/app/reimbursement/shared/reimbursement-validator.service';
 import { NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { FinishedDialogComponent } from './finished-dialog/finished-dialog.component';
@@ -66,7 +69,9 @@ export class OverviewStepComponent {
   showPdf = false;
   pdfContext?: PdfContext;
 
+  reimbursement: Reimbursement;
   report$: Observable<ReimbursementReport>;
+  warnings$: Observable<ValidationWarnings>;
 
   readonly originalOrder = () => 0;
 
@@ -79,11 +84,12 @@ export class OverviewStepComponent {
     private readonly dialog: Dialog
   ) {
     this.form = controlService.overviewStep;
-    this.report$ = this.reimbursementService.getReport(this.reimbursement);
-  }
 
-  get reimbursement() {
-    return this.controlService.getReimbursement();
+    this.reimbursement = this.controlService.getReimbursement();
+    this.report$ = this.reimbursementService.getReport(this.reimbursement);
+    this.warnings$ = this.validationService.validateReimbursement(
+      this.reimbursement
+    );
   }
 
   get name$() {
@@ -119,10 +125,6 @@ export class OverviewStepComponent {
   get prevStep() {
     const meeting = this.controlService.meetingStep.controls.type.value;
     return meeting === 'committee' ? 'auslagen-gremium' : 'auslagen';
-  }
-
-  getWarnings(): string[] {
-    return this.validationService.validateReimbursement(this.reimbursement);
   }
 
   async addImageToPdf(imageFile: File, pdf: jsPDF) {
@@ -212,7 +214,7 @@ export class OverviewStepComponent {
 
     const sectionId = this.reimbursement.participant.sectionId;
     forkJoin({
-      reimbursement: of(this.reimbursement),
+      reimbursement: of(this.controlService.getReimbursement()),
       report: this.reimbursementService.getReport(this.reimbursement),
       meeting: this.meeting$,
       section: this.sectionService

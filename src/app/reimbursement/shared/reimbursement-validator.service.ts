@@ -1,51 +1,68 @@
 import { Reimbursement } from 'src/domain/reimbursement.model';
 import { Injectable } from '@angular/core';
 import { TransportExpense } from 'src/domain/expense.model';
-import { PlzService } from 'src/app/core/plz.service';
+import { Locality, LocalityService } from 'src/app/core/locality.service';
+import { forkJoin, map, Observable, of } from 'rxjs';
+
+interface MissingRoute {
+  origin: string;
+  destination: string;
+}
+
+export interface ValidationWarnings {
+  unknownLocality: Pick<Locality, 'postal_code' | 'name'> | null;
+  incompleteRoute: MissingRoute[] | null;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReimbursementValidatorService {
-  constructor(private readonly plzService: PlzService) {}
+  constructor(private readonly localityService: LocalityService) {}
 
-  public validateReimbursement(reimbursement: Reimbursement): string[] {
-    const findings: string[] = [];
+  public validateReimbursement(
+    reimbursement: Reimbursement
+  ): Observable<ValidationWarnings> {
+    // Check if zip code exists
+    const postal_code = reimbursement.participant.zipCode;
+    const name = reimbursement.participant.city;
 
-    // Check if zip code exists and if it is in bavaria
-    const plz = reimbursement.participant.zipCode;
-    const city = reimbursement.participant.city;
-    if (!this.plzService.exists(plz, city)) {
-      findings.push(
-        `Dein Wohnort (${plz} ${city}) ist uns unbekannt. Bitte überprüfe deine Angaben noch einmal.`
-      );
-    }
+    const unknownLocality = this.localityService
+      .exists(postal_code, name)
+      .pipe(map(exists => (exists ? null : { postal_code, name })));
 
     // check that the route is complete
     const transportExpenses = reimbursement.expenses.transport;
-    findings.push(
-      ...this.checkValidityOfRoute([
+    const incompleteRoute = of(
+      this.checkValidityOfRoute([
         ...transportExpenses.inbound,
         ...transportExpenses.outbound
       ])
     );
 
-    return findings;
+    return forkJoin({
+      unknownLocality,
+      incompleteRoute
+    });
   }
 
-  private checkValidityOfRoute(expenses: TransportExpense[]): string[] {
-    const findings: string[] = [];
-    let currentPosition = expenses[0]?.destination;
+  private checkValidityOfRoute(
+    expenses: TransportExpense[]
+  ): MissingRoute[] | null {
+    const gaps: MissingRoute[] = [];
+
     for (let i = 1; i < expenses.length; i++) {
-      const endPosition = expenses[i].destination;
+      const currentPosition = expenses[i - 1].destination;
       const startPosition = expenses[i].origin;
+
       if (startPosition !== currentPosition) {
-        findings.push(
-          `Deine Abrechnung weist eine Lücke auf. Wir wissen nicht, wie Du von ${currentPosition} nach ${startPosition} gekommen bist. Wenn Du hier ein kostenfreies Verkehrsmittel benutzt hast, oder mitgefahren bist, kannst Du diese Warnung ignorieren.`
-        );
+        gaps.push({
+          origin: currentPosition,
+          destination: startPosition
+        });
       }
-      currentPosition = endPosition;
     }
-    return findings;
+
+    return gaps.length > 0 ? gaps : null;
   }
 }

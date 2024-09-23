@@ -16,6 +16,10 @@ td {
   text-align: right;
 }
 
+.warning {
+  font-weight: bold;
+}
+
 .files-list {
   border: 1px solid #ccc;
   border-radius: 3px;
