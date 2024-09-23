@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
-import { PlzService } from 'src/app/core/plz.service';
+import { LocalityService } from 'src/app/core/locality.service';
 import { SectionService } from 'src/app/core/section.service';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -32,7 +32,7 @@ interface ResolvedFederation extends Federation {
   ]
 })
 export class ParticipantStepComponent implements OnInit {
-  private readonly plzService = inject(PlzService);
+  private readonly localityService = inject(LocalityService);
   private readonly sectionService = inject(SectionService);
   private readonly controlService = inject(ReimbursementControlService);
 
@@ -44,6 +44,16 @@ export class ParticipantStepComponent implements OnInit {
   filteredStates: ResolvedFederation[] = [];
 
   ngOnInit() {
+    // autcomplete locality
+    this.zipCode.valueChanges
+      .pipe(switchMap(value => this.localityService.search(value)))
+      .subscribe(results => {
+        if (results.length === 1) {
+          const city = results[0].name;
+          this.form.patchValue({ city });
+        }
+      });
+
     // load section autocompletions
     this.sectionService
       .getFederations()
@@ -137,14 +147,6 @@ export class ParticipantStepComponent implements OnInit {
         .find(section => section.id === value)?.name || '';
   }
 
-  plzChanged() {
-    const plz = this.zipCode.value;
-    const results = this.plzService.search(plz);
-    if (results.length === 1) {
-      const city = results[0].city;
-      this.form.patchValue({ city });
-    }
-  }
   ibanChanged() {
     const iban = this.iban.value;
     const formatted =
