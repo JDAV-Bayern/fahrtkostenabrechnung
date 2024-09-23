@@ -69,13 +69,11 @@ export class OverviewStepComponent {
   showPdf = false;
   pdfContext?: PdfContext;
 
+  reimbursement = this.controlService.getReimbursement();
   report$ = this.reimbursementService.getReport(this.reimbursement);
+  warnings$ = this.validationService.validateReimbursement(this.reimbursement);
 
   readonly originalOrder = () => 0;
-
-  get reimbursement() {
-    return this.controlService.getReimbursement();
-  }
 
   get name$() {
     switch (this.reimbursement.type) {
@@ -110,10 +108,6 @@ export class OverviewStepComponent {
   get prevStep() {
     const meeting = this.controlService.meetingStep.controls.type.value;
     return meeting === 'committee' ? 'auslagen-gremium' : 'auslagen';
-  }
-
-  getWarnings(): string[] {
-    return this.validationService.validateReimbursement(this.reimbursement);
   }
 
   async addImageToPdf(imageFile: File, pdf: jsPDF) {
@@ -203,7 +197,7 @@ export class OverviewStepComponent {
 
     const sectionId = this.reimbursement.participant.sectionId;
     forkJoin({
-      reimbursement: of(this.reimbursement),
+      reimbursement: of(this.controlService.getReimbursement()),
       report: this.reimbursementService.getReport(this.reimbursement),
       meeting: this.meeting$,
       section: this.sectionService

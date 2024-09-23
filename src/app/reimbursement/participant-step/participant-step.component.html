@@ -53,6 +53,7 @@
       />
       <mat-autocomplete
         requireSelection
+        autoActiveFirstOption
         [displayWith]="displayFn()"
         #auto="matAutocomplete"
       >
@@ -77,7 +78,6 @@
       <input
         type="text"
         id="zipCode"
-        (change)="plzChanged()"
         formControlName="zipCode"
         class="form-control"
         required
