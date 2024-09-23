@@ -22,6 +22,6 @@ export class HeaderComponent {
 
   deleteAllData() {
     this.controlService.deleteStoredData();
-    this.router.navigate(['kurs']);
+    this.router.navigate(['fahrtkosten', 'kurs']);
   }
 }

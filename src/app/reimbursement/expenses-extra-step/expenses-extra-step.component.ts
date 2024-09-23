@@ -14,7 +14,7 @@ import { FoodExpenseModalComponent } from 'src/app/expenses/food-expense-modal/f
 import { MaterialExpenseModalComponent } from 'src/app/expenses/material-expense-modal/material-expense-modal.component';
 import { toInterval } from 'src/app/shared/validators/date-range.validator';
 import { getFoodOptions } from '../shared/food.validator';
-import { Observable } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-expenses-extra-step',
@@ -51,7 +51,11 @@ export class ExpensesExtraStepComponent {
     this.materialForm = reimbursementControlService.materialExpenses;
 
     const reimbursment = this.reimbursementControlService.getReimbursement();
-    this.report$ = this.reimbursementService.getReport(reimbursment);
+    this.report$ = this.reimbursementControlService.reimbursement$.pipe(
+      switchMap(reimbursement =>
+        this.reimbursementService.getReport(reimbursement)
+      )
+    );
   }
 
   get foodOptions() {

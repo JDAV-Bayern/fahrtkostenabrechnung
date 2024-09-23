@@ -8,14 +8,16 @@
         <td>{{ name }}</td>
       </tr>
     }
-    <tr>
-      <td>Teilnehmer:</td>
-      <td>{{ participant.givenName }} {{ participant.familyName }}</td>
-    </tr>
-    <tr>
-      <td>IBAN:</td>
-      <td>{{ participant.iban }}</td>
-    </tr>
+    @if (participant$ | async; as participant) {
+      <tr>
+        <td>Teilnehmer:</td>
+        <td>{{ participant.givenName }} {{ participant.familyName }}</td>
+      </tr>
+      <tr>
+        <td>IBAN:</td>
+        <td>{{ participant.iban }}</td>
+      </tr>
+    }
   </table>
 
   @if (report$ | async; as report) {
@@ -71,12 +73,16 @@
       <p>
         Bitte denke daran, dass wir die Belege für deine Zugtickets benötigen.
       </p>
-      <p *ngIf="reimbursement.type === 'committee'">
-        Falls du eine BahnCard benutzt hast, hänge bitte die Rechnung für diese
-        an. Die BahnCard wird für Gremien im angezeigten Betrag aktuell nicht
-        berücksichtigt, wird jedoch durch die LGS entsprechend zusätzlich
-        erstattet.
-      </p>
+      @if (reimbursement$ | async; as reimbursement) {
+        @if (reimbursement.type === 'committee') {
+          <p>
+            Falls du eine BahnCard benutzt hast, hänge bitte die Rechnung für
+            diese an. Die BahnCard wird für Gremien im angezeigten Betrag
+            aktuell nicht berücksichtigt, wird jedoch durch die LGS entsprechend
+            zusätzlich erstattet.
+          </p>
+        }
+      }
       <ngx-file-drop
         (onFileDrop)="fileDropped($event)"
         [accept]="'.pdf,.jpg,.png,.jpeg,.JPG,.JPEG,.PDF,.PNG'"

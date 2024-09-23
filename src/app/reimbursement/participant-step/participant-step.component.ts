@@ -5,7 +5,7 @@ import { LocalityService } from 'src/app/core/locality.service';
 import { SectionService } from 'src/app/core/section.service';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgFor, NgIf } from '@angular/common';
+import { NgIf } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { Federation, FederationLevel, Section } from 'src/domain/section.model';
 import { forkJoin, map, switchMap } from 'rxjs';
@@ -21,7 +21,6 @@ interface ResolvedFederation extends Federation {
   standalone: true,
   imports: [
     NgIf,
-    NgFor,
     RouterLink,
     ReactiveFormsModule,
     MatAutocompleteModule,
@@ -30,11 +29,11 @@ interface ResolvedFederation extends Federation {
 })
 export class ParticipantStepComponent {
   @ViewChild('sectionInput')
-  sectionInput!: ElementRef<HTMLInputElement>;
+  sectionInput?: ElementRef<HTMLInputElement>;
 
   form;
   states: ResolvedFederation[] = [];
-  filteredStates: ResolvedFederation[] = [];
+  filteredStates?: ResolvedFederation[];
 
   constructor(
     private readonly localityService: LocalityService,
@@ -127,22 +126,24 @@ export class ParticipantStepComponent {
   }
 
   filter() {
+    if (!this.sectionInput) {
+      this.filteredStates = this.states;
+      return;
+    }
+
     const filterValue = this.sectionInput.nativeElement.value.toLowerCase();
-    const filteredStates = this.states.map(state => ({
-      ...state,
-      sections: state.sections.filter(section =>
-        section.name.toLowerCase().includes(filterValue)
-      )
-    }));
-    this.filteredStates = filteredStates.filter(
-      state => state.sections.length > 0
-    );
+    this.filteredStates = this.states
+      .map(state => ({
+        ...state,
+        sections: state.sections.filter(section =>
+          section.name.toLowerCase().includes(filterValue)
+        )
+      }))
+      .filter(state => state.sections.length > 0);
   }
 
-  displayFn() {
-    return (value: number) =>
-      this.states
-        .flatMap(state => state.sections)
-        .find(section => section.id === value)?.name || '';
-  }
+  displayFn = (value: number) =>
+    this.states
+      .flatMap(state => state.sections)
+      .find(section => section.id === value)?.name || '';
 }
