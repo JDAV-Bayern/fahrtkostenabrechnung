@@ -25,7 +25,7 @@ import {
   ReimbursementService
 } from '../shared/reimbursement.service';
 import { ExpenseTypePipe } from '../../expenses/shared/expense-type.pipe';
-import { forkJoin, map, Observable, of, switchMap } from 'rxjs';
+import { combineLatest, first, map, Observable, of, switchMap } from 'rxjs';
 import { SectionService } from 'src/app/core/section.service';
 import { Federation, Section } from 'src/domain/section.model';
 import { Reimbursement } from 'src/domain/reimbursement.model';
@@ -72,40 +72,43 @@ export class OverviewStepComponent {
   showPdf = false;
   pdfContext?: PdfContext;
 
-  reimbursement = this.controlService.getReimbursement();
-  report$ = this.reimbursementService.getReport(this.reimbursement);
-  warnings$ = this.validationService.validateReimbursement(this.reimbursement);
+  reimbursement$ = this.controlService.reimbursement$;
+  report$ = this.controlService.reimbursement$.pipe(
+    switchMap(reimbursement =>
+      this.reimbursementService.getReport(reimbursement)
+    )
+  );
+  warnings$ = this.controlService.reimbursement$.pipe(
+    switchMap(reimbursement =>
+      this.validationService.validateReimbursement(reimbursement)
+    )
+  );
+
+  meeting$ = this.reimbursement$.pipe(
+    switchMap(reimbursement => {
+      switch (reimbursement.type) {
+        case 'course':
+          return this.courseService.getCourse(reimbursement.course);
+        case 'committee':
+          return of(reimbursement.committee);
+      }
+    })
+  );
+
+  name$ = this.meeting$.pipe(
+    map(meeting =>
+      'number' in meeting && meeting.number
+        ? `${meeting.number} \u2013 ${meeting.name}`
+        : meeting.name
+    )
+  );
 
   readonly originalOrder = () => 0;
 
-  get name$() {
-    switch (this.reimbursement.type) {
-      case 'course':
-        return this.courseService
-          .getCourse(this.reimbursement.course)
-          .pipe(
-            map(course =>
-              course.number
-                ? `${course.number} \u2013 ${course.name}`
-                : course.name
-            )
-          );
-      case 'committee':
-        return of(this.reimbursement.committee.name);
-    }
-  }
-
-  get meeting$(): Observable<Meeting> {
-    switch (this.reimbursement.type) {
-      case 'course':
-        return this.courseService.getCourse(this.reimbursement.course);
-      case 'committee':
-        return of(this.reimbursement.committee);
-    }
-  }
-
-  get participant() {
-    return this.reimbursement.participant;
+  get participant$() {
+    return this.reimbursement$.pipe(
+      map(reimbursement => reimbursement.participant)
+    );
   }
 
   get prevStep() {
@@ -198,34 +201,39 @@ export class OverviewStepComponent {
   onSubmit() {
     this.loading = true;
 
-    const sectionId = this.reimbursement.participant.sectionId;
-    forkJoin({
-      reimbursement: of(this.controlService.getReimbursement()),
-      report: this.reimbursementService.getReport(this.reimbursement),
-      meeting: this.meeting$,
-      section: this.sectionService
-        .getSection(sectionId)
-        .pipe(
-          switchMap(section =>
-            section.state$.pipe(map(state => ({ ...section, state })))
-          )
-        )
-    }).subscribe(pdfContext => {
-      this.showPdf = true;
-      this.pdfContext = pdfContext;
-    });
+    const section$ = this.participant$.pipe(
+      switchMap(participant =>
+        this.sectionService.getSection(participant.sectionId)
+      ),
+      switchMap(section =>
+        section.state$.pipe(map(state => ({ ...section, state })))
+      )
+    );
 
-    this.showPdf = true;
+    combineLatest({
+      reimbursement: this.reimbursement$,
+      report: this.report$,
+      meeting: this.meeting$,
+      section: section$
+    })
+      .pipe(first())
+      .subscribe(pdfContext => {
+        this.showPdf = true;
+        this.pdfContext = pdfContext;
+      });
   }
 
   async createPDF() {
     const htmlElement = document.getElementById('pdf-container');
-    if (!htmlElement || !this.form.valid) {
+
+    if (!htmlElement || !this.pdfContext || !this.form.valid) {
       console.error('Could not find PDF container or form is invalid');
       this.loading = false;
       this.showPdf = false;
       return;
     }
+
+    const { reimbursement, meeting } = this.pdfContext;
 
     const doc = new jsPDF('p', 'pt', [595, 822], true);
     //Add mailto link and logo
@@ -273,18 +281,17 @@ export class OverviewStepComponent {
       }
     }
 
-    combinedPdfDocument.setSubject(JSON.stringify(this.reimbursement));
+    combinedPdfDocument.setSubject(JSON.stringify(reimbursement));
 
     const pdfBytes = await combinedPdfDocument.save();
     const file = new Blob([pdfBytes], { type: 'application/ pdf' });
     const fileURL = URL.createObjectURL(file);
 
     let fileName;
-    const meeting = this.pdfContext!.meeting;
     const subject = 'number' in meeting ? meeting.number : meeting.name;
-    const lastName = this.reimbursement.participant.familyName;
+    const lastName = reimbursement.participant.familyName;
 
-    switch (this.reimbursement.type) {
+    switch (reimbursement.type) {
       case 'course':
         fileName = `Fahrtkostenabrechnung_${subject}_${lastName}.pdf`;
         break;
@@ -303,7 +310,7 @@ export class OverviewStepComponent {
 
     this.dialog.open(FinishedDialogComponent, {
       data: {
-        givenName: this.reimbursement.participant.givenName,
+        givenName: reimbursement.participant.givenName,
         subject
       }
     });

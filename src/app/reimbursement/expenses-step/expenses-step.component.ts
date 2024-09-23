@@ -18,7 +18,7 @@ import {
   TransportExpenseModalComponent
 } from 'src/app/expenses/transport-expense-modal/transport-expense-modal.component';
 import { RouterLink } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-expenses-step',
@@ -44,8 +44,10 @@ export class ExpensesStepComponent {
   private readonly dialog = inject(Dialog);
 
   form = this.reimbursementControlService.transportExpensesStep;
-  report$ = this.reimbursementService.getReport(
-    this.reimbursementControlService.getReimbursement()
+  report$ = this.reimbursementControlService.reimbursement$.pipe(
+    switchMap(reimbursement =>
+      this.reimbursementService.getReport(reimbursement)
+    )
   );
 
   get meetingType() {
