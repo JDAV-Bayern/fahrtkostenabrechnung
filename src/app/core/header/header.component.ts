@@ -32,6 +32,6 @@ export class HeaderComponent {
 
     this.controlService.deleteStoredData();
     control.setValue(meetingType);
-    this.router.navigate([originUrl]);
+    this.router.navigate(['fahrtkosten', originUrl]);
   }
 }

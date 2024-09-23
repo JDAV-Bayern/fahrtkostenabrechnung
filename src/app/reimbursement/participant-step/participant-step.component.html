@@ -40,33 +40,43 @@
     </div>
     <div class="form-group">
       <label for="section">Sektion</label>
-      <input
-        #sectionInput
-        type="text"
-        id="section"
-        class="form-control"
-        formControlName="sectionId"
-        required
-        [matAutocomplete]="auto"
-        (input)="filter()"
-        (focus)="filter()"
-      />
-      <mat-autocomplete
-        requireSelection
-        autoActiveFirstOption
-        [displayWith]="displayFn()"
-        #auto="matAutocomplete"
-      >
-        @for (state of filteredStates; track state.id) {
-          <mat-optgroup [label]="'JDAV ' + state.name">
-            @for (section of state.sections; track section.id) {
-              <mat-option [value]="section.id">
-                {{ section.name }}
-              </mat-option>
-            }
-          </mat-optgroup>
-        }
-      </mat-autocomplete>
+      @if (filteredStates) {
+        <input
+          #sectionInput
+          type="text"
+          id="section"
+          class="form-control"
+          formControlName="sectionId"
+          required
+          [matAutocomplete]="auto"
+          (input)="filter()"
+          (focus)="filter()"
+        />
+        <mat-autocomplete
+          requireSelection
+          autoActiveFirstOption
+          [displayWith]="displayFn"
+          #auto="matAutocomplete"
+        >
+          @for (state of filteredStates; track state.id) {
+            <mat-optgroup [label]="'JDAV ' + state.name">
+              @for (section of state.sections; track section.id) {
+                <mat-option [value]="section.id">
+                  {{ section.name }}
+                </mat-option>
+              }
+            </mat-optgroup>
+          }
+        </mat-autocomplete>
+      } @else {
+        <input
+          type="text"
+          id="section"
+          class="form-control"
+          value="Sektionen werden geladen..."
+          disabled
+        />
+      }
       @if (sectionId.hasError('required') && sectionId.touched) {
         <div class="error-message">Bitte gib deine Sektion ein.</div>
       }

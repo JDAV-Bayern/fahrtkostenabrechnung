@@ -3,6 +3,7 @@ import { AsyncPipe, CurrencyPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { switchMap } from 'rxjs';
 import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
 import { ExpenseExtraData } from 'src/app/expenses/expense-modal/expense-modal.component';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
@@ -35,8 +36,10 @@ export class ExpensesStepComponent {
   );
 
   form = this.reimbursementControlService.transportExpensesStep;
-  report$ = this.reimbursementService.getReport(
-    this.reimbursementControlService.getReimbursement()
+  report$ = this.reimbursementControlService.reimbursement$.pipe(
+    switchMap(reimbursement =>
+      this.reimbursementService.getReport(reimbursement)
+    )
   );
 
   get meetingType() {
