@@ -98,5 +98,5 @@ jobs:
         id: deploy
         run: |
           echo "Deploying to VPS"
-          echo ${{ secrets.DEPLOYMENT_SSH_KEY }} > github_rsa
+          echo "${{ secrets.DEPLOYMENT_SSH_KEY }}" > github_rsa
           ssh -i github_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null github@portal.jdav-bayern.de "dummy"
