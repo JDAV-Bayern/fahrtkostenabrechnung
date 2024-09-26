@@ -89,3 +89,14 @@ jobs:
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Deploy to VPS
+        id: deploy
+        run: |
+          echo "Deploying to VPS"
+          echo ${{ secrets.DEPLOYMENT_SSH_KEY }} > github_rsa
+          ssh -i github_rsa -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null github@portal.jdav-bayern.de "dummy"
