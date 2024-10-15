@@ -1,14 +1,18 @@
 import { Component, ElementRef, forwardRef, ViewChild } from '@angular/core';
 import {
+  AbstractControl,
   ControlValueAccessor,
   FormControl,
+  NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   NonNullableFormBuilder,
   ReactiveFormsModule,
+  ValidationErrors,
+  Validator,
   Validators
 } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { Subscription, switchMap } from 'rxjs';
+import { map, Subscription, switchMap } from 'rxjs';
 import { CountryService } from 'src/app/core/country.service';
 import { LocalityService } from 'src/app/core/locality.service';
 import { Country } from 'src/domain/address.model';
@@ -22,14 +26,19 @@ const PLZ_PATTERN = /^[0-9]{4,5}$/;
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => FormAddressComponent),
+      useExisting: FormAddressComponent,
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: FormAddressComponent,
       multi: true
     }
   ],
   templateUrl: './form-address.component.html',
   styleUrl: './form-address.component.css'
 })
-export class FormAddressComponent implements ControlValueAccessor {
+export class FormAddressComponent implements ControlValueAccessor, Validator {
   form = this.formBuilder.group({
     line1: ['', Validators.required],
     // line2: new FormControl<string | null>(null),
@@ -89,9 +98,11 @@ export class FormAddressComponent implements ControlValueAccessor {
     val && this.form.setValue(val, { emitEvent: false });
   }
 
-  registerOnChange(fn: (val: any) => void): void {
+  registerOnChange(fn: (value: any) => void): void {
     this.onChangeSub && this.onChangeSub.unsubscribe();
-    this.onChangeSub = this.form.valueChanges.subscribe(fn);
+    this.onChangeSub = this.form.valueChanges
+      .pipe(map(val => ({ ...val, countryId: val.countryId || 0 })))
+      .subscribe(fn);
   }
 
   registerOnTouched(fn: () => void): void {
@@ -100,6 +111,10 @@ export class FormAddressComponent implements ControlValueAccessor {
 
   setDisabledState?(isDisabled: boolean): void {
     isDisabled ? this.form.disable() : this.form.enable();
+  }
+
+  validate(ctrl: AbstractControl): ValidationErrors | null {
+    return this.form.valid ? null : { address: true };
   }
 
   filter() {
