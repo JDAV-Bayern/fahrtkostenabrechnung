@@ -12,32 +12,36 @@
       des Formulars, erklärst Du Dich damit einverstanden.
     </p>
 
-    <div class="form-group">
-      <label for="givenName">Vorname</label>
-      <input
-        type="text"
-        id="givenName"
-        formControlName="givenName"
-        class="form-control"
-        required
-      />
-      @if (givenName.hasError('required') && givenName.touched) {
-        <div class="error-message">Bitte gib deinen Vornamen ein.</div>
-      }
+    <div class="stacked">
+      <div class="form-group">
+        <label for="givenName">Vorname</label>
+        <input
+          type="text"
+          id="givenName"
+          formControlName="givenName"
+          class="form-control"
+          required
+        />
+        @if (givenName.hasError('required') && givenName.touched) {
+          <div class="error-message">Bitte gib deinen Vornamen ein.</div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="familyName">Nachname</label>
+        <input
+          type="text"
+          id="familyName"
+          formControlName="familyName"
+          class="form-control"
+          required
+        />
+        @if (familyName.hasError('required') && familyName.touched) {
+          <div class="error-message">Bitte gib deinen Nachnamen ein.</div>
+        }
+      </div>
     </div>
-    <div class="form-group">
-      <label for="familyName">Nachname</label>
-      <input
-        type="text"
-        id="familyName"
-        formControlName="familyName"
-        class="form-control"
-        required
-      />
-      @if (familyName.hasError('required') && familyName.touched) {
-        <div class="error-message">Bitte gib deinen Nachnamen ein.</div>
-      }
-    </div>
+
     <div class="form-group">
       <label for="section">Sektion</label>
       @if (filteredStates) {
@@ -82,75 +86,66 @@
       }
     </div>
 
-    <h2>Wohnort</h2>
     <div class="form-group">
-      <label for="zipCode">PLZ</label>
+      <label for="email">E-Mail</label>
       <input
-        type="text"
-        id="zipCode"
-        formControlName="zipCode"
+        type="email"
+        id="email"
+        formControlName="email"
         class="form-control"
         required
       />
-      @if (zipCode.hasError('required') && zipCode.touched) {
-        <div class="error-message">Bitte gib deine Postleitzahl ein.</div>
+      @if (email.hasError('required') && email.touched) {
+        <div class="error-message">Bitte gib deine E-Mail-Adresse ein.</div>
       }
-      @if (zipCode.hasError('pattern') && zipCode.touched) {
+      @if (email.hasError('email') && email.touched) {
         <div class="error-message">
-          Bitte gib eine gültige Postleitzahl ein.
+          Bitte gib eine gültige E-Mail-Adresse ein.
         </div>
       }
     </div>
-    <div class="form-group">
-      <label for="city">Ort</label>
-      <input
-        type="text"
-        id="city"
-        formControlName="city"
-        class="form-control"
-        required
-      />
-      @if (city.hasError('required') && city.touched) {
-        <div class="error-message">Bitte gib deinen Wohnort ein.</div>
-      }
-    </div>
 
-    <h2>Kontodaten</h2>
-    <div class="form-group">
-      <label for="iban">IBAN</label>
-      <input
-        type="text"
-        class="form-control"
-        formControlName="iban"
-        id="iban"
-        (input)="ibanChanged()"
-        required
-      />
-      @if (iban.hasError('required') && iban.touched) {
-        <div class="error-message">Bitte gib deine IBAN ein.</div>
-      }
-      @if (iban.hasError('ibanInvalid') && iban.touched) {
-        <div class="error-message">Bitte gib eine gültige IBAN ein.</div>
-      }
-    </div>
-    @if (bic.enabled) {
+    <app-form-address formControlName="address"></app-form-address>
+
+    <fieldset formGroupName="bankAccount">
+      <h2>Kontodaten</h2>
+
       <div class="form-group">
-        <label for="bic">BIC</label>
+        <label for="iban">IBAN</label>
         <input
           type="text"
           class="form-control"
-          formControlName="bic"
-          id="bic"
-          onchange="this.value = this.value.toUpperCase();"
+          formControlName="iban"
+          id="iban"
           required
         />
-        @if (bic.hasError('required') && bic.touched) {
-          <div class="error-message">Bitte gib deine BIC ein.</div>
+        @if (iban.hasError('required') && iban.touched) {
+          <div class="error-message">Bitte gib deine IBAN ein.</div>
         }
-        @if (bic.hasError('pattern') && bic.touched) {
-          <div class="error-message">Bitte gib eine gültige BIC ein.</div>
+        @if (iban.hasError('ibanInvalid') && iban.touched) {
+          <div class="error-message">Bitte gib eine gültige IBAN ein.</div>
         }
       </div>
-    }
+
+      @if (bic.enabled) {
+        <div class="form-group">
+          <label for="bic">BIC</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="bic"
+            id="bic"
+            onchange="this.value = this.value.toUpperCase();"
+            required
+          />
+          @if (bic.hasError('required') && bic.touched) {
+            <div class="error-message">Bitte gib deine BIC ein.</div>
+          }
+          @if (bic.hasError('pattern') && bic.touched) {
+            <div class="error-message">Bitte gib eine gültige BIC ein.</div>
+          }
+        </div>
+      }
+    </fieldset>
   </fieldset>
 </app-form-card>
