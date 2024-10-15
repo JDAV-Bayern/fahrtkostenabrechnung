@@ -73,16 +73,19 @@
         </tr>
         <tr>
           <td>Wohnort:</td>
-          <td>{{ participant.zipCode }} {{ participant.city }}</td>
+          <td>
+            {{ participant.address.postalCode }}
+            {{ participant.address.locality }}
+          </td>
         </tr>
         <tr>
           <td>IBAN:</td>
-          <td>{{ participant.iban }}</td>
+          <td>{{ participant.bankAccount.iban }}</td>
         </tr>
-        @if (participant.bic?.length) {
+        @if (participant.bankAccount.bic?.length) {
           <tr>
             <td>BIC:</td>
-            <td>{{ participant.bic }}</td>
+            <td>{{ participant.bankAccount.bic }}</td>
           </tr>
         }
       </table>

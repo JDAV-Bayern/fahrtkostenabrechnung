@@ -1,12 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map, Observable, of } from 'rxjs';
-
-export interface Locality {
-  postal_code: string;
-  name: string;
-  country: number;
-}
+import { LocalityDto } from 'src/domain/address.dto';
+import { Locality } from 'src/domain/address.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,15 +15,25 @@ export class LocalityService {
       return of([]);
     }
 
-    return this.http.get<Locality[]>('/api/localities', {
-      params: { postal_code: prefix }
-    });
+    return this.http
+      .get<LocalityDto[]>('/api/localities', {
+        params: { postal_code: prefix }
+      })
+      .pipe(
+        map(localities =>
+          localities.map(dto => ({
+            postalCode: dto.postal_code,
+            name: dto.name,
+            countryId: dto.country_id
+          }))
+        )
+      );
   }
 
   exists(plz: string, city: string): Observable<boolean> {
     return this.search(plz).pipe(
       map(localities =>
-        localities.some(val => val.postal_code === plz && val.name === city)
+        localities.some(val => val.postalCode === plz && val.name === city)
       )
     );
   }

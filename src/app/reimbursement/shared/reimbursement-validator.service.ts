@@ -1,8 +1,9 @@
 import { Reimbursement } from 'src/domain/reimbursement.model';
 import { Injectable, inject } from '@angular/core';
 import { TransportExpense } from 'src/domain/expense.model';
-import { Locality, LocalityService } from 'src/app/core/locality.service';
+import { LocalityService } from 'src/app/core/locality.service';
 import { forkJoin, map, Observable, of } from 'rxjs';
+import { Locality } from 'src/domain/address.model';
 
 interface MissingRoute {
   origin: string;
@@ -10,7 +11,7 @@ interface MissingRoute {
 }
 
 export interface ValidationWarnings {
-  unknownLocality: Pick<Locality, 'postal_code' | 'name'> | null;
+  unknownLocality: Pick<Locality, 'postalCode' | 'name'> | null;
   incompleteRoute: MissingRoute[] | null;
 }
 
@@ -24,12 +25,12 @@ export class ReimbursementValidatorService {
     reimbursement: Reimbursement
   ): Observable<ValidationWarnings> {
     // Check if zip code exists
-    const postal_code = reimbursement.participant.zipCode;
-    const name = reimbursement.participant.city;
+    const postalCode = reimbursement.participant.address.postalCode;
+    const name = reimbursement.participant.address.locality;
 
     const unknownLocality = this.localityService
-      .exists(postal_code, name)
-      .pipe(map(exists => (exists ? null : { postal_code, name })));
+      .exists(postalCode, name)
+      .pipe(map(exists => (exists ? null : { postalCode, name })));
 
     // check that the route is complete
     const transportExpenses = reimbursement.expenses.transport;
