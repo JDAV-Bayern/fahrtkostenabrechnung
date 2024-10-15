@@ -87,7 +87,7 @@ export class ReimbursementControlService {
         familyName: ['', Validators.required],
         sectionId: new FormControl<number | null>(null, Validators.required),
         email: ['', [Validators.required, Validators.email]],
-        address: [{} as Address, Validators.required],
+        address: {} as Address,
         bankAccount: this.formBuilder.group({
           iban: ['', [Validators.required, validateIBAN]],
           bic: [
@@ -238,11 +238,7 @@ export class ReimbursementControlService {
     const reimbursement = {
       participant: {
         ...participant,
-        sectionId: participant.sectionId || 0,
-        address: {
-          ...participant.address,
-          countryId: participant.address.countryId || 0
-        }
+        sectionId: participant.sectionId || 0
       },
       expenses: this.expensesStep.getRawValue(),
       note: this.overviewStep.controls.note.value
