@@ -1,14 +1,13 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
-import { LocalityService } from 'src/app/core/locality.service';
 import { SectionService } from 'src/app/core/section.service';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { Federation, FederationLevel, Section } from 'src/domain/section.model';
 import { forkJoin, map, switchMap } from 'rxjs';
+import { FormAddressComponent } from 'src/app/shared/form-address/form-address.component';
 
 interface ResolvedFederation extends Federation {
   sections: Section[];
@@ -20,37 +19,26 @@ interface ResolvedFederation extends Federation {
   styleUrls: ['./participant-step.component.css'],
   standalone: true,
   imports: [
-    NgIf,
     RouterLink,
     ReactiveFormsModule,
     MatAutocompleteModule,
-    FormCardComponent
+    FormCardComponent,
+    FormAddressComponent
   ]
 })
 export class ParticipantStepComponent {
+  form;
+
   @ViewChild('sectionInput')
   sectionInput?: ElementRef<HTMLInputElement>;
-
-  form;
   states: ResolvedFederation[] = [];
   filteredStates?: ResolvedFederation[];
 
   constructor(
-    private readonly localityService: LocalityService,
     private readonly sectionService: SectionService,
     public controlService: ReimbursementControlService
   ) {
     this.form = controlService.participantStep;
-
-    // autcomplete locality
-    this.zipCode.valueChanges
-      .pipe(switchMap(value => this.localityService.search(value)))
-      .subscribe(results => {
-        if (results.length === 1) {
-          const city = results[0].name;
-          this.form.patchValue({ city });
-        }
-      });
 
     // load section autocompletions
     this.sectionService
@@ -65,7 +53,7 @@ export class ParticipantStepComponent {
           states.sort((a, b) => {
             // TODO make this database driven
             const isBavarianA = a.name === 'Bayern';
-            const isBavarianB = a.name === 'Bayern';
+            const isBavarianB = b.name === 'Bayern';
             return isBavarianA ? -1 : isBavarianB ? 1 : 0;
           })
         ),
@@ -98,20 +86,16 @@ export class ParticipantStepComponent {
     return this.form.controls.sectionId;
   }
 
-  get zipCode() {
-    return this.form.controls.zipCode;
-  }
-
-  get city() {
-    return this.form.controls.city;
+  get email() {
+    return this.form.controls.email;
   }
 
   get iban() {
-    return this.form.controls.iban;
+    return this.form.controls.bankAccount.controls.iban;
   }
 
   get bic() {
-    return this.form.controls.bic;
+    return this.form.controls.bankAccount.controls.bic;
   }
 
   get prevStep() {

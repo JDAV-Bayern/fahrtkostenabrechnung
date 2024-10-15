@@ -15,7 +15,7 @@
       </tr>
       <tr>
         <td>IBAN:</td>
-        <td>{{ participant.iban }}</td>
+        <td>{{ participant.bankAccount.iban }}</td>
       </tr>
     }
   </table>
@@ -44,7 +44,7 @@
   @if (warnings$ | async; as warnings) {
     @if (warnings.unknownLocality; as locality) {
       <p class="warning">
-        Dein Wohnort ({{ locality.postal_code }} {{ locality.name }}) ist uns
+        Dein Wohnort ({{ locality.postalCode }} {{ locality.name }}) ist uns
         unbekannt. Bitte überprüfe deine Angaben noch einmal.
       </p>
     }
