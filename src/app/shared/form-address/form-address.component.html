@@ -1,0 +1,96 @@
+<fieldset [formGroup]="form">
+  <h2>Wohnort</h2>
+
+  <div class="form-group">
+    <label for="line1">Straße</label>
+    <input
+      type="text"
+      id="line1"
+      formControlName="line1"
+      class="form-control"
+      required
+      (blur)="onTouched()"
+    />
+    @if (line1.hasError('required') && line1.touched) {
+      <div class="error-message">Bitte gib deine Straße ein.</div>
+    }
+  </div>
+
+  <div class="stacked">
+    <div class="form-group">
+      <label for="postalCode">PLZ</label>
+      <input
+        type="text"
+        id="postalCode"
+        formControlName="postalCode"
+        class="form-control"
+        required
+        (blur)="onTouched()"
+      />
+      @if (postalCode.hasError('required') && postalCode.touched) {
+        <div class="error-message">Bitte gib deine Postleitzahl ein.</div>
+      }
+      @if (postalCode.hasError('pattern') && postalCode.touched) {
+        <div class="error-message">
+          Bitte gib eine gültige Postleitzahl ein.
+        </div>
+      }
+    </div>
+
+    <div class="form-group">
+      <label for="locality">Ort</label>
+      <input
+        type="text"
+        id="locality"
+        formControlName="locality"
+        class="form-control"
+        required
+        (blur)="onTouched()"
+      />
+      @if (locality.hasError('required') && locality.touched) {
+        <div class="error-message">Bitte gib deinen Wohnort ein.</div>
+      }
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="country">Land</label>
+    @if (filteredCountries) {
+      <input
+        #countryInput
+        type="text"
+        id="country"
+        class="form-control"
+        formControlName="countryId"
+        required
+        [matAutocomplete]="autoCountry"
+        (input)="filter()"
+        (focus)="filter()"
+        (blur)="onTouched()"
+      />
+      <mat-autocomplete
+        requireSelection
+        autoActiveFirstOption
+        [displayWith]="displayFn"
+        #autoCountry="matAutocomplete"
+      >
+        @for (country of filteredCountries; track country.id) {
+          <mat-option [value]="country.id">
+            {{ country.name }}
+          </mat-option>
+        }
+      </mat-autocomplete>
+    } @else {
+      <input
+        type="text"
+        id="country"
+        class="form-control"
+        value="Länder werden geladen..."
+        disabled
+      />
+    }
+    @if (countryId.hasError('required') && countryId.touched) {
+      <div class="error-message">Bitte gib dein Land ein.</div>
+    }
+  </div>
+</fieldset>

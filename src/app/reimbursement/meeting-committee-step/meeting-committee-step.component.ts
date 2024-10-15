@@ -22,7 +22,6 @@ export class MeetingCommitteeStepComponent implements OnInit {
   private readonly controlService = inject(ReimbursementControlService);
   form = this.controlService.meetingStep.controls.committee;
 
-
   ngOnInit() {
     this.controlService.meetingStep.controls.type.setValue('committee');
   }

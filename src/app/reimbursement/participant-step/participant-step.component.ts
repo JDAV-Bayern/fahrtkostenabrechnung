@@ -9,9 +9,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { RouterLink } from '@angular/router';
 import { forkJoin, map, switchMap } from 'rxjs';
-import { LocalityService } from 'src/app/core/locality.service';
 import { SectionService } from 'src/app/core/section.service';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
+import { FormAddressComponent } from 'src/app/shared/form-address/form-address.component';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { Federation, FederationLevel, Section } from 'src/domain/section.model';
 
@@ -27,11 +27,11 @@ interface ResolvedFederation extends Federation {
     RouterLink,
     ReactiveFormsModule,
     MatAutocompleteModule,
-    FormCardComponent
+    FormCardComponent,
+    FormAddressComponent
   ]
 })
 export class ParticipantStepComponent implements OnInit {
-  private readonly localityService = inject(LocalityService);
   private readonly sectionService = inject(SectionService);
   private readonly controlService = inject(ReimbursementControlService);
 
@@ -43,16 +43,6 @@ export class ParticipantStepComponent implements OnInit {
   filteredStates?: ResolvedFederation[];
 
   ngOnInit() {
-    // autcomplete locality
-    this.zipCode.valueChanges
-      .pipe(switchMap(value => this.localityService.search(value)))
-      .subscribe(results => {
-        if (results.length === 1) {
-          const city = results[0].name;
-          this.form.patchValue({ city });
-        }
-      });
-
     // load section autocompletions
     this.sectionService
       .getFederations()
@@ -99,20 +89,16 @@ export class ParticipantStepComponent implements OnInit {
     return this.form.controls.sectionId;
   }
 
-  get zipCode() {
-    return this.form.controls.zipCode;
-  }
-
-  get city() {
-    return this.form.controls.city;
+  get email() {
+    return this.form.controls.email;
   }
 
   get iban() {
-    return this.form.controls.iban;
+    return this.form.controls.bankAccount.controls.iban;
   }
 
   get bic() {
-    return this.form.controls.bic;
+    return this.form.controls.bankAccount.controls.bic;
   }
 
   get prevStep() {
@@ -156,6 +142,6 @@ export class ParticipantStepComponent implements OnInit {
         .replace(/\s/g, '')
         .match(/.{1,4}/g)
         ?.join(' ') || '';
-    this.form.patchValue({ iban: formatted });
+    this.form.controls.bankAccount.controls.iban.setValue(formatted);
   }
 }

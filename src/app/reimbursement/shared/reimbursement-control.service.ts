@@ -9,6 +9,7 @@ import { validateIBAN } from 'ngx-iban-validator';
 import { map, Observable, startWith } from 'rxjs';
 import { deepMarkAsDirty, reviveFormArrays } from 'src/app/shared/form-util';
 import { anyRequired } from 'src/app/shared/validators/any-required.validator';
+import { Address } from 'src/domain/address.model';
 import {
   Direction,
   Discount,
@@ -32,7 +33,6 @@ import {
 const LOCAL_STORAGE_KEY_REIMBURSEMENT = 'reimbursement';
 const LOCAL_STORAGE_KEY_SETTINGS = 'settings';
 
-const PLZ_PATTERN = /^[0-9]{4,5}$/;
 const BIC_PATTERN = /^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/;
 
 const SEPA_CODES =
@@ -77,13 +77,15 @@ export class ReimbursementControlService {
       givenName: ['', Validators.required],
       familyName: ['', Validators.required],
       sectionId: new FormControl<number | null>(null, Validators.required),
-      zipCode: ['', [Validators.required, Validators.pattern(PLZ_PATTERN)]],
-      city: ['', Validators.required],
-      iban: ['', [Validators.required, validateIBAN]],
-      bic: [
-        { value: '', disabled: true },
-        [Validators.required, Validators.pattern(BIC_PATTERN)]
-      ]
+      email: ['', [Validators.required, Validators.email]],
+      address: [{} as Address, Validators.required],
+      bankAccount: this.formBuilder.group({
+        iban: ['', [Validators.required, validateIBAN]],
+        bic: [
+          { value: '', disabled: true },
+          [Validators.required, Validators.pattern(BIC_PATTERN)]
+        ]
+      })
     }),
     expenses: this.formBuilder.group(
       {
@@ -124,7 +126,7 @@ export class ReimbursementControlService {
   constructor() {
     this.form.valueChanges.subscribe(() => this.saveForm());
 
-    const iban = this.participantStep.controls.iban;
+    const iban = this.participantStep.controls.bankAccount.controls.iban;
     iban.valueChanges.subscribe(value => this.onIbanChanged(value));
 
     const meetingType = this.meetingStep.controls.type;
@@ -251,7 +253,11 @@ export class ReimbursementControlService {
     const reimbursement = {
       participant: {
         ...participant,
-        sectionId: participant.sectionId || 0
+        sectionId: participant.sectionId || 0,
+        address: {
+          ...participant.address,
+          countryId: participant.address.countryId || 0
+        }
       },
       expenses: {
         transport: this.transportExpensesStep.getRawValue(),
@@ -342,8 +348,8 @@ export class ReimbursementControlService {
   }
 
   private onIbanChanged(value: string) {
-    const iban = this.participantStep.controls.iban;
-    const bic = this.participantStep.controls.bic;
+    const iban = this.participantStep.controls.bankAccount.controls.iban;
+    const bic = this.participantStep.controls.bankAccount.controls.bic;
     const enable =
       iban.valid && (value.match(BIC_REQUIRED) || !value.match(SEPA_CODES));
 
