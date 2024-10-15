@@ -1,14 +1,17 @@
-import { Component, ElementRef, forwardRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import {
   ControlValueAccessor,
   FormControl,
+  NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   NonNullableFormBuilder,
   ReactiveFormsModule,
+  Validator,
+  ValidatorFn,
   Validators
 } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { Subscription, switchMap } from 'rxjs';
+import { map, Subscription, switchMap } from 'rxjs';
 import { CountryService } from 'src/app/core/country.service';
 import { LocalityService } from 'src/app/core/locality.service';
 import { Address, Country } from 'src/domain/address.model';
@@ -22,14 +25,19 @@ const PLZ_PATTERN = /^[0-9]{4,5}$/;
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => FormAddressComponent),
+      useExisting: FormAddressComponent,
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: FormAddressComponent,
       multi: true
     }
   ],
   templateUrl: './form-address.component.html',
   styleUrl: './form-address.component.css'
 })
-export class FormAddressComponent implements ControlValueAccessor {
+export class FormAddressComponent implements ControlValueAccessor, Validator {
   form = this.formBuilder.group({
     line1: ['', Validators.required],
     // line2: new FormControl<string | null>(null),
@@ -93,11 +101,11 @@ export class FormAddressComponent implements ControlValueAccessor {
     }
   }
 
-  registerOnChange(fn: (val: Address) => void): void {
+  registerOnChange(fn: (value: Address) => void): void {
     this.onChangeSub?.unsubscribe();
-    this.onChangeSub = this.form.valueChanges.subscribe(val =>
-      fn(val as Address)
-    );
+    this.onChangeSub = this.form.valueChanges
+      .pipe(map(val => ({ ...val, countryId: val.countryId || 0 }) as Address))
+      .subscribe(fn);
   }
 
   registerOnTouched(fn: () => void): void {
@@ -111,6 +119,10 @@ export class FormAddressComponent implements ControlValueAccessor {
       this.form.enable();
     }
   }
+
+  validate: ValidatorFn = () => {
+    return this.form.valid ? null : { address: true };
+  };
 
   filter() {
     if (!this.countryInput) {
