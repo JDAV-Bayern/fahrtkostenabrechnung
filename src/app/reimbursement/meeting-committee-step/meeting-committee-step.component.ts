@@ -10,6 +10,8 @@ import {
 } from '@angular/material/datepicker';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { TimeInputDirective } from 'src/app/shared/time-input.directive';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'app-meeting-committee-step',
@@ -22,9 +24,11 @@ import { TimeInputDirective } from 'src/app/shared/time-input.directive';
     ReactiveFormsModule,
     FormCardComponent,
     MatDatepickerModule,
+    MatFormFieldModule,
     MatAutocompleteModule,
     TimeInputDirective
-  ]
+  ],
+  providers: [provideNativeDateAdapter()]
 })
 export class MeetingCommitteeStepComponent {
   form;

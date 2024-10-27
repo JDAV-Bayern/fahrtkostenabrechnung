@@ -4,5 +4,12 @@
 }
 
 .time-control {
-  width: 100px;
+  flex-grow: 1;
+}
+
+.timesFormContainer {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
 }

@@ -45,87 +45,31 @@
 
     <fieldset [formGroup]="time">
       <div class="form-group">
-        <label for="start">Beginn der Reise</label>
-        <fieldset id="start" class="datetime-group">
+        <label>Zeitraum der Reise</label>
+        <mat-date-range-input
+          [rangePicker]="picker"
+          class="form-control"
+          (click)="picker.open()"
+        >
           <input
+            matStartDate
             type="text"
             formControlName="startDate"
-            class="form-control"
             required
             [max]="now"
-            [matDatepickerFilter]="filterStartDates"
-            [matDatepicker]="pickerStart"
-            (click)="pickerStart.open()"
+            [contentEditable]="false"
           />
-          <mat-datepicker
-            touchUi
-            [dateClass]="dateClass"
-            #pickerStart
-          ></mat-datepicker>
           <input
-            appTimeInput
-            type="text"
-            formControlName="startTime"
-            class="form-control time-control"
-            required
-          />
-        </fieldset>
-        <div
-          *ngIf="
-            startDate.hasError('required') &&
-            !startDate.hasError('matDatepickerParse') &&
-            startDate.touched
-          "
-          class="error-message"
-        >
-          Bitte gib das Startdatum deiner Reise an.
-        </div>
-        <div
-          *ngIf="startDate.hasError('matDatepickerParse') && startDate.touched"
-          class="error-message"
-        >
-          Bitte gib ein gültiges Datum an.
-        </div>
-        <div
-          *ngIf="startTime.hasError('required') && startTime.touched"
-          class="error-message"
-        >
-          Bitte gib die Startzeit deiner Reise an.
-        </div>
-        <div
-          *ngIf="startTime.hasError('invalidTime') && startTime.touched"
-          class="error-message"
-        >
-          Bitte gib eine gültige Zeit an.
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="end">Ende der Reise</label>
-        <fieldset id="end" class="datetime-group">
-          <input
+            matEndDate
             type="text"
             formControlName="endDate"
-            class="form-control"
             required
             [max]="now"
-            [matDatepickerFilter]="filterEndDates"
-            [matDatepicker]="pickerEnd"
-            (click)="pickerEnd.open()"
+            [contentEditable]="false"
           />
-          <mat-datepicker
-            touchUi
-            [dateClass]="dateClass"
-            #pickerEnd
-          ></mat-datepicker>
-          <input
-            appTimeInput
-            type="text"
-            formControlName="endTime"
-            class="form-control time-control"
-            required
-          />
-        </fieldset>
+        </mat-date-range-input>
+
+        <mat-date-range-picker #picker></mat-date-range-picker>
         <div
           *ngIf="
             endDate.hasError('required') &&
@@ -142,25 +86,64 @@
         >
           Bitte gib ein gültiges Datum an.
         </div>
-        <div
-          *ngIf="endTime.hasError('required') && endTime.touched"
-          class="error-message"
-        >
-          Bitte gib die Endzeit deiner Reise an.
+        <div *ngIf="time.hasError('dateRangeOrder')" class="error-message">
+          Das Ende der Reise darf nicht vor dem Start liegen.
         </div>
-        <div
-          *ngIf="endTime.hasError('invalidTime') && endTime.touched"
-          class="error-message"
-        >
-          Bitte gib eine gültige Zeit an.
+        <div *ngIf="time.hasError('dateRangePast')" class="error-message">
+          Die Reise muss bereits vollständig abgeschlossen sein.
         </div>
-      </div>
 
-      <div *ngIf="time.hasError('dateRangeOrder')" class="error-message">
-        Das Ende der Reise darf nicht vor dem Start liegen.
-      </div>
-      <div *ngIf="time.hasError('dateRangePast')" class="error-message">
-        Die Reise muss bereits vollständig abgeschlossen sein.
+        <div class="timesFormContainer">
+          <div>
+            <label for="start">Beginn der Reise</label>
+            <fieldset id="start" class="datetime-group">
+              <input
+                appTimeInput
+                type="text"
+                formControlName="startTime"
+                class="form-control time-control"
+                required
+              />
+            </fieldset>
+            <div
+              *ngIf="startTime.hasError('required') && startTime.touched"
+              class="error-message"
+            >
+              Bitte gib die Startzeit deiner Reise an.
+            </div>
+            <div
+              *ngIf="startTime.hasError('invalidTime') && startTime.touched"
+              class="error-message"
+            >
+              Bitte gib eine gültige Zeit an.
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="end">Ende der Reise</label>
+            <fieldset id="end" class="datetime-group">
+              <input
+                appTimeInput
+                type="text"
+                formControlName="endTime"
+                class="form-control time-control"
+                required
+              />
+            </fieldset>
+            <div
+              *ngIf="endTime.hasError('required') && endTime.touched"
+              class="error-message"
+            >
+              Bitte gib die Endzeit deiner Reise an.
+            </div>
+            <div
+              *ngIf="endTime.hasError('invalidTime') && endTime.touched"
+              class="error-message"
+            >
+              Bitte gib eine gültige Zeit an.
+            </div>
+          </div>
+        </div>
       </div>
     </fieldset>
   </fieldset>
