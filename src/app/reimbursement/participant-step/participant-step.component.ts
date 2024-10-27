@@ -127,4 +127,14 @@ export class ParticipantStepComponent {
       this.form.patchValue({ city });
     }
   }
+  ibanChanged() {
+    const iban = this.iban.value;
+    const formatted =
+      iban
+        .toUpperCase()
+        .replace(/\s/g, '')
+        .match(/.{1,4}/g)
+        ?.join(' ') || '';
+    this.form.patchValue({ iban: formatted });
+  }
 }

@@ -131,6 +131,7 @@
         class="form-control"
         formControlName="iban"
         id="iban"
+        (input)="ibanChanged()"
         required
       />
       <div
@@ -153,6 +154,7 @@
         class="form-control"
         formControlName="bic"
         id="bic"
+        onchange="this.value = this.value.toUpperCase();"
         required
       />
       <div
