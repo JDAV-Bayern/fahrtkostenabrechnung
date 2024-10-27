@@ -40,7 +40,7 @@ import {
   reviveFormArrays
 } from 'src/app/shared/form-util';
 
-const PLZ_PATTERN = /^[0-9]{5}$/;
+const PLZ_PATTERN = /^[0-9]{4,5}$/;
 const BIC_PATTERN = /^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/;
 
 const SEPA_CODES =
