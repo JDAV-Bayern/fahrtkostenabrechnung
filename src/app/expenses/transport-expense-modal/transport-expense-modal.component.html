@@ -3,21 +3,22 @@
     {{ mode.value ? (mode.value | transportMode) : 'Fahrtkosten' }} erfassen
   </h2>
 
-  <div *ngIf="mode.invalid" class="means-of-travel-buttons-container">
-    <button
-      *ngFor="let modeOption of allowedModes"
-      class="jdav-btn secondary icon"
-      (click)="chooseExpense(modeOption)"
-    >
-      <span
-        class="material-symbols-outlined"
-        [innerHtml]="getIcon(modeOption)"
-      ></span>
-      {{ modeOption | transportMode }}
-    </button>
-  </div>
-
-  <div *ngIf="mode.valid">
+  @if (mode.invalid) {
+    <div class="means-of-travel-buttons-container">
+      @for (modeOption of allowedModes; track modeOption) {
+        <button
+          class="jdav-btn secondary icon"
+          (click)="chooseExpense(modeOption)"
+        >
+          <span
+            class="material-symbols-outlined"
+            [innerHtml]="getIcon(modeOption)"
+          ></span>
+          {{ modeOption | transportMode }}
+        </button>
+      }
+    </div>
+  } @else {
     <div class="form-group">
       <label for="origin">Von</label>
       <input
@@ -27,12 +28,9 @@
         class="form-control"
         required
       />
-      <div
-        *ngIf="origin.hasError('required') && origin.touched"
-        class="error-message"
-      >
-        Bitte gib einen Startort ein.
-      </div>
+      @if (origin.hasError('required') && origin.touched) {
+        <div class="error-message">Bitte gib einen Startort ein.</div>
+      }
     </div>
 
     <div class="form-group">
@@ -44,147 +42,144 @@
         class="form-control"
         required
       />
-      <div
-        *ngIf="destination.hasError('required') && destination.touched"
-        class="error-message"
-      >
-        Bitte gib einen Zielort ein.
-      </div>
+      @if (destination.hasError('required') && destination.touched) {
+        <div class="error-message">Bitte gib einen Zielort ein.</div>
+      }
     </div>
 
     <!-- car and bike expenses -->
-    <div *ngIf="distance" class="form-group">
-      <label for="distance">Strecke (km)</label>
-      <input
-        type="number"
-        class="form-control"
-        formControlName="distance"
-        id="distance"
-        placeholder="Strecke in Kilometern"
-      />
-      <div
-        *ngIf="distance.hasError('required') && distance.touched"
-        class="error-message"
-      >
-        Bitte gib die Distanz ein.
-      </div>
-      <div *ngIf="distance.hasError('min')" class="error-message">
-        Bitte gib eine gültige Distanz ein.
-      </div>
-    </div>
-
-    <!-- train expenses -->
-    <fieldset *ngIf="train" [formGroup]="train">
+    @if (distance) {
       <div class="form-group">
-        <label for="price">Ticketpreis (ermäßigt)</label>
+        <label for="distance">Strecke (km)</label>
         <input
           type="number"
-          id="price"
-          formControlName="price"
           class="form-control"
-          required
+          formControlName="distance"
+          id="distance"
+          placeholder="Strecke in Kilometern"
         />
-        <div
-          *ngIf="
+        @if (distance.hasError('required') && distance.touched) {
+          <div class="error-message">Bitte gib die Distanz ein.</div>
+        }
+        @if (distance.hasError('min')) {
+          <div class="error-message">Bitte gib eine gültige Distanz ein.</div>
+        }
+      </div>
+    }
+
+    <!-- train expenses -->
+    @if (train) {
+      <fieldset [formGroup]="train">
+        <div class="form-group">
+          <label for="price">Ticketpreis (ermäßigt)</label>
+          <input
+            type="number"
+            id="price"
+            formControlName="price"
+            class="form-control"
+            required
+          />
+          @if (
             train.controls.price.hasError('required') &&
             train.controls.price.touched
-          "
-          class="error-message"
-        >
-          Bitte gib einen Preis ein.
+          ) {
+            <div class="error-message">Bitte gib einen Preis ein.</div>
+          }
+          @if (train.controls.price.hasError('min')) {
+            <div class="error-message">Bitte gib einen gültigen Preis ein.</div>
+          }
         </div>
-        <div *ngIf="train.controls.price.hasError('min')" class="error-message">
-          Bitte gib einen gültigen Preis ein.
-        </div>
-      </div>
 
-      <div class="form-group">
-        <label for="discountCard">BahnCard</label>
-        <select
-          id="discountCard"
-          formControlName="discountCard"
-          class="form-control"
-          required
-        >
-          <option value="none">Keine BahnCard</option>
-          <option value="BC25">BahnCard 25</option>
-          <option value="BC50">BahnCard 50</option>
-        </select>
-        <div
-          *ngIf="
+        <div class="form-group">
+          <label for="discountCard">BahnCard</label>
+          <select
+            id="discountCard"
+            formControlName="discountCard"
+            class="form-control"
+            required
+          >
+            <option value="none">Keine BahnCard</option>
+            <option value="BC25">BahnCard 25</option>
+            <option value="BC50">BahnCard 50</option>
+          </select>
+          @if (
             train.controls.discountCard.hasError('required') &&
             train.controls.discountCard.touched
-          "
-          class="error-message"
-        >
-          Bitte wähle deine BahnCard aus.
+          ) {
+            <div class="error-message">Bitte wähle deine BahnCard aus.</div>
+          }
         </div>
-      </div>
-    </fieldset>
+      </fieldset>
+    }
 
     <!-- car expenses -->
-    <fieldset *ngIf="car" [formGroup]="car">
-      <div class="form-group">
-        <label for="carType">Auto Typ</label>
-        <select
-          id="carType"
-          formControlName="type"
-          class="form-control"
-          required
-        >
-          <option value="combustion">Verbrenner</option>
-          <option value="plug-in-hybrid">Plug-in Hybrid</option>
-          <option value="electric">Elektro</option>
-        </select>
-        <div
-          *ngIf="
-            car.controls.type.hasError('required') && car.controls.type.touched
-          "
-          class="error-message"
-        >
-          Bitte wähle den Typ deines Autos aus.
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="passengers">Mitfahrer*innen</label>
-        <p>
-          <b>Hinweis:</b> Bist Du Teile der Strecke mit unterschiedlicher Anzahl
-          an Mitfahrer*innen gefahren? Dann gib bitte jede Teilstrecke als
-          einzelne Auslage an.
-        </p>
-        <div
-          class="passengers-item"
-          formArrayName="passengers"
-          *ngFor="
-            let passenger of car.controls.passengers.controls;
-            let i = index
-          "
-        >
-          <button class="jdav-btn tertiary icon" (click)="removePassenger(i)">
-            <span class="material-symbols-outlined">&#xe872;</span>
-          </button>
-          <input class="form-control not-filled" formControlName="{{ i }}" />
-          <span
-            *ngIf="passenger.hasError('required') && passenger.touched"
-            class="error-message"
-            >Bitte gib einen Namen für deine*n Mitfahrer*in an</span
+    @if (car) {
+      <fieldset [formGroup]="car">
+        <div class="form-group">
+          <label for="carType">Auto Typ</label>
+          <select
+            id="carType"
+            formControlName="type"
+            class="form-control"
+            required
           >
+            <option value="combustion">Verbrenner</option>
+            <option value="plug-in-hybrid">Plug-in Hybrid</option>
+            <option value="electric">Elektro</option>
+          </select>
+          @if (
+            car.controls.type.hasError('required') && car.controls.type.touched
+          ) {
+            <div class="error-message">
+              Bitte wähle den Typ deines Autos aus.
+            </div>
+          }
         </div>
-        <button
-          class="jdav-btn add-passenger tertiary icon"
-          (click)="addPassenger()"
-        >
-          <span class="material-symbols-outlined">&#xe145;</span>
-          Mitfahrer*in hinzufügen
-        </button>
-      </div>
-    </fieldset>
+
+        <div class="form-group">
+          <label for="passengers">Mitfahrer*innen</label>
+          <p>
+            <b>Hinweis:</b> Bist Du Teile der Strecke mit unterschiedlicher
+            Anzahl an Mitfahrer*innen gefahren? Dann gib bitte jede Teilstrecke
+            als einzelne Auslage an.
+          </p>
+          @for (
+            passenger of car.controls.passengers.controls;
+            track passenger;
+          ) {
+            <div class="passengers-item" formArrayName="passengers">
+              <button
+                class="jdav-btn tertiary icon"
+                (click)="removePassenger($index)"
+              >
+                <span class="material-symbols-outlined">&#xe872;</span>
+              </button>
+              <input
+                class="form-control not-filled"
+                formControlName="{{ $index }}"
+              />
+              @if (passenger.hasError('required') && passenger.touched) {
+                <span class="error-message">
+                  Bitte gib einen Namen für deine*n Mitfahrer*in an
+                </span>
+              }
+            </div>
+          }
+          <button
+            class="jdav-btn add-passenger tertiary icon"
+            (click)="addPassenger()"
+          >
+            <span class="material-symbols-outlined">&#xe145;</span>
+            Mitfahrer*in hinzufügen
+          </button>
+        </div>
+      </fieldset>
+    }
 
     <div class="button-container">
       <button type="submit" [disabled]="!form.valid" class="jdav-btn">
         Speichern
       </button>
     </div>
-  </div>
+  }
 </form>

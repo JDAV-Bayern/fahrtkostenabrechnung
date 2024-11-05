@@ -1,5 +1,5 @@
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
-import { NgFor, NgIf } from '@angular/common';
+
 import { Component, Inject } from '@angular/core';
 import {
   FormControl,
@@ -23,13 +23,7 @@ export interface TransportExpenseDialogData {
   templateUrl: './transport-expense-modal.component.html',
   styleUrls: ['./transport-expense-modal.component.css'],
   standalone: true,
-  imports: [
-    NgIf,
-    NgFor,
-    ReactiveFormsModule,
-    ExpenseTitlePipe,
-    TransportModePipe
-  ]
+  imports: [ReactiveFormsModule, ExpenseTitlePipe, TransportModePipe]
 })
 export class TransportExpenseModalComponent {
   form: FormGroup<TransportExpenseForm>;

@@ -14,25 +14,21 @@
       (click)="picker.open()"
     />
     <mat-datepicker touchUi #picker></mat-datepicker>
-    <div
-      *ngIf="
-        date.hasError('required') &&
-        !date.hasError('matDatepickerParse') &&
-        date.touched
-      "
-      class="error-message"
-    >
-      Bitte gib das Datum dieser Auslage an.
-    </div>
-    <div
-      *ngIf="date.hasError('matDatepickerParse') && date.touched"
-      class="error-message"
-    >
-      Bitte gib ein gültiges Datum an.
-    </div>
-    <div *ngIf="date.hasError('matDatepickerMax')" class="error-message">
-      Das Datum darf nicht in der Zukunft liegen.
-    </div>
+    @if (
+      date.hasError('required') &&
+      !date.hasError('matDatepickerParse') &&
+      date.touched
+    ) {
+      <div class="error-message">Bitte gib das Datum dieser Auslage an.</div>
+    }
+    @if (date.hasError('matDatepickerParse') && date.touched) {
+      <div class="error-message">Bitte gib ein gültiges Datum an.</div>
+    }
+    @if (date.hasError('matDatepickerMax')) {
+      <div class="error-message">
+        Das Datum darf nicht in der Zukunft liegen.
+      </div>
+    }
   </div>
 
   <div class="form-group">
@@ -44,12 +40,9 @@
       class="form-control"
       required
     />
-    <div
-      *ngIf="purpose.hasError('required') && purpose.touched"
-      class="error-message"
-    >
-      Bitte gib den Zweck dieser Ausgabe an.
-    </div>
+    @if (purpose.hasError('required') && purpose.touched) {
+      <div class="error-message">Bitte gib den Zweck dieser Ausgabe an.</div>
+    }
   </div>
 
   <div class="form-group">
@@ -61,15 +54,12 @@
       class="form-control"
       required
     />
-    <div
-      *ngIf="amount.hasError('required') && amount.touched"
-      class="error-message"
-    >
-      Bitte gib einen Betrag ein.
-    </div>
-    <div *ngIf="amount.hasError('min')" class="error-message">
-      Bitte gib eine gültigen Betrag ein.
-    </div>
+    @if (amount.hasError('required') && amount.touched) {
+      <div class="error-message">Bitte gib einen Betrag ein.</div>
+    }
+    @if (amount.hasError('min')) {
+      <div class="error-message">Bitte gib eine gültigen Betrag ein.</div>
+    }
   </div>
 
   <div class="button-container">

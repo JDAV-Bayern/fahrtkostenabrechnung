@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -10,7 +9,7 @@ import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbu
   templateUrl: './meeting-course-step.component.html',
   styleUrls: ['./meeting-course-step.component.css'],
   standalone: true,
-  imports: [NgIf, ReactiveFormsModule, FormCardComponent]
+  imports: [ReactiveFormsModule, FormCardComponent]
 })
 export class MeetingCourseStepComponent {
   form;

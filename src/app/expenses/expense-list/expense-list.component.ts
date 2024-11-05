@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { DialogRef } from '@angular/cdk/dialog';
 import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
-import { NgFor, NgIf } from '@angular/common';
+
 import { ExpenseCardComponent } from '../expense-card/expense-card.component';
 import { ExpenseType } from 'src/domain/expense.model';
 import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.service';
@@ -12,14 +12,7 @@ import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.s
   templateUrl: './expense-list.component.html',
   styleUrls: ['./expense-list.component.css'],
   standalone: true,
-  imports: [
-    NgIf,
-    NgFor,
-    ReactiveFormsModule,
-    CdkDrag,
-    CdkDropList,
-    ExpenseCardComponent
-  ]
+  imports: [ReactiveFormsModule, CdkDrag, CdkDropList, ExpenseCardComponent]
 })
 export class ExpenseListComponent {
   @Input({ required: true })

@@ -5,9 +5,9 @@
     <tr>
       <td>Veranstaltung:</td>
       <td>
-        <span *ngIf="meeting.type === 'course'">
+        @if (meeting.type === 'course') {
           {{ meeting.code }} &ndash;
-        </span>
+        }
         {{ meeting.name }}
       </td>
     </tr>
@@ -22,24 +22,33 @@
   </table>
 
   <table class="expenses">
-    <tr *ngFor="let entry of report.categories | keyvalue: originalOrder">
-      <td>{{ entry.key | expenseType }}:</td>
-      <td>{{ entry.value | currency }}</td>
-    </tr>
+    @for (
+      entry of report.categories | keyvalue: originalOrder;
+      track entry.key
+    ) {
+      <tr>
+        <td>{{ entry.key | expenseType }}:</td>
+        <td>{{ entry.value | currency }}</td>
+      </tr>
+    }
     <tr>
       <td>Erstattungsbetrag:</td>
       <td>{{ report.total | currency }}</td>
     </tr>
   </table>
 
-  <p *ngIf="report.totalReduced">
-    <b
-      >Da deine Sektion nicht in Bayern liegt, ist der Erstattungsbetrag gemäß
-      unserer Reisekostenrichtlinien auf
-      {{ report.total | currency }} begrenzt.</b
-    >
-  </p>
-  <p *ngFor="let warning of getWarnings()"><b>Warnung</b> {{ warning }}</p>
+  @if (report.totalReduced) {
+    <p>
+      <b
+        >Da deine Sektion nicht in Bayern liegt, ist der Erstattungsbetrag gemäß
+        unserer Reisekostenrichtlinien auf
+        {{ report.total | currency }} begrenzt.</b
+      >
+    </p>
+  }
+  @for (warning of getWarnings(); track warning) {
+    <p><b>Warnung</b> {{ warning }}</p>
+  }
 
   <div class="form-group">
     <label for="note">Bemerkung zu deiner Abrechnung</label>
@@ -47,17 +56,19 @@
     </textarea>
   </div>
 
-  <div *ngIf="report.receiptsRequired">
+  @if (report.receiptsRequired) {
     <h2>Belege</h2>
     <p>
       Bitte denke daran, dass wir die Belege für deine Zugtickets benötigen.
     </p>
-    <p *ngIf="reimbursement.meeting.type === 'committee'">
-      Falls du eine BahnCard benutzt hast, hänge bitte die Rechnung für diese
-      an. Die BahnCard wird für Gremien im angezeigten Betrag aktuell nicht
-      berücksichtigt, wird jedoch durch die LGS entsprechend zusätzlich
-      erstattet.
-    </p>
+    @if (reimbursement.meeting.type === 'committee') {
+      <p>
+        Falls du eine BahnCard benutzt hast, hänge bitte die Rechnung für diese
+        an. Die BahnCard wird für Gremien im angezeigten Betrag aktuell nicht
+        berücksichtigt, wird jedoch durch die LGS entsprechend zusätzlich
+        erstattet.
+      </p>
+    }
     <ngx-file-drop
       (onFileDrop)="fileDropped($event)"
       [accept]="'.pdf,.jpg,.png,.jpeg,.JPG,.JPEG,.PDF,.PNG'"
@@ -72,17 +83,23 @@
         </button>
       </ng-template>
     </ngx-file-drop>
-
-    <fieldset *ngIf="files.length" class="files-list">
-      <legend style="color: #999">Belege</legend>
-      <p class="file-list-entry" *ngFor="let file of files">
-        <button class="jdav-btn tertiary icon" (click)="removeFile(file.name)">
-          <span class="material-symbols-outlined">&#xe872;</span>
-        </button>
-        {{ file.name }}
-      </p>
-    </fieldset>
-  </div>
+    @if (files.length) {
+      <fieldset class="files-list">
+        <legend style="color: #999">Belege</legend>
+        @for (file of files; track file) {
+          <p class="file-list-entry">
+            <button
+              class="jdav-btn tertiary icon"
+              (click)="removeFile(file.name)"
+            >
+              <span class="material-symbols-outlined">&#xe872;</span>
+            </button>
+            {{ file.name }}
+          </p>
+        }
+      </fieldset>
+    }
+  }
 
   <button
     submitButton
@@ -91,15 +108,19 @@
     (click)="onSubmit()"
     class="jdav-btn"
   >
-    <app-progress-indicator *ngIf="loading"></app-progress-indicator>
-    <span *ngIf="!loading">PDF herunterladen</span>
+    @if (loading) {
+      <app-progress-indicator></app-progress-indicator>
+    } @else {
+      PDF herunterladen
+    }
   </button>
 </app-form-card>
 
 <div style="position: absolute; top: 2000px">
-  <app-pdf-view
-    *ngIf="showPdf"
-    [reimbursement]="reimbursement"
-    (fullyRendered)="pdfFullyRendered()"
-  ></app-pdf-view>
+  @if (showPdf) {
+    <app-pdf-view
+      [reimbursement]="reimbursement"
+      (fullyRendered)="pdfFullyRendered()"
+    ></app-pdf-view>
+  }
 </div>

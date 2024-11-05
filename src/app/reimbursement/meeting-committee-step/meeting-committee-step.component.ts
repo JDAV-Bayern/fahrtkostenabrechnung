@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -17,7 +16,6 @@ import { TimeInputDirective } from 'src/app/shared/time-input.directive';
   styleUrls: ['./meeting-committee-step.component.css'],
   standalone: true,
   imports: [
-    NgIf,
     RouterLink,
     ReactiveFormsModule,
     FormCardComponent,

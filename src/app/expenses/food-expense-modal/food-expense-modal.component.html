@@ -17,30 +17,23 @@
       (dateChange)="onDateChange()"
     />
     <mat-datepicker touchUi #picker></mat-datepicker>
-    <div
-      *ngIf="
-        date.hasError('required') &&
-        !date.hasError('matDatepickerParse') &&
-        date.touched
-      "
-      class="error-message"
-    >
-      Bitte gib das Datum dieser Auslage an.
-    </div>
-    <div
-      *ngIf="date.hasError('matDatepickerParse') && date.touched"
-      class="error-message"
-    >
-      Bitte gib ein gültiges Datum an.
-    </div>
-    <div
-      *ngIf="
-        date.hasError('matDatepickerMin') || date.hasError('matDatepickerMax')
-      "
-      class="error-message"
-    >
-      Bitte gib ein Datum während der Veranstaltung an.
-    </div>
+    @if (
+      date.hasError('required') &&
+      !date.hasError('matDatepickerParse') &&
+      date.touched
+    ) {
+      <div class="error-message">Bitte gib das Datum dieser Auslage an.</div>
+    }
+    @if (date.hasError('matDatepickerParse') && date.touched) {
+      <div class="error-message">Bitte gib ein gültiges Datum an.</div>
+    }
+    @if (
+      date.hasError('matDatepickerMin') || date.hasError('matDatepickerMax')
+    ) {
+      <div class="error-message">
+        Bitte gib ein Datum während der Veranstaltung an.
+      </div>
+    }
   </div>
 
   <div class="form-group">
@@ -51,16 +44,17 @@
       class="form-control"
       required
     >
-      <option *ngFor="let absence of options" [value]="absence">
-        {{ absence | absence }}
-      </option>
+      @for (absence of options; track absence) {
+        <option [value]="absence">
+          {{ absence | absence }}
+        </option>
+      }
     </select>
-    <div
-      *ngIf="absence.hasError('required') && absence.touched"
-      class="error-message"
-    >
-      Bitte gib die Dauer deiner Anwesenheit an.
-    </div>
+    @if (absence.hasError('required') && absence.touched) {
+      <div class="error-message">
+        Bitte gib die Dauer deiner Anwesenheit an.
+      </div>
+    }
   </div>
 
   <div class="form-group">

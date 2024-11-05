@@ -8,7 +8,7 @@ import { NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { FinishedDialogComponent } from './finished-dialog/finished-dialog.component';
 import { CurrencyPipe, KeyValuePipe, formatDate } from '@angular/common';
-import { NgFor, NgIf } from '@angular/common';
+
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ProgressIndicatorComponent } from 'src/app/shared/icons/progress-indicator/progress-indicator.component';
 import { PdfViewComponent } from './pdf-view/pdf-view.component';
@@ -22,8 +22,6 @@ import { ExpenseTypePipe } from '../../expenses/shared/expense-type.pipe';
   styleUrls: ['./overview-step.component.css'],
   standalone: true,
   imports: [
-    NgIf,
-    NgFor,
     ReactiveFormsModule,
     CurrencyPipe,
     KeyValuePipe,

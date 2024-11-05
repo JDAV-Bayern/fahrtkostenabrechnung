@@ -1,10 +1,4 @@
-import {
-  CurrencyPipe,
-  KeyValuePipe,
-  NgFor,
-  NgIf,
-  PercentPipe
-} from '@angular/common';
+import { CurrencyPipe, KeyValuePipe, PercentPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { expenseConfig } from 'src/app/expenses/expense.config';
@@ -21,8 +15,6 @@ import { MeetingType } from 'src/domain/meeting.model';
   styleUrls: ['./expense-rates.component.css'],
   standalone: true,
   imports: [
-    NgIf,
-    NgFor,
     CurrencyPipe,
     KeyValuePipe,
     PercentPipe,

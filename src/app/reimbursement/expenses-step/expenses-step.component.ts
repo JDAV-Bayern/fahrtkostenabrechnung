@@ -2,7 +2,7 @@ import { CdkDrag, CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { Component } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
-import { CurrencyPipe, NgIf } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { Direction, TransportMode } from 'src/domain/expense.model';
@@ -22,7 +22,6 @@ import { RouterLink } from '@angular/router';
   styleUrls: ['./expenses-step.component.css'],
   standalone: true,
   imports: [
-    NgIf,
     RouterLink,
     ReactiveFormsModule,
     CurrencyPipe,

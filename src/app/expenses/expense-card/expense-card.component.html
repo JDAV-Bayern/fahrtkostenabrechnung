@@ -2,21 +2,20 @@
   <table>
     <tr>
       <td class="tleft">
-        <span *ngIf="expense.type === 'transport'">
+        @if (expense.type === 'transport') {
           von <b>{{ expense.origin }}</b>
-        </span>
-        <span *ngIf="expense.type !== 'transport'">
+        } @else {
           <b>{{ expense.date | date }}</b>
-        </span>
+        }
       </td>
       <td class="tmid">{{ expense | expenseTitle }}</td>
       <th class="tright">{{ expense | expenseAmount | currency }}</th>
     </tr>
     <tr>
       <td class="tleft">
-        <span *ngIf="expense.type === 'transport'">
+        @if (expense.type === 'transport') {
           nach <b>{{ expense.destination }}</b>
-        </span>
+        }
       </td>
       <td class="tmid">
         <app-expense-details [expense]="expense" />

@@ -1,4 +1,3 @@
-import { NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 
 import {
@@ -19,7 +18,7 @@ export interface Breadcrumb {
   templateUrl: './breadcrumbs.component.html',
   styleUrls: ['./breadcrumbs.component.css'],
   standalone: true,
-  imports: [NgIf, NgFor, RouterLink]
+  imports: [RouterLink]
 })
 export class BreadcrumbsComponent {
   breadcrumbs: Breadcrumb[] = [];

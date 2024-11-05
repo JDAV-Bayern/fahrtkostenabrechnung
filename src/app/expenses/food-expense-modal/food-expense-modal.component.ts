@@ -1,5 +1,5 @@
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
-import { NgFor, NgIf } from '@angular/common';
+
 import { Component, Inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -16,7 +16,7 @@ import { getFoodOptions } from 'src/app/reimbursement/shared/food.validator';
   templateUrl: './food-expense-modal.component.html',
   styleUrls: ['./food-expense-modal.component.css'],
   standalone: true,
-  imports: [NgIf, NgFor, ReactiveFormsModule, MatDatepickerModule, AbsencePipe]
+  imports: [ReactiveFormsModule, MatDatepickerModule, AbsencePipe]
 })
 export class FoodExpenseModalComponent {
   form: FormGroup<FoodExpenseForm>;

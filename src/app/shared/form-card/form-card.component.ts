@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -6,8 +5,7 @@ import { Router } from '@angular/router';
   selector: 'app-form-card',
   templateUrl: './form-card.component.html',
   styleUrls: ['./form-card.component.css'],
-  standalone: true,
-  imports: [NgIf]
+  standalone: true
 })
 export class FormCardComponent {
   @Input() nextStep?: string;

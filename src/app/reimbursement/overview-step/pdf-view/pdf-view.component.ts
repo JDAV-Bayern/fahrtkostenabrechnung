@@ -1,4 +1,4 @@
-import { CurrencyPipe, DatePipe, NgFor, NgIf } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SectionService } from 'src/app/core/section.service';
 import { logoBase64 } from 'src/assets/logoBase64';
@@ -18,8 +18,6 @@ import { ReimbursementService } from '../../shared/reimbursement.service';
   styleUrls: ['./pdf-view.component.css'],
   standalone: true,
   imports: [
-    NgIf,
-    NgFor,
     DatePipe,
     CurrencyPipe,
     MeetingTypePipe,

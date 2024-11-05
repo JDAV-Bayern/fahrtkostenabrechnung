@@ -1,4 +1,4 @@
-import { CurrencyPipe, DecimalPipe, NgIf } from '@angular/common';
+import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import {
   CarTypePipe,
@@ -15,7 +15,6 @@ import { Expense } from 'src/domain/expense.model';
   styleUrls: ['./expense-details.component.css'],
   standalone: true,
   imports: [
-    NgIf,
     DecimalPipe,
     CurrencyPipe,
     DiscountCardPipe,

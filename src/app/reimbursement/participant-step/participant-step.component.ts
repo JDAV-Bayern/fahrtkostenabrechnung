@@ -5,7 +5,7 @@ import { PlzService } from 'src/app/core/plz.service';
 import { SectionService } from 'src/app/core/section.service';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { NgFor, NgIf } from '@angular/common';
+
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { JdavState } from 'src/domain/section.model';
 
@@ -15,8 +15,6 @@ import { JdavState } from 'src/domain/section.model';
   styleUrls: ['./participant-step.component.css'],
   standalone: true,
   imports: [
-    NgIf,
-    NgFor,
     RouterLink,
     ReactiveFormsModule,
     MatAutocompleteModule,

@@ -1,5 +1,5 @@
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
-import { NgIf } from '@angular/common';
+
 import { Component, Inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -11,7 +11,7 @@ import { RawFormValue } from 'src/app/shared/form-value';
   templateUrl: './material-expense-modal.component.html',
   styleUrls: ['./material-expense-modal.component.css'],
   standalone: true,
-  imports: [NgIf, ReactiveFormsModule, MatDatepickerModule]
+  imports: [ReactiveFormsModule, MatDatepickerModule]
 })
 export class MaterialExpenseModalComponent {
   form: FormGroup<MaterialExpenseForm>;

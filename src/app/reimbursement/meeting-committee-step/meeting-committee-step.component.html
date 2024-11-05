@@ -18,12 +18,9 @@
         class="form-control"
         required
       />
-      <div
-        *ngIf="name.hasError('required') && name.touched"
-        class="error-message"
-      >
-        Bitte gib den Zweck deiner Reise an.
-      </div>
+      @if (name.hasError('required') && name.touched) {
+        <div class="error-message">Bitte gib den Zweck deiner Reise an.</div>
+      }
     </div>
 
     <div class="form-group">
@@ -35,12 +32,9 @@
         class="form-control"
         required
       />
-      <div
-        *ngIf="location.hasError('required') && location.touched"
-        class="error-message"
-      >
-        Bitte gib den Zielort deiner Reise an.
-      </div>
+      @if (location.hasError('required') && location.touched) {
+        <div class="error-message">Bitte gib den Zielort deiner Reise an.</div>
+      }
     </div>
 
     <fieldset [formGroup]="time">
@@ -70,34 +64,26 @@
             required
           />
         </fieldset>
-        <div
-          *ngIf="
-            startDate.hasError('required') &&
-            !startDate.hasError('matDatepickerParse') &&
-            startDate.touched
-          "
-          class="error-message"
-        >
-          Bitte gib das Startdatum deiner Reise an.
-        </div>
-        <div
-          *ngIf="startDate.hasError('matDatepickerParse') && startDate.touched"
-          class="error-message"
-        >
-          Bitte gib ein gültiges Datum an.
-        </div>
-        <div
-          *ngIf="startTime.hasError('required') && startTime.touched"
-          class="error-message"
-        >
-          Bitte gib die Startzeit deiner Reise an.
-        </div>
-        <div
-          *ngIf="startTime.hasError('invalidTime') && startTime.touched"
-          class="error-message"
-        >
-          Bitte gib eine gültige Zeit an.
-        </div>
+        @if (
+          startDate.hasError('required') &&
+          !startDate.hasError('matDatepickerParse') &&
+          startDate.touched
+        ) {
+          <div class="error-message">
+            Bitte gib das Startdatum deiner Reise an.
+          </div>
+        }
+        @if (startDate.hasError('matDatepickerParse') && startDate.touched) {
+          <div class="error-message">Bitte gib ein gültiges Datum an.</div>
+        }
+        @if (startTime.hasError('required') && startTime.touched) {
+          <div class="error-message">
+            Bitte gib die Startzeit deiner Reise an.
+          </div>
+        }
+        @if (startTime.hasError('invalidTime') && startTime.touched) {
+          <div class="error-message">Bitte gib eine gültige Zeit an.</div>
+        }
       </div>
 
       <div class="form-group">
@@ -126,42 +112,38 @@
             required
           />
         </fieldset>
-        <div
-          *ngIf="
-            endDate.hasError('required') &&
-            !endDate.hasError('matDatepickerParse') &&
-            endDate.touched
-          "
-          class="error-message"
-        >
-          Bitte gib das Enddatum deiner Reise an.
-        </div>
-        <div
-          *ngIf="endDate.hasError('matDatepickerParse') && endDate.touched"
-          class="error-message"
-        >
-          Bitte gib ein gültiges Datum an.
-        </div>
-        <div
-          *ngIf="endTime.hasError('required') && endTime.touched"
-          class="error-message"
-        >
-          Bitte gib die Endzeit deiner Reise an.
-        </div>
-        <div
-          *ngIf="endTime.hasError('invalidTime') && endTime.touched"
-          class="error-message"
-        >
-          Bitte gib eine gültige Zeit an.
-        </div>
+        @if (
+          endDate.hasError('required') &&
+          !endDate.hasError('matDatepickerParse') &&
+          endDate.touched
+        ) {
+          <div class="error-message">
+            Bitte gib das Enddatum deiner Reise an.
+          </div>
+        }
+        @if (endDate.hasError('matDatepickerParse') && endDate.touched) {
+          <div class="error-message">Bitte gib ein gültiges Datum an.</div>
+        }
+        @if (endTime.hasError('required') && endTime.touched) {
+          <div class="error-message">
+            Bitte gib die Endzeit deiner Reise an.
+          </div>
+        }
+        @if (endTime.hasError('invalidTime') && endTime.touched) {
+          <div class="error-message">Bitte gib eine gültige Zeit an.</div>
+        }
       </div>
 
-      <div *ngIf="time.hasError('dateRangeOrder')" class="error-message">
-        Das Ende der Reise darf nicht vor dem Start liegen.
-      </div>
-      <div *ngIf="time.hasError('dateRangePast')" class="error-message">
-        Die Reise muss bereits vollständig abgeschlossen sein.
-      </div>
+      @if (time.hasError('dateRangeOrder')) {
+        <div class="error-message">
+          Das Ende der Reise darf nicht vor dem Start liegen.
+        </div>
+      }
+      @if (time.hasError('dateRangePast')) {
+        <div class="error-message">
+          Die Reise muss bereits vollständig abgeschlossen sein.
+        </div>
+      }
     </fieldset>
   </fieldset>
 </app-form-card>

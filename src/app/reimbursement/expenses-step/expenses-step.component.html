@@ -21,12 +21,12 @@
       >
         <h3>Hinfahrt</h3>
       </app-expense-list>
-      <div
-        *ngIf="inbound.hasError('transportModeLimited')"
-        class="error-message"
-      >
-        Du kannst pro Fahrtrichtung maximal eine Auslage für Abotickets angeben.
-      </div>
+      @if (inbound.hasError('transportModeLimited')) {
+        <div class="error-message">
+          Du kannst pro Fahrtrichtung maximal eine Auslage für Abotickets
+          angeben.
+        </div>
+      }
 
       <app-expense-list
         expenseType="transport"
@@ -37,12 +37,12 @@
       >
         <h3>Vor Ort</h3>
       </app-expense-list>
-      <div
-        *ngIf="onsite.hasError('transportModesAllowed')"
-        class="error-message"
-      >
-        Vor Ort können keine Fahrradfahrten oder Abotickets abgerechnet werden.
-      </div>
+      @if (onsite.hasError('transportModesAllowed')) {
+        <div class="error-message">
+          Vor Ort können keine Fahrradfahrten oder Abotickets abgerechnet
+          werden.
+        </div>
+      }
 
       <app-expense-list
         expenseType="transport"
@@ -59,12 +59,12 @@
           </button>
         </div>
       </app-expense-list>
-      <div
-        *ngIf="outbound.hasError('transportModeLimited')"
-        class="error-message"
-      >
-        Du kannst pro Fahrtrichtung maximal eine Auslage für Abotickets angeben.
-      </div>
+      @if (outbound.hasError('transportModeLimited')) {
+        <div class="error-message">
+          Du kannst pro Fahrtrichtung maximal eine Auslage für Abotickets
+          angeben.
+        </div>
+      }
     </div>
 
     <p class="subtotal">
@@ -72,8 +72,8 @@
       <span>{{ total | currency }}</span>
     </p>
 
-    <div *ngIf="form.hasError('anyRequired')" class="error-message">
-      Bitte gib mindestens eine Auslage an.
-    </div>
+    @if (form.hasError('anyRequired')) {
+      <div class="error-message">Bitte gib mindestens eine Auslage an.</div>
+    }
   </fieldset>
 </app-form-card>

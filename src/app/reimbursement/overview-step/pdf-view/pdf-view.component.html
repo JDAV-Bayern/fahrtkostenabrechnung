@@ -11,40 +11,44 @@
   </p>
 
   <div class="info">
-    <div *ngIf="meeting.type === 'course'">
-      <h2>Kursdaten</h2>
-      <table class="detailstable">
-        <tr>
-          <td>Kurs:</td>
-          <td>{{ meeting.name }}</td>
-        </tr>
-        <tr>
-          <td>Kursnummer:</td>
-          <td>{{ meeting.code }}</td>
-        </tr>
-      </table>
-    </div>
-    <div *ngIf="meeting.type === 'committee'">
-      <h2>Reisedaten</h2>
-      <table class="detailstable">
-        <tr>
-          <td>Zweck:</td>
-          <td>{{ meeting.name }}</td>
-        </tr>
-        <tr>
-          <td>Ort:</td>
-          <td>{{ meeting.location }}</td>
-        </tr>
-        <tr>
-          <td>Beginn:</td>
-          <td>{{ meeting.time.start | date: 'short' }}</td>
-        </tr>
-        <tr>
-          <td>Ende:</td>
-          <td>{{ meeting.time.end | date: 'short' }}</td>
-        </tr>
-      </table>
-    </div>
+    @if (meeting.type === 'course') {
+      <div>
+        <h2>Kursdaten</h2>
+        <table class="detailstable">
+          <tr>
+            <td>Kurs:</td>
+            <td>{{ meeting.name }}</td>
+          </tr>
+          <tr>
+            <td>Kursnummer:</td>
+            <td>{{ meeting.code }}</td>
+          </tr>
+        </table>
+      </div>
+    }
+    @if (meeting.type === 'committee') {
+      <div>
+        <h2>Reisedaten</h2>
+        <table class="detailstable">
+          <tr>
+            <td>Zweck:</td>
+            <td>{{ meeting.name }}</td>
+          </tr>
+          <tr>
+            <td>Ort:</td>
+            <td>{{ meeting.location }}</td>
+          </tr>
+          <tr>
+            <td>Beginn:</td>
+            <td>{{ meeting.time.start | date: 'short' }}</td>
+          </tr>
+          <tr>
+            <td>Ende:</td>
+            <td>{{ meeting.time.end | date: 'short' }}</td>
+          </tr>
+        </table>
+      </div>
+    }
     <div>
       <h2>Teilnehmer*innendaten</h2>
       <table class="detailstable">
@@ -64,16 +68,22 @@
           <td>IBAN:</td>
           <td>{{ participant.iban }}</td>
         </tr>
-        <tr *ngIf="participant.bic?.length">
-          <td>BIC:</td>
-          <td>{{ participant.bic }}</td>
-        </tr>
+        @if (participant.bic?.length) {
+          <tr>
+            <td>BIC:</td>
+            <td>{{ participant.bic }}</td>
+          </tr>
+        }
       </table>
     </div>
   </div>
 
-  <p *ngIf="reimbursement.note !== ''"><b>Bemerkung:</b></p>
-  <p *ngFor="let line of reimbursement.note.split('\n')">{{ line }}</p>
+  @if (reimbursement.note !== '') {
+    <p><b>Bemerkung:</b></p>
+    @for (line of reimbursement.note.split('\n'); track line) {
+      <p>{{ line }}</p>
+    }
+  }
 
   <h2>Abrechnungspositionen</h2>
 
@@ -93,93 +103,111 @@
         <th scope="row" class="align-right">{{ report.total | currency }}</th>
       </tr>
     </thead>
-    <tbody *ngIf="report.categories.transport">
-      <tr>
-        <th scope="rowgroup" colspan="3" class="category-header">
-          Fahrtkosten
-        </th>
-        <th scope="rowgroup" class="align-right">
-          {{ report.categories.transport | currency }}
-        </th>
-      </tr>
-      <ng-container *ngFor="let direction of directions">
+    @if (report.categories.transport) {
+      <tbody>
         <tr>
-          <td></td>
-          <td scope="rowgroup" colspan="3" class="category-header">
-            {{ direction | direction }}
-          </td>
-        </tr>
-
-        <tr *ngFor="let expense of reimbursement.expenses.transport[direction]">
-          <td class="align-right">
-            <p>von</p>
-            <p>nach</p>
-          </td>
-          <th scope="row">
-            <p>{{ expense.origin }}</p>
-            <p>{{ expense.destination }}</p>
+          <th scope="rowgroup" colspan="3" class="category-header">
+            Fahrtkosten
           </th>
-          <td>
-            <p>
-              <b>{{ expense | expenseTitle }}</b>
-            </p>
-            <p class="details">
-              <app-expense-details [expense]="expense" />
-            </p>
-          </td>
-          <td class="align-right">{{ expense | expenseAmount | currency }}</td>
+          <th scope="rowgroup" class="align-right">
+            {{ report.categories.transport | currency }}
+          </th>
         </tr>
-      </ng-container>
-    </tbody>
+        @for (direction of directions; track direction) {
+          <tr>
+            <td></td>
+            <td scope="rowgroup" colspan="3" class="category-header">
+              {{ direction | direction }}
+            </td>
+          </tr>
+          @for (
+            expense of reimbursement.expenses.transport[direction];
+            track expense
+          ) {
+            <tr>
+              <td class="align-right">
+                <p>von</p>
+                <p>nach</p>
+              </td>
+              <th scope="row">
+                <p>{{ expense.origin }}</p>
+                <p>{{ expense.destination }}</p>
+              </th>
+              <td>
+                <p>
+                  <b>{{ expense | expenseTitle }}</b>
+                </p>
+                <p class="details">
+                  <app-expense-details [expense]="expense" />
+                </p>
+              </td>
+              <td class="align-right">
+                {{ expense | expenseAmount | currency }}
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    }
 
-    <tbody *ngIf="report.categories.food">
-      <tr>
-        <th scope="col" colspan="3" class="category-header">Tagegeld</th>
-        <th scope="col" class="align-right">
-          {{ report.categories.food | currency }}
-        </th>
-      </tr>
+    @if (report.categories.food) {
+      <tbody>
+        <tr>
+          <th scope="col" colspan="3" class="category-header">Tagegeld</th>
+          <th scope="col" class="align-right">
+            {{ report.categories.food | currency }}
+          </th>
+        </tr>
+        @for (expense of reimbursement.expenses.food; track expense) {
+          <tr>
+            <th scope="row" colspan="2">
+              {{ expense.date | date }}
+            </th>
+            <td>
+              <p>
+                <b>{{ expense | expenseTitle }}</b>
+              </p>
+              <p class="details">
+                <app-expense-details [expense]="expense" />
+              </p>
+            </td>
+            <td class="align-right">
+              {{ expense | expenseAmount | currency }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    }
 
-      <tr *ngFor="let expense of reimbursement.expenses.food">
-        <th scope="row" colspan="2">
-          {{ expense.date | date }}
-        </th>
-        <td>
-          <p>
-            <b>{{ expense | expenseTitle }}</b>
-          </p>
-          <p class="details">
-            <app-expense-details [expense]="expense" />
-          </p>
-        </td>
-        <td class="align-right">{{ expense | expenseAmount | currency }}</td>
-      </tr>
-    </tbody>
-
-    <tbody *ngIf="report.categories.material">
-      <tr>
-        <th scope="col" colspan="3" class="category-header">
-          Sonstige Auslagen
-        </th>
-        <th scope="col" class="align-right">
-          {{ report.categories.material | currency }}
-        </th>
-      </tr>
-
-      <tr *ngFor="let expense of reimbursement.expenses.material">
-        <th scope="row" colspan="2">
-          {{ expense.date | date }}
-        </th>
-        <td>
-          <p>
-            <b>{{ expense | expenseTitle }}</b>
-          </p>
-          <p class="details">
-            <app-expense-details [expense]="expense" />
-          </p>
-        </td>
-        <td class="align-right">{{ expense | expenseAmount | currency }}</td>
-      </tr>
-    </tbody>
+    @if (report.categories.material) {
+      <tbody>
+        <tr>
+          <th scope="col" colspan="3" class="category-header">
+            Sonstige Auslagen
+          </th>
+          <th scope="col" class="align-right">
+            {{ report.categories.material | currency }}
+          </th>
+        </tr>
+        @for (expense of reimbursement.expenses.material; track expense) {
+          <tr>
+            <th scope="row" colspan="2">
+              {{ expense.date | date }}
+            </th>
+            <td>
+              <p>
+                <b>{{ expense | expenseTitle }}</b>
+              </p>
+              <p class="details">
+                <app-expense-details [expense]="expense" />
+              </p>
+            </td>
+            <td class="align-right">
+              {{ expense | expenseAmount | currency }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    }
   </table>
 </div>

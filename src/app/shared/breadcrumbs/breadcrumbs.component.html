@@ -1,8 +1,12 @@
 <ol class="breadcrumbs">
-  <li *ngFor="let bc of breadcrumbs; let last = last">
-    <a [routerLink]="bc.link">
-      {{ bc.label }}
-    </a>
-    <span *ngIf="!last" class="material-symbols-outlined">chevron_right</span>
-  </li>
+  @for (bc of breadcrumbs; track bc) {
+    <li>
+      <a [routerLink]="bc.link">
+        {{ bc.label }}
+      </a>
+      @if (!$last) {
+        <span class="material-symbols-outlined">chevron_right</span>
+      }
+    </li>
+  }
 </ol>

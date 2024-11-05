@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { CurrencyPipe, DatePipe, NgIf } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ExpenseDetailsComponent } from '../shared/expense-details/expense-details.component';
 import { Expense } from 'src/domain/expense.model';
 import { ExpenseTitlePipe } from '../shared/expense-title.pipe';
@@ -11,7 +11,6 @@ import { ExpenseAmountPipe } from '../shared/expense-amount.pipe';
   styleUrls: ['./expense-card.component.css'],
   standalone: true,
   imports: [
-    NgIf,
     CurrencyPipe,
     DatePipe,
     ExpenseTitlePipe,

@@ -11,27 +11,25 @@
         oninput="this.value = this.value.toUpperCase();"
         required
       />
-      <div
-        *ngIf="code?.hasError('required') && code?.touched"
-        class="error-message"
-      >
-        Bitte gib die Kursnummer ein.
-      </div>
-      <div
-        *ngIf="code?.hasError('unknownCourse') && code?.touched"
-        class="error-message"
-      >
-        <p>Bitte gib eine gültige Kursnummer an.</p>
-        <p>
-          Kursnummern der JDAV Bayern haben das Format BXXXGA, BXXXFB oder
-          BXXXAM mit einer dreistelligen Zahl. Bitte stelle sicher, dass du
-          einen Kurs der JDAV Bayern besucht hast.
-        </p>
-      </div>
-      <div *ngIf="code?.hasError('federalCourse')" class="error-message">
-        Diese Kursnummer (JXXX) sieht nach einem Kurs des Bundesverbands aus.
-        Diese können nicht über dieses Formular abgerechnet werden.
-      </div>
+      @if (code?.hasError('required') && code?.touched) {
+        <div class="error-message">Bitte gib die Kursnummer ein.</div>
+      }
+      @if (code?.hasError('unknownCourse') && code?.touched) {
+        <div class="error-message">
+          <p>Bitte gib eine gültige Kursnummer an.</p>
+          <p>
+            Kursnummern der JDAV Bayern haben das Format BXXXGA, BXXXFB oder
+            BXXXAM mit einer dreistelligen Zahl. Bitte stelle sicher, dass du
+            einen Kurs der JDAV Bayern besucht hast.
+          </p>
+        </div>
+      }
+      @if (code?.hasError('federalCourse')) {
+        <div class="error-message">
+          Diese Kursnummer (JXXX) sieht nach einem Kurs des Bundesverbands aus.
+          Diese können nicht über dieses Formular abgerechnet werden.
+        </div>
+      }
     </div>
     <div class="form-group">
       <label for="courseName">Kursname</label>
@@ -42,12 +40,9 @@
         class="form-control"
         required
       />
-      <div
-        *ngIf="name.hasError('required') && name.touched"
-        class="error-message"
-      >
-        Bitte gib den Kursnamen ein.
-      </div>
+      @if (name.hasError('required') && name.touched) {
+        <div class="error-message">Bitte gib den Kursnamen ein.</div>
+      }
     </div>
   </fieldset>
 </app-form-card>

@@ -3,7 +3,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import { CurrencyPipe, DatePipe, NgIf } from '@angular/common';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ReimbursementService } from '../shared/reimbursement.service';
 import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.service';
 import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
@@ -18,7 +18,6 @@ import { getFoodOptions } from '../shared/food.validator';
   styleUrls: ['./expenses-extra-step.component.css'],
   standalone: true,
   imports: [
-    NgIf,
     ReactiveFormsModule,
     CurrencyPipe,
     DatePipe,

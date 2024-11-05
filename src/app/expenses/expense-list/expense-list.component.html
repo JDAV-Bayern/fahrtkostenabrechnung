@@ -6,18 +6,15 @@
     [cdkDropListEnterPredicate]="enterPredicate"
   >
     <!-- TODO: readd [formArrayName]="form" -->
-    <div
-      *ngFor="let expenseForm of form.controls; index as i"
-      cdkDrag
-      [cdkDragData]="expenseForm"
-      (cdkDragDropped)="drop($event)"
-    >
-      <app-expense-card
-        [expense]="getExpense(expenseForm)"
-        (editRow)="openExpenseDialog(expenseForm)"
-        (deleteRow)="deleteExpense(i)"
-      />
-    </div>
+    @for (expenseForm of form.controls; track expenseForm) {
+      <div cdkDrag [cdkDragData]="expenseForm" (cdkDragDropped)="drop($event)">
+        <app-expense-card
+          [expense]="getExpense(expenseForm)"
+          (editRow)="openExpenseDialog(expenseForm)"
+          (deleteRow)="deleteExpense($index)"
+        />
+      </div>
+    }
   </div>
   <button (click)="openExpenseDialog()" class="jdav-btn icon">
     <span class="material-symbols-outlined">add</span>
