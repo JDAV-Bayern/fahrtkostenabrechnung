@@ -1,5 +1,5 @@
 import { DEFAULT_DIALOG_CONFIG, DialogConfig } from '@angular/cdk/dialog';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
 import {
   ApplicationConfig,
   DEFAULT_CURRENCY_CODE,
@@ -46,7 +46,12 @@ export const appConfig: ApplicationConfig = {
       ...(environment.useHashRouting ? [withHashLocation()] : [])
     ),
     provideAnimations(),
-    provideHttpClient(),
+    provideHttpClient(
+      withXsrfConfiguration({
+        cookieName: 'csrftoken',
+        headerName: 'X-CSRFToken'
+      })
+    ),
     importProvidersFrom(DateFnsModule),
     { provide: DEFAULT_CURRENCY_CODE, useValue: 'EUR' },
     { provide: DEFAULT_DIALOG_CONFIG, useValue: DIALOG_CONFIG },
