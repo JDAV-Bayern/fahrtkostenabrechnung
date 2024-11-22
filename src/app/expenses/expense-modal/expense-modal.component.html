@@ -1,0 +1,17 @@
+@switch (type) {
+  @case ('transport') {
+    <app-transport-expense-modal
+      [formControl]="control"
+      [allowedModes]="allowedModes"
+      [completion]="completion"
+    ></app-transport-expense-modal>
+  }
+  @case ('food') {
+    <app-food-expense-modal [formControl]="control"></app-food-expense-modal>
+  }
+  @case ('material') {
+    <app-material-expense-modal
+      [formControl]="control"
+    ></app-material-expense-modal>
+  }
+}

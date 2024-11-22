@@ -142,6 +142,6 @@ export class ParticipantStepComponent implements OnInit {
         .replace(/\s/g, '')
         .match(/.{1,4}/g)
         ?.join(' ') || '';
-    this.form.controls.bankAccount.controls.iban.setValue(formatted);
+    this.iban.setValue(formatted);
   }
 }

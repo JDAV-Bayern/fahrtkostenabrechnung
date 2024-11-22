@@ -5,7 +5,7 @@
 
   @if (mode.invalid) {
     <div class="means-of-travel-buttons-container">
-      @for (modeOption of allowedModes; track modeOption) {
+      @for (modeOption of allowedModes(); track modeOption) {
         <button
           class="jdav-btn secondary icon"
           (click)="chooseExpense(modeOption)"
@@ -48,7 +48,7 @@
     </div>
 
     <!-- car and bike expenses -->
-    @if (distance) {
+    @if (distance.enabled) {
       <div class="form-group">
         <label for="distance">Strecke (km)</label>
         <input
@@ -67,8 +67,8 @@
       </div>
     }
 
-    <!-- public expenses -->
-    @if (ticket) {
+    <!-- public transport expenses -->
+    @if (ticket.enabled) {
       <fieldset [formGroup]="ticket">
         <div class="form-group">
           <label for="price">Ticketpreis (ermäßigt)</label>
@@ -113,7 +113,7 @@
     }
 
     <!-- car expenses -->
-    @if (carTrip) {
+    @if (carTrip.enabled) {
       <fieldset [formGroup]="carTrip">
         <div class="form-group">
           <label for="engineType">Auto Typ</label>
@@ -157,7 +157,7 @@
               </button>
               <input
                 class="form-control not-filled"
-                formControlName="{{ $index }}"
+                [formControlName]="$index"
               />
               @if (passenger.hasError('required') && passenger.touched) {
                 <span class="error-message">
@@ -167,6 +167,7 @@
             </div>
           }
           <button
+            type="button"
             class="jdav-btn add-passenger tertiary icon"
             (click)="addPassenger()"
           >
