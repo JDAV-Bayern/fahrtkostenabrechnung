@@ -1,5 +1,5 @@
 import { DEFAULT_DIALOG_CONFIG, DialogConfig } from '@angular/cdk/dialog';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXsrfConfiguration } from '@angular/common/http';
 import { ApplicationConfig, DEFAULT_CURRENCY_CODE } from '@angular/core';
 import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { MAT_DATE_LOCALE, MatDateFormats } from '@angular/material/core';
@@ -43,7 +43,12 @@ export const appConfig: ApplicationConfig = {
       ...(environment.useHashRouting ? [withHashLocation()] : [])
     ),
     provideAnimations(),
-    provideHttpClient(),
+    provideHttpClient(
+      withXsrfConfiguration({
+        cookieName: 'csrftoken',
+        headerName: 'X-CSRFToken'
+      })
+    ),
     provideDateFnsAdapter(DATE_FORMATS),
     { provide: DEFAULT_CURRENCY_CODE, useValue: 'EUR' },
     { provide: DEFAULT_DIALOG_CONFIG, useValue: DIALOG_CONFIG },
