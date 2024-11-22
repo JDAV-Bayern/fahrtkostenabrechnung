@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { map, Observable, switchMap } from 'rxjs';
 import { SectionService } from 'src/app/core/section.service';
@@ -11,6 +12,7 @@ import {
   TransportExpense
 } from 'src/domain/expense.model';
 import { MeetingType } from 'src/domain/meeting.model';
+import { ReimbursementDto } from 'src/domain/reimbursement.dto';
 import { Reimbursement } from 'src/domain/reimbursement.model';
 
 export type ReimbursementReport = {
@@ -24,6 +26,7 @@ export type ReimbursementReport = {
   providedIn: 'root'
 })
 export class ReimbursementService {
+  private readonly http = inject(HttpClient);
   private readonly expenseService = inject(ExpenseService);
   private readonly sectionService = inject(SectionService);
 
@@ -97,5 +100,42 @@ export class ReimbursementService {
         return { categories, total, totalReduced, receiptsRequired };
       })
     );
+  }
+
+  save(reimbursement: Reimbursement) {
+    this.http
+      .post<ReimbursementDto>('/api/reimbursements', {
+        ...reimbursement,
+        participant: {
+          given_name: reimbursement.participant.givenName,
+          family_name: reimbursement.participant.familyName,
+          section_id: reimbursement.participant.sectionId,
+          email: reimbursement.participant.email,
+          address: {
+            line1: reimbursement.participant.address.line1,
+            postal_code: reimbursement.participant.address.postalCode,
+            locality: reimbursement.participant.address.locality,
+            country_id: reimbursement.participant.address.countryId
+          },
+          bank_account: reimbursement.participant.bankAccount
+        },
+        transport: [
+          ...reimbursement.expenses.transport.inbound.map(e => ({
+            ...e,
+            direction: 'inbound'
+          })),
+          ...reimbursement.expenses.transport.onsite.map(e => ({
+            ...e,
+            direction: 'onsite'
+          })),
+          ...reimbursement.expenses.transport.outbound.map(e => ({
+            ...e,
+            direction: 'outbound'
+          }))
+        ],
+        food: reimbursement.expenses.food,
+        material: reimbursement.expenses.material
+      })
+      .subscribe(console.log);
   }
 }

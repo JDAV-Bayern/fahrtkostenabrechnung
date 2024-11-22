@@ -201,6 +201,12 @@ export class OverviewStepComponent {
   onSubmit() {
     this.loading = true;
 
+    this.reimbursement$
+      .pipe(first())
+      .subscribe(reimbursement =>
+        this.reimbursementService.save(reimbursement)
+      );
+
     const section$ = this.participant$.pipe(
       switchMap(participant =>
         this.sectionService.getSection(participant.sectionId)
