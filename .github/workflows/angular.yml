@@ -24,4 +24,4 @@ jobs:
     - name: Build artifact
       run: npm run build
     - name: Run tests
-      run: npm test
+      run: npm test -- --no-watch --no-progress --browsers=ChromeHeadless
