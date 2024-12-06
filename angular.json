@@ -19,6 +19,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "localize": true,
             "outputPath": {
               "base": "dist/portal-jdav-bayern"
             },

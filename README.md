@@ -19,7 +19,7 @@ Gib gerne deinen Senf dazu und stell einen Pull request. Das Projekt ist in Angu
 Um ein neues Release zu erstellen einfach folgenden Befehl ausführen:
 
 ```bash
-yarn release:<<patch|minor|major>>
+npm version <patch|minor|major>
 ```
 
 Dadruch wird automatisch die Versionsnummer entprechend des Arguments (patch, minor oder major) in der `package.json` erhöht, ein Commit und ein Tag erstellt.

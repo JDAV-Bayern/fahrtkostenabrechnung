@@ -4,12 +4,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --localize",
+    "build": "ng build",
+    "build:staging": "ng build --configuration staging",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test",
-    "release:patch": "yarn version --patch",
-    "release:minor": "yarn version --minor",
-    "release:major": "yarn version --major"
+    "test": "ng test"
   },
   "private": true,
   "dependencies": {
@@ -20,7 +18,7 @@
     "@angular/core": "^18.0.3",
     "@angular/forms": "^18.0.3",
     "@angular/localize": "^18.0.3",
-    "@angular/material": "~18.0.4",
+    "@angular/material": "^18.0.4",
     "@angular/material-date-fns-adapter": "^18.0.4",
     "@angular/platform-browser": "^18.0.3",
     "@angular/platform-browser-dynamic": "^18.0.3",
