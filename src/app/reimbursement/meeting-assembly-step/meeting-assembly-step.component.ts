@@ -8,7 +8,6 @@ import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbu
   selector: 'app-meeting-assembly-step',
   templateUrl: './meeting-assembly-step.component.html',
   styleUrls: ['./meeting-assembly-step.component.css'],
-  standalone: true,
   imports: [RouterLink, ReactiveFormsModule, FormCardComponent]
 })
 export class MeetingAssemblyStepComponent {

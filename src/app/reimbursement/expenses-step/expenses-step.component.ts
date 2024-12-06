@@ -20,7 +20,6 @@ import { RouterLink } from '@angular/router';
   selector: 'app-expenses-step',
   templateUrl: './expenses-step.component.html',
   styleUrls: ['./expenses-step.component.css'],
-  standalone: true,
   imports: [
     RouterLink,
     ReactiveFormsModule,

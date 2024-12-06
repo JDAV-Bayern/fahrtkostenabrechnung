@@ -9,7 +9,6 @@ import {
 } from '@angular/forms';
 import { TransportExpenseForm } from 'src/app/expenses/shared/expense-form';
 import { TransportMode } from 'src/domain/expense.model';
-import { ExpenseTitlePipe } from '../shared/expense-title.pipe';
 import { TransportModePipe } from '../shared/transport-mode.pipe';
 import { RawFormValue } from 'src/app/shared/form-value';
 
@@ -22,8 +21,7 @@ export interface TransportExpenseDialogData {
   selector: 'app-transport-expense-modal',
   templateUrl: './transport-expense-modal.component.html',
   styleUrls: ['./transport-expense-modal.component.css'],
-  standalone: true,
-  imports: [ReactiveFormsModule, ExpenseTitlePipe, TransportModePipe]
+  imports: [ReactiveFormsModule, TransportModePipe]
 })
 export class TransportExpenseModalComponent {
   form: FormGroup<TransportExpenseForm>;

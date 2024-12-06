@@ -13,7 +13,6 @@ import { MeetingType } from 'src/domain/meeting.model';
   selector: 'app-expense-rates',
   templateUrl: './expense-rates.component.html',
   styleUrls: ['./expense-rates.component.css'],
-  standalone: true,
   imports: [
     CurrencyPipe,
     KeyValuePipe,

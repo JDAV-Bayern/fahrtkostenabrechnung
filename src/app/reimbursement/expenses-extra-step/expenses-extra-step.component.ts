@@ -16,7 +16,6 @@ import { getFoodOptions } from '../shared/food.validator';
   selector: 'app-expenses-extra-step',
   templateUrl: './expenses-extra-step.component.html',
   styleUrls: ['./expenses-extra-step.component.css'],
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     CurrencyPipe,

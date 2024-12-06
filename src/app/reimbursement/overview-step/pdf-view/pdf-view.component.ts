@@ -16,7 +16,6 @@ import { ReimbursementService } from '../../shared/reimbursement.service';
   selector: 'app-pdf-view',
   templateUrl: './pdf-view.component.html',
   styleUrls: ['./pdf-view.component.css'],
-  standalone: true,
   imports: [
     DatePipe,
     CurrencyPipe,

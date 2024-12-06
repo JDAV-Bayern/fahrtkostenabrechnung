@@ -7,7 +7,6 @@ import { InstagramIconComponent } from 'src/app/shared/icons/instagram-icon/inst
   selector: 'footer[appFooter]',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.css'],
-  standalone: true,
   imports: [RouterLink, InstagramIconComponent, GithubIconComponent]
 })
 export class FooterComponent {}

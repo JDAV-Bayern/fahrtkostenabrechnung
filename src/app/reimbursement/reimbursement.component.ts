@@ -7,7 +7,6 @@ import { RouterOutlet } from '@angular/router';
   selector: 'app-reimbursement',
   templateUrl: './reimbursement.component.html',
   styleUrls: ['./reimbursement.component.css'],
-  standalone: true,
   imports: [RouterOutlet, ReactiveFormsModule]
 })
 export class ReimbursementComponent {
