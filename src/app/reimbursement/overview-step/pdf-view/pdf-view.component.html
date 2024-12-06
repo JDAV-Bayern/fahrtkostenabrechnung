@@ -78,9 +78,9 @@
     </div>
   </div>
 
-  @if (reimbursement.note !== '') {
+  @if (reimbursement().note !== '') {
     <p><b>Bemerkung:</b></p>
-    @for (line of reimbursement.note.split('\n'); track line) {
+    @for (line of reimbursement().note.split('\n'); track line) {
       <p>{{ line }}</p>
     }
   }
@@ -121,7 +121,7 @@
             </td>
           </tr>
           @for (
-            expense of reimbursement.expenses.transport[direction];
+            expense of reimbursement().expenses.transport[direction];
             track expense
           ) {
             <tr>
@@ -158,7 +158,7 @@
             {{ report.categories.food | currency }}
           </th>
         </tr>
-        @for (expense of reimbursement.expenses.food; track expense) {
+        @for (expense of reimbursement().expenses.food; track expense) {
           <tr>
             <th scope="row" colspan="2">
               {{ expense.date | date }}
@@ -189,7 +189,7 @@
             {{ report.categories.material | currency }}
           </th>
         </tr>
-        @for (expense of reimbursement.expenses.material; track expense) {
+        @for (expense of reimbursement().expenses.material; track expense) {
           <tr>
             <th scope="row" colspan="2">
               {{ expense.date | date }}

@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { SectionService } from 'src/app/core/section.service';
 import { logoBase64 } from 'src/assets/logoBase64';
 import { Direction } from 'src/domain/expense.model';
@@ -27,11 +27,9 @@ import { ReimbursementService } from '../../shared/reimbursement.service';
   ]
 })
 export class PdfViewComponent {
-  @Input({ required: true })
-  reimbursement!: Reimbursement;
+  readonly reimbursement = input.required<Reimbursement>();
 
-  @Output()
-  fullyRendered = new EventEmitter<void>();
+  readonly fullyRendered = output<void>();
 
   section?: Section;
 
@@ -41,11 +39,11 @@ export class PdfViewComponent {
   ) {}
 
   get meeting() {
-    return this.reimbursement.meeting;
+    return this.reimbursement().meeting;
   }
 
   get participant() {
-    return this.reimbursement.participant;
+    return this.reimbursement().participant;
   }
 
   get now() {
@@ -57,11 +55,11 @@ export class PdfViewComponent {
   }
 
   get report() {
-    return this.reimbursementService.getReport(this.reimbursement);
+    return this.reimbursementService.getReport(this.reimbursement());
   }
 
   ngOnInit() {
-    const sectionId = this.reimbursement.participant.sectionId;
+    const sectionId = this.reimbursement().participant.sectionId;
     this.section = this.sectionService.getSection(sectionId);
   }
 

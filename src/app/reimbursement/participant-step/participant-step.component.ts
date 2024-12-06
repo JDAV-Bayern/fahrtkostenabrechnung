@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { PlzService } from 'src/app/core/plz.service';
@@ -21,8 +21,8 @@ import { JdavState } from 'src/domain/section.model';
   ]
 })
 export class ParticipantStepComponent {
-  @ViewChild('sectionInput')
-  sectionInput!: ElementRef<HTMLInputElement>;
+  readonly sectionInput =
+    viewChild.required<ElementRef<HTMLInputElement>>('sectionInput');
 
   form;
   states: JdavState[];
@@ -99,7 +99,7 @@ export class ParticipantStepComponent {
   }
 
   filter() {
-    const filterValue = this.sectionInput.nativeElement.value.toLowerCase();
+    const filterValue = this.sectionInput().nativeElement.value.toLowerCase();
     const filteredStates = this.states.map(state => ({
       id: state.id,
       name: state.name,
