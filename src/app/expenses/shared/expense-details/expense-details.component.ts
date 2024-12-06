@@ -1,5 +1,5 @@
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import {
   CarTypePipe,
   DiscountCardPipe,
@@ -22,6 +22,5 @@ import { Expense } from 'src/domain/expense.model';
   ]
 })
 export class ExpenseDetailsComponent {
-  @Input({ required: true })
-  expense!: Expense;
+  readonly expense = input.required<Expense>();
 }

@@ -3,11 +3,11 @@
 </div>
 
 <div class="button-container">
-  @if (prevStep) {
+  @if (prevStep()) {
     <button class="jdav-btn secondary" (click)="previous()">Zurück</button>
   }
-  @if (nextStep) {
-    <button class="jdav-btn" [disabled]="nextDisabled" (click)="next()">
+  @if (nextStep()) {
+    <button class="jdav-btn" [disabled]="nextDisabled()" (click)="next()">
       Weiter
     </button>
   }

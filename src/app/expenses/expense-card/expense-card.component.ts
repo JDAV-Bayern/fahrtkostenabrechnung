@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ExpenseDetailsComponent } from '../shared/expense-details/expense-details.component';
 import { Expense } from 'src/domain/expense.model';
@@ -18,14 +18,10 @@ import { ExpenseAmountPipe } from '../shared/expense-amount.pipe';
   ]
 })
 export class ExpenseCardComponent {
-  @Input({ required: true })
-  expense!: Expense;
+  readonly expense = input.required<Expense>();
 
-  @Output()
-  editRow = new EventEmitter<void>();
-
-  @Output()
-  deleteRow = new EventEmitter<number>();
+  readonly editRow = output<void>();
+  readonly deleteRow = output<void>();
 
   editMe() {
     this.editRow.emit();

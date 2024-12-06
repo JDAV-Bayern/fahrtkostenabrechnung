@@ -2,11 +2,11 @@
   <ng-content></ng-content>
   <div
     cdkDropList
-    [cdkDropListData]="form"
-    [cdkDropListEnterPredicate]="enterPredicate"
+    [cdkDropListData]="form()"
+    [cdkDropListEnterPredicate]="enterPredicate()"
   >
     <!-- TODO: readd [formArrayName]="form" -->
-    @for (expenseForm of form.controls; track expenseForm) {
+    @for (expenseForm of form().controls; track expenseForm) {
       <div cdkDrag [cdkDragData]="expenseForm" (cdkDragDropped)="drop($event)">
         <app-expense-card
           [expense]="getExpense(expenseForm)"

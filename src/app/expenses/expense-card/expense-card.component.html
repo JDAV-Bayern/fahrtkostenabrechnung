@@ -1,24 +1,25 @@
 <div class="card">
+  @let exp = expense();
   <table>
     <tr>
       <td class="tleft">
-        @if (expense.type === 'transport') {
-          von <b>{{ expense.origin }}</b>
+        @if (exp.type === 'transport') {
+          von <b>{{ exp.origin }}</b>
         } @else {
-          <b>{{ expense.date | date }}</b>
+          <b>{{ exp.date | date }}</b>
         }
       </td>
-      <td class="tmid">{{ expense | expenseTitle }}</td>
-      <th class="tright">{{ expense | expenseAmount | currency }}</th>
+      <td class="tmid">{{ exp | expenseTitle }}</td>
+      <th class="tright">{{ exp | expenseAmount | currency }}</th>
     </tr>
     <tr>
       <td class="tleft">
-        @if (expense.type === 'transport') {
-          nach <b>{{ expense.destination }}</b>
+        @if (exp.type === 'transport') {
+          nach <b>{{ exp.destination }}</b>
         }
       </td>
       <td class="tmid">
-        <app-expense-details [expense]="expense" />
+        <app-expense-details [expense]="exp" />
       </td>
 
       <td class="tright">

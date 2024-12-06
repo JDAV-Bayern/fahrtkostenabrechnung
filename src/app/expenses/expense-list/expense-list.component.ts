@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { DialogRef } from '@angular/cdk/dialog';
 import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
@@ -14,36 +14,35 @@ import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.s
   imports: [ReactiveFormsModule, CdkDrag, CdkDropList, ExpenseCardComponent]
 })
 export class ExpenseListComponent {
-  @Input({ required: true })
-  expenseType!: ExpenseType;
-
-  @Input({ required: true })
-  form!: FormArray<FormGroup>;
-
-  @Input()
-  openDialog?: (form?: FormGroup) => DialogRef<FormGroup>;
-
-  @Input()
-  enterPredicate: (drag: CdkDrag, drop: CdkDropList) => boolean = () => true;
+  readonly expenseType = input.required<ExpenseType>();
+  readonly form = input.required<FormArray<FormGroup>>();
+  readonly openDialog = input<(form?: FormGroup) => DialogRef<FormGroup>>();
+  readonly enterPredicate = input<
+    (drag: CdkDrag, drop: CdkDropList) => boolean
+  >(() => true);
 
   parent!: FormGroup;
 
   constructor(private controlService: ExpenseControlService) {}
 
   ngOnInit() {
-    this.parent = this.form.parent as FormGroup;
+    this.parent = this.form().parent as FormGroup;
   }
 
   getExpense(expenseForm: FormGroup) {
-    return this.controlService.getExpense(this.expenseType, expenseForm.value);
+    return this.controlService.getExpense(
+      this.expenseType(),
+      expenseForm.value
+    );
   }
 
   openExpenseDialog(form?: FormGroup) {
-    if (this.openDialog) {
+    const openDialog = this.openDialog();
+    if (openDialog) {
       if (form) {
-        this.openDialog(form);
+        openDialog(form);
       } else {
-        this.openDialog().closed.subscribe(result => {
+        openDialog().closed.subscribe(result => {
           if (result) {
             this.addExpense(result);
           }
@@ -53,11 +52,11 @@ export class ExpenseListComponent {
   }
 
   addExpense(result: any) {
-    this.form.push(result);
+    this.form().push(result);
   }
 
   deleteExpense(index: number) {
-    this.form.removeAt(index);
+    this.form().removeAt(index);
   }
 
   drop(event: CdkDragDrop<FormArray>) {

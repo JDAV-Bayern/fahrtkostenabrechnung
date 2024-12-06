@@ -1,20 +1,21 @@
-@switch (expense.type) {
+@let exp = expense();
+@switch (exp.type) {
   @case ('transport') {
-    @switch (expense.mode) {
+    @switch (exp.mode) {
       @case ('car') {
-        {{ expense.distance | number: '1.0-0' }} km,
-        {{ expense.carType | carType }}
-        @if (expense.passengers.length > 0) {
-          &ndash; {{ expense.passengers.length }} Mitfahrer*innen:
-          {{ expense.passengers | join }}
+        {{ exp.distance | number: '1.0-0' }} km,
+        {{ exp.carType | carType }}
+        @if (exp.passengers.length > 0) {
+          &ndash; {{ exp.passengers.length }} Mitfahrer*innen:
+          {{ exp.passengers | join }}
         }
       }
 
       @case ('train') {
-        @if (expense.discountCard !== 'none') {
-          {{ expense.price | currency }} mit
+        @if (exp.discountCard !== 'none') {
+          {{ exp.price | currency }} mit
         }
-        {{ expense.discountCard | discountCard }}
+        {{ exp.discountCard | discountCard }}
       }
 
       @case ('plan') {
@@ -22,14 +23,14 @@
       }
 
       @case ('bike') {
-        {{ expense.distance | number: '1.0-0' }} km
+        {{ exp.distance | number: '1.0-0' }} km
       }
     }
   }
 
   @case ('food') {
-    @if (expense.meals.length > 0) {
-      Abzüglich {{ expense.meals | meals | join }}
+    @if (exp.meals.length > 0) {
+      Abzüglich {{ exp.meals | meals | join }}
     } @else {
       Ohne Abzüge
     }
