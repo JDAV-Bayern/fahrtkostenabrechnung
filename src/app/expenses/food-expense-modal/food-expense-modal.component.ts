@@ -15,7 +15,6 @@ import { getFoodOptions } from 'src/app/reimbursement/shared/food.validator';
   selector: 'app-food-expense-modal',
   templateUrl: './food-expense-modal.component.html',
   styleUrls: ['./food-expense-modal.component.css'],
-  standalone: true,
   imports: [ReactiveFormsModule, MatDatepickerModule, AbsencePipe]
 })
 export class FoodExpenseModalComponent {

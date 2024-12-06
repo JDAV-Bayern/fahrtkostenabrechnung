@@ -11,7 +11,6 @@ import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.s
   selector: 'app-expense-list',
   templateUrl: './expense-list.component.html',
   styleUrls: ['./expense-list.component.css'],
-  standalone: true,
   imports: [ReactiveFormsModule, CdkDrag, CdkDropList, ExpenseCardComponent]
 })
 export class ExpenseListComponent {

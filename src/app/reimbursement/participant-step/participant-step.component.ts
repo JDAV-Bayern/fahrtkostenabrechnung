@@ -13,7 +13,6 @@ import { JdavState } from 'src/domain/section.model';
   selector: 'app-participant-step',
   templateUrl: './participant-step.component.html',
   styleUrls: ['./participant-step.component.css'],
-  standalone: true,
   imports: [
     RouterLink,
     ReactiveFormsModule,

@@ -20,7 +20,6 @@ import { ExpenseTypePipe } from '../../expenses/shared/expense-type.pipe';
   selector: 'app-overview-step',
   templateUrl: './overview-step.component.html',
   styleUrls: ['./overview-step.component.css'],
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     CurrencyPipe,

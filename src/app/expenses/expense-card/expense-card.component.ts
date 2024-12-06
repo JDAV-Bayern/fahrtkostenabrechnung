@@ -9,7 +9,6 @@ import { ExpenseAmountPipe } from '../shared/expense-amount.pipe';
   selector: 'app-expense-card',
   templateUrl: './expense-card.component.html',
   styleUrls: ['./expense-card.component.css'],
-  standalone: true,
   imports: [
     CurrencyPipe,
     DatePipe,

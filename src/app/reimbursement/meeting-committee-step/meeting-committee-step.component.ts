@@ -14,7 +14,6 @@ import { TimeInputDirective } from 'src/app/shared/time-input.directive';
   selector: 'app-meeting-committee-step',
   templateUrl: './meeting-committee-step.component.html',
   styleUrls: ['./meeting-committee-step.component.css'],
-  standalone: true,
   imports: [
     RouterLink,
     ReactiveFormsModule,

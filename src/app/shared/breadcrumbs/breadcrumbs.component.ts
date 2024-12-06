@@ -17,7 +17,6 @@ export interface Breadcrumb {
   selector: 'app-breadcrumbs',
   templateUrl: './breadcrumbs.component.html',
   styleUrls: ['./breadcrumbs.component.css'],
-  standalone: true,
   imports: [RouterLink]
 })
 export class BreadcrumbsComponent {

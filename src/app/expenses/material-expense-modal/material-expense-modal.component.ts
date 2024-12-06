@@ -10,7 +10,6 @@ import { RawFormValue } from 'src/app/shared/form-value';
   selector: 'app-material-expense-modal',
   templateUrl: './material-expense-modal.component.html',
   styleUrls: ['./material-expense-modal.component.css'],
-  standalone: true,
   imports: [ReactiveFormsModule, MatDatepickerModule]
 })
 export class MaterialExpenseModalComponent {
