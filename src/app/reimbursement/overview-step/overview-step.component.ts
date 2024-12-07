@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import jsPDF from 'jspdf';
 import * as imageprocessor from 'ts-image-processor';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
@@ -33,7 +33,12 @@ import { ExpenseTypePipe } from '../../expenses/shared/expense-type.pipe';
   ]
 })
 export class OverviewStepComponent {
-  form;
+  private readonly reimbursementService = inject(ReimbursementService);
+  private readonly controlService = inject(ReimbursementControlService);
+  private readonly validationService = inject(ReimbursementValidatorService);
+  private readonly dialog = inject(Dialog);
+
+  form = this.controlService.overviewStep;
 
   files: File[] = [];
   showPdf = false;
@@ -47,15 +52,6 @@ export class OverviewStepComponent {
   pdfFullyRenderedPromise: Promise<void> = new Promise(resolve => {
     this.pdfFullyRendered = resolve;
   });
-
-  constructor(
-    private readonly reimbursementService: ReimbursementService,
-    private readonly controlService: ReimbursementControlService,
-    private readonly validationService: ReimbursementValidatorService,
-    private readonly dialog: Dialog
-  ) {
-    this.form = controlService.overviewStep;
-  }
 
   get reimbursement() {
     return this.controlService.getReimbursement();

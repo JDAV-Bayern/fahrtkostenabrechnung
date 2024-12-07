@@ -1,6 +1,6 @@
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { FoodExpenseForm } from 'src/app/expenses/shared/expense-form';
@@ -18,6 +18,10 @@ import { getFoodOptions } from 'src/app/reimbursement/shared/food.validator';
   imports: [ReactiveFormsModule, MatDatepickerModule, AbsencePipe]
 })
 export class FoodExpenseModalComponent {
+  private readonly controlService = inject(ReimbursementControlService);
+  private readonly dialogRef =
+    inject<DialogRef<FormGroup<FoodExpenseForm>>>(DialogRef);
+
   form: FormGroup<FoodExpenseForm>;
   initialFormValue: RawFormValue<FoodExpenseForm>;
   options: Absence[] = [];
@@ -28,11 +32,9 @@ export class FoodExpenseModalComponent {
       expense => expense.date?.getTime() === date?.getTime()
     );
 
-  constructor(
-    private controlService: ReimbursementControlService,
-    private dialogRef: DialogRef<FormGroup<FoodExpenseForm>>,
-    @Inject(DIALOG_DATA) data: { form: FormGroup<FoodExpenseForm> }
-  ) {
+  constructor() {
+    const data = inject<{ form: FormGroup<FoodExpenseForm> }>(DIALOG_DATA);
+
     this.form = data.form;
 
     this.initialFormValue = this.form.getRawValue();

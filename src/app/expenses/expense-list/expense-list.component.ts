@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, inject } from '@angular/core';
 import { DialogRef } from '@angular/cdk/dialog';
 import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
@@ -14,6 +14,8 @@ import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.s
   imports: [ReactiveFormsModule, CdkDrag, CdkDropList, ExpenseCardComponent]
 })
 export class ExpenseListComponent {
+  private readonly controlService = inject(ExpenseControlService);
+
   readonly expenseType = input.required<ExpenseType>();
   readonly form = input.required<FormArray<FormGroup>>();
   readonly openDialog = input<(form?: FormGroup) => DialogRef<FormGroup>>();
@@ -22,8 +24,6 @@ export class ExpenseListComponent {
   >(() => true);
 
   parent!: FormGroup;
-
-  constructor(private controlService: ExpenseControlService) {}
 
   ngOnInit() {
     this.parent = this.form().parent as FormGroup;

@@ -1,5 +1,5 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, inject } from '@angular/core';
 import { SectionService } from 'src/app/core/section.service';
 import { logoBase64 } from 'src/assets/logoBase64';
 import { Direction } from 'src/domain/expense.model';
@@ -27,16 +27,14 @@ import { ReimbursementService } from '../../shared/reimbursement.service';
   ]
 })
 export class PdfViewComponent {
+  private readonly reimbursementService = inject(ReimbursementService);
+  private readonly sectionService = inject(SectionService);
+
   readonly reimbursement = input.required<Reimbursement>();
 
   readonly fullyRendered = output<void>();
 
   section?: Section;
-
-  constructor(
-    private readonly reimbursementService: ReimbursementService,
-    private readonly sectionService: SectionService
-  ) {}
 
   get meeting() {
     return this.reimbursement().meeting;

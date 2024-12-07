@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
@@ -23,8 +23,10 @@ import { TimeInputDirective } from 'src/app/shared/time-input.directive';
     TimeInputDirective
   ]
 })
-export class MeetingCommitteeStepComponent {
-  form;
+export class MeetingCommitteeStepComponent implements OnInit {
+  private readonly controlService = inject(ReimbursementControlService);
+
+  form = this.controlService.meetingStep;
   dateClass: MatCalendarCellClassFunction<Date> = (cellDate, view) => {
     // Only highligh dates inside the month view.
     if (view === 'month') {
@@ -69,8 +71,7 @@ export class MeetingCommitteeStepComponent {
     !this.startDate.value ||
     date?.getTime() >= this.startDate.value?.getTime();
 
-  constructor(public controlService: ReimbursementControlService) {
-    this.form = controlService.meetingStep;
+  ngOnInit() {
     this.form.controls.type.setValue('committee');
   }
 

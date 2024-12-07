@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
@@ -10,11 +10,12 @@ import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbu
   styleUrls: ['./meeting-assembly-step.component.css'],
   imports: [RouterLink, ReactiveFormsModule, FormCardComponent]
 })
-export class MeetingAssemblyStepComponent {
-  form;
+export class MeetingAssemblyStepComponent implements OnInit {
+  private readonly controlService = inject(ReimbursementControlService);
 
-  constructor(public controlService: ReimbursementControlService) {
-    this.form = controlService.meetingStep;
+  form = this.controlService.meetingStep;
+
+  ngOnInit() {
     this.form.controls.type.setValue('assembly');
   }
 

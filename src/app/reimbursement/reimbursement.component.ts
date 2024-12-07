@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ReimbursementControlService } from './shared/reimbursement-control.service';
 import { RouterOutlet } from '@angular/router';
 
@@ -10,9 +10,7 @@ import { RouterOutlet } from '@angular/router';
   imports: [RouterOutlet, ReactiveFormsModule]
 })
 export class ReimbursementComponent {
-  form: FormGroup;
+  private readonly controlService = inject(ReimbursementControlService);
 
-  constructor(private readonly controlService: ReimbursementControlService) {
-    this.form = this.controlService.form;
-  }
+  form = this.controlService.form;
 }

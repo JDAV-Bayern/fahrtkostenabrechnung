@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,11 +8,11 @@ import { Router } from '@angular/router';
   standalone: true
 })
 export class FormCardComponent {
+  private readonly router = inject(Router);
+
   readonly nextStep = input<string>();
   readonly prevStep = input<string>();
   readonly nextDisabled = input(false);
-
-  constructor(public router: Router) {}
 
   next() {
     if (this.nextStep() && !this.nextDisabled()) {

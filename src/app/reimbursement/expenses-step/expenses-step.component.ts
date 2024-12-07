@@ -1,5 +1,5 @@
 import { CdkDrag, CdkDropListGroup } from '@angular/cdk/drag-drop';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { CurrencyPipe } from '@angular/common';
@@ -31,16 +31,14 @@ import { RouterLink } from '@angular/router';
   ]
 })
 export class ExpensesStepComponent {
-  form;
+  private readonly reimbursementService = inject(ReimbursementService);
+  private readonly reimbursementControlService = inject(
+    ReimbursementControlService
+  );
+  private readonly expenseControlService = inject(ExpenseControlService);
+  private readonly dialog = inject(Dialog);
 
-  constructor(
-    private readonly reimbursementService: ReimbursementService,
-    private readonly reimbursementControlService: ReimbursementControlService,
-    private readonly expenseControlService: ExpenseControlService,
-    private dialog: Dialog
-  ) {
-    this.form = this.reimbursementControlService.transportExpensesStep;
-  }
+  form = this.reimbursementControlService.transportExpensesStep;
 
   get meetingType() {
     return this.reimbursementControlService.meetingStep.controls.type.value;

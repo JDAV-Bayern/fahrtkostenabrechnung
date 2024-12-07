@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 
 import {
   ActivatedRoute,
@@ -19,13 +19,15 @@ export interface Breadcrumb {
   styleUrls: ['./breadcrumbs.component.css'],
   imports: [RouterLink]
 })
-export class BreadcrumbsComponent {
+export class BreadcrumbsComponent implements OnInit {
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+
   breadcrumbs: Breadcrumb[] = [];
 
-  constructor(
-    private router: Router,
-    private route: ActivatedRoute
-  ) {
+  ngOnInit() {
+    this.buildBreadcrumb(this.route);
+
     this.router.events
       .pipe(filter(evt => evt instanceof NavigationEnd))
       .subscribe(() => {

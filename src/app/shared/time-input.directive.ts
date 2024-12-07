@@ -1,4 +1,10 @@
-import { Directive, ElementRef, Renderer2, forwardRef } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  Renderer2,
+  forwardRef,
+  inject
+} from '@angular/core';
 import {
   ControlValueAccessor,
   NG_VALIDATORS,
@@ -32,16 +38,14 @@ export const TIME_PATTERN = /^([0-9]{1,2})(?:\:([0-9]{2})?)?$/;
   providers: [TIME_VALUE_ACCESSOR, TIME_VALIDATORS]
 })
 export class TimeInputDirective implements ControlValueAccessor, Validator {
+  private readonly renderer = inject(Renderer2);
+  private readonly elementRef = inject(ElementRef);
+
   onChange = (_: any) => {};
   onTouched = () => {};
 
   disabled = false;
   lastValueValid = false;
-
-  constructor(
-    private renderer: Renderer2,
-    private elementRef: ElementRef
-  ) {}
 
   writeValue(value: any): void {
     const hours = Math.floor(value / 60 / 60 / 1000);

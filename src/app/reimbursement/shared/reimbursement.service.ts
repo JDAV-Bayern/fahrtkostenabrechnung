@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { SectionService } from 'src/app/core/section.service';
 import { expenseConfig } from 'src/app/expenses/expense.config';
 import { ExpenseService } from 'src/app/expenses/shared/expense.service';
@@ -23,12 +23,10 @@ export type ReimbursementReport = {
   providedIn: 'root'
 })
 export class ReimbursementService {
-  config = expenseConfig.course;
+  private readonly expenseService = inject(ExpenseService);
+  private readonly sectionService = inject(SectionService);
 
-  constructor(
-    private expenseService: ExpenseService,
-    private sectionService: SectionService
-  ) {}
+  config = expenseConfig.course;
 
   set meetingType(type: MeetingType) {
     this.config = expenseConfig[type];

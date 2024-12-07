@@ -1,6 +1,6 @@
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -24,15 +24,17 @@ export interface TransportExpenseDialogData {
   imports: [ReactiveFormsModule, TransportModePipe]
 })
 export class TransportExpenseModalComponent {
+  private readonly dialogRef =
+    inject<DialogRef<FormGroup<TransportExpenseForm>>>(DialogRef);
+
   form: FormGroup<TransportExpenseForm>;
   allowedModes: TransportMode[];
 
   initialFormValue: RawFormValue<TransportExpenseForm>;
 
-  constructor(
-    private dialogRef: DialogRef<FormGroup<TransportExpenseForm>>,
-    @Inject(DIALOG_DATA) data: TransportExpenseDialogData
-  ) {
+  constructor() {
+    const data = inject<TransportExpenseDialogData>(DIALOG_DATA);
+
     this.form = data.form;
     this.allowedModes = data.allowedModes;
 
