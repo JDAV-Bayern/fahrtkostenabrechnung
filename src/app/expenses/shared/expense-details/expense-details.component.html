@@ -4,18 +4,18 @@
     @switch (exp.mode) {
       @case ('car') {
         {{ exp.distance | number: '1.0-0' }} km,
-        {{ exp.carType | carType }}
-        @if (exp.passengers.length > 0) {
-          &ndash; {{ exp.passengers.length }} Mitfahrer*innen:
-          {{ exp.passengers | join }}
+        {{ exp.carTrip.engineType | engineType }}
+        @if (exp.carTrip.passengers.length > 0) {
+          &ndash; {{ exp.carTrip.passengers.length }} Mitfahrer*innen:
+          {{ exp.carTrip.passengers | join }}
         }
       }
 
-      @case ('train') {
-        @if (exp.discountCard !== 'none') {
-          {{ exp.price | currency }} mit
+      @case ('public') {
+        @if (exp.ticket.discount !== 'none') {
+          {{ exp.ticket.price | currency }} mit
         }
-        {{ exp.discountCard | discountCard }}
+        {{ exp.ticket.discount | discount }}
       }
 
       @case ('plan') {
@@ -29,8 +29,8 @@
   }
 
   @case ('food') {
-    @if (exp.meals.length > 0) {
-      Abzüglich {{ exp.meals | meals | join }}
+    @if (exp.breakfast || exp.lunch || exp.dinner) {
+      Abzüglich {{ exp | meals | join }}
     } @else {
       Ohne Abzüge
     }

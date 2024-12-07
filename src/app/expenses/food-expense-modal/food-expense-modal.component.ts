@@ -55,10 +55,6 @@ export class FoodExpenseModalComponent {
     return this.form.controls.absence;
   }
 
-  get meals() {
-    return this.form.controls.meals;
-  }
-
   get meetingTime() {
     return this.controlService.meetingStep.controls.time.getRawValue();
   }

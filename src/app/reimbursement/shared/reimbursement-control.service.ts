@@ -103,7 +103,7 @@ export class ReimbursementControlService {
               ),
               onsite: this.formBuilder.array<FormGroup<TransportExpenseForm>>(
                 [],
-                allowedTransportModes(['car', 'train'])
+                allowedTransportModes(['car', 'public'])
               ),
               outbound: this.formBuilder.array<FormGroup<TransportExpenseForm>>(
                 [],
@@ -286,23 +286,23 @@ export class ReimbursementControlService {
     const origin = this.completeOrigin(direction);
     form.controls.origin.setValue(origin);
 
-    // auto-complete car type
-    const car = form.controls.car;
-    if (car) {
+    // auto-complete engine type
+    const carTrip = form.controls.carTrip;
+    if (carTrip) {
       for (let expense of expenses) {
-        if (expense.car) {
-          car.controls.type.setValue(expense.car.type);
+        if (expense.carTrip) {
+          carTrip.controls.engineType.setValue(expense.carTrip.engineType);
           break;
         }
       }
     }
 
-    // auto-complete discount card
-    const train = form.controls.train;
-    if (train) {
+    // auto-complete discount
+    const ticket = form.controls.ticket;
+    if (ticket) {
       for (let expense of expenses) {
-        if (expense.train) {
-          train.controls.discountCard.setValue(expense.train.discountCard);
+        if (expense.ticket) {
+          ticket.controls.discount.setValue(expense.ticket.discount);
           break;
         }
       }

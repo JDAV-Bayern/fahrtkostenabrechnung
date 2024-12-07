@@ -80,7 +80,7 @@ export class ExpensesStepComponent {
   }
 
   getAllowedModes(direction: Direction) {
-    let allowedModes: TransportMode[] = ['car', 'train'];
+    let allowedModes: TransportMode[] = ['car', 'public'];
 
     if (direction !== 'onsite') {
       allowedModes.push('bike');

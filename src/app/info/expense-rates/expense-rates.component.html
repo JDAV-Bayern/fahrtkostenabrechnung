@@ -52,22 +52,22 @@
     }
   </table>
 
-  <h3>Zugfahrt</h3>
+  <h3>Fahrt mit ÖPNV</h3>
 
   <p class="explanation">
-    Die Erstattung von Zugfahrten erfolgt abhängig vom (ermäßigten) Ticketpreis
-    und der genutzten BahnCard.
+    Die Erstattung von Fahrten mit dem ÖPNV erfolgt abhängig vom (ermäßigten)
+    Ticketpreis und der genutzten BahnCard.
   </p>
   <p class="important">Bitte eine Kopie der Fahrkarte anhängen!</p>
 
   @if (meetingType !== 'committee') {
     <table>
       @for (
-        entry of config.transport.train | keyvalue: originalOrder;
+        entry of config.transport.public | keyvalue: originalOrder;
         track entry.key
       ) {
         <tr>
-          <td>{{ entry.key | discountCard }}</td>
+          <td>{{ entry.key | discount }}</td>
           <td>{{ entry.value | percent }} des Ticketpreis</td>
         </tr>
       }
@@ -82,7 +82,7 @@
     </p>
   }
 
-  <h3>Fahrt mit Aboticket</h3>
+  <h3>Fahrt mit ÖPNV-Abo</h3>
 
   <p class="explanation">
     Für die Nutzung von Abotickets (Deutschlandticket, Semesterticket, o.ä.)
@@ -128,15 +128,18 @@
     Bei Gewährung unentgeltlicher Verpflegung werden folgende Beträge abgezogen:
   </p>
   <table>
-    @for (
-      entry of config.food.meals | keyvalue: originalOrder;
-      track entry.key
-    ) {
-      <tr>
-        <td>{{ entry.key | meals }}</td>
-        <td>{{ entry.value | currency }}</td>
-      </tr>
-    }
+    <tr>
+      <td>Frühstück</td>
+      <td>{{ config.food.meals.breakfast | currency }}</td>
+    </tr>
+    <tr>
+      <td>Mittag</td>
+      <td>{{ config.food.meals.lunch | currency }}</td>
+    </tr>
+    <tr>
+      <td>Abend</td>
+      <td>{{ config.food.meals.dinner | currency }}</td>
+    </tr>
   </table>
 
   <p class="explanation">

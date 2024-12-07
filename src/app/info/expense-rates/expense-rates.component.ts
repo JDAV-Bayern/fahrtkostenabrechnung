@@ -4,8 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { expenseConfig } from 'src/app/expenses/expense.config';
 import {
   AbsencePipe,
-  DiscountCardPipe,
-  MealsPipe
+  DiscountPipe
 } from 'src/app/expenses/shared/expense-data.pipe';
 import { MeetingType } from 'src/domain/meeting.model';
 
@@ -13,14 +12,7 @@ import { MeetingType } from 'src/domain/meeting.model';
   selector: 'app-expense-rates',
   templateUrl: './expense-rates.component.html',
   styleUrls: ['./expense-rates.component.css'],
-  imports: [
-    CurrencyPipe,
-    KeyValuePipe,
-    PercentPipe,
-    DiscountCardPipe,
-    AbsencePipe,
-    MealsPipe
-  ]
+  imports: [CurrencyPipe, KeyValuePipe, PercentPipe, DiscountPipe, AbsencePipe]
 })
 export class ExpenseRatesComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
