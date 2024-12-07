@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -53,6 +53,10 @@ const DATE_KEYS = ['date', 'startDate', 'endDate'];
   providedIn: 'root'
 })
 export class ReimbursementControlService {
+  private readonly formBuilder = inject(NonNullableFormBuilder);
+  private readonly expenseControlService = inject(ExpenseControlService);
+  private readonly reimbursementService = inject(ReimbursementService);
+
   private courseCodeControl = this.formBuilder.control('', [
     Validators.required,
     validateCourseCode
@@ -124,11 +128,7 @@ export class ReimbursementControlService {
     { validators: validateFoodExpenseInterval }
   );
 
-  constructor(
-    private formBuilder: NonNullableFormBuilder,
-    private expenseControlService: ExpenseControlService,
-    private reimbursementService: ReimbursementService
-  ) {
+  constructor() {
     this.form.valueChanges.subscribe(() => this.saveForm());
 
     const iban = this.participantStep.controls.iban;

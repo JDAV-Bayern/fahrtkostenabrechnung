@@ -1,5 +1,5 @@
 import { CurrencyPipe, KeyValuePipe, PercentPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { expenseConfig } from 'src/app/expenses/expense.config';
 import {
@@ -22,13 +22,15 @@ import { MeetingType } from 'src/domain/meeting.model';
     MealsPipe
   ]
 })
-export class ExpenseRatesComponent {
+export class ExpenseRatesComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+
   config = expenseConfig.course;
   meetingType: MeetingType = 'course';
 
   readonly originalOrder = () => 0;
 
-  constructor(private route: ActivatedRoute) {
+  ngOnInit() {
     this.route.queryParamMap.subscribe(params => {
       const param = params.get('veranstaltung')!;
       const meetingType = this.getMeetingType(param);

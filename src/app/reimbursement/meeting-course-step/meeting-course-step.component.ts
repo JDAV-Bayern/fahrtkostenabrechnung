@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
@@ -10,14 +10,13 @@ import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbu
   styleUrls: ['./meeting-course-step.component.css'],
   imports: [ReactiveFormsModule, FormCardComponent]
 })
-export class MeetingCourseStepComponent {
-  form;
+export class MeetingCourseStepComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+  private readonly controlService = inject(ReimbursementControlService);
 
-  constructor(
-    public route: ActivatedRoute,
-    public controlService: ReimbursementControlService
-  ) {
-    this.form = controlService.meetingStep;
+  form = this.controlService.meetingStep;
+
+  ngOnInit() {
     this.form.controls.type.setValue('course');
 
     this.route.queryParamMap.subscribe(params => {

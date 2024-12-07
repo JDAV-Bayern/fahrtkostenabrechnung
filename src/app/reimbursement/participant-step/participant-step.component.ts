@@ -1,4 +1,10 @@
-import { Component, ElementRef, viewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  viewChild,
+  inject,
+  OnInit
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { PlzService } from 'src/app/core/plz.service';
@@ -20,21 +26,19 @@ import { JdavState } from 'src/domain/section.model';
     FormCardComponent
   ]
 })
-export class ParticipantStepComponent {
+export class ParticipantStepComponent implements OnInit {
+  private readonly plzService = inject(PlzService);
+  private readonly sectionService = inject(SectionService);
+  private readonly controlService = inject(ReimbursementControlService);
+
   readonly sectionInput =
     viewChild.required<ElementRef<HTMLInputElement>>('sectionInput');
 
-  form;
-  states: JdavState[];
-  filteredStates: JdavState[];
+  form = this.controlService.participantStep;
+  states: JdavState[] = [];
+  filteredStates: JdavState[] = [];
 
-  constructor(
-    private readonly plzService: PlzService,
-    private readonly sectionService: SectionService,
-    public controlService: ReimbursementControlService
-  ) {
-    this.form = controlService.participantStep;
-
+  ngOnInit() {
     // load section autocompletions
     this.states = this.sectionService.getJdavStates();
 

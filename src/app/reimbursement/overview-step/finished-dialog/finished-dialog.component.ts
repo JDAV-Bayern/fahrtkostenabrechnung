@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { Meeting } from 'src/domain/meeting.model';
 
@@ -9,19 +9,12 @@ import { Meeting } from 'src/domain/meeting.model';
   standalone: true
 })
 export class FinishedDialogComponent {
-  private givenName: string;
-  private meeting: Meeting;
+  private readonly data = inject<{ meeting: Meeting; givenName: string }>(
+    DIALOG_DATA
+  );
 
-  constructor(
-    @Inject(DIALOG_DATA)
-    data: {
-      meeting: Meeting;
-      givenName: string;
-    }
-  ) {
-    this.givenName = data.givenName;
-    this.meeting = data.meeting;
-  }
+  givenName = this.data.givenName;
+  meeting = this.data.meeting;
 
   get emailHref(): string {
     let subject;

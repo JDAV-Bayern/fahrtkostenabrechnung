@@ -1,5 +1,5 @@
 import { Reimbursement } from 'src/domain/reimbursement.model';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { TransportExpense } from 'src/domain/expense.model';
 import { PlzService } from 'src/app/core/plz.service';
 
@@ -7,7 +7,7 @@ import { PlzService } from 'src/app/core/plz.service';
   providedIn: 'root'
 })
 export class ReimbursementValidatorService {
-  constructor(private readonly plzService: PlzService) {}
+  private readonly plzService = inject(PlzService);
 
   public validateReimbursement(reimbursement: Reimbursement): string[] {
     const findings: string[] = [];

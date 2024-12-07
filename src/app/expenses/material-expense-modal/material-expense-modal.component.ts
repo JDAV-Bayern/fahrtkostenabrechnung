@@ -1,6 +1,6 @@
 import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
 
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MaterialExpenseForm } from 'src/app/expenses/shared/expense-form';
@@ -13,14 +13,16 @@ import { RawFormValue } from 'src/app/shared/form-value';
   imports: [ReactiveFormsModule, MatDatepickerModule]
 })
 export class MaterialExpenseModalComponent {
+  private readonly dialogRef =
+    inject<DialogRef<FormGroup<MaterialExpenseForm>>>(DialogRef);
+
   form: FormGroup<MaterialExpenseForm>;
 
   initialFormValue: RawFormValue<MaterialExpenseForm>;
 
-  constructor(
-    private dialogRef: DialogRef<FormGroup<MaterialExpenseForm>>,
-    @Inject(DIALOG_DATA) data: { form: FormGroup<MaterialExpenseForm> }
-  ) {
+  constructor() {
+    const data = inject<{ form: FormGroup<MaterialExpenseForm> }>(DIALOG_DATA);
+
     this.form = data.form;
 
     this.initialFormValue = this.form.getRawValue();

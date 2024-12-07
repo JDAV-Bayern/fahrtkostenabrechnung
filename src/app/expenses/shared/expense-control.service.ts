@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
   ExpenseType,
   TransportExpense,
@@ -27,7 +27,7 @@ import { RawFormValue } from 'src/app/shared/form-value';
   providedIn: 'root'
 })
 export class ExpenseControlService {
-  constructor(private formBuilder: NonNullableFormBuilder) {}
+  private readonly formBuilder = inject(NonNullableFormBuilder);
 
   createForm(type: ExpenseType): FormGroup {
     switch (type) {

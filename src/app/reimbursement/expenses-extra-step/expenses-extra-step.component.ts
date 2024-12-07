@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
@@ -26,22 +26,17 @@ import { getFoodOptions } from '../shared/food.validator';
   ]
 })
 export class ExpensesExtraStepComponent {
-  rootForm;
-  parentForm;
-  foodForm;
-  materialForm;
+  private readonly reimbursementService = inject(ReimbursementService);
+  private readonly reimbursementControlService = inject(
+    ReimbursementControlService
+  );
+  private readonly expenseControlService = inject(ExpenseControlService);
+  private readonly dialog = inject(Dialog);
 
-  constructor(
-    private reimbursementService: ReimbursementService,
-    private reimbursementControlService: ReimbursementControlService,
-    private expenseControlService: ExpenseControlService,
-    private dialog: Dialog
-  ) {
-    this.rootForm = reimbursementControlService.form;
-    this.parentForm = reimbursementControlService.expensesStep;
-    this.foodForm = reimbursementControlService.foodExpenses;
-    this.materialForm = reimbursementControlService.materialExpenses;
-  }
+  rootForm = this.reimbursementControlService.form;
+  parentForm = this.reimbursementControlService.expensesStep;
+  foodForm = this.reimbursementControlService.foodExpenses;
+  materialForm = this.reimbursementControlService.materialExpenses;
 
   get foodOptions() {
     const time = this.rootForm.controls.meeting.controls.time;
