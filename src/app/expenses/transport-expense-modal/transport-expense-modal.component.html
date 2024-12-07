@@ -67,9 +67,9 @@
       </div>
     }
 
-    <!-- train expenses -->
-    @if (train) {
-      <fieldset [formGroup]="train">
+    <!-- public expenses -->
+    @if (ticket) {
+      <fieldset [formGroup]="ticket">
         <div class="form-group">
           <label for="price">Ticketpreis (ermäßigt)</label>
           <input
@@ -80,21 +80,21 @@
             required
           />
           @if (
-            train.controls.price.hasError('required') &&
-            train.controls.price.touched
+            ticket.controls.price.hasError('required') &&
+            ticket.controls.price.touched
           ) {
             <div class="error-message">Bitte gib einen Preis ein.</div>
           }
-          @if (train.controls.price.hasError('min')) {
+          @if (ticket.controls.price.hasError('min')) {
             <div class="error-message">Bitte gib einen gültigen Preis ein.</div>
           }
         </div>
 
         <div class="form-group">
-          <label for="discountCard">BahnCard</label>
+          <label for="discount">BahnCard</label>
           <select
-            id="discountCard"
-            formControlName="discountCard"
+            id="discount"
+            formControlName="discount"
             class="form-control"
             required
           >
@@ -103,8 +103,8 @@
             <option value="BC50">BahnCard 50</option>
           </select>
           @if (
-            train.controls.discountCard.hasError('required') &&
-            train.controls.discountCard.touched
+            ticket.controls.discount.hasError('required') &&
+            ticket.controls.discount.touched
           ) {
             <div class="error-message">Bitte wähle deine BahnCard aus.</div>
           }
@@ -113,13 +113,13 @@
     }
 
     <!-- car expenses -->
-    @if (car) {
-      <fieldset [formGroup]="car">
+    @if (carTrip) {
+      <fieldset [formGroup]="carTrip">
         <div class="form-group">
-          <label for="carType">Auto Typ</label>
+          <label for="engineType">Auto Typ</label>
           <select
-            id="carType"
-            formControlName="type"
+            id="engineType"
+            formControlName="engineType"
             class="form-control"
             required
           >
@@ -128,7 +128,8 @@
             <option value="electric">Elektro</option>
           </select>
           @if (
-            car.controls.type.hasError('required') && car.controls.type.touched
+            carTrip.controls.engineType.hasError('required') &&
+            carTrip.controls.engineType.touched
           ) {
             <div class="error-message">
               Bitte wähle den Typ deines Autos aus.
@@ -144,7 +145,7 @@
             als einzelne Auslage an.
           </p>
           @for (
-            passenger of car.controls.passengers.controls;
+            passenger of carTrip.controls.passengers.controls;
             track passenger
           ) {
             <div class="passengers-item" formArrayName="passengers">

@@ -1,9 +1,4 @@
-import {
-  Absence,
-  DiscountCard,
-  ExpenseType,
-  Meal
-} from 'src/domain/expense.model';
+import { Absence, Discount, ExpenseType, Meal } from 'src/domain/expense.model';
 import { MeetingType } from 'src/domain/meeting.model';
 
 export type ExpenseConfig = Record<
@@ -12,7 +7,7 @@ export type ExpenseConfig = Record<
     allowed: ExpenseType[];
     transport?: {
       car: number[];
-      train: Record<DiscountCard, number>;
+      public: Record<Discount, number>;
       plan: number;
       bike: number;
     };
@@ -29,7 +24,7 @@ export const expenseConfig: ExpenseConfig = {
     allowed: ['transport'],
     transport: {
       car: [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
-      train: {
+      public: {
         none: 1,
         BC25: 1.05,
         BC50: 1.1
@@ -43,7 +38,7 @@ export const expenseConfig: ExpenseConfig = {
     allowed: ['transport'],
     transport: {
       car: [0.05, 0.1, 0.15, 0.2, 0.25, 0.3],
-      train: {
+      public: {
         none: 1,
         BC25: 1.05,
         BC50: 1.1
@@ -56,8 +51,8 @@ export const expenseConfig: ExpenseConfig = {
     allowed: ['transport', 'food', 'material'],
     transport: {
       car: [0.2, 0.27, 0.3],
-      train: {
-        // for committee reimbursement, the discount card is not handled by the form
+      public: {
+        // for committee reimbursement, the discount is not handled by the form
         none: 1,
         BC25: 1,
         BC50: 1

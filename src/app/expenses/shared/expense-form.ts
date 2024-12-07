@@ -1,8 +1,8 @@
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import {
   Absence,
-  CarType,
-  DiscountCard,
+  EngineType,
+  Discount,
   TransportMode
 } from 'src/domain/expense.model';
 
@@ -11,27 +11,23 @@ export type TransportExpenseForm = {
   origin: FormControl<string>;
   destination: FormControl<string>;
   distance?: FormControl<number>;
-  car?: FormGroup<CarForm>;
-  train?: FormGroup<TrainForm>;
+  carTrip?: FormGroup<CarTripForm>;
+  ticket?: FormGroup<TicketForm>;
 };
 
-export type TrainForm = {
+export type TicketForm = {
   price: FormControl<number>;
-  discountCard: FormControl<DiscountCard>;
+  discount: FormControl<Discount>;
 };
 
-export type CarForm = {
-  type: FormControl<CarType>;
+export type CarTripForm = {
+  engineType: FormControl<EngineType>;
   passengers: FormArray<FormControl<string>>;
 };
 
 export type FoodExpenseForm = {
   date: FormControl<Date | null>;
   absence: FormControl<Absence>;
-  meals: FormGroup<MealForm>;
-};
-
-export type MealForm = {
   breakfast: FormControl<boolean>;
   lunch: FormControl<boolean>;
   dinner: FormControl<boolean>;

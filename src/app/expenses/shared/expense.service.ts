@@ -21,15 +21,15 @@ export class ExpenseService {
 
         switch (expense.mode) {
           case 'car':
-            const nPax = expense.passengers.length;
+            const nPax = expense.carTrip.passengers.length;
             const maxPax = this.config.transport.car.length - 1;
             const index = nPax < maxPax ? nPax : maxPax;
-            const carFactor = this.config.transport.car[index];
-            return expense.distance * carFactor;
-          case 'train':
-            const trainFactor =
-              this.config.transport.train[expense.discountCard];
-            return expense.price * trainFactor;
+            const distanceFactor = this.config.transport.car[index];
+            return expense.distance * distanceFactor;
+          case 'public':
+            const discountFactor =
+              this.config.transport.public[expense.ticket.discount];
+            return expense.ticket.price * discountFactor;
           case 'bike':
             const bikeFactor = this.config.transport.bike;
             return expense.distance * bikeFactor;
@@ -42,9 +42,9 @@ export class ExpenseService {
         }
 
         let amount = this.config.food.allowance[expense.absence];
-        for (let meal of expense.meals) {
-          amount -= this.config.food.meals[meal];
-        }
+        amount -= expense.breakfast ? this.config.food.meals.breakfast : 0;
+        amount -= expense.lunch ? this.config.food.meals.lunch : 0;
+        amount -= expense.dinner ? this.config.food.meals.dinner : 0;
 
         return amount > 0 ? amount : 0;
       case 'material':

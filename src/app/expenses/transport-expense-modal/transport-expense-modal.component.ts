@@ -63,19 +63,19 @@ export class TransportExpenseModalComponent {
     return this.form.controls.distance;
   }
 
-  get train() {
-    return this.form.controls.train;
+  get ticket() {
+    return this.form.controls.ticket;
   }
 
-  get car() {
-    return this.form.controls.car;
+  get carTrip() {
+    return this.form.controls.carTrip;
   }
 
   getIcon(mode: TransportMode) {
     switch (mode) {
       case 'car':
         return '&#xe531;';
-      case 'train':
+      case 'public':
         return '&#xe570;';
       case 'plan':
         return '&#xe8f8;';
@@ -94,12 +94,12 @@ export class TransportExpenseModalComponent {
       validators: Validators.required
     });
 
-    const passengers = this.car?.controls.passengers;
+    const passengers = this.carTrip?.controls.passengers;
     passengers?.push(control);
   }
 
   removePassenger(index: number) {
-    const passengers = this.car?.controls.passengers;
+    const passengers = this.carTrip?.controls.passengers;
     passengers?.removeAt(index);
   }
 

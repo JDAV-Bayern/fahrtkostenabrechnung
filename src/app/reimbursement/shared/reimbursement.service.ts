@@ -82,11 +82,11 @@ export class ReimbursementService {
     }
 
     // check if receipt is required
-    const trainExpense = this.getExpenses('transport', reimbursement).some(e =>
-      ['train', 'plan'].includes(e.mode)
+    const publicExpense = this.getExpenses('transport', reimbursement).some(e =>
+      ['public', 'plan'].includes(e.mode)
     );
     const materialExpenses = (categories.material || 0) > 0;
-    const receiptsRequired = trainExpense || materialExpenses;
+    const receiptsRequired = publicExpense || materialExpenses;
 
     return { categories, total, totalReduced, receiptsRequired };
   }

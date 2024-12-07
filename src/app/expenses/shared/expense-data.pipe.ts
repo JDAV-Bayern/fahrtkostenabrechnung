@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { FoodExpense } from 'src/domain/expense.model';
 
 export function formatAbsence(value: string): string | null {
   switch (value) {
@@ -13,24 +14,11 @@ export function formatAbsence(value: string): string | null {
   }
 }
 
-export function formatMeal(value: string): string | null {
-  switch (value) {
-    case 'breakfast':
-      return 'Frühstück';
-    case 'lunch':
-      return 'Mittag';
-    case 'dinner':
-      return 'Abend';
-    default:
-      return null;
-  }
-}
-
 @Pipe({
-  name: 'discountCard',
+  name: 'discount',
   standalone: true
 })
-export class DiscountCardPipe implements PipeTransform {
+export class DiscountPipe implements PipeTransform {
   transform(value: string): string | null {
     switch (value) {
       case 'none':
@@ -46,10 +34,10 @@ export class DiscountCardPipe implements PipeTransform {
 }
 
 @Pipe({
-  name: 'carType',
+  name: 'engineType',
   standalone: true
 })
-export class CarTypePipe implements PipeTransform {
+export class EngineTypePipe implements PipeTransform {
   transform(value: string): string | null {
     switch (value) {
       case 'combustion':
@@ -79,14 +67,11 @@ export class AbsencePipe implements PipeTransform {
   standalone: true
 })
 export class MealsPipe implements PipeTransform {
-  transform(value: string): string | null;
-  transform(value: string[]): (string | null)[];
-
-  transform(value: string | string[]) {
-    if (typeof value === 'string') {
-      return formatMeal(value);
-    } else {
-      return value.map(meal => formatMeal(meal));
-    }
+  transform(value: FoodExpense): (string | null)[] {
+    return [
+      ...(value.breakfast ? ['Frühstück'] : []),
+      ...(value.lunch ? ['Mittag'] : []),
+      ...(value.dinner ? ['Abend'] : [])
+    ];
   }
 }

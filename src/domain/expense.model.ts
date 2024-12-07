@@ -1,6 +1,6 @@
 export type Direction = 'inbound' | 'onsite' | 'outbound';
-export type DiscountCard = 'BC25' | 'BC50' | 'none';
-export type CarType = 'combustion' | 'electric' | 'plug-in-hybrid';
+export type Discount = 'BC25' | 'BC50' | 'none';
+export type EngineType = 'combustion' | 'electric' | 'plug-in-hybrid';
 export type Absence = 'fullDay' | 'travelDay' | 'workDay';
 export type Meal = 'breakfast' | 'lunch' | 'dinner';
 
@@ -19,14 +19,18 @@ export interface BikeExpense extends TransportExpenseBase {
 export interface CarExpense extends TransportExpenseBase {
   mode: 'car';
   distance: number;
-  carType: CarType;
-  passengers: string[];
+  carTrip: {
+    engineType: EngineType;
+    passengers: string[];
+  };
 }
 
-export interface TrainExpense extends TransportExpenseBase {
-  mode: 'train';
-  discountCard: DiscountCard;
-  price: number;
+export interface PublicTransportExpense extends TransportExpenseBase {
+  mode: 'public';
+  ticket: {
+    discount: Discount;
+    price: number;
+  };
 }
 
 export interface PublicTransportPlanExpense extends TransportExpenseBase {
@@ -37,7 +41,9 @@ export interface FoodExpense {
   type: 'food';
   date: Date;
   absence: Absence;
-  meals: Meal[];
+  breakfast: boolean;
+  lunch: boolean;
+  dinner: boolean;
 }
 
 export interface MaterialExpense {
@@ -50,7 +56,7 @@ export interface MaterialExpense {
 export type TransportExpense =
   | BikeExpense
   | CarExpense
-  | TrainExpense
+  | PublicTransportExpense
   | PublicTransportPlanExpense;
 export type TransportMode = TransportExpense['mode'];
 

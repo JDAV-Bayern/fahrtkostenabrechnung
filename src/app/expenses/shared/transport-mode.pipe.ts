@@ -5,8 +5,8 @@ export function formatTransportMode(value: TransportMode) {
   switch (value) {
     case 'car':
       return 'Autofahrt';
-    case 'train':
-      return 'Zugfahrt';
+    case 'public':
+      return 'Fahrt mit ÖPNV';
     case 'plan':
       return 'Fahrt mit ÖPNV-Abo';
     case 'bike':

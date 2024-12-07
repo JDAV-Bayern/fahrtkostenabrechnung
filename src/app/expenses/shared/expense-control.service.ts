@@ -4,8 +4,8 @@ import {
   TransportExpense,
   FoodExpense,
   MaterialExpense,
-  CarType,
-  DiscountCard,
+  EngineType,
+  Discount,
   TransportMode,
   Meal,
   Absence
@@ -46,13 +46,13 @@ export class ExpenseControlService {
       origin: ['', Validators.required],
       destination: ['', Validators.required],
       distance: [0, [Validators.required, Validators.min(0)]],
-      car: this.formBuilder.group({
-        type: ['combustion' as CarType, Validators.required],
+      carTrip: this.formBuilder.group({
+        engineType: ['combustion' as EngineType, Validators.required],
         passengers: this.formBuilder.array<string>([])
       }),
-      train: this.formBuilder.group({
+      ticket: this.formBuilder.group({
         price: [0, [Validators.required, Validators.min(0)]],
-        discountCard: ['none' as DiscountCard, Validators.required]
+        discount: ['none' as Discount, Validators.required]
       })
     }) as FormGroup<TransportExpenseForm>;
 
@@ -66,11 +66,9 @@ export class ExpenseControlService {
     return this.formBuilder.group({
       date: new FormControl<Date | null>(null, Validators.required),
       absence: ['workDay' as Absence, [Validators.required, Validators.min(0)]],
-      meals: this.formBuilder.group({
-        breakfast: false as boolean,
-        lunch: false as boolean,
-        dinner: false as boolean
-      })
+      breakfast: false as boolean,
+      lunch: false as boolean,
+      dinner: false as boolean
     });
   }
 
@@ -104,17 +102,21 @@ export class ExpenseControlService {
           origin: value.origin,
           destination: value.destination,
           distance: value.distance!,
-          carType: value.car!.type,
-          passengers: value.car!.passengers
+          carTrip: {
+            engineType: value.carTrip!.engineType,
+            passengers: value.carTrip!.passengers
+          }
         };
-      case 'train':
+      case 'public':
         return {
           type: 'transport',
-          mode: 'train',
+          mode: 'public',
           origin: value.origin,
           destination: value.destination,
-          price: value.train!.price,
-          discountCard: value.train!.discountCard
+          ticket: {
+            price: value.ticket!.price,
+            discount: value.ticket!.discount
+          }
         };
       case 'plan':
         return {
@@ -137,18 +139,10 @@ export class ExpenseControlService {
   }
 
   getFoodExpense(value: RawFormValue<FoodExpenseForm>): FoodExpense {
-    let meals: Meal[] = [];
-    for (let entry of Object.entries(value.meals)) {
-      if (entry[1] === true) {
-        meals.push(entry[0] as Meal);
-      }
-    }
-
     return {
       type: 'food',
-      date: value.date || new Date(),
-      absence: value.absence,
-      meals: meals
+      ...value,
+      date: value.date || new Date()
     };
   }
 
@@ -168,20 +162,20 @@ export class ExpenseControlService {
   ) {
     switch (value) {
       case 'car':
-        form.removeControl('train');
+        form.removeControl('ticket');
         break;
-      case 'train':
+      case 'public':
         form.removeControl('distance');
-        form.removeControl('car');
+        form.removeControl('carTrip');
         break;
       case 'plan':
         form.removeControl('distance');
-        form.removeControl('car');
-        form.removeControl('train');
+        form.removeControl('carTrip');
+        form.removeControl('ticket');
         break;
       case 'bike':
-        form.removeControl('car');
-        form.removeControl('train');
+        form.removeControl('carTrip');
+        form.removeControl('ticket');
         break;
     }
   }
