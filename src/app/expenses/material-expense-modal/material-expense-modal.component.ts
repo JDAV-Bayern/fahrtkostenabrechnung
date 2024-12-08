@@ -1,38 +1,51 @@
-import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
-
+import { DialogRef } from '@angular/cdk/dialog';
 import { Component, inject } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {
+  AbstractControl,
+  ControlValueAccessor,
+  FormControl,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validator,
+  Validators
+} from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MaterialExpenseForm } from 'src/app/expenses/shared/expense-form';
-import { RawFormValue } from 'src/app/shared/form-value';
 
 @Component({
   selector: 'app-material-expense-modal',
   templateUrl: './material-expense-modal.component.html',
   styleUrls: ['./material-expense-modal.component.css'],
-  imports: [ReactiveFormsModule, MatDatepickerModule]
+  imports: [ReactiveFormsModule, MatDatepickerModule],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: MaterialExpenseModalComponent,
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: MaterialExpenseModalComponent,
+      multi: true
+    }
+  ]
 })
-export class MaterialExpenseModalComponent {
-  private readonly dialogRef =
-    inject<DialogRef<FormGroup<MaterialExpenseForm>>>(DialogRef);
+export class MaterialExpenseModalComponent
+  implements ControlValueAccessor, Validator
+{
+  private readonly formBuilder = inject(NonNullableFormBuilder);
+  private readonly dialogRef = inject(DialogRef);
 
-  form: FormGroup<MaterialExpenseForm>;
+  form = this.formBuilder.group({
+    date: new FormControl<Date | null>(null, Validators.required),
+    purpose: ['', Validators.required],
+    amount: [0, [Validators.required, Validators.min(0)]]
+  });
 
-  initialFormValue: RawFormValue<MaterialExpenseForm>;
-
-  constructor() {
-    const data = inject<{ form: FormGroup<MaterialExpenseForm> }>(DIALOG_DATA);
-
-    this.form = data.form;
-
-    this.initialFormValue = this.form.getRawValue();
-
-    this.dialogRef.closed.subscribe(() => {
-      if (!this.form.valid) {
-        this.form.reset(this.initialFormValue);
-      }
-    });
-  }
+  onChange: (val: any) => void = () => {};
+  onTouched: () => void = () => {};
 
   get date() {
     return this.form.controls.date;
@@ -50,9 +63,29 @@ export class MaterialExpenseModalComponent {
     return new Date();
   }
 
+  writeValue(val: any): void {
+    val && this.form.patchValue(val, { emitEvent: false });
+  }
+
+  registerOnChange(fn: (val: any) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    isDisabled ? this.form.disable() : this.form.enable();
+  }
+
+  validate(control: AbstractControl): ValidationErrors | null {
+    return this.form.valid ? null : { materialExpense: true };
+  }
+
   submitForm() {
-    if (this.form.valid) {
-      this.dialogRef.close(this.form);
-    }
+    const date = this.form.controls.date.value || new Date(NaN);
+    this.onChange({ type: 'material', ...this.form.value, date });
+    this.dialogRef.close();
   }
 }

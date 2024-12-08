@@ -6,17 +6,17 @@
     [cdkDropListEnterPredicate]="enterPredicate()"
   >
     <!-- TODO: readd [formArrayName]="form" -->
-    @for (expenseForm of form().controls; track expenseForm) {
-      <div cdkDrag [cdkDragData]="expenseForm" (cdkDragDropped)="drop($event)">
+    @for (control of form().controls; track control) {
+      <div cdkDrag [cdkDragData]="control" (cdkDragDropped)="drop($event)">
         <app-expense-card
-          [expense]="getExpense(expenseForm)"
-          (editRow)="openExpenseDialog(expenseForm)"
+          [expense]="control.value"
+          (editRow)="openEditDialog(control)"
           (deleteRow)="deleteExpense($index)"
         />
       </div>
     }
   </div>
-  <button (click)="openExpenseDialog()" class="jdav-btn icon">
+  <button (click)="openCreateDialog()" class="jdav-btn icon">
     <span class="material-symbols-outlined">add</span>
     Auslage hinzufügen
   </button>

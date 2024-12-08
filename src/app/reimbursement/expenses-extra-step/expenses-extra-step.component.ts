@@ -1,14 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
-import { Dialog, DialogModule } from '@angular/cdk/dialog';
+import { DialogModule } from '@angular/cdk/dialog';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { ReimbursementService } from '../shared/reimbursement.service';
-import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.service';
 import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
-import { FoodExpenseModalComponent } from 'src/app/expenses/food-expense-modal/food-expense-modal.component';
-import { MaterialExpenseModalComponent } from 'src/app/expenses/material-expense-modal/material-expense-modal.component';
 import { toInterval } from 'src/app/shared/validators/date-range.validator';
 import { getFoodOptions } from '../shared/food.validator';
 
@@ -30,8 +27,6 @@ export class ExpensesExtraStepComponent {
   private readonly reimbursementControlService = inject(
     ReimbursementControlService
   );
-  private readonly expenseControlService = inject(ExpenseControlService);
-  private readonly dialog = inject(Dialog);
 
   rootForm = this.reimbursementControlService.form;
   parentForm = this.reimbursementControlService.expensesStep;
@@ -48,28 +43,6 @@ export class ExpensesExtraStepComponent {
   get report() {
     const reimbursment = this.reimbursementControlService.getReimbursement();
     return this.reimbursementService.getReport(reimbursment);
-  }
-
-  getOpenFoodDialogFn() {
-    return (form?: FormGroup) => {
-      if (!form) {
-        form = this.expenseControlService.createFoodForm();
-      }
-      return this.dialog.open<FormGroup>(FoodExpenseModalComponent, {
-        data: { form }
-      });
-    };
-  }
-
-  getOpenMaterialDialogFn(form?: FormGroup) {
-    return (form?: FormGroup) => {
-      if (!form) {
-        form = this.expenseControlService.createMaterialForm();
-      }
-      return this.dialog.open<FormGroup>(MaterialExpenseModalComponent, {
-        data: { form }
-      });
-    };
   }
 
   completeFood() {

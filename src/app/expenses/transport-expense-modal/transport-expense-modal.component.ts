@@ -1,50 +1,70 @@
-import { DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
-
-import { Component, inject } from '@angular/core';
+import { DialogRef } from '@angular/cdk/dialog';
+import { Component, inject, input, OnInit } from '@angular/core';
 import {
+  AbstractControl,
+  ControlValueAccessor,
   FormControl,
-  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  NonNullableFormBuilder,
   ReactiveFormsModule,
+  ValidationErrors,
+  Validator,
   Validators
 } from '@angular/forms';
-import { TransportExpenseForm } from 'src/app/expenses/shared/expense-form';
-import { TransportMode } from 'src/domain/expense.model';
+import { Discount, EngineType, TransportMode } from 'src/domain/expense.model';
 import { TransportModePipe } from '../shared/transport-mode.pipe';
-import { RawFormValue } from 'src/app/shared/form-value';
-
-export interface TransportExpenseDialogData {
-  allowedModes: TransportMode[];
-  form: FormGroup<TransportExpenseForm>;
-}
+import { TransportExpenseCompletion } from 'src/app/reimbursement/shared/reimbursement-control.service';
 
 @Component({
   selector: 'app-transport-expense-modal',
   templateUrl: './transport-expense-modal.component.html',
   styleUrls: ['./transport-expense-modal.component.css'],
-  imports: [ReactiveFormsModule, TransportModePipe]
+  imports: [ReactiveFormsModule, TransportModePipe],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: TransportExpenseModalComponent,
+      multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: TransportExpenseModalComponent,
+      multi: true
+    }
+  ]
 })
-export class TransportExpenseModalComponent {
-  private readonly dialogRef =
-    inject<DialogRef<FormGroup<TransportExpenseForm>>>(DialogRef);
+export class TransportExpenseModalComponent
+  implements ControlValueAccessor, Validator, OnInit
+{
+  private readonly formBuilder = inject(NonNullableFormBuilder);
+  private readonly dialogRef = inject(DialogRef);
 
-  form: FormGroup<TransportExpenseForm>;
-  allowedModes: TransportMode[];
+  allowedModes = input<TransportMode[]>();
+  completion = input<TransportExpenseCompletion>();
 
-  initialFormValue: RawFormValue<TransportExpenseForm>;
+  form = this.formBuilder.group({
+    mode: new FormControl<TransportMode | null>(null, Validators.required),
+    origin: ['', Validators.required],
+    destination: ['', Validators.required],
+    distance: [0, [Validators.required, Validators.min(0)]],
+    carTrip: this.formBuilder.group({
+      engineType: ['combustion' as EngineType, Validators.required],
+      passengers: this.formBuilder.array<string>([])
+    }),
+    ticket: this.formBuilder.group({
+      price: [0, [Validators.required, Validators.min(0)]],
+      discount: ['none' as Discount, Validators.required]
+    })
+  });
 
-  constructor() {
-    const data = inject<TransportExpenseDialogData>(DIALOG_DATA);
+  onChange: (val: any) => void = () => {};
+  onTouched: () => void = () => {};
 
-    this.form = data.form;
-    this.allowedModes = data.allowedModes;
-
-    this.initialFormValue = this.form.getRawValue();
-
-    this.dialogRef.closed.subscribe(() => {
-      if (!this.form.valid) {
-        this.form.reset(this.initialFormValue);
-      }
-    });
+  ngOnInit() {
+    this.form.controls.mode.valueChanges.subscribe(val =>
+      this.onTransportModeChanged(val)
+    );
   }
 
   get mode() {
@@ -71,6 +91,31 @@ export class TransportExpenseModalComponent {
     return this.form.controls.carTrip;
   }
 
+  writeValue(val: any): void {
+    if (val) {
+      val.carTrip?.passengers?.forEach(() => this.addPassenger());
+      this.form.patchValue(val, { emitEvent: false });
+    }
+  }
+
+  registerOnChange(fn: (val: any) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    isDisabled
+      ? this.form.disable({ emitEvent: false })
+      : this.enableControls(this.mode.value);
+  }
+
+  validate(control: AbstractControl): ValidationErrors | null {
+    return this.form.valid ? null : { transportExpense: true };
+  }
+
   getIcon(mode: TransportMode) {
     switch (mode) {
       case 'car':
@@ -89,23 +134,54 @@ export class TransportExpenseModalComponent {
   }
 
   addPassenger() {
-    const control = new FormControl('', {
-      nonNullable: true,
-      validators: Validators.required
-    });
-
-    const passengers = this.carTrip?.controls.passengers;
-    passengers?.push(control);
+    const control = this.formBuilder.control('', Validators.required);
+    this.carTrip.controls.passengers.push(control);
   }
 
   removePassenger(index: number) {
-    const passengers = this.carTrip?.controls.passengers;
-    passengers?.removeAt(index);
+    this.carTrip.controls.passengers.removeAt(index);
   }
 
   submitForm() {
-    if (this.form.valid) {
-      this.dialogRef.close(this.form);
+    this.onChange({ type: 'transport', ...this.form.value });
+    this.dialogRef.close();
+  }
+
+  private enableControls(mode: TransportMode | null) {
+    // TODO: Is it fine to avoid emitting events here?
+    // It might break the form state, but if we emit events other things break
+    this.form.enable({ emitEvent: false });
+
+    switch (mode) {
+      case 'car':
+        this.form.controls.ticket.disable();
+        break;
+      case 'public':
+        this.form.controls.distance.disable();
+        this.form.controls.carTrip.disable();
+        break;
+      case 'plan':
+        this.form.controls.distance.disable();
+        this.form.controls.carTrip.disable();
+        this.form.controls.ticket.disable();
+        break;
+      case 'bike':
+        this.form.controls.carTrip.disable();
+        this.form.controls.ticket.disable();
+        break;
     }
+  }
+
+  private onTransportModeChanged(value: TransportMode | null) {
+    this.enableControls(value);
+    const completion = this.completion();
+
+    if (!completion) return;
+
+    if (completion.origin) this.origin.setValue(completion.origin);
+    if (completion.engineType)
+      this.carTrip.controls.engineType.setValue(completion.engineType);
+    if (completion.discount)
+      this.ticket.controls.discount.setValue(completion.discount);
   }
 }
