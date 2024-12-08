@@ -10,12 +10,7 @@
   <fieldset [formGroup]="parentForm">
     @if (foodOptions.length !== 0 || foodForm.length !== 0) {
       <div>
-        <app-expense-list
-          expenseType="food"
-          [form]="foodForm"
-          formArrayName="food"
-          [openDialog]="getOpenFoodDialogFn()"
-        >
+        <app-expense-list type="food" [form]="foodForm" formArrayName="food">
           <div class="heading">
             <h2>Tagegelder</h2>
             <button class="jdav-btn icon" (click)="completeFood()">
@@ -59,10 +54,9 @@
 
     <div>
       <app-expense-list
-        expenseType="material"
+        type="material"
         [form]="materialForm"
         formArrayName="material"
-        [openDialog]="getOpenMaterialDialogFn()"
       >
         <h2>Sonstige Auslagen</h2>
       </app-expense-list>

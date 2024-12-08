@@ -1,12 +1,18 @@
 import { Injectable, inject } from '@angular/core';
 import {
   FormControl,
-  FormGroup,
   NonNullableFormBuilder,
   Validators
 } from '@angular/forms';
 import { validateIBAN } from 'ngx-iban-validator';
-import { Direction } from 'src/domain/expense.model';
+import {
+  Direction,
+  Discount,
+  EngineType,
+  FoodExpense,
+  MaterialExpense,
+  TransportExpense
+} from 'src/domain/expense.model';
 import { Reimbursement } from 'src/domain/reimbursement.model';
 import {
   allowedTransportModes,
@@ -16,12 +22,6 @@ import { validateCourseCode } from '../../shared/validators/course-code.validato
 import { Meeting, MeetingType } from 'src/domain/meeting.model';
 import { MeetingForm } from './meeting-form';
 import { ReimbursementService } from './reimbursement.service';
-import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.service';
-import {
-  TransportExpenseForm,
-  FoodExpenseForm,
-  MaterialExpenseForm
-} from 'src/app/expenses/shared/expense-form';
 import { anyRequired } from 'src/app/shared/validators/any-required.validator';
 import {
   orderedDateRange,
@@ -49,12 +49,17 @@ const BIC_REQUIRED = /^(MC|SM|CH)/;
 
 const DATE_KEYS = ['date', 'startDate', 'endDate'];
 
+export interface TransportExpenseCompletion {
+  origin?: string;
+  engineType?: EngineType;
+  discount?: Discount;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class ReimbursementControlService {
   private readonly formBuilder = inject(NonNullableFormBuilder);
-  private readonly expenseControlService = inject(ExpenseControlService);
   private readonly reimbursementService = inject(ReimbursementService);
 
   private courseCodeControl = this.formBuilder.control('', [
@@ -97,26 +102,26 @@ export class ReimbursementControlService {
         {
           transport: this.formBuilder.group(
             {
-              inbound: this.formBuilder.array<FormGroup<TransportExpenseForm>>(
+              inbound: this.formBuilder.array<TransportExpense>(
                 [],
                 limitedTransportMode('plan', 1)
               ),
-              onsite: this.formBuilder.array<FormGroup<TransportExpenseForm>>(
+              onsite: this.formBuilder.array<TransportExpense>(
                 [],
                 allowedTransportModes(['car', 'public'])
               ),
-              outbound: this.formBuilder.array<FormGroup<TransportExpenseForm>>(
+              outbound: this.formBuilder.array<TransportExpense>(
                 [],
                 limitedTransportMode('plan', 1)
               )
             },
             { validators: anyRequired }
           ),
-          food: this.formBuilder.array<FormGroup<FoodExpenseForm>>(
+          food: this.formBuilder.array<FoodExpense>(
             [],
             [validateFoodExpenseUnique, validateFoodExpenseWorkDay]
           ),
-          material: this.formBuilder.array<FormGroup<MaterialExpenseForm>>([])
+          material: this.formBuilder.array<MaterialExpense>([])
         },
         { validators: anyRequired }
       ),
@@ -183,33 +188,14 @@ export class ReimbursementControlService {
     const storedValue = JSON.parse(storedData, reviveDate(DATE_KEYS));
 
     // add controls for form arrays
-    reviveFormArrays(this.form, storedValue, key => this.createForm(key));
+    reviveFormArrays(this.form, storedValue, () =>
+      this.formBuilder.control({})
+    );
 
     this.form.patchValue(storedValue);
 
     // mark controls with values as touched
     deepMarkAsDirty(this.form);
-  }
-
-  createForm(key?: string) {
-    switch (key) {
-      case 'inbound':
-      case 'onsite':
-      case 'outbound':
-        return this.expenseControlService.createTransportForm();
-      case 'food':
-        return this.expenseControlService.createFoodForm();
-      case 'material':
-        return this.expenseControlService.createMaterialForm();
-      case 'passengers':
-        return this.formBuilder.control('', Validators.required);
-      default:
-        console.warn(
-          'Could not create FormControl for FormArray with key',
-          key
-        );
-        return undefined;
-    }
   }
 
   saveForm() {
@@ -231,9 +217,6 @@ export class ReimbursementControlService {
   getReimbursement(): Reimbursement {
     const meetingValue = this.meetingStep.value;
     const participant = this.participantStep.getRawValue();
-    const transport = this.transportExpensesStep.getRawValue();
-    const food = this.foodExpenses.getRawValue();
-    const material = this.materialExpenses.getRawValue();
 
     let meeting;
     if (meetingValue.time) {
@@ -252,61 +235,20 @@ export class ReimbursementControlService {
         ...participant,
         sectionId: participant.sectionId || 0
       },
-      expenses: {
-        transport: {
-          inbound: transport.inbound.map(value =>
-            this.expenseControlService.getTransportExpense(value)
-          ),
-          onsite: transport.onsite.map(value =>
-            this.expenseControlService.getTransportExpense(value)
-          ),
-          outbound: transport.outbound.map(value =>
-            this.expenseControlService.getTransportExpense(value)
-          )
-        },
-        food: food.map(value =>
-          this.expenseControlService.getFoodExpense(value)
-        ),
-        material: material.map(value =>
-          this.expenseControlService.getMaterialExpense(value)
-        )
-      },
+      expenses: this.expensesStep.getRawValue(),
       note: this.overviewStep.controls.note.value
     };
   }
 
-  completeTransportExpense(
-    direction: Direction,
-    form: FormGroup<TransportExpenseForm>
-  ) {
+  completeTransportExpense(direction: Direction): TransportExpenseCompletion {
     const transport = this.transportExpensesStep.getRawValue();
     const expenses = Object.values(transport).flat();
 
-    // auto-complete origin
     const origin = this.completeOrigin(direction);
-    form.controls.origin.setValue(origin);
+    const engineType = expenses.find(e => e.mode === 'car')?.carTrip.engineType;
+    const discount = expenses.find(e => e.mode === 'public')?.ticket.discount;
 
-    // auto-complete engine type
-    const carTrip = form.controls.carTrip;
-    if (carTrip) {
-      for (let expense of expenses) {
-        if (expense.carTrip) {
-          carTrip.controls.engineType.setValue(expense.carTrip.engineType);
-          break;
-        }
-      }
-    }
-
-    // auto-complete discount
-    const ticket = form.controls.ticket;
-    if (ticket) {
-      for (let expense of expenses) {
-        if (expense.ticket) {
-          ticket.controls.discount.setValue(expense.ticket.discount);
-          break;
-        }
-      }
-    }
+    return { origin, engineType, discount };
   }
 
   completeReturnTrip(): void {
@@ -318,13 +260,13 @@ export class ReimbursementControlService {
       const value = values[i];
 
       // swap origin and destination
-      let temp = value.origin;
-      value.origin = value.destination;
-      value.destination = temp;
+      const control = this.formBuilder.control({} as TransportExpense);
+      control.setValue({
+        ...value,
+        origin: value.destination,
+        destination: value.origin
+      });
 
-      const control = this.expenseControlService.createTransportForm();
-      reviveFormArrays(control, value, key => this.createForm(key));
-      control.patchValue(value);
       outbound.push(control);
     }
   }
@@ -336,8 +278,15 @@ export class ReimbursementControlService {
 
     for (let foodOpt of foodOpts) {
       if (foodOpt.absence !== null) {
-        const form = this.expenseControlService.createFoodForm();
-        form.patchValue({ date: foodOpt.date, absence: foodOpt.absence });
+        const form = this.formBuilder.control({} as FoodExpense);
+        form.setValue({
+          type: 'food',
+          date: foodOpt.date,
+          absence: foodOpt.absence,
+          breakfast: false,
+          lunch: false,
+          dinner: false
+        });
         this.foodExpenses.push(form);
       }
     }

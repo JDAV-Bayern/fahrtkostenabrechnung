@@ -4,17 +4,16 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { CurrencyPipe } from '@angular/common';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
-import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import { Direction, TransportMode } from 'src/domain/expense.model';
-import { ReimbursementService } from '../shared/reimbursement.service';
-import { TransportExpenseForm } from 'src/app/expenses/shared/expense-form';
-import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.service';
-import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
+import { DialogModule } from '@angular/cdk/dialog';
 import {
-  TransportExpenseDialogData,
-  TransportExpenseModalComponent
-} from 'src/app/expenses/transport-expense-modal/transport-expense-modal.component';
+  Direction,
+  TransportExpense,
+  TransportMode
+} from 'src/domain/expense.model';
+import { ReimbursementService } from '../shared/reimbursement.service';
+import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
 import { RouterLink } from '@angular/router';
+import { ExpenseExtraData } from 'src/app/expenses/expense-modal/expense-modal.component';
 
 @Component({
   selector: 'app-expenses-step',
@@ -35,8 +34,6 @@ export class ExpensesStepComponent {
   private readonly reimbursementControlService = inject(
     ReimbursementControlService
   );
-  private readonly expenseControlService = inject(ExpenseControlService);
-  private readonly dialog = inject(Dialog);
 
   form = this.reimbursementControlService.transportExpensesStep;
 
@@ -99,26 +96,11 @@ export class ExpensesStepComponent {
     return allowedModes;
   }
 
-  getOpenDialogFn(direction: Direction) {
-    return (expense?: FormGroup<TransportExpenseForm>) => {
-      const form = expense || this.expenseControlService.createTransportForm();
-      const sub = form.controls.mode.valueChanges.subscribe(() =>
-        this.reimbursementControlService.completeTransportExpense(
-          direction,
-          form
-        )
-      );
-
-      const allowedModes = this.getAllowedModes(direction);
-      const data: TransportExpenseDialogData = { form, allowedModes };
-
-      const dialogRef = this.dialog.open<FormGroup>(
-        TransportExpenseModalComponent,
-        { data }
-      );
-      dialogRef.closed.subscribe(() => sub.unsubscribe());
-      return dialogRef;
-    };
+  getDialogData(direction: Direction): ExpenseExtraData<TransportExpense> {
+    const allowedModes = this.getAllowedModes(direction);
+    const completion =
+      this.reimbursementControlService.completeTransportExpense(direction);
+    return { allowedModes, completion };
   }
 
   getPredicateFn(direction: Direction) {

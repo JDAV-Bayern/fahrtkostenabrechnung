@@ -1,11 +1,19 @@
 import { Component, input, inject } from '@angular/core';
-import { DialogRef } from '@angular/cdk/dialog';
-import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { Dialog, DialogRef } from '@angular/cdk/dialog';
+import {
+  FormArray,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule
+} from '@angular/forms';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
-
 import { ExpenseCardComponent } from '../expense-card/expense-card.component';
-import { ExpenseType } from 'src/domain/expense.model';
-import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.service';
+import { Expense } from 'src/domain/expense.model';
+import {
+  ExpenseDialogData,
+  ExpenseExtraData,
+  ExpenseModalComponent
+} from '../expense-modal/expense-modal.component';
 
 @Component({
   selector: 'app-expense-list',
@@ -13,12 +21,12 @@ import { ExpenseControlService } from 'src/app/expenses/shared/expense-control.s
   styleUrls: ['./expense-list.component.css'],
   imports: [ReactiveFormsModule, CdkDrag, CdkDropList, ExpenseCardComponent]
 })
-export class ExpenseListComponent {
-  private readonly controlService = inject(ExpenseControlService);
+export class ExpenseListComponent<T extends Expense> {
+  private readonly dialog = inject(Dialog);
 
-  readonly expenseType = input.required<ExpenseType>();
-  readonly form = input.required<FormArray<FormGroup>>();
-  readonly openDialog = input<(form?: FormGroup) => DialogRef<FormGroup>>();
+  readonly type = input.required<T['type']>();
+  readonly form = input.required<FormArray<FormControl<T>>>();
+  readonly dialogData = input<ExpenseExtraData<T>>();
   readonly enterPredicate = input<
     (drag: CdkDrag, drop: CdkDropList) => boolean
   >(() => true);
@@ -29,37 +37,33 @@ export class ExpenseListComponent {
     this.parent = this.form().parent as FormGroup;
   }
 
-  getExpense(expenseForm: FormGroup) {
-    return this.controlService.getExpense(
-      this.expenseType(),
-      expenseForm.value
-    );
-  }
-
-  openExpenseDialog(form?: FormGroup) {
-    const openDialog = this.openDialog();
-    if (openDialog) {
-      if (form) {
-        openDialog(form);
-      } else {
-        openDialog().closed.subscribe(result => {
-          if (result) {
-            this.addExpense(result);
-          }
-        });
+  openCreateDialog() {
+    const control = new FormControl({} as T, { nonNullable: true });
+    this.openEditDialog(control).closed.subscribe(() => {
+      if (control?.valid) {
+        this.form().push(control);
       }
-    }
+    });
   }
 
-  addExpense(result: any) {
-    this.form().push(result);
+  openEditDialog(control: FormControl<T>): DialogRef {
+    return this.dialog.open<any, ExpenseDialogData<T>>(
+      ExpenseModalComponent<T>,
+      {
+        data: {
+          type: this.type(),
+          control: control,
+          extra: this.dialogData()
+        }
+      }
+    );
   }
 
   deleteExpense(index: number) {
     this.form().removeAt(index);
   }
 
-  drop(event: CdkDragDrop<FormArray>) {
+  drop(event: CdkDragDrop<FormArray<FormControl<T>>>) {
     const target = event.previousContainer.data.at(event.previousIndex);
     event.previousContainer.data.removeAt(event.previousIndex);
     event.container.data.insert(event.currentIndex, target);

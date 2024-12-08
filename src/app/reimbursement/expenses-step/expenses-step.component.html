@@ -13,10 +13,10 @@
 
     <div cdkDropListGroup>
       <app-expense-list
-        expenseType="transport"
+        type="transport"
         [form]="inbound"
         formArrayName="inbound"
-        [openDialog]="getOpenDialogFn('inbound')"
+        [dialogData]="getDialogData('inbound')"
         [enterPredicate]="getPredicateFn('inbound')"
       >
         <h3>Hinfahrt</h3>
@@ -29,10 +29,10 @@
       }
 
       <app-expense-list
-        expenseType="transport"
+        type="transport"
         [form]="onsite"
         formArrayName="onsite"
-        [openDialog]="getOpenDialogFn('onsite')"
+        [dialogData]="getDialogData('onsite')"
         [enterPredicate]="getPredicateFn('onsite')"
       >
         <h3>Vor Ort</h3>
@@ -45,10 +45,10 @@
       }
 
       <app-expense-list
-        expenseType="transport"
+        type="transport"
         [form]="form.controls.outbound"
         formArrayName="outbound"
-        [openDialog]="getOpenDialogFn('outbound')"
+        [dialogData]="getDialogData('outbound')"
         [enterPredicate]="getPredicateFn('outbound')"
       >
         <div class="heading">
