@@ -1,20 +1,20 @@
+import { Dialog, DialogModule } from '@angular/cdk/dialog';
+import { CurrencyPipe, KeyValuePipe, formatDate } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import jsPDF from 'jspdf';
-import * as imageprocessor from 'ts-image-processor';
-import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
-import { PDFDocument } from 'pdf-lib';
-import { ReimbursementValidatorService } from 'src/app/reimbursement/shared/reimbursement-validator.service';
 import { NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
-import { Dialog, DialogModule } from '@angular/cdk/dialog';
+import { PDFDocument } from 'pdf-lib';
+import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
+import { ReimbursementValidatorService } from 'src/app/reimbursement/shared/reimbursement-validator.service';
+import * as imageprocessor from 'ts-image-processor';
 import { FinishedDialogComponent } from './finished-dialog/finished-dialog.component';
-import { CurrencyPipe, KeyValuePipe, formatDate } from '@angular/common';
 
+import { ReactiveFormsModule } from '@angular/forms';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { ProgressIndicatorComponent } from 'src/app/shared/icons/progress-indicator/progress-indicator.component';
-import { PdfViewComponent } from './pdf-view/pdf-view.component';
-import { ReactiveFormsModule } from '@angular/forms';
-import { ReimbursementService } from '../shared/reimbursement.service';
 import { ExpenseTypePipe } from '../../expenses/shared/expense-type.pipe';
+import { ReimbursementService } from '../shared/reimbursement.service';
+import { PdfViewComponent } from './pdf-view/pdf-view.component';
 
 @Component({
   selector: 'app-overview-step',

@@ -11,6 +11,7 @@ import {
   ValidatorFn,
   Validators
 } from '@angular/forms';
+import { TransportExpenseCompletion } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import {
   Discount,
   EngineType,
@@ -18,7 +19,6 @@ import {
   TransportMode
 } from 'src/domain/expense.model';
 import { TransportModePipe } from '../shared/transport-mode.pipe';
-import { TransportExpenseCompletion } from 'src/app/reimbursement/shared/reimbursement-control.service';
 
 @Component({
   selector: 'app-transport-expense-modal',

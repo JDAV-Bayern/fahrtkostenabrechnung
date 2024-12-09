@@ -1,5 +1,4 @@
 import { FormArray, FormGroup, ValidatorFn } from '@angular/forms';
-import { toInterval } from '../../shared/validators/date-range.validator';
 import {
   Interval,
   closestIndexTo,
@@ -8,6 +7,7 @@ import {
   startOfDay
 } from 'date-fns';
 import { Absence } from 'src/domain/expense.model';
+import { toInterval } from '../../shared/validators/date-range.validator';
 
 export interface FoodOptions {
   date: Date;

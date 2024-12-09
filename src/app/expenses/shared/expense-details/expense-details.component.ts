@@ -1,8 +1,8 @@
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { Component, input } from '@angular/core';
 import {
-  EngineTypePipe,
   DiscountPipe,
+  EngineTypePipe,
   MealsPipe
 } from 'src/app/expenses/shared/expense-data.pipe';
 import { JoinPipe } from 'src/app/shared/join.pipe';

@@ -12,11 +12,11 @@ import {
   Validators
 } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { getFoodOptions } from 'src/app/reimbursement/shared/food.validator';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
+import { toInterval } from 'src/app/shared/validators/date-range.validator';
 import { Absence, FoodExpense } from 'src/domain/expense.model';
 import { AbsencePipe } from '../shared/expense-data.pipe';
-import { toInterval } from 'src/app/shared/validators/date-range.validator';
-import { getFoodOptions } from 'src/app/reimbursement/shared/food.validator';
 
 @Component({
   selector: 'app-food-expense-modal',

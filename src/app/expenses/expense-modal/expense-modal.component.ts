@@ -1,15 +1,15 @@
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, inject } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { TransportExpenseCompletion } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import {
   Expense,
   TransportExpense,
   TransportMode
 } from 'src/domain/expense.model';
-import { TransportExpenseModalComponent } from '../transport-expense-modal/transport-expense-modal.component';
-import { TransportExpenseCompletion } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { FoodExpenseModalComponent } from '../food-expense-modal/food-expense-modal.component';
 import { MaterialExpenseModalComponent } from '../material-expense-modal/material-expense-modal.component';
+import { TransportExpenseModalComponent } from '../transport-expense-modal/transport-expense-modal.component';
 
 export interface ExpenseDialogData<T extends Expense> {
   type: T['type'];

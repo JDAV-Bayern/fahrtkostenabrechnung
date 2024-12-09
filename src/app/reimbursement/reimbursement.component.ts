@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ReimbursementControlService } from './shared/reimbursement-control.service';
 import { RouterOutlet } from '@angular/router';
+import { ReimbursementControlService } from './shared/reimbursement-control.service';
 
 @Component({
   selector: 'app-reimbursement',

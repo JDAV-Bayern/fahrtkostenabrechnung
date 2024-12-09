@@ -1,9 +1,9 @@
-import { Component, input, output } from '@angular/core';
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { ExpenseDetailsComponent } from '../shared/expense-details/expense-details.component';
+import { Component, input, output } from '@angular/core';
 import { Expense } from 'src/domain/expense.model';
-import { ExpenseTitlePipe } from '../shared/expense-title.pipe';
 import { ExpenseAmountPipe } from '../shared/expense-amount.pipe';
+import { ExpenseDetailsComponent } from '../shared/expense-details/expense-details.component';
+import { ExpenseTitlePipe } from '../shared/expense-title.pipe';
 
 @Component({
   selector: 'app-expense-card',

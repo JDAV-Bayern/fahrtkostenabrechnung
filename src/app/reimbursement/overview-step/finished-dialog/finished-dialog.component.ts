@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
+import { Component, inject } from '@angular/core';
 import { Meeting } from 'src/domain/meeting.model';
 
 @Component({
