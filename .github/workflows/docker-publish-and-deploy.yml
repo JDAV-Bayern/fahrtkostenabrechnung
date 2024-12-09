@@ -1,4 +1,4 @@
-name: Docker build publish and deploy
+name: Build and publish Docker image and deploy to production
 
 # This workflow uses actions that are not certified by GitHub.
 # They are provided by a third-party and are governed by

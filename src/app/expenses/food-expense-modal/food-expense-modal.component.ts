@@ -1,20 +1,19 @@
 import { DialogRef } from '@angular/cdk/dialog';
 import { Component, inject } from '@angular/core';
 import {
-  AbstractControl,
   ControlValueAccessor,
   FormControl,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   NonNullableFormBuilder,
   ReactiveFormsModule,
-  ValidationErrors,
   Validator,
+  ValidatorFn,
   Validators
 } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
-import { Absence } from 'src/domain/expense.model';
+import { Absence, FoodExpense } from 'src/domain/expense.model';
 import { AbsencePipe } from '../shared/expense-data.pipe';
 import { toInterval } from 'src/app/shared/validators/date-range.validator';
 import { getFoodOptions } from 'src/app/reimbursement/shared/food.validator';
@@ -52,8 +51,12 @@ export class FoodExpenseModalComponent
     dinner: false
   });
 
-  onChange: (val: any) => void = () => {};
-  onTouched: () => void = () => {};
+  onChange: (val: FoodExpense) => void = () => {
+    // do nothing
+  };
+  onTouched: () => void = () => {
+    // do nothing
+  };
 
   initialDate: Date | null = null;
   options: Absence[] = [];
@@ -76,15 +79,17 @@ export class FoodExpenseModalComponent
     return this.controlService.meetingStep.controls.time.getRawValue();
   }
 
-  writeValue(val: any): void {
-    val && this.form.patchValue(val, { emitEvent: false });
-    if (val?.date) {
-      this.initialDate = val.date;
-      this.onDateChange();
+  writeValue(val: Partial<FoodExpense>): void {
+    if (val) {
+      this.form.patchValue(val, { emitEvent: false });
+      if (val.date) {
+        this.initialDate = val.date;
+        this.onDateChange();
+      }
     }
   }
 
-  registerOnChange(fn: (val: any) => void): void {
+  registerOnChange(fn: (val: FoodExpense) => void): void {
     this.onChange = fn;
   }
 
@@ -93,12 +98,16 @@ export class FoodExpenseModalComponent
   }
 
   setDisabledState(isDisabled: boolean): void {
-    isDisabled ? this.form.disable() : this.form.enable();
+    if (isDisabled) {
+      this.form.disable();
+    } else {
+      this.form.enable();
+    }
   }
 
-  validate(control: AbstractControl): ValidationErrors | null {
+  validate: ValidatorFn = () => {
     return this.form.valid ? null : { foodExpense: true };
-  }
+  };
 
   onDateChange() {
     const time = this.controlService.meetingStep.controls.time;
@@ -129,7 +138,7 @@ export class FoodExpenseModalComponent
 
   submitForm() {
     const date = this.form.controls.date.value || new Date(NaN);
-    this.onChange({ type: 'food', ...this.form.value, date });
+    this.onChange({ type: 'food', ...this.form.value, date } as FoodExpense);
     this.dialogRef.close();
   }
 }

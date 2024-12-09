@@ -1,7 +1,7 @@
 import { FormControl, FormGroup } from '@angular/forms';
 import { MeetingType } from 'src/domain/meeting.model';
 
-export type MeetingForm = {
+export interface MeetingForm {
   type: FormControl<MeetingType>;
   name: FormControl<string>;
   location: FormControl<string>;
@@ -12,4 +12,4 @@ export type MeetingForm = {
     endTime: FormControl<number>;
   }>;
   code?: FormControl<string>;
-};
+}

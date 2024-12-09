@@ -49,7 +49,7 @@ export class OverviewStepComponent {
   pdfFullyRendered = () => {
     console.error('pdfFullyRendered not set');
   };
-  pdfFullyRenderedPromise: Promise<void> = new Promise(resolve => {
+  pdfFullyRenderedPromise = new Promise<void>(resolve => {
     this.pdfFullyRendered = resolve;
   });
 
@@ -230,16 +230,19 @@ export class OverviewStepComponent {
     const lastName = this.reimbursement.participant.familyName;
 
     switch (meeting.type) {
-      case 'course':
+      case 'course': {
         fileName = `Fahrtkostenabrechnung_${meeting.code}_${lastName}.pdf`;
         break;
-      case 'assembly':
+      }
+      case 'assembly': {
         fileName = `Fahrtkostenabrechnung_LJV_${lastName}.pdf`;
         break;
-      case 'committee':
+      }
+      case 'committee': {
         const timestamp = formatDate(meeting.time.start, 'yyyyMMdd', 'de-DE');
         fileName = `Fahrtkostenabrechnung_${lastName}_${timestamp}.pdf`;
         break;
+      }
     }
 
     const link = document.createElement('a');

@@ -10,7 +10,7 @@ type FormKey =
   | 'expensesStep'
   | 'overviewStep';
 
-type RouteOptions = string | { [key in MeetingType]: string };
+type RouteOptions = string | Record<MeetingType, string>;
 
 function createGuard(form: FormKey, routeTo: RouteOptions): CanActivateFn {
   return route => {

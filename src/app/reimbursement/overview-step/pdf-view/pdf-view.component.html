@@ -3,7 +3,11 @@
   <p>
     <b>Datum: {{ now | date }}</b>
   </p>
-  <img class="logo" src="data:image/png;base64,{{ getLogo() }}" />
+  <img
+    class="logo"
+    src="data:image/png;base64,{{ getLogo() }}"
+    alt="Logo der JDAV Bayern"
+  />
   <p style="width: 312px">
     Diese Fahrtkostenabrechnung wurde automatisch erstellt. Bitte die generierte
     PDF per E-Mail an lgs&#64;jdav-bayern.de oder ausgedruckt in die
@@ -116,7 +120,7 @@
         @for (direction of directions; track direction) {
           <tr>
             <td></td>
-            <td scope="rowgroup" colspan="3" class="category-header">
+            <td colspan="3" class="category-header">
               {{ direction | direction }}
             </td>
           </tr>

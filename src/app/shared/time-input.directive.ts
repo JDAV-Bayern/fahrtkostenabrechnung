@@ -25,7 +25,7 @@ export const TIME_VALIDATORS = {
   multi: true
 };
 
-export const TIME_PATTERN = /^([0-9]{1,2})(?:\:([0-9]{2})?)?$/;
+export const TIME_PATTERN = /^([0-9]{1,2})(?::([0-9]{2})?)?$/;
 
 @Directive({
   selector: 'input[appTimeInput]',
@@ -41,13 +41,17 @@ export class TimeInputDirective implements ControlValueAccessor, Validator {
   private readonly renderer = inject(Renderer2);
   private readonly elementRef = inject(ElementRef);
 
-  onChange = (_: any) => {};
-  onTouched = () => {};
+  onChange: (val: number) => void = () => {
+    // do nothing
+  };
+  onTouched: () => void = () => {
+    // do nothing
+  };
 
   disabled = false;
   lastValueValid = false;
 
-  writeValue(value: any): void {
+  writeValue(value: number): void {
     const hours = Math.floor(value / 60 / 60 / 1000);
     const minutes = Math.floor(value / 60 / 1000) - hours * 60;
     const formatted = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
@@ -59,11 +63,11 @@ export class TimeInputDirective implements ControlValueAccessor, Validator {
     );
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(fn: (val: number) => void): void {
     this.onChange = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
@@ -89,7 +93,7 @@ export class TimeInputDirective implements ControlValueAccessor, Validator {
     this.onChange(0);
   }
 
-  validate: ValidatorFn = control => {
+  validate: ValidatorFn = () => {
     return this.lastValueValid ? null : { invalidTime: true };
   };
 }

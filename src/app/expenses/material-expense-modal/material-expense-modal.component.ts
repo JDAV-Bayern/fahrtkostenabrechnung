@@ -1,18 +1,18 @@
 import { DialogRef } from '@angular/cdk/dialog';
 import { Component, inject } from '@angular/core';
 import {
-  AbstractControl,
   ControlValueAccessor,
   FormControl,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   NonNullableFormBuilder,
   ReactiveFormsModule,
-  ValidationErrors,
   Validator,
+  ValidatorFn,
   Validators
 } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MaterialExpense } from 'src/domain/expense.model';
 
 @Component({
   selector: 'app-material-expense-modal',
@@ -44,8 +44,12 @@ export class MaterialExpenseModalComponent
     amount: [0, [Validators.required, Validators.min(0)]]
   });
 
-  onChange: (val: any) => void = () => {};
-  onTouched: () => void = () => {};
+  onChange: (val: MaterialExpense) => void = () => {
+    // do nothing
+  };
+  onTouched: () => void = () => {
+    // do nothing
+  };
 
   get date() {
     return this.form.controls.date;
@@ -63,11 +67,13 @@ export class MaterialExpenseModalComponent
     return new Date();
   }
 
-  writeValue(val: any): void {
-    val && this.form.patchValue(val, { emitEvent: false });
+  writeValue(val: Partial<MaterialExpense>): void {
+    if (val) {
+      this.form.patchValue(val, { emitEvent: false });
+    }
   }
 
-  registerOnChange(fn: (val: any) => void): void {
+  registerOnChange(fn: (val: MaterialExpense) => void): void {
     this.onChange = fn;
   }
 
@@ -76,16 +82,24 @@ export class MaterialExpenseModalComponent
   }
 
   setDisabledState(isDisabled: boolean): void {
-    isDisabled ? this.form.disable() : this.form.enable();
+    if (isDisabled) {
+      this.form.disable();
+    } else {
+      this.form.enable();
+    }
   }
 
-  validate(control: AbstractControl): ValidationErrors | null {
+  validate: ValidatorFn = () => {
     return this.form.valid ? null : { materialExpense: true };
-  }
+  };
 
   submitForm() {
     const date = this.form.controls.date.value || new Date(NaN);
-    this.onChange({ type: 'material', ...this.form.value, date });
+    this.onChange({
+      type: 'material',
+      ...this.form.value,
+      date
+    } as MaterialExpense);
     this.dialogRef.close();
   }
 }

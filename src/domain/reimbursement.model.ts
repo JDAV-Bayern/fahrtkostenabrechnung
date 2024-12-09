@@ -11,7 +11,7 @@ export interface Reimbursement {
   meeting: Meeting;
   participant: Participant;
   expenses: {
-    transport: { [key in Direction]: TransportExpense[] };
+    transport: Record<Direction, TransportExpense[]>;
     food: FoodExpense[];
     material: MaterialExpense[];
   };

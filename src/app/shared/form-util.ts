@@ -2,13 +2,9 @@ import { AbstractControl, FormArray, FormGroup } from '@angular/forms';
 
 export type ControlFactory = (key?: string) => AbstractControl | undefined;
 
-export function reviveDate(dateKeys: string[]) {
-  return (key: string, value: any) =>
-    dateKeys.includes(key) ? new Date(value) : value;
-}
-
 export function reviveFormArrays(
   control: AbstractControl,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value: any,
   factory: ControlFactory,
   key?: string
@@ -33,17 +29,17 @@ export function reviveFormArrays(
 export function reviveFormArray(
   key: string | undefined,
   control: FormArray,
-  value: Array<any>,
+  value: unknown[],
   factory: ControlFactory
 ) {
   control.clear();
 
-  for (let i = 0; i < value.length; i++) {
+  value.forEach(() => {
     const child = factory(key);
     if (child) {
       control.push(child);
     }
-  }
+  });
 }
 
 export function deepMarkAsDirty(control: AbstractControl) {
