@@ -1,4 +1,4 @@
-import { Component, input, inject } from '@angular/core';
+import { Component, input, inject, OnInit } from '@angular/core';
 import { Dialog, DialogRef } from '@angular/cdk/dialog';
 import {
   FormArray,
@@ -21,7 +21,7 @@ import {
   styleUrls: ['./expense-list.component.css'],
   imports: [ReactiveFormsModule, CdkDrag, CdkDropList, ExpenseCardComponent]
 })
-export class ExpenseListComponent<T extends Expense> {
+export class ExpenseListComponent<T extends Expense> implements OnInit {
   private readonly dialog = inject(Dialog);
 
   readonly type = input.required<T['type']>();
@@ -46,8 +46,8 @@ export class ExpenseListComponent<T extends Expense> {
     });
   }
 
-  openEditDialog(control: FormControl<T>): DialogRef {
-    return this.dialog.open<any, ExpenseDialogData<T>>(
+  openEditDialog(control: FormControl<T>): DialogRef<never> {
+    return this.dialog.open<never, ExpenseDialogData<T>>(
       ExpenseModalComponent<T>,
       {
         data: {

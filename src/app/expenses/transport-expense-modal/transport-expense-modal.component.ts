@@ -1,18 +1,22 @@
 import { DialogRef } from '@angular/cdk/dialog';
 import { Component, inject, input, OnInit } from '@angular/core';
 import {
-  AbstractControl,
   ControlValueAccessor,
   FormControl,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   NonNullableFormBuilder,
   ReactiveFormsModule,
-  ValidationErrors,
   Validator,
+  ValidatorFn,
   Validators
 } from '@angular/forms';
-import { Discount, EngineType, TransportMode } from 'src/domain/expense.model';
+import {
+  Discount,
+  EngineType,
+  TransportExpense,
+  TransportMode
+} from 'src/domain/expense.model';
 import { TransportModePipe } from '../shared/transport-mode.pipe';
 import { TransportExpenseCompletion } from 'src/app/reimbursement/shared/reimbursement-control.service';
 
@@ -58,8 +62,12 @@ export class TransportExpenseModalComponent
     })
   });
 
-  onChange: (val: any) => void = () => {};
-  onTouched: () => void = () => {};
+  onChange: (val: TransportExpense) => void = () => {
+    // do nothing
+  };
+  onTouched: () => void = () => {
+    // do nothing
+  };
 
   ngOnInit() {
     this.form.controls.mode.valueChanges.subscribe(val =>
@@ -91,14 +99,16 @@ export class TransportExpenseModalComponent
     return this.form.controls.carTrip;
   }
 
-  writeValue(val: any): void {
+  writeValue(val: Partial<TransportExpense>): void {
     if (val) {
-      val.carTrip?.passengers?.forEach(() => this.addPassenger());
+      if ('carTrip' in val) {
+        val.carTrip?.passengers?.forEach(() => this.addPassenger());
+      }
       this.form.patchValue(val, { emitEvent: false });
     }
   }
 
-  registerOnChange(fn: (val: any) => void): void {
+  registerOnChange(fn: (val: TransportExpense) => void): void {
     this.onChange = fn;
   }
 
@@ -107,14 +117,16 @@ export class TransportExpenseModalComponent
   }
 
   setDisabledState(isDisabled: boolean): void {
-    isDisabled
-      ? this.form.disable({ emitEvent: false })
-      : this.enableControls(this.mode.value);
+    if (isDisabled) {
+      this.form.disable({ emitEvent: false });
+    } else {
+      this.enableControls(this.mode.value);
+    }
   }
 
-  validate(control: AbstractControl): ValidationErrors | null {
+  validate: ValidatorFn = () => {
     return this.form.valid ? null : { transportExpense: true };
-  }
+  };
 
   getIcon(mode: TransportMode) {
     switch (mode) {
@@ -143,7 +155,10 @@ export class TransportExpenseModalComponent
   }
 
   submitForm() {
-    this.onChange({ type: 'transport', ...this.form.value });
+    this.onChange({
+      type: 'transport',
+      ...this.form.value
+    } as TransportExpense);
     this.dialogRef.close();
   }
 

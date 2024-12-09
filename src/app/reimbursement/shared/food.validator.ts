@@ -9,11 +9,11 @@ import {
 } from 'date-fns';
 import { Absence } from 'src/domain/expense.model';
 
-export type FoodOptions = {
+export interface FoodOptions {
   date: Date;
   absence: Absence | null;
   options?: Absence[];
-};
+}
 
 export function getFoodOptions(interval: Interval) {
   // too short
@@ -22,7 +22,7 @@ export function getFoodOptions(interval: Interval) {
   }
 
   // add all days
-  let foodOpts: FoodOptions[] = eachDayOfInterval(interval).map(date => ({
+  const foodOpts: FoodOptions[] = eachDayOfInterval(interval).map(date => ({
     date,
     absence: 'fullDay'
   }));
@@ -99,7 +99,7 @@ export const validateFoodExpenseInterval: ValidatorFn = control => {
 
   const foodOpts = getFoodOptions(i);
 
-  for (let item of food.controls) {
+  for (const item of food.controls) {
     const date = item.get('date');
     const absence = item.get('absence');
 

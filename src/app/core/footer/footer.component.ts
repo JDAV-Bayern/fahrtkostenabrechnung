@@ -4,7 +4,8 @@ import { GithubIconComponent } from 'src/app/shared/icons/github-icon/github-ico
 import { InstagramIconComponent } from 'src/app/shared/icons/instagram-icon/instagram-icon.component';
 
 @Component({
-  selector: 'footer[appFooter]',
+  // eslint-disable-next-line @angular-eslint/component-selector
+  selector: 'footer[app-footer]',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.css'],
   imports: [RouterLink, InstagramIconComponent, GithubIconComponent]

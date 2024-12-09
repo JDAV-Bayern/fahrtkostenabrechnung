@@ -14,29 +14,37 @@ export class ExpenseService {
     }
 
     switch (expense.type) {
-      case 'transport':
+      case 'transport': {
         if (!this.config.transport) {
           return 0;
         }
 
         switch (expense.mode) {
-          case 'car':
+          case 'car': {
             const nPax = expense.carTrip.passengers.length;
             const maxPax = this.config.transport.car.length - 1;
             const index = nPax < maxPax ? nPax : maxPax;
             const distanceFactor = this.config.transport.car[index];
             return expense.distance * distanceFactor;
-          case 'public':
+          }
+          case 'public': {
             const discountFactor =
               this.config.transport.public[expense.ticket.discount];
             return expense.ticket.price * discountFactor;
-          case 'bike':
+          }
+          case 'bike': {
             const bikeFactor = this.config.transport.bike;
             return expense.distance * bikeFactor;
-          case 'plan':
+          }
+          case 'plan': {
             return this.config.transport.plan;
+          }
+          default: {
+            return 0;
+          }
         }
-      case 'food':
+      }
+      case 'food': {
         if (!this.config.food) {
           return 0;
         }
@@ -47,8 +55,10 @@ export class ExpenseService {
         amount -= expense.dinner ? this.config.food.meals.dinner : 0;
 
         return amount > 0 ? amount : 0;
-      case 'material':
+      }
+      case 'material': {
         return expense.amount;
+      }
     }
   }
 }

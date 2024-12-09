@@ -1,4 +1,3 @@
-import { APP_BASE_HREF } from '@angular/common';
 import {
   ApplicationConfig,
   DEFAULT_CURRENCY_CODE,

@@ -34,11 +34,7 @@ import {
   validateFoodExpenseUnique,
   validateFoodExpenseWorkDay
 } from './food.validator';
-import {
-  deepMarkAsDirty,
-  reviveDate,
-  reviveFormArrays
-} from 'src/app/shared/form-util';
+import { deepMarkAsDirty, reviveFormArrays } from 'src/app/shared/form-util';
 
 const PLZ_PATTERN = /^[0-9]{4,5}$/;
 const BIC_PATTERN = /^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/;
@@ -185,7 +181,9 @@ export class ReimbursementControlService {
 
     // parse JSON from local storage
     const storedData = localStorage.getItem('reimbursement') || '{}';
-    const storedValue = JSON.parse(storedData, reviveDate(DATE_KEYS));
+    const storedValue = JSON.parse(storedData, (key, value) =>
+      DATE_KEYS.includes(key) ? new Date(value) : value
+    );
 
     // add controls for form arrays
     reviveFormArrays(this.form, storedValue, () =>
@@ -276,7 +274,7 @@ export class ReimbursementControlService {
     const interval = toInterval(this.meetingStep.controls.time);
     const foodOpts = interval ? getFoodOptions(interval) : [];
 
-    for (let foodOpt of foodOpts) {
+    for (const foodOpt of foodOpts) {
       if (foodOpt.absence !== null) {
         const form = this.formBuilder.control({} as FoodExpense);
         form.setValue({
@@ -337,6 +335,11 @@ export class ReimbursementControlService {
     const bic = this.participantStep.controls.bic;
     const enable =
       iban.valid && (value.match(BIC_REQUIRED) || !value.match(SEPA_CODES));
-    enable ? bic.enable() : bic.disable();
+
+    if (enable) {
+      bic.enable();
+    } else {
+      bic.disable();
+    }
   }
 }

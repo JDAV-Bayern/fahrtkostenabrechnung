@@ -1,12 +1,12 @@
 import { AbstractControl, ValidatorFn } from '@angular/forms';
 import { Interval, isAfter, isFuture } from 'date-fns';
 
-export type DateRangeFormValue = {
+export interface DateRangeFormValue {
   startDate: Date | null;
   startTime: number;
   endDate: Date | null;
   endTime: number;
-};
+}
 
 export function toInterval(control: AbstractControl): Interval | null {
   const startDate = control.get('startDate');

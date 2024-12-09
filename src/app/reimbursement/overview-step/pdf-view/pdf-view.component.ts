@@ -1,5 +1,12 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import { Component, input, output, inject } from '@angular/core';
+import {
+  Component,
+  input,
+  output,
+  inject,
+  OnInit,
+  AfterViewInit
+} from '@angular/core';
 import { SectionService } from 'src/app/core/section.service';
 import { logoBase64 } from 'src/assets/logoBase64';
 import { Direction } from 'src/domain/expense.model';
@@ -26,7 +33,7 @@ import { ReimbursementService } from '../../shared/reimbursement.service';
     ExpenseDetailsComponent
   ]
 })
-export class PdfViewComponent {
+export class PdfViewComponent implements OnInit, AfterViewInit {
   private readonly reimbursementService = inject(ReimbursementService);
   private readonly sectionService = inject(SectionService);
 

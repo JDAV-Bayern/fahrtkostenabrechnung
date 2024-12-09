@@ -12,12 +12,12 @@ import {
 import { MeetingType } from 'src/domain/meeting.model';
 import { Reimbursement } from 'src/domain/reimbursement.model';
 
-export type ReimbursementReport = {
+export interface ReimbursementReport {
   categories: Partial<Record<ExpenseType, number>>;
   total: number;
   totalReduced: boolean;
   receiptsRequired: boolean;
-};
+}
 
 @Injectable({
   providedIn: 'root'
@@ -57,7 +57,7 @@ export class ReimbursementService {
       sum + this.expenseService.getAmount(expense);
 
     const categories: ReimbursementReport['categories'] = {};
-    for (let type of this.config.allowed) {
+    for (const type of this.config.allowed) {
       categories[type] = this.getExpenses(type, reimbursement).reduce(
         reducer,
         0
