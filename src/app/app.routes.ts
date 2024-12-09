@@ -1,22 +1,22 @@
 import { Routes } from '@angular/router';
-import { ParticipantStepComponent } from './reimbursement/participant-step/participant-step.component';
-import { OverviewStepComponent } from './reimbursement/overview-step/overview-step.component';
-import { ExpensesStepComponent } from './reimbursement/expenses-step/expenses-step.component';
 import { DataProtectionComponent } from './info/data-protection/data-protection.component';
+import { ExpenseRatesComponent } from './info/expense-rates/expense-rates.component';
 import { InfoComponent } from './info/info.component';
-import { ReimbursementComponent } from './reimbursement/reimbursement.component';
-import { MeetingCourseStepComponent } from './reimbursement/meeting-course-step/meeting-course-step.component';
-import {
-  meetingGuard,
-  transportExpensesGuard,
-  participantGuard,
-  expensesGuard
-} from './reimbursement/shared/finished-step.guard';
+import { ExpensesExtraStepComponent } from './reimbursement/expenses-extra-step/expenses-extra-step.component';
+import { ExpensesStepComponent } from './reimbursement/expenses-step/expenses-step.component';
 import { MeetingAssemblyStepComponent } from './reimbursement/meeting-assembly-step/meeting-assembly-step.component';
 import { MeetingCommitteeStepComponent } from './reimbursement/meeting-committee-step/meeting-committee-step.component';
-import { ExpensesExtraStepComponent } from './reimbursement/expenses-extra-step/expenses-extra-step.component';
-import { ExpenseRatesComponent } from './info/expense-rates/expense-rates.component';
+import { MeetingCourseStepComponent } from './reimbursement/meeting-course-step/meeting-course-step.component';
+import { OverviewStepComponent } from './reimbursement/overview-step/overview-step.component';
+import { ParticipantStepComponent } from './reimbursement/participant-step/participant-step.component';
+import { ReimbursementComponent } from './reimbursement/reimbursement.component';
 import { disabledStepGuard } from './reimbursement/shared/disabled-step.guard';
+import {
+  expensesGuard,
+  meetingGuard,
+  participantGuard,
+  transportExpensesGuard
+} from './reimbursement/shared/finished-step.guard';
 
 export const routes: Routes = [
   {

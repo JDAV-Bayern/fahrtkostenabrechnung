@@ -1,22 +1,22 @@
+import { DEFAULT_DIALOG_CONFIG, DialogConfig } from '@angular/cdk/dialog';
 import {
   ApplicationConfig,
   DEFAULT_CURRENCY_CODE,
   importProvidersFrom
 } from '@angular/core';
-import { provideRouter, withHashLocation } from '@angular/router';
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { routes } from './app.routes';
 import { DateFnsModule } from '@angular/material-date-fns-adapter';
 import {
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
   MatDateFormats
 } from '@angular/material/core';
-import { DEFAULT_DIALOG_CONFIG, DialogConfig } from '@angular/cdk/dialog';
 import { MatDatepickerIntl } from '@angular/material/datepicker';
-import { JdavDatepickerIntl } from './core/date-time-intl';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideRouter, withHashLocation } from '@angular/router';
 import { de } from 'date-fns/locale';
 import { environment } from 'src/environments/environment';
+import { routes } from './app.routes';
+import { JdavDatepickerIntl } from './core/date-time-intl';
 
 export const DIALOG_CONFIG: DialogConfig = {
   panelClass: 'dialog',

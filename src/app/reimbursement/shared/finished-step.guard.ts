@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, createUrlTreeFromSnapshot } from '@angular/router';
-import { ReimbursementControlService } from './reimbursement-control.service';
 import { MeetingType } from 'src/domain/meeting.model';
+import { ReimbursementControlService } from './reimbursement-control.service';
 
 type FormKey =
   | 'meetingStep'

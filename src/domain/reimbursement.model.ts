@@ -1,10 +1,10 @@
-import { Meeting } from './meeting.model';
 import {
-  TransportExpense,
+  Direction,
   FoodExpense,
   MaterialExpense,
-  Direction
+  TransportExpense
 } from './expense.model';
+import { Meeting } from './meeting.model';
 import { Participant } from './participant.model';
 
 export interface Reimbursement {
