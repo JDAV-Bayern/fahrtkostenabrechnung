@@ -1,6 +1,6 @@
 # Fahrtkostenformular für die Kurse und Veranstaltungen der JDAV Bayern
 
-Das Projekt wurde in Q1/2024 von Simon Langebrake (stellv. Landesjugendleiter) und Joseph Hirsch (stellv. Landesjugendleiter) initiiert und aufgesetzt. Es soll die Abrechnung von Fahrtkosten für die Kurse und Veranstaltungen der JDAV Bayern vereinfachen. Die Sofware ist noch nicht live, da sie noch nicht vollständig getestet ist.
+Das Projekt wurde in Q1/2024 von Simon Langebrake (stellv. Landesjugendleiter) und Joseph Hirsch (stellv. Landesjugendleiter) initiiert und aufgesetzt. Es soll die Abrechnung von Fahrtkosten für die Kurse und Veranstaltungen der JDAV Bayern vereinfachen. Die Software ist noch nicht live, da sie noch nicht vollständig getestet ist.
 
 ## Anwendung
 
@@ -12,34 +12,25 @@ Das Fahrtkostenformular ist als reine Frontend-Anwendung konzipiert. Alle Daten 
 
 ## Mitentwickeln
 
-Gib gerne deinen Senf dazu! Wir freuen über jeden Beitrag. Um einen Fehler zu melden oder eine
-Verbesserung vorzuschlagen, kannst du entweder einen Issue eröffnen oder die Änderung direkt
-selbst programmieren und eine Pull Request stellen.
+Gib gerne deinen Senf dazu! Wir freuen uns über jeden Beitrag. Um einen Fehler zu melden oder eine Verbesserung vorzuschlagen, kannst du entweder einen Issue eröffnen oder die Änderung direkt selbst programmieren und eine Pull Request stellen.
 
-Das Projekt ist eine in TypeScript geschriebene Single Page Application basierend auf dem Framework
-[Angular](https://angular.dev). Wie du damit lokal Entwickeln kannst, ist weiter unten erklärt.
-Wenn du eine Pull Request eröffnest, werden automatisch einige automatisierte Tests durchgeführt.
-Auch dazu findest du weiter unten genauere Infos.
+Das Projekt ist eine in TypeScript geschriebene Single Page Application basierend auf dem Framework [Angular](https://angular.dev). Wie du damit lokal Entwickeln kannst, ist weiter unten erklärt. Wenn du eine Pull Request eröffnest, werden automatisch einige automatisierte Tests durchgeführt. Auch dazu findest du weiter unten genauere Infos.
 
-Das Projekt ist unter der [MIT-Lizenz](https://choosealicense.com/licenses/mit/) veröffentlicht.
-Bevor du Code zum Projekt beiträgst, solltest du dich kurz mit dieser vertraut machen.
+Das Projekt ist unter der [MIT-Lizenz](https://choosealicense.com/licenses/mit/) veröffentlicht. Bevor du Code zum Projekt beiträgst, solltest du dich kurz mit dieser vertraut machen.
 
 ## Lokale Entwicklung
 
-Zur lokalen Entwicklung wird die [Angular CLI](https://angular.dev/tools/cli) genutzt.
-Detaillierte Informationen sind in der Dokumentation zu finden.
+Zur lokalen Entwicklung wird die [Angular CLI](https://angular.dev/tools/cli) genutzt. Detaillierte Informationen sind in der Dokumentation zu finden.
 
 ### Installation
 
-Du benötigst eine Installation von [Node.js 22](https://nodejs.org/en/download/package-manager).
-Über den mitgelieferten Package Manager NPM werden alle weiteren Abhängigkeiten installiert:
+Du benötigst eine Installation von [Node.js 22](https://nodejs.org/en/download/package-manager). Über den mitgelieferten Package Manager NPM werden alle weiteren Abhängigkeiten installiert:
 
 ```bash
 npm install
 ```
 
-Im Normalfall ist es außerdem ratsam, die Angular CLI als globales Paket zu installieren, um sie
-unabhängig vom Projektkontext nutzen zu können:
+Im Normalfall ist es außerdem ratsam, die Angular CLI als globales Paket zu installieren, um sie unabhängig vom Projektkontext nutzen zu können:
 
 ```bash
 npm install -g @angular/cli
@@ -53,29 +44,23 @@ Um einen Server für die lokale Entwicklung zu starten, verwende:
 ng serve
 ```
 
-Sobald der Server läuft, öffne `http://localhost:4200/` in deinem Browser. Die Seite wird
-automatisch neu geladen, wenn Änderungen vorgenommen werden.
+Sobald der Server läuft, öffne `http://localhost:4200/` in deinem Browser. Die Seite wird automatisch neu geladen, wenn Änderungen vorgenommen werden.
 
 ### Codegenerierung
 
-Mithilfe der CLI kann das Codegerüst für neue Teile der App generiert werden, beispielsweise für
-neue Komponenten:
+Mithilfe der CLI kann das Codegerüst für neue Teile der App generiert werden, beispielsweise für neue Komponenten:
 
 ```bash
-ng generate component <compoent-name>
+ng generate component <component-name>
 ```
 
 ## Codequalität
 
-Um eine möglichst hohe Qualität des Projekts sicherzustellen, solltest du deinen Code regelmäßig
-mit den hier aufgelisteten Tools testen. Diese Tests werden auch automatisiert durchgeführt, wenn
-du deine Pull Request eröffnest.
+Um eine möglichst hohe Qualität des Projekts sicherzustellen, solltest du deinen Code regelmäßig mit den hier aufgelisteten Tools testen. Diese Tests werden auch automatisiert durchgeführt, wenn du deine Pull Request eröffnest.
 
 ### Linting
 
-Das Projekt nutzt [ESlint](https://eslint.org/), um Fehlern im Code vorzubeugen. Der Linter
-analysiert den Quellcode, um mögliche Bugs aufzudecken. Liste alle fehler mit dem folgenden Befehl
-auf:
+Das Projekt nutzt [ESLint](https://eslint.org/), um Fehlern im Code vorzubeugen. Der Linter analysiert den Quellcode, um mögliche Bugs aufzudecken. Liste alle Fehler mit dem folgenden Befehl auf:
 
 ```bash
 ng lint
@@ -83,8 +68,7 @@ ng lint
 
 ### Formatierung
 
-Für eine einheitliche Formatierung des Codes wird [Prettier](https://prettier.io/) genutzt. Du
-kannst alle Dateien des Projekt mit dem folgenden Befehl formatieren:
+Für eine einheitliche Formatierung des Codes wird [Prettier](https://prettier.io/) genutzt. Du kannst alle Dateien des Projekts mit dem folgenden Befehl formatieren:
 
 ```bash
 npm run format
@@ -92,15 +76,13 @@ npm run format
 
 ### Unit Tests ausführen
 
-Unit Tests stellen sicher, dass einzelne Komponenten des Projekts die beabsichtigte Funktionsweise
-erfüllen. Du kannst sie mit folgendem Befehl ausführen:
+Unit Tests stellen sicher, dass einzelne Komponenten des Projekts die beabsichtigte Funktionsweise erfüllen. Du kannst sie mit folgendem Befehl ausführen:
 
 ```bash
 ng test
 ```
 
-Akutell sind kaum Unit Tests im Projekt enthalten, wir freuen uns aber, wenn diese für neu
-entwickelten Code erstellt werden.
+Aktuell sind kaum Unit Tests im Projekt enthalten, wir freuen uns aber, wenn diese für neu entwickelten Code erstellt werden.
 
 ### App bauen
 
@@ -112,23 +94,17 @@ ng build
 
 ## Deployment
 
-Wenn auf den `main`-Branch gepusht wird, z.B. weil deine Pull Request gemerged wird, wird die App
-automatisch gebaut und zunächst in unserem Staging-Environment auf
-[Github Pages](https://pages.github.com/) deployed.
+Wenn auf den `main`-Branch gepusht wird, z.B. weil deine Pull Request gemerged wird, wird die App automatisch gebaut und zunächst in unserem Staging-Environment auf [GitHub Pages](https://pages.github.com/) deployed.
 
-Wenn das nächste Release-Tag erstellt wird, wird ein [Docker](https://www.docker.com/)-Image der
-App gebaut und auf der Github Container Registry veröffentlicht. Dieses Image deployen wir auch in
-unserem Production-Environment.
+Wenn das nächste Release-Tag erstellt wird, wird ein [Docker](https://www.docker.com/)-Image der App gebaut und auf der GitHub Container Registry veröffentlicht. Dieses Image deployen wir auch in unserem Production-Environment.
 
-Um ein neues Release zu erstellen einfach folgenden Befehl ausführen:
+Um ein neues Release zu erstellen, einfach folgenden Befehl ausführen:
 
 ```bash
 npm version <patch|minor|major>
 ```
 
-Dadurch wird automatisch die Versionsnummer entprechend des Arguments (patch, minor oder major) in
-der `package.json` erhöht und ein Commit sowie ein Tag erstellt. Nach dem pushen des Tags wird
-automatisch eine neue Version des Containers gebaut und veröffentlicht.
+Dadurch wird automatisch die Versionsnummer entsprechend des Arguments (patch, minor oder major) in der `package.json` erhöht und ein Commit sowie ein Tag erstellt. Nach dem Pushen des Tags wird automatisch eine neue Version des Containers gebaut und veröffentlicht.
 
 ```bash
 git push --follow-tags
