@@ -29,7 +29,7 @@ export const expenseConfig: ExpenseConfig = {
         BC25: 1.05,
         BC50: 1.1
       },
-      plan: 12.25,
+      plan: 14.5,
       bike: 0.13
     },
     maxTotal: 75
@@ -43,7 +43,7 @@ export const expenseConfig: ExpenseConfig = {
         BC25: 1.05,
         BC50: 1.1
       },
-      plan: 12.25,
+      plan: 14.5,
       bike: 0.13
     }
   },
@@ -57,7 +57,7 @@ export const expenseConfig: ExpenseConfig = {
         BC25: 1,
         BC50: 1
       },
-      plan: 12.25,
+      plan: 14.5,
       bike: 0.13
     },
     food: {
