@@ -1,3 +1,6 @@
+@use '@angular/material' as mat;
+@use 'app/jdav_theme-colors' as jdav;
+
 /* You can add global styles to this file, and also import other style files */
 :root {
   --color-primary: #52ae32;
@@ -16,6 +19,14 @@ html {
   padding: 0;
   max-width: 100vw;
   overflow-x: hidden;
+  @include mat.theme(
+    (
+      color: (
+        primary: jdav.$primary-palette,
+        tertiary: jdav.$tertiary-palette,
+      )
+    )
+  );
 }
 
 a {
