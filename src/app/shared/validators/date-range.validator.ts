@@ -1,47 +1,34 @@
-import { AbstractControl, ValidatorFn } from '@angular/forms';
-import { Interval, isAfter, isFuture } from 'date-fns';
+import { ValidatorFn } from '@angular/forms';
+import { interval, Interval, isAfter, isFuture, isValid } from 'date-fns';
+import { MeetingForm } from 'src/app/reimbursement/shared/meeting-form';
 
-export interface DateRangeFormValue {
-  startDate: Date | null;
-  startTime: number;
-  endDate: Date | null;
-  endTime: number;
-}
+export function toInterval(form: MeetingForm['time']): Interval | null {
+  const start = form.controls.start.value;
+  const end = form.controls.end.value;
 
-export function toInterval(control: AbstractControl): Interval | null {
-  const startDate = control.get('startDate');
-  const startTime = control.get('startTime');
-  const endDate = control.get('endDate');
-  const endTime = control.get('endTime');
-
-  if (startDate && startTime && endDate && endTime) {
-    if (startDate.value instanceof Date && endDate.value instanceof Date) {
-      if (
-        typeof startTime.value === 'number' &&
-        typeof endTime.value === 'number'
-      ) {
-        return {
-          start: new Date(startDate.value.getTime() + startTime.value),
-          end: new Date(endDate.value.getTime() + endTime.value)
-        };
-      }
-    }
+  if (start && end && isValid(start) && isValid(end)) {
+    return interval(start, end);
   }
 
   return null;
 }
 
 export const pastDateRange: ValidatorFn = control => {
-  const start = control.get('startDate');
-  const end = control.get('endDate');
+  const start = control.get('start')?.value;
+  const end = control.get('end')?.value;
 
-  const startIsFuture = start && start.value && isFuture(start.value);
-  const endIsFuture = end && end.value && isFuture(end.value);
+  const startIsFuture = start instanceof Date && isFuture(start);
+  const endIsFuture = end instanceof Date && isFuture(end);
 
   return startIsFuture || endIsFuture ? { dateRangePast: true } : null;
 };
 
 export const orderedDateRange: ValidatorFn = control => {
-  const i = toInterval(control);
-  return i && isAfter(i.start, i.end) ? { dateRangeOrder: true } : null;
+  const start = control.get('start')?.value;
+  const end = control.get('end')?.value;
+
+  const isUnordered =
+    start instanceof Date && end instanceof Date && isAfter(start, end);
+
+  return isUnordered ? { dateRangeOrder: true } : null;
 };
