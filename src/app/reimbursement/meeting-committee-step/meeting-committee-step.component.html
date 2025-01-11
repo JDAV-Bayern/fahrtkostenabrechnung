@@ -38,101 +38,21 @@
     </div>
 
     <fieldset [formGroup]="time">
-      <div class="form-group">
-        <label for="start">Beginn der Reise</label>
-        <fieldset id="start" class="datetime-group">
-          <input
-            type="text"
-            formControlName="startDate"
-            class="form-control"
-            required
-            [max]="now"
-            [matDatepickerFilter]="filterStartDates"
-            [matDatepicker]="pickerStart"
-            (click)="pickerStart.open()"
-          />
-          <mat-datepicker
-            touchUi
-            [dateClass]="dateClass"
-            #pickerStart
-          ></mat-datepicker>
-          <input
-            appTimeInput
-            type="text"
-            formControlName="startTime"
-            class="form-control time-control"
-            required
-          />
-        </fieldset>
-        @if (
-          startDate.hasError('required') &&
-          !startDate.hasError('matDatepickerParse') &&
-          startDate.touched
-        ) {
-          <div class="error-message">
-            Bitte gib das Startdatum deiner Reise an.
-          </div>
-        }
-        @if (startDate.hasError('matDatepickerParse') && startDate.touched) {
-          <div class="error-message">Bitte gib ein gültiges Datum an.</div>
-        }
-        @if (startTime.hasError('required') && startTime.touched) {
-          <div class="error-message">
-            Bitte gib die Startzeit deiner Reise an.
-          </div>
-        }
-        @if (startTime.hasError('invalidTime') && startTime.touched) {
-          <div class="error-message">Bitte gib eine gültige Zeit an.</div>
-        }
-      </div>
-
-      <div class="form-group">
-        <label for="end">Ende der Reise</label>
-        <fieldset id="end" class="datetime-group">
-          <input
-            type="text"
-            formControlName="endDate"
-            class="form-control"
-            required
-            [max]="now"
-            [matDatepickerFilter]="filterEndDates"
-            [matDatepicker]="pickerEnd"
-            (click)="pickerEnd.open()"
-          />
-          <mat-datepicker
-            touchUi
-            [dateClass]="dateClass"
-            #pickerEnd
-          ></mat-datepicker>
-          <input
-            appTimeInput
-            type="text"
-            formControlName="endTime"
-            class="form-control time-control"
-            required
-          />
-        </fieldset>
-        @if (
-          endDate.hasError('required') &&
-          !endDate.hasError('matDatepickerParse') &&
-          endDate.touched
-        ) {
-          <div class="error-message">
-            Bitte gib das Enddatum deiner Reise an.
-          </div>
-        }
-        @if (endDate.hasError('matDatepickerParse') && endDate.touched) {
-          <div class="error-message">Bitte gib ein gültiges Datum an.</div>
-        }
-        @if (endTime.hasError('required') && endTime.touched) {
-          <div class="error-message">
-            Bitte gib die Endzeit deiner Reise an.
-          </div>
-        }
-        @if (endTime.hasError('invalidTime') && endTime.touched) {
-          <div class="error-message">Bitte gib eine gültige Zeit an.</div>
-        }
-      </div>
+      <app-form-datetime
+        legend="Beginn der Reise"
+        [formControl]="start"
+        [max]="end.value || now"
+        [comparisonStart]="start.value"
+        [comparisonEnd]="end.value"
+      ></app-form-datetime>
+      <app-form-datetime
+        legend="Ende der Reise"
+        [formControl]="end"
+        [min]="start.value"
+        [max]="now"
+        [comparisonStart]="start.value"
+        [comparisonEnd]="end.value"
+      ></app-form-datetime>
 
       @if (time.hasError('dateRangeOrder')) {
         <div class="error-message">

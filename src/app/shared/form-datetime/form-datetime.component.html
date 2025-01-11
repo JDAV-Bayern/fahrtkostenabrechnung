@@ -1,0 +1,54 @@
+<fieldset class="datetime-group" [formGroup]="form">
+  <legend>{{ legend() }}</legend>
+
+  <input
+    type="text"
+    class="form-control"
+    aria-label="Datum"
+    required
+    [min]="min()"
+    [max]="max()"
+    [formControl]="date"
+    [matDatepicker]="datepicker"
+    (blur)="onTouched()"
+    (click)="datepicker.open()"
+  />
+  <mat-datepicker
+    [startAt]="comparisonStart() || comparisonEnd()"
+    [touchUi]="isMobile"
+    [dateClass]="dateClass"
+    #datepicker
+  ></mat-datepicker>
+
+  <input
+    type="text"
+    class="form-control time-control"
+    aria-label="Uhrzeit"
+    required
+    [formControl]="time"
+    [matTimepicker]="timepicker"
+    (blur)="onTouched()"
+  />
+  <mat-timepicker #timepicker interval="15m"></mat-timepicker>
+</fieldset>
+
+@if (
+  date.hasError('required') &&
+  !date.hasError('matDatepickerParse') &&
+  date.touched
+) {
+  <div class="error-message">Bitte gib das Datum deiner Reise an.</div>
+}
+@if (date.hasError('matDatepickerParse')) {
+  <div class="error-message">Bitte gib ein gültiges Datum an.</div>
+}
+@if (
+  time.hasError('required') &&
+  !time.hasError('matTimepickerParse') &&
+  time.touched
+) {
+  <div class="error-message">Bitte gib die Zeit deiner Reise an.</div>
+}
+@if (time.hasError('matTimepickerParse')) {
+  <div class="error-message">Bitte gib eine gültige Zeit an.</div>
+}

@@ -23,7 +23,7 @@ html {
     (
       color: (
         primary: jdav.$primary-palette,
-        tertiary: jdav.$tertiary-palette,
+        tertiary: jdav.$tertiary-palette
       )
     )
   );
@@ -41,6 +41,7 @@ a:hover {
 
 fieldset {
   border: none;
+  margin: 0;
   padding: 0;
 }
 
@@ -54,7 +55,8 @@ fieldset {
   overflow-y: scroll;
 }
 
-.form-group label {
+.form-group label,
+.form-group legend {
   display: block;
   font-weight: bold;
   margin-bottom: 5px;
@@ -141,27 +143,22 @@ select {
 .error-message {
   color: #b60000;
   font-size: 12px;
-  margin-top: 5px;
-  margin-bottom: 20px;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
 }
 
-button.start-date {
-  background-color: var(--color-primary-light);
-  border-radius: 100% 0 0 100%;
+.mat-calendar-body-cell.in-comparison-range {
+  background-color: var(--mat-sys-tertiary-container);
 }
 
-button.end-date {
-  background-color: var(--color-primary-light);
-  border-radius: 0 100% 100% 0;
+.mat-calendar-body-cell.comparison-start {
+  border-top-left-radius: 100%;
+  border-bottom-left-radius: 100%;
 }
 
-button.single-date {
-  background-color: var(--color-primary-light);
-  border-radius: 100%;
-}
-
-button.range-date {
-  background-color: var(--color-primary-light);
+.mat-calendar-body-cell.comparison-end {
+  border-top-right-radius: 100%;
+  border-bottom-right-radius: 100%;
 }
 
 @font-face {

@@ -43,7 +43,7 @@ const SEPA_CODES =
   /^(BE|BG|DK|DE|EE|FI|FR|GR|GB|IE|IS|IT|HR|LV|LI|LT|LU|MT|MC|NL|NO|AT|PL|PT|RO|SM|SE|CH|SK|SI|ES|CZ|HU|CY)/;
 const BIC_REQUIRED = /^(MC|SM|CH)/;
 
-const DATE_KEYS = ['date', 'startDate', 'endDate'];
+const DATE_KEYS = ['date', 'start', 'end'];
 
 export interface TransportExpenseCompletion {
   origin?: string;
@@ -73,10 +73,8 @@ export class ReimbursementControlService {
         location: this.formBuilder.control('', Validators.required),
         time: this.formBuilder.group(
           {
-            startDate: new FormControl<Date | null>(null, Validators.required),
-            startTime: [0, Validators.required],
-            endDate: new FormControl<Date | null>(null, Validators.required),
-            endTime: [0, Validators.required]
+            start: new FormControl<Date | null>(null, Validators.required),
+            end: new FormControl<Date | null>(null, Validators.required)
           },
           { validators: [orderedDateRange, pastDateRange] }
         ),
@@ -182,7 +180,7 @@ export class ReimbursementControlService {
     // parse JSON from local storage
     const storedData = localStorage.getItem('reimbursement') || '{}';
     const storedValue = JSON.parse(storedData, (key, value) =>
-      DATE_KEYS.includes(key) ? new Date(value) : value
+      value && DATE_KEYS.includes(key) ? new Date(value) : value
     );
 
     // add controls for form arrays

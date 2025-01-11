@@ -20,13 +20,16 @@ export const DIALOG_CONFIG: DialogConfig = {
 
 export const DATE_FORMATS: MatDateFormats = {
   parse: {
-    dateInput: ['d.M.yy', 'd.M.yyyy']
+    dateInput: ['d.M.yy', 'd.M.yyyy'],
+    timeInput: 'p'
   },
   display: {
     dateInput: 'P',
+    timeInput: 'p',
     monthYearLabel: 'LLL uuuu',
     dateA11yLabel: 'PP',
-    monthYearA11yLabel: 'LLLL uuuu'
+    monthYearA11yLabel: 'LLLL uuuu',
+    timeOptionLabel: 'p'
   }
 };
 

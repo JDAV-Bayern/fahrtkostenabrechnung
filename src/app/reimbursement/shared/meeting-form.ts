@@ -6,10 +6,8 @@ export interface MeetingForm {
   name: FormControl<string>;
   location: FormControl<string>;
   time: FormGroup<{
-    startDate: FormControl<Date | null>;
-    startTime: FormControl<number>;
-    endDate: FormControl<Date | null>;
-    endTime: FormControl<number>;
+    start: FormControl<Date | null>;
+    end: FormControl<Date | null>;
   }>;
   code?: FormControl<string>;
 }
