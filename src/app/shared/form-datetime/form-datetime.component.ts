@@ -21,6 +21,7 @@ import {
   isAfter,
   isSameDay,
   isWithinInterval,
+  set,
   startOfDay
 } from 'date-fns';
 import { Subscription } from 'rxjs';
@@ -81,9 +82,19 @@ export class FormDatetimeComponent
   }
 
   ngOnInit() {
-    this.onDateChangeSub = this.date.valueChanges.subscribe(date =>
-      this.time.setValue(date)
-    );
+    this.onDateChangeSub = this.date.valueChanges.subscribe(date => {
+      let time = this.time.value;
+      if (date && time) {
+        time = set(time, {
+          year: date.getFullYear(),
+          month: date.getMonth(),
+          date: date.getDate()
+        });
+        this.time.setValue(time);
+      } else {
+        this.time.setValue(date);
+      }
+    });
   }
 
   ngOnDestroy() {
