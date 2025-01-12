@@ -6,7 +6,7 @@ function isEmptyInput(control: AbstractControl): boolean {
   }
 
   const value = control.value;
-  if (value === null) {
+  if (value === null || control.disabled) {
     return true;
   }
   if (typeof value === 'string' || Array.isArray(value)) {

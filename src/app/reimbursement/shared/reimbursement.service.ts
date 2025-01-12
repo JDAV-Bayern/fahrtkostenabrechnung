@@ -1,16 +1,33 @@
 import { Injectable, inject } from '@angular/core';
+import {
+  closestIndexTo,
+  differenceInHours,
+  eachDayOfInterval,
+  interval,
+  startOfDay
+} from 'date-fns';
 import { SectionService } from 'src/app/core/section.service';
 import { expenseConfig } from 'src/app/expenses/expense.config';
 import { ExpenseService } from 'src/app/expenses/shared/expense.service';
 import {
+  Absence,
   Expense,
   ExpenseType,
   FoodExpense,
   MaterialExpense,
   TransportExpense
 } from 'src/domain/expense.model';
-import { MeetingType } from 'src/domain/meeting.model';
+import { Meeting, MeetingType } from 'src/domain/meeting.model';
 import { Reimbursement } from 'src/domain/reimbursement.model';
+
+const createFoodExpense = (date: Date, absence: Absence): FoodExpense => ({
+  type: 'food',
+  date,
+  absence,
+  breakfast: false,
+  lunch: false,
+  dinner: false
+});
 
 export interface ReimbursementReport {
   categories: Partial<Record<ExpenseType, number>>;
@@ -50,6 +67,50 @@ export class ReimbursementService {
     } else {
       return reimbursement.expenses[type];
     }
+  }
+
+  getFoodExpenses(meeting: Meeting): FoodExpense[] {
+    if (meeting.type !== 'committee') {
+      return [];
+    }
+
+    let i;
+
+    try {
+      const start = meeting.time.start;
+      const end = meeting.time.end;
+      i = interval(start, end, { assertPositive: true });
+    } catch {
+      return [];
+    }
+
+    // too short
+    if (differenceInHours(i.end, i.start) < 8) {
+      return [];
+    }
+
+    const dates = eachDayOfInterval(i);
+
+    // single day
+    if (dates.length === 1) {
+      return [createFoodExpense(dates[0], 'single')];
+    }
+
+    if (dates.length === 2 && !meeting.time.overnight) {
+      const midnight = startOfDay(i.end);
+      const short =
+        closestIndexTo(midnight, [meeting.time.start, meeting.time.end]) ?? 0;
+      const long = 1 - short;
+
+      return [createFoodExpense(dates[long], 'single')];
+    }
+
+    // add all days
+    const expenses = dates.map(date => createFoodExpense(date, 'intermediate'));
+    expenses[0].absence = 'arrival';
+    expenses[expenses.length - 1].absence = 'return';
+
+    return expenses;
   }
 
   getReport(reimbursement: Reimbursement): ReimbursementReport {

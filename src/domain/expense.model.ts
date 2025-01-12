@@ -1,7 +1,7 @@
 export type Direction = 'inbound' | 'onsite' | 'outbound';
 export type Discount = 'BC25' | 'BC50' | 'none';
 export type EngineType = 'combustion' | 'electric' | 'plug-in-hybrid';
-export type Absence = 'fullDay' | 'travelDay' | 'workDay';
+export type Absence = 'arrival' | 'return' | 'intermediate' | 'single';
 export type Meal = 'breakfast' | 'lunch' | 'dinner';
 
 export interface TransportExpenseBase {

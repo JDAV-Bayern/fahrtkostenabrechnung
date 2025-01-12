@@ -1,56 +1,54 @@
 <app-form-card
   prevStep="auslagen"
   nextStep="zusammenfassung"
-  [nextDisabled]="
-    parentForm.invalid ||
-    rootForm.hasError('foodExpenseDate') ||
-    rootForm.hasError('foodExpenseAbsence')
-  "
+  [nextDisabled]="parentForm.invalid"
 >
   <fieldset [formGroup]="parentForm">
-    @if (foodOptions.length !== 0 || foodForm.length !== 0) {
-      <div>
-        <app-expense-list type="food" [form]="foodForm" formArrayName="food">
-          <div class="heading">
-            <h2>Tagegelder</h2>
-            <button class="jdav-btn icon" (click)="completeFood()">
+    <div>
+      <div class="heading">
+        <h2>Tagegelder</h2>
+        @if (foodForm.length > 0) {
+          @if (foodForm.disabled) {
+            <button class="jdav-btn icon" (click)="foodForm.enable()">
               <span class="material-symbols-outlined">restaurant</span>
               Tagegelder abrechnen
             </button>
+          } @else {
+            <button
+              class="jdav-btn secondary icon"
+              (click)="foodForm.disable()"
+            >
+              <span class="material-symbols-outlined">delete</span>
+              Tagegelder entfernen
+            </button>
+          }
+        }
+      </div>
+      @if (foodForm.length === 0) {
+        <p>
+          Für diese Reise können keine Tagegelder beantragt werden, da die Dauer
+          der Abwesenheit unter 8 Stunden betrug.
+        </p>
+      } @else if (foodForm.enabled) {
+        <p>
+          Bitte wähle aus, welche Mahlzeiten du kostenlos erhalten hast. Die
+          angegebene Verpflegungspauschale wird um diese gekürzt.
+        </p>
+        <fieldset formArrayName="food">
+          <div>
+            @for (control of foodForm.controls; track control) {
+              <app-food-expense-card
+                [formControl]="control"
+              ></app-food-expense-card>
+            }
           </div>
-        </app-expense-list>
+        </fieldset>
         <p class="subtotal">
           Summe:
           <span>{{ report.categories.food | currency }}</span>
         </p>
-        @if (foodForm.hasError('foodExpenseUnique')) {
-          <div class="error-message">
-            Bitte gib nur eine Auslage für den
-            {{ rootForm.getError('foodExpenseUnique').date | date }} an.
-          </div>
-        }
-        @if (foodForm.hasError('foodExpenseWorkDay')) {
-          <div class="error-message">
-            Bitte gib bei Reisen ohne Übernachtung nur für den Tag mit längerer
-            Abwesenheit eine Auslage an.
-          </div>
-        }
-        @if (rootForm.hasError('foodExpenseDate')) {
-          <div class="error-message">
-            Die Auslage für den
-            {{ rootForm.getError('foodExpenseDate').date | date }} liegt
-            außerhalb deines Reisezeitraums.
-          </div>
-        }
-        @if (rootForm.hasError('foodExpenseAbsence')) {
-          <div class="error-message">
-            Die Abwesenheitsdauer für den
-            {{ rootForm.getError('foodExpenseAbsence').date | date }} stimmt
-            nicht mit deinem Reisezeitraum überein.
-          </div>
-        }
-      </div>
-    }
+      }
+    </div>
 
     <div>
       <app-expense-list

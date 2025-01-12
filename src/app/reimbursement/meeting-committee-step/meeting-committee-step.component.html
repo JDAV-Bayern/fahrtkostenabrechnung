@@ -64,6 +64,13 @@
           Die Reise muss bereits vollständig abgeschlossen sein.
         </div>
       }
+
+      @if (overnight.enabled) {
+        <div class="form-checkbox">
+          <input type="checkbox" id="overnight" [formControl]="overnight" />
+          <label for="overnight">Mit Übernachtung</label>
+        </div>
+      }
     </fieldset>
   </fieldset>
 </app-form-card>

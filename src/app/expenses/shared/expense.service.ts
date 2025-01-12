@@ -49,10 +49,12 @@ export class ExpenseService {
           return 0;
         }
 
-        let amount = this.config.food.allowance[expense.absence];
-        amount -= expense.breakfast ? this.config.food.meals.breakfast : 0;
-        amount -= expense.lunch ? this.config.food.meals.lunch : 0;
-        amount -= expense.dinner ? this.config.food.meals.dinner : 0;
+        let amount = this.config.food[expense.absence];
+        const full = this.config.food.intermediate;
+
+        amount -= expense.breakfast ? full * 0.2 : 0;
+        amount -= expense.lunch ? full * 0.4 : 0;
+        amount -= expense.dinner ? full * 0.4 : 0;
 
         return amount > 0 ? amount : 0;
       }

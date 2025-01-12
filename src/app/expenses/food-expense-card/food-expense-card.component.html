@@ -1,0 +1,44 @@
+<div class="card">
+  @if (updatedExpense; as expense) {
+    <div class="heading">
+      <p>{{ expense.date | date: 'EEEE, dd. MMMM yyyy' }}</p>
+      <p>{{ expense | expenseAmount | currency }}</p>
+    </div>
+
+    <p class="details">
+      {{ expense.absence | absence }} |
+      {{ getAllowance(expense.absence) | currency }} Tagessatz
+    </p>
+
+    <div class="form-group">
+      <fieldset [formGroup]="form">
+        <legend>Abzüglich Mahlzeiten</legend>
+
+        <div class="form-checkbox">
+          <input
+            type="checkbox"
+            id="breakfast-{{ inputId }}"
+            formControlName="breakfast"
+          />
+          <label for="breakfast-{{ inputId }}">Frühstück</label>
+        </div>
+        <div class="form-checkbox">
+          <input
+            type="checkbox"
+            id="lunch-{{ inputId }}"
+            formControlName="lunch"
+          />
+          <label for="lunch-{{ inputId }}">Mittagessen</label>
+        </div>
+        <div class="form-checkbox">
+          <input
+            type="checkbox"
+            id="dinner-{{ inputId }}"
+            formControlName="dinner"
+          />
+          <label for="dinner-{{ inputId }}">Abendessen</label>
+        </div>
+      </fieldset>
+    </div>
+  }
+</div>

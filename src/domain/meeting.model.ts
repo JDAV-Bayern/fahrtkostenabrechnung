@@ -20,6 +20,7 @@ export interface Committee extends MeetingBase {
   time: {
     start: Date;
     end: Date;
+    overnight?: boolean;
   };
 }
 

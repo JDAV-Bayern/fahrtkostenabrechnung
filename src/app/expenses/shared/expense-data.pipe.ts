@@ -1,14 +1,16 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { FoodExpense } from 'src/domain/expense.model';
 
-export function formatAbsence(value: string): string | null {
+export function formatAbsence(value: string | null | undefined): string | null {
   switch (value) {
-    case 'fullDay':
-      return 'ganze 24 Stunden';
-    case 'travelDay':
-      return 'am An- oder Abreisetag';
-    case 'workDay':
-      return 'mehr als acht Stunden';
+    case 'arrival':
+      return 'Anreisetag';
+    case 'return':
+      return 'Rückreisetag';
+    case 'intermediate':
+      return 'Zwischentag';
+    case 'single':
+      return 'Abwesenheit von mehr als 8 Stunden';
     default:
       return null;
   }
@@ -57,7 +59,7 @@ export class EngineTypePipe implements PipeTransform {
   standalone: true
 })
 export class AbsencePipe implements PipeTransform {
-  transform(value: string): string | null {
+  transform(value: string | null | undefined): string | null {
     return formatAbsence(value);
   }
 }

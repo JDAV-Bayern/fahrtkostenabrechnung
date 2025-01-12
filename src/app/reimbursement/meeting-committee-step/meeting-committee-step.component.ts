@@ -46,6 +46,10 @@ export class MeetingCommitteeStepComponent implements OnInit {
     return this.time.controls.end;
   }
 
+  get overnight() {
+    return this.time.controls.overnight;
+  }
+
   get now() {
     return new Date();
   }

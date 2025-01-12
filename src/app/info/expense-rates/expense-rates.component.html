@@ -100,7 +100,7 @@
 
   <table>
     <tr>
-      <td>{{ config.transport.bike | currency }} pro Kilometer</td>
+      <td>{{ config.transport.bike | currency }} pro km</td>
     </tr>
   </table>
 }
@@ -113,15 +113,18 @@
     Mehraufwand für Verpflegung nach folgenden Sätzen abgerechnet werden:
   </p>
   <table>
-    @for (
-      entry of config.food.allowance | keyvalue: originalOrder;
-      track entry.key
-    ) {
-      <tr>
-        <td>{{ entry.key | absence }}</td>
-        <td>{{ entry.value | currency }}</td>
-      </tr>
-    }
+    <tr>
+      <td>Ganztägige Abwesenheit</td>
+      <td>{{ config.food.intermediate | currency }}</td>
+    </tr>
+    <tr>
+      <td>An- und Abreisetag bei mehrtägigen Reisen</td>
+      <td>{{ config.food.arrival | currency }}</td>
+    </tr>
+    <tr>
+      <td>Mehr als 8-stündige Abwesenheit ohne Übernachtung</td>
+      <td>{{ config.food.single | currency }}</td>
+    </tr>
   </table>
 
   <p>
@@ -130,15 +133,15 @@
   <table>
     <tr>
       <td>Frühstück</td>
-      <td>{{ config.food.meals.breakfast | currency }}</td>
+      <td>{{ config.food.intermediate * 0.2 | currency }}</td>
     </tr>
     <tr>
-      <td>Mittag</td>
-      <td>{{ config.food.meals.lunch | currency }}</td>
+      <td>Mittagessen</td>
+      <td>{{ config.food.intermediate * 0.4 | currency }}</td>
     </tr>
     <tr>
-      <td>Abend</td>
-      <td>{{ config.food.meals.dinner | currency }}</td>
+      <td>Abendessen</td>
+      <td>{{ config.food.intermediate * 0.4 | currency }}</td>
     </tr>
   </table>
 

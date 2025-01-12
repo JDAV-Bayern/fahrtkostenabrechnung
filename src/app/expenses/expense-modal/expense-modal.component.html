@@ -6,11 +6,6 @@
       [completion]="data.extra?.completion"
     ></app-transport-expense-modal>
   }
-  @case ('food') {
-    <app-food-expense-modal
-      [formControl]="data.control"
-    ></app-food-expense-modal>
-  }
   @case ('material') {
     <app-material-expense-modal
       [formControl]="data.control"

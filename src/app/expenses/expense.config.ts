@@ -1,4 +1,4 @@
-import { Absence, Discount, ExpenseType, Meal } from 'src/domain/expense.model';
+import { Absence, Discount, ExpenseType } from 'src/domain/expense.model';
 import { MeetingType } from 'src/domain/meeting.model';
 
 export type ExpenseConfig = Record<
@@ -11,10 +11,7 @@ export type ExpenseConfig = Record<
       plan: number;
       bike: number;
     };
-    food?: {
-      allowance: Record<Absence, number>;
-      meals: Record<Meal, number>;
-    };
+    food?: Record<Absence, number>;
     maxTotal?: number;
   }
 >;
@@ -61,16 +58,10 @@ export const expenseConfig: ExpenseConfig = {
       bike: 0.13
     },
     food: {
-      allowance: {
-        fullDay: 28,
-        travelDay: 14,
-        workDay: 14
-      },
-      meals: {
-        breakfast: 5.6,
-        lunch: 11.2,
-        dinner: 11.2
-      }
+      arrival: 14,
+      return: 14,
+      intermediate: 28,
+      single: 14
     }
   }
 };
