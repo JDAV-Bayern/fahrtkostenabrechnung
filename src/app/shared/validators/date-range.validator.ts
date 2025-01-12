@@ -1,17 +1,5 @@
 import { ValidatorFn } from '@angular/forms';
-import { interval, Interval, isAfter, isFuture, isValid } from 'date-fns';
-import { MeetingForm } from 'src/app/reimbursement/shared/meeting-form';
-
-export function toInterval(form: MeetingForm['time']): Interval | null {
-  const start = form.controls.start.value;
-  const end = form.controls.end.value;
-
-  if (start && end && isValid(start) && isValid(end)) {
-    return interval(start, end);
-  }
-
-  return null;
-}
+import { isAfter, isFuture } from 'date-fns';
 
 export const pastDateRange: ValidatorFn = control => {
   const start = control.get('start')?.value;

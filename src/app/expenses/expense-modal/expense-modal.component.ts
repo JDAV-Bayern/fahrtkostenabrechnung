@@ -7,7 +7,6 @@ import {
   TransportExpense,
   TransportMode
 } from 'src/domain/expense.model';
-import { FoodExpenseModalComponent } from '../food-expense-modal/food-expense-modal.component';
 import { MaterialExpenseModalComponent } from '../material-expense-modal/material-expense-modal.component';
 import { TransportExpenseModalComponent } from '../transport-expense-modal/transport-expense-modal.component';
 
@@ -30,7 +29,6 @@ export type ExpenseExtraData<T extends Expense> = T extends TransportExpense
   imports: [
     ReactiveFormsModule,
     TransportExpenseModalComponent,
-    FoodExpenseModalComponent,
     MaterialExpenseModalComponent
   ],
   templateUrl: './expense-modal.component.html'

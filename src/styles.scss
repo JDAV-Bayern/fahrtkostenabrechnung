@@ -63,6 +63,16 @@ fieldset {
   margin-top: 20px;
 }
 
+.form-checkbox {
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.form-checkbox label {
+  display: inline;
+  font-weight: normal;
+}
+
 button.jdav-btn {
   font-size: 13px;
   box-sizing: border-box;
