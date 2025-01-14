@@ -8,7 +8,6 @@ export interface MeetingForm {
   time: FormGroup<{
     start: FormControl<Date | null>;
     end: FormControl<Date | null>;
-    overnight: FormControl<boolean>;
   }>;
   code?: FormControl<string>;
 }

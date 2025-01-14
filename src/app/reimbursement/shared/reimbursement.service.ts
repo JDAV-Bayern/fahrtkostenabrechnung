@@ -1,9 +1,9 @@
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   closestIndexTo,
   differenceInHours,
   eachDayOfInterval,
-  interval,
+  Interval,
   startOfDay
 } from 'date-fns';
 import { SectionService } from 'src/app/core/section.service';
@@ -17,7 +17,7 @@ import {
   MaterialExpense,
   TransportExpense
 } from 'src/domain/expense.model';
-import { Meeting, MeetingType } from 'src/domain/meeting.model';
+import { MeetingType } from 'src/domain/meeting.model';
 import { Reimbursement } from 'src/domain/reimbursement.model';
 
 const createFoodExpense = (date: Date, absence: Absence): FoodExpense => ({
@@ -69,37 +69,22 @@ export class ReimbursementService {
     }
   }
 
-  getFoodExpenses(meeting: Meeting): FoodExpense[] {
-    if (meeting.type !== 'committee') {
-      return [];
-    }
-
-    let i;
-
-    try {
-      const start = meeting.time.start;
-      const end = meeting.time.end;
-      i = interval(start, end, { assertPositive: true });
-    } catch {
-      return [];
-    }
-
+  getFoodExpenses(time: Interval, isOvernight: boolean): FoodExpense[] {
     // too short
-    if (differenceInHours(i.end, i.start) < 8) {
+    if (differenceInHours(time.end, time.start) < 8) {
       return [];
     }
 
-    const dates = eachDayOfInterval(i);
+    const dates = eachDayOfInterval(time);
 
     // single day
     if (dates.length === 1) {
       return [createFoodExpense(dates[0], 'single')];
     }
 
-    if (dates.length === 2 && !meeting.time.overnight) {
-      const midnight = startOfDay(i.end);
-      const short =
-        closestIndexTo(midnight, [meeting.time.start, meeting.time.end]) ?? 0;
+    if (dates.length === 2 && !isOvernight) {
+      const midnight = startOfDay(time.end);
+      const short = closestIndexTo(midnight, [time.start, time.end]) ?? 0;
       const long = 1 - short;
 
       return [createFoodExpense(dates[long], 'single')];
