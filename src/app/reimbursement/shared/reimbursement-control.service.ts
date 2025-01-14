@@ -30,6 +30,9 @@ import {
   limitedTransportMode
 } from './transport-mode.validator';
 
+const LOCAL_STORAGE_KEY_REIMBURSEMENT = 'reimbursement';
+const LOCAL_STORAGE_KEY_SETTINGS = 'settings';
+
 const PLZ_PATTERN = /^[0-9]{4,5}$/;
 const BIC_PATTERN = /^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/;
 
@@ -67,8 +70,7 @@ export class ReimbursementControlService {
       time: this.formBuilder.group(
         {
           start: new FormControl<Date | null>(null, Validators.required),
-          end: new FormControl<Date | null>(null, Validators.required),
-          overnight: [false]
+          end: new FormControl<Date | null>(null, Validators.required)
         },
         { validators: [orderedDateRange, pastDateRange] }
       ),
@@ -116,6 +118,12 @@ export class ReimbursementControlService {
     })
   });
 
+  // local state not included in the final data
+  foodSettings = this.formBuilder.group({
+    isEnabled: [false],
+    isOvernight: [false]
+  });
+
   constructor() {
     this.form.valueChanges.subscribe(() => this.saveForm());
 
@@ -131,6 +139,10 @@ export class ReimbursementControlService {
     const meetingTime = this.meetingStep.controls.time;
     meetingTime.valueChanges.subscribe(value =>
       this.onMeetingTimeChanged(value)
+    );
+
+    this.foodSettings.valueChanges.subscribe(value =>
+      this.onFoodSettingsChanged(value)
     );
 
     this.loadForm();
@@ -171,27 +183,40 @@ export class ReimbursementControlService {
   loadForm() {
     console.log('Loading form values from local storage...');
 
-    // parse JSON from local storage
-    const storedData = localStorage.getItem('reimbursement') || '{}';
-    const storedValue = JSON.parse(storedData, (key, value) =>
-      value && DATE_KEYS.includes(key) ? new Date(value) : value
-    );
+    const storedData = localStorage.getItem(LOCAL_STORAGE_KEY_REIMBURSEMENT);
+    const settingsData = localStorage.getItem(LOCAL_STORAGE_KEY_SETTINGS);
 
-    // add controls for form arrays
-    reviveFormArrays(this.form, storedValue, () =>
-      this.formBuilder.control({})
-    );
+    if (storedData) {
+      // parse JSON from local storage
+      const storedValue = JSON.parse(storedData, (key, value) =>
+        value && DATE_KEYS.includes(key) ? new Date(value) : value
+      );
 
-    this.form.patchValue(storedValue);
+      // add controls for form arrays
+      reviveFormArrays(this.form, storedValue, () =>
+        this.formBuilder.control({})
+      );
 
-    // mark controls with values as touched
-    deepMarkAsDirty(this.form);
+      this.form.patchValue(storedValue);
+
+      // mark controls with values as touched
+      deepMarkAsDirty(this.form);
+    }
+
+    if (settingsData) {
+      const settingsValue = JSON.parse(settingsData);
+      this.foodSettings.patchValue(settingsValue);
+    }
   }
 
   saveForm() {
     // TODO: exclude file field?
     const data = JSON.stringify(this.form.value);
-    localStorage.setItem('reimbursement', data);
+    localStorage.setItem(LOCAL_STORAGE_KEY_REIMBURSEMENT, data);
+
+    // save food settings
+    const foodSettingsData = JSON.stringify(this.foodSettings.value);
+    localStorage.setItem(LOCAL_STORAGE_KEY_SETTINGS, foodSettingsData);
   }
 
   deleteStoredData(): void {
@@ -201,7 +226,9 @@ export class ReimbursementControlService {
     );
     this.foodExpenses.clear();
     this.materialExpenses.clear();
-    localStorage.removeItem('reimbursement');
+    this.foodSettings.reset();
+    localStorage.removeItem(LOCAL_STORAGE_KEY_REIMBURSEMENT);
+    localStorage.removeItem(LOCAL_STORAGE_KEY_SETTINGS);
   }
 
   getMeeting(): Meeting {
@@ -210,8 +237,7 @@ export class ReimbursementControlService {
     if (meeting.type === 'committee') {
       meeting.time = {
         start: meeting.time.start || new Date(NaN),
-        end: meeting.time.end || new Date(NaN),
-        overnight: meeting.time.overnight
+        end: meeting.time.end || new Date(NaN)
       };
     }
 
@@ -325,36 +351,59 @@ export class ReimbursementControlService {
   private onMeetingTimeChanged(value: {
     start?: Date | null;
     end?: Date | null;
-    overnight?: boolean;
   }) {
+    const overnightControl = this.foodSettings.controls.isOvernight;
     // update overnight checkbox visibility
     if (value.start && value.end) {
-      const control = this.meetingStep.controls.time.controls.overnight;
       const days = eachDayOfInterval({ start: value.start, end: value.end });
-
       if (days.length === 2) {
-        control.enable({ onlySelf: true });
+        overnightControl.enable();
       } else {
-        control.disable({ onlySelf: true });
+        overnightControl.disable();
       }
     }
 
+    this.updateFoodExpenses(value, overnightControl.value);
+  }
+
+  private onFoodSettingsChanged(value: {
+    isEnabled?: boolean;
+    isOvernight?: boolean;
+  }) {
+    this.updateFoodExpenses(
+      this.meetingStep.controls.time.value,
+      value.isOvernight
+    );
+    this.saveForm();
+  }
+
+  private updateFoodExpenses(
+    time: {
+      start?: Date | null;
+      end?: Date | null;
+    },
+    isOvernight?: boolean
+  ) {
     // update food expenses
-    const meeting = this.meetingStep.value as Meeting;
-    if (meeting.type === 'committee') {
-      meeting.time = {
-        start: value.start || new Date(NaN),
-        end: value.end || new Date(NaN),
-        overnight: value.overnight
-      };
+    if (!time.start || !time.end) {
+      return;
     }
 
-    const expenses = this.reimbursementService.getFoodExpenses(meeting);
+    const expenses = this.reimbursementService.getFoodExpenses(
+      { start: time.start, end: time.end },
+      isOvernight || false
+    );
     this.foodExpenses.clear();
 
     for (const expense of expenses) {
       const form = this.formBuilder.control(expense);
       this.foodExpenses.push(form);
+    }
+
+    if (this.foodSettings.controls.isEnabled.value) {
+      this.foodExpenses.enable();
+    } else {
+      this.foodExpenses.disable();
     }
   }
 }

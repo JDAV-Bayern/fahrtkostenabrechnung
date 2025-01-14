@@ -47,7 +47,7 @@ export class MeetingCommitteeStepComponent implements OnInit {
   }
 
   get overnight() {
-    return this.time.controls.overnight;
+    return this.controlService.foodSettings.controls.isOvernight;
   }
 
   get now() {

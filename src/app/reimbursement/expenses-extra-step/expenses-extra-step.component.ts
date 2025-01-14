@@ -23,16 +23,18 @@ import { ReimbursementService } from '../shared/reimbursement.service';
 })
 export class ExpensesExtraStepComponent {
   private readonly reimbursementService = inject(ReimbursementService);
-  private readonly reimbursementControlService = inject(
-    ReimbursementControlService
-  );
+  private readonly controlService = inject(ReimbursementControlService);
 
-  parentForm = this.reimbursementControlService.expensesStep;
-  foodForm = this.reimbursementControlService.foodExpenses;
-  materialForm = this.reimbursementControlService.materialExpenses;
+  parentForm = this.controlService.expensesStep;
+  foodForm = this.controlService.foodExpenses;
+  materialForm = this.controlService.materialExpenses;
 
   get report() {
-    const reimbursment = this.reimbursementControlService.getReimbursement();
+    const reimbursment = this.controlService.getReimbursement();
     return this.reimbursementService.getReport(reimbursment);
+  }
+
+  get isFoodEnabled() {
+    return this.controlService.foodSettings.controls.isEnabled;
   }
 }

@@ -9,14 +9,17 @@
         <h2>Tagegelder</h2>
         @if (foodForm.length > 0) {
           @if (foodForm.disabled) {
-            <button class="jdav-btn icon" (click)="foodForm.enable()">
+            <button
+              class="jdav-btn icon"
+              (click)="isFoodEnabled.setValue(true)"
+            >
               <span class="material-symbols-outlined">restaurant</span>
               Tagegelder abrechnen
             </button>
           } @else {
             <button
               class="jdav-btn secondary icon"
-              (click)="foodForm.disable()"
+              (click)="isFoodEnabled.setValue(false)"
             >
               <span class="material-symbols-outlined">delete</span>
               Tagegelder entfernen
