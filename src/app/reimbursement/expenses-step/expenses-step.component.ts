@@ -1,4 +1,3 @@
-import { DialogModule } from '@angular/cdk/dialog';
 import { CdkDrag, CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { CurrencyPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
@@ -24,7 +23,6 @@ import { ReimbursementService } from '../shared/reimbursement.service';
     ReactiveFormsModule,
     CurrencyPipe,
     CdkDropListGroup,
-    DialogModule,
     FormCardComponent,
     ExpenseListComponent
   ]

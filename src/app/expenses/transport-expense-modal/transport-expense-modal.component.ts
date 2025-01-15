@@ -1,5 +1,12 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, inject, input, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  input,
+  OnInit,
+  viewChildren
+} from '@angular/core';
 import {
   ControlValueAccessor,
   FormControl,
@@ -46,6 +53,9 @@ export class TransportExpenseModalComponent
 
   allowedModes = input<TransportMode[]>();
   completion = input<TransportExpenseCompletion>();
+
+  passengerInputs =
+    viewChildren<ElementRef<HTMLInputElement>>('passengerInput');
 
   form = this.formBuilder.group({
     mode: new FormControl<TransportMode | null>(null, Validators.required),
@@ -148,6 +158,11 @@ export class TransportExpenseModalComponent
   addPassenger() {
     const control = this.formBuilder.control('', Validators.required);
     this.carTrip.controls.passengers.push(control);
+
+    setTimeout(() => {
+      const inputs = this.passengerInputs();
+      inputs[inputs.length - 1].nativeElement.focus();
+    });
   }
 
   removePassenger(index: number) {

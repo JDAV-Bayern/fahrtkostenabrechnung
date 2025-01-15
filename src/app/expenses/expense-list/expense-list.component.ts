@@ -1,4 +1,4 @@
-import { Dialog, DialogRef } from '@angular/cdk/dialog';
+import { Dialog, DialogModule, DialogRef } from '@angular/cdk/dialog';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import { Component, inject, input, OnInit } from '@angular/core';
 import {
@@ -19,7 +19,13 @@ import {
   selector: 'app-expense-list',
   templateUrl: './expense-list.component.html',
   styleUrls: ['./expense-list.component.css'],
-  imports: [ReactiveFormsModule, CdkDrag, CdkDropList, ExpenseCardComponent]
+  imports: [
+    ReactiveFormsModule,
+    DialogModule,
+    CdkDrag,
+    CdkDropList,
+    ExpenseCardComponent
+  ]
 })
 export class ExpenseListComponent<T extends Expense> implements OnInit {
   private readonly dialog = inject(Dialog);

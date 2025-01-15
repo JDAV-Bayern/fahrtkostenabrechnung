@@ -7,6 +7,7 @@
     <div class="means-of-travel-buttons-container">
       @for (modeOption of allowedModes(); track modeOption) {
         <button
+          type="button"
           class="jdav-btn secondary icon"
           (click)="chooseExpense(modeOption)"
         >
@@ -138,42 +139,49 @@
         </div>
 
         <div class="form-group">
-          <label for="passengers">Mitfahrer*innen</label>
-          <p>
-            <b>Hinweis:</b> Bist Du Teile der Strecke mit unterschiedlicher
-            Anzahl an Mitfahrer*innen gefahren? Dann gib bitte jede Teilstrecke
-            als einzelne Auslage an.
-          </p>
-          @for (
-            passenger of carTrip.controls.passengers.controls;
-            track passenger
-          ) {
-            <div class="passengers-item" formArrayName="passengers">
-              <button
-                class="jdav-btn tertiary icon"
-                (click)="removePassenger($index)"
-              >
-                <span class="material-symbols-outlined">&#xe872;</span>
-              </button>
-              <input
-                class="form-control not-filled"
-                [formControlName]="$index"
-              />
-              @if (passenger.hasError('required') && passenger.touched) {
-                <span class="error-message">
-                  Bitte gib einen Namen für deine*n Mitfahrer*in an
-                </span>
-              }
-            </div>
-          }
-          <button
-            type="button"
-            class="jdav-btn add-passenger tertiary icon"
-            (click)="addPassenger()"
-          >
-            <span class="material-symbols-outlined">&#xe145;</span>
-            Mitfahrer*in hinzufügen
-          </button>
+          <fieldset>
+            <legend>Mitfahrer*innen</legend>
+            <p>
+              <b>Hinweis:</b> Bist Du Teile der Strecke mit unterschiedlicher
+              Anzahl an Mitfahrer*innen gefahren? Dann gib bitte jede
+              Teilstrecke als einzelne Auslage an.
+            </p>
+
+            @for (
+              passenger of carTrip.controls.passengers.controls;
+              track passenger
+            ) {
+              <div class="passengers-item" formArrayName="passengers">
+                <button
+                  type="button"
+                  class="jdav-btn tertiary icon"
+                  (click)="removePassenger($index)"
+                >
+                  <span class="material-symbols-outlined">&#xe872;</span>
+                </button>
+                <input
+                  #passengerInput
+                  aria-label="Mitfahrer*in"
+                  class="form-control not-filled"
+                  [formControl]="passenger"
+                />
+                @if (passenger.hasError('required') && passenger.touched) {
+                  <span class="error-message">
+                    Bitte gib einen Namen für deine*n Mitfahrer*in an
+                  </span>
+                }
+              </div>
+            }
+
+            <button
+              type="button"
+              class="jdav-btn add-passenger tertiary icon"
+              (click)="addPassenger()"
+            >
+              <span class="material-symbols-outlined">&#xe145;</span>
+              Mitfahrer*in hinzufügen
+            </button>
+          </fieldset>
         </div>
       </fieldset>
     }

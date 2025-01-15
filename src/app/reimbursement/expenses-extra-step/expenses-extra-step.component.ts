@@ -1,4 +1,3 @@
-import { DialogModule } from '@angular/cdk/dialog';
 import { CurrencyPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -15,7 +14,6 @@ import { ReimbursementService } from '../shared/reimbursement.service';
   imports: [
     ReactiveFormsModule,
     CurrencyPipe,
-    DialogModule,
     FormCardComponent,
     ExpenseListComponent,
     FoodExpenseCardComponent

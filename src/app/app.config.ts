@@ -13,6 +13,8 @@ import { JdavDatepickerIntl } from './core/date-time-intl';
 export const DIALOG_CONFIG: DialogConfig = {
   panelClass: 'dialog',
   hasBackdrop: true,
+  autoFocus: 'first-tabbable',
+  restoreFocus: true,
   maxWidth: '80vw',
   maxHeight: '90vh',
   width: '700px'
