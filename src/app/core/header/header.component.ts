@@ -22,14 +22,10 @@ export class HeaderComponent implements OnInit {
   deleteAllData() {
     const originUrl: string =
       {
-        course: 'kurs',
         assembly: 'ljv',
         committee: 'gremium'
       }[
-        this.controlService.meetingStep.value.type as
-          | 'course'
-          | 'assembly'
-          | 'committee'
+        this.controlService.meetingStep.value.type as 'assembly' | 'committee'
       ] ?? 'kurs';
     this.controlService.deleteStoredData();
     this.router.navigate([originUrl]);
