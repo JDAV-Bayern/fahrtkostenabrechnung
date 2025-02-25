@@ -35,5 +35,6 @@ export class HeaderComponent implements OnInit {
         originUrl = 'kurs';
     }
     this.controlService.deleteStoredData();
-    this.router.navigate([originUrl]);  }
+    this.router.navigate([originUrl]);
+  }
 }
