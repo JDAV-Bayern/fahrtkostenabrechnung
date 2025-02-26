@@ -20,7 +20,21 @@ export class HeaderComponent implements OnInit {
   }
 
   deleteAllData() {
+    let originUrl: string;
+    switch (this.controlService.meetingStep.value.type) {
+      case 'course':
+        originUrl = 'kurs';
+        break;
+      case 'assembly':
+        originUrl = 'ljv';
+        break;
+      case 'committee':
+        originUrl = 'gremium';
+        break;
+      default:
+        originUrl = 'kurs';
+    }
     this.controlService.deleteStoredData();
-    this.router.navigate(['kurs']);
+    this.router.navigate([originUrl]);
   }
 }
