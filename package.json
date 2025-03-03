@@ -11,7 +11,8 @@
     "test:ci": "ng test --no-watch --no-progress --browsers=ChromeHeadless",
     "lint": "ng lint",
     "format": "prettier . --write",
-    "format:check": "prettier . --check"
+    "format:check": "prettier . --check",
+    "generate-types": "openapi-zod-client 'http://localhost:8000/openapi.json' -o './src/app/shared/generated-types.ts'"
   },
   "private": true,
   "dependencies": {
@@ -27,6 +28,7 @@
     "@angular/platform-browser": "^19.0.3",
     "@angular/platform-browser-dynamic": "^19.0.3",
     "@angular/router": "^19.0.3",
+    "angular-auth-oidc-client": "19.0.0",
     "date-fns": "^4.1.0",
     "jspdf": "^2.5.1",
     "ngx-file-drop": "^16.0.0",
@@ -41,6 +43,7 @@
     "@angular-devkit/build-angular": "^19.0.4",
     "@angular/cli": "^19.0.4",
     "@angular/compiler-cli": "^19.0.3",
+    "@inquirer/prompts": "^7.3.2",
     "@types/jasmine": "~4.3.0",
     "angular-eslint": "19.0.1",
     "eslint": "^9.16.0",
@@ -51,6 +54,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "openapi-zod-client": "^1.18.3",
     "prettier": "^3.3.2",
     "prettier-plugin-organize-imports": "^4.1.0",
     "typescript": "~5.6.3",
