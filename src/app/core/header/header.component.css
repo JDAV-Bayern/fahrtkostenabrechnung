@@ -30,6 +30,13 @@
   font-weight: normal;
 }
 
+.user_display {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  align-items: center;
+}
+
 @media (min-width: 640px) {
   .container {
     flex-direction: row;

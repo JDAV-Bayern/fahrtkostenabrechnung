@@ -12,7 +12,8 @@
     "test:ci": "ng test --no-watch --no-progress --browsers=ChromeHeadless",
     "lint": "ng lint",
     "format": "prettier . --write",
-    "format:check": "prettier . --check"
+    "format:check": "prettier . --check",
+    "generate-types": "rm -rf src/app/api; openapi-generator-cli generate -i http://127.0.0.1:8000/openapi.json -g typescript-angular -o src/app/api --skip-validate-spec"
   },
   "private": true,
   "dependencies": {
@@ -28,6 +29,8 @@
     "@angular/platform-browser": "^19.0.3",
     "@angular/platform-browser-dynamic": "^19.0.3",
     "@angular/router": "^19.0.3",
+    "@openapitools/openapi-generator-cli": "^2.18.4",
+    "angular-auth-oidc-client": "19.0.0",
     "date-fns": "^4.1.0",
     "jspdf": "^2.5.1",
     "ngx-file-drop": "^16.0.0",
