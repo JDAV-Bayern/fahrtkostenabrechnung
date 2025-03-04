@@ -12,7 +12,9 @@
     "lint": "ng lint",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
-    "generate-types": "openapi-zod-client 'http://localhost:8000/openapi.json' -o './src/app/shared/generated-types.ts'"
+    "generate-types": "openapi-zod-client 'http://localhost:8000/openapi.json' -t ./src/app/shared/generated-types/template.hbs -o './src/app/shared/generated-types/generated-types.ts' --export-schemas",
+    "generate-client": "openapi-zod-client 'http://localhost:8000/openapi.json' -o './src/app/shared/generated-types/generated-client.ts'",
+    "generate-all": "npm run generate-types && npm run generate-client"
   },
   "private": true,
   "dependencies": {
