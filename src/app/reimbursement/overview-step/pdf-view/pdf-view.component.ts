@@ -13,7 +13,6 @@ import { ExpenseDetailsComponent } from 'src/app/expenses/shared/expense-details
 import { ExpenseTitlePipe } from 'src/app/expenses/shared/expense-title.pipe';
 import { DirectionPipe } from 'src/app/reimbursement/shared/direction.pipe';
 import { MeetingTypePipe } from 'src/app/reimbursement/shared/meeting-type.pipe';
-import { logoBase64 } from 'src/assets/logoBase64';
 import { Direction } from 'src/domain/expense.model';
 import { Reimbursement } from 'src/domain/reimbursement.model';
 import { Section } from 'src/domain/section.model';
@@ -70,9 +69,5 @@ export class PdfViewComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.fullyRendered.emit();
-  }
-
-  getLogo() {
-    return logoBase64;
   }
 }

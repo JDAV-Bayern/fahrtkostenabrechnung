@@ -11,12 +11,11 @@
   justify-content: space-around;
   align-items: center;
   gap: 10px;
-  padding: 10px;
+  padding: 1rem;
 }
 
-.logo img {
-  max-height: 80px;
-  max-width: 30vw;
+.logo {
+  width: 130px;
 }
 
 .heading {
