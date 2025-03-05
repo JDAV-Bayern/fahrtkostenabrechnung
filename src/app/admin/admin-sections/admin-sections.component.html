@@ -1,5 +1,51 @@
-<div>
-  <p *ngFor="let section of sections.sections">
-    {{ section.name }}
-  </p>
+<div class="section-admin-container">
+  <div *ngIf="!sectionToEdit">
+    <h3>Sektionen ({{ sections.length }})</h3>
+    <div class="actionrow">
+      <div>
+        Suchen
+        <input
+          [(ngModel)]="searchValue"
+          (input)="search()"
+          class="search-field"
+          type="text"
+        />
+      </div>
+      <input type="button" value="Neue Sektion hinzufügen" />
+    </div>
+
+    <div>
+      <table class="data-table">
+        <tr>
+          <th>Nummer</th>
+          <th style="width: 100%">Name</th>
+          <th>Bundesland</th>
+          <th>Bezirk</th>
+          <th>Aktionen</th>
+        </tr>
+        <tr class="table-row" *ngFor="let section of sections">
+          <th>
+            {{ section.number }}
+          </th>
+          <td>
+            {{ section.name }}
+          </td>
+          <td>
+            {{ section.state }}
+          </td>
+          <td>
+            {{ section.district }}
+          </td>
+          <td class="buttons">
+            <button (click)="editSection(section)">Edit</button>
+            <button (click)="deleteSection(section.number)">Delete</button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div *ngIf="!!sectionToEdit">
+    <app-section-form (cancel)="this.sectionToEdit = undefined">
+    </app-section-form>
+  </div>
 </div>

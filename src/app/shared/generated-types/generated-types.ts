@@ -11,9 +11,6 @@ export const SectionDTO = z
 export const SectionListDTO = z
   .object({ sections: z.array(SectionDTO) })
   .passthrough();
-export const Body_import_sections_import_sections_post = z
-  .object({ sections_json: z.instanceof(File) })
-  .passthrough();
 export const ValidationError = z
   .object({
     loc: z.array(z.union([z.string(), z.number()])),
@@ -46,8 +43,6 @@ export const UserInfoDTO = z
 export type SectionDTOType = z.infer<typeof SectionDTO>;
 // prettier-ignore
 export type SectionListDTOType = z.infer<typeof SectionListDTO>;
-// prettier-ignore
-export type Body_import_sections_import_sections_postType = z.infer<typeof Body_import_sections_import_sections_post>;
 // prettier-ignore
 export type ValidationErrorType = z.infer<typeof ValidationError>;
 // prettier-ignore

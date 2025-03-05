@@ -12,9 +12,6 @@ const SectionDTO = z
 const SectionListDTO = z
   .object({ sections: z.array(SectionDTO) })
   .passthrough();
-const Body_import_sections_import_sections_post = z
-  .object({ sections_json: z.instanceof(File) })
-  .passthrough();
 const ValidationError = z
   .object({
     loc: z.array(z.union([z.string(), z.number()])),
@@ -47,7 +44,6 @@ const UserInfoDTO = z
 export const schemas = {
   SectionDTO,
   SectionListDTO,
-  Body_import_sections_import_sections_post,
   ValidationError,
   HTTPValidationError,
   AuthInfo,
@@ -64,15 +60,48 @@ const endpoints = makeApi([
     response: z.string()
   },
   {
+    method: 'get',
+    path: '/sections',
+    alias: 'get_sections_sections_get',
+    requestFormat: 'json',
+    response: SectionListDTO
+  },
+  {
     method: 'post',
-    path: '/import_sections',
-    alias: 'import_sections_import_sections_post',
-    requestFormat: 'form-data',
+    path: '/sections',
+    alias: 'create_section_sections_post',
+    requestFormat: 'json',
     parameters: [
       {
         name: 'body',
         type: 'Body',
-        schema: z.object({ sections_json: z.instanceof(File) }).passthrough()
+        schema: SectionDTO
+      }
+    ],
+    response: SectionDTO,
+    errors: [
+      {
+        status: 422,
+        description: `Validation Error`,
+        schema: HTTPValidationError
+      }
+    ]
+  },
+  {
+    method: 'patch',
+    path: '/sections/:number',
+    alias: 'update_section_sections__number__patch',
+    requestFormat: 'json',
+    parameters: [
+      {
+        name: 'body',
+        type: 'Body',
+        schema: SectionDTO
+      },
+      {
+        name: 'number',
+        type: 'Path',
+        schema: z.number().int()
       }
     ],
     response: z.unknown(),
@@ -85,11 +114,25 @@ const endpoints = makeApi([
     ]
   },
   {
-    method: 'get',
-    path: '/sections',
-    alias: 'get_sections_sections_get',
+    method: 'delete',
+    path: '/sections/:number',
+    alias: 'delete_section_sections__number__delete',
     requestFormat: 'json',
-    response: SectionListDTO
+    parameters: [
+      {
+        name: 'number',
+        type: 'Path',
+        schema: z.number().int()
+      }
+    ],
+    response: z.unknown(),
+    errors: [
+      {
+        status: 422,
+        description: `Validation Error`,
+        schema: HTTPValidationError
+      }
+    ]
   },
   {
     method: 'get',

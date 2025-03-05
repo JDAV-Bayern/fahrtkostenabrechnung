@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { lastValueFrom } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { createApiClient } from './generated-types';
+import { createApiClient } from './generated-types/generated-client';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +24,7 @@ export class BackendService {
       this.apiClient = createApiClient(this.baseUrl, {
         axiosConfig: {
           headers: {
-            Authorizaiton: `Bearer ${token}`
+            Authorization: `Bearer ${token}`
           }
         }
       });
