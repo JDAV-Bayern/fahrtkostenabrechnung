@@ -17,10 +17,6 @@ td:last-child {
   text-align: right;
 }
 
-.explanation {
-  font-style: italic;
-}
-
 .important {
   font-weight: bold;
 }

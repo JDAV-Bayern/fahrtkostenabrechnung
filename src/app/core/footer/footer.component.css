@@ -13,16 +13,12 @@ a {
   padding: 2.5rem 1rem;
 }
 
+.logo {
+  width: 150px;
+}
+
 .contact-info {
   text-align: center;
-}
-
-.contact-info h1 {
-  margin: 1rem 0;
-  font-size: 1.5rem;
-}
-
-.contact-info p {
   font-size: 0.875rem;
 }
 
