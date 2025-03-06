@@ -14,8 +14,11 @@ export class HeaderComponent {
   private readonly router = inject(Router);
 
   deleteAllData() {
+    const control = this.controlService.meetingStep.controls.type;
+    const meetingType = control.value;
+
     let originUrl: string;
-    switch (this.controlService.meetingStep.value.type) {
+    switch (meetingType) {
       case 'course':
         originUrl = 'kurs';
         break;
@@ -25,10 +28,10 @@ export class HeaderComponent {
       case 'committee':
         originUrl = 'gremium';
         break;
-      default:
-        originUrl = 'kurs';
     }
+
     this.controlService.deleteStoredData();
+    control.setValue(meetingType);
     this.router.navigate([originUrl]);
   }
 }
