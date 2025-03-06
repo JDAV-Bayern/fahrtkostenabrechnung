@@ -11,7 +11,7 @@ import { FinishedDialogComponent } from './finished-dialog/finished-dialog.compo
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
-import { ProgressIndicatorComponent } from 'src/app/shared/icons/progress-indicator/progress-indicator.component';
+import { ProgressIndicatorComponent } from 'src/app/shared/progress-indicator/progress-indicator.component';
 import { ExpenseTypePipe } from '../../expenses/shared/expense-type.pipe';
 import { ReimbursementService } from '../shared/reimbursement.service';
 import { PdfViewComponent } from './pdf-view/pdf-view.component';
