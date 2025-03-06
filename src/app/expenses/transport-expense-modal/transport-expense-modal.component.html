@@ -11,10 +11,22 @@
           class="jdav-btn secondary icon"
           (click)="chooseExpense(modeOption)"
         >
-          <span
-            class="material-symbols-outlined"
-            [innerHtml]="getIcon(modeOption)"
-          ></span>
+          <span class="material-symbols-outlined">
+            @switch (modeOption) {
+              @case ('car') {
+                directions_car
+              }
+              @case ('public') {
+                train
+              }
+              @case ('bike') {
+                pedal_bike
+              }
+              @case ('plan') {
+                transit_ticket
+              }
+            }
+          </span>
           {{ modeOption | transportMode }}
         </button>
       }
@@ -157,7 +169,7 @@
                   class="jdav-btn tertiary icon"
                   (click)="removePassenger($index)"
                 >
-                  <span class="material-symbols-outlined">&#xe872;</span>
+                  <span class="material-symbols-outlined">delete</span>
                 </button>
                 <input
                   #passengerInput
@@ -178,7 +190,7 @@
               class="jdav-btn add-passenger tertiary icon"
               (click)="addPassenger()"
             >
-              <span class="material-symbols-outlined">&#xe145;</span>
+              <span class="material-symbols-outlined">add</span>
               Mitfahrer*in hinzufügen
             </button>
           </fieldset>

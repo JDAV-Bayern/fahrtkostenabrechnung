@@ -138,19 +138,6 @@ export class TransportExpenseModalComponent
     return this.form.valid ? null : { transportExpense: true };
   };
 
-  getIcon(mode: TransportMode) {
-    switch (mode) {
-      case 'car':
-        return '&#xe531;';
-      case 'public':
-        return '&#xe570;';
-      case 'plan':
-        return '&#xe8f8;';
-      case 'bike':
-        return '&#xeb29;';
-    }
-  }
-
   chooseExpense(mode: TransportMode) {
     this.mode.setValue(mode);
   }
