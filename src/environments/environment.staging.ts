@@ -1,3 +1,4 @@
 export const environment = {
-  useHashRouting: true
+  useHashRouting: false,
+  environment: 'staging'
 };

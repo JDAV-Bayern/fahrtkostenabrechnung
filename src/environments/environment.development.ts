@@ -1,3 +1,4 @@
 export const environment = {
-  useHashRouting: false
+  useHashRouting: false,
+  environment: 'development'
 };

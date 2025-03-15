@@ -6,7 +6,9 @@ COPY package.json package-lock.json ./
 RUN npm ci
 
 COPY . .
-RUN npm run build
+
+ARG BUILD_CONFIG=production
+RUN ng build -- --configuration $BUILD_CONFIG
 
 FROM nginx:alpine AS runner
 
