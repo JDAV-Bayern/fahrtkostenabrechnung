@@ -48,7 +48,6 @@
               "outputHashing": "all"
             },
             "staging": {
-              "baseHref": "/fahrtkostenabrechnung/",
               "budgets": [
                 {
                   "type": "initial",
