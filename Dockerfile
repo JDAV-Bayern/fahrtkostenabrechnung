@@ -8,7 +8,7 @@ RUN npm ci
 COPY . .
 
 ARG BUILD_CONFIG=production
-RUN npm build:$BUILD_CONFIG
+RUN npm run build:$BUILD_CONFIG
 
 FROM nginx:alpine AS runner
 
