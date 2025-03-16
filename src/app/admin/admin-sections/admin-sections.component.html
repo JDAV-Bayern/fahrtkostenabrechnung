@@ -1,0 +1,112 @@
+<div class="section-admin-container">
+  <h3>Sektionen ({{ sections.length }})</h3>
+  <div class="actionrow">
+    <div>
+      Suchen
+      <input
+        [(ngModel)]="searchValue"
+        (input)="search()"
+        class="search-field"
+        type="text"
+      />
+    </div>
+    <div>
+      <label for="file-upload" class="file-upload-label"
+        >Sektionen importieren</label
+      >
+      <input
+        id="file-upload"
+        accept="application/json"
+        (change)="importSections($event)"
+        type="file"
+      />
+      <input
+        type="button"
+        value="Neue Sektion hinzufügen"
+        (click)="createSection()"
+      />
+    </div>
+  </div>
+
+  <div>
+    <table class="data-table">
+      <tr>
+        <th>Nummer</th>
+        <th style="width: 100%">Name</th>
+        <th>Bundesland</th>
+        <th>Bezirk</th>
+        <th>Aktionen</th>
+      </tr>
+      <tr class="table-row" *ngFor="let section of sections">
+        <th>
+          {{ section.number }}
+        </th>
+        <td>
+          {{ section.name }}
+        </td>
+        <td>
+          {{ section.state }}
+        </td>
+        <td>
+          {{ section.district }}
+        </td>
+        <td class="buttons">
+          <button (click)="editSection(section)">Edit</button>
+          <button (click)="deleteSection(section)">Delete</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  @if (sectionToEdit) {
+    <div class="section-edit-modal">
+      <h3>Sektion bearbeiten</h3>
+      <form (submit)="saveSection()">
+        <div class="form-group">
+          <label for="number">Nummer</label>
+          <input
+            type="text"
+            id="number"
+            name="number"
+            [(ngModel)]="sectionToEdit.number"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            [(ngModel)]="sectionToEdit.name"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="state">Bundesland</label>
+          <input
+            type="text"
+            id="state"
+            name="state"
+            [(ngModel)]="sectionToEdit.state"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="district">Bezirk</label>
+          <input
+            type="text"
+            id="district"
+            name="district"
+            [(ngModel)]="sectionToEdit.district"
+            required
+          />
+        </div>
+        <div>
+          <button (click)="sectionToEdit = null">Abbrechen</button>
+          <input type="submit" value="Speichern" />
+        </div>
+      </form>
+    </div>
+  }
+</div>
