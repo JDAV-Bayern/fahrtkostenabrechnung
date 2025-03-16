@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+import { HttpResponse } from '@angular/common/http';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SectionDTO, SectionsService } from 'src/app/api';
@@ -56,6 +57,23 @@ export class AdminSectionsComponent {
     }
   }
 
+  observer = {
+    next: () => {},
+    error: (error: HttpResponse<any>) => {
+      let errorText = 'unknown error';
+      try {
+        errorText = (error as unknown as { error: { detail: string } }).error
+          ?.detail;
+      } catch (e) {}
+      alert(
+        'Fehler beim Speichern der Sektion: ' + error.status + '\n' + errorText
+      );
+    },
+    complete: () => {
+      this.updateSections();
+    }
+  };
+
   deleteSection(section: SectionDTO) {
     if (
       confirm(
@@ -64,7 +82,7 @@ export class AdminSectionsComponent {
     ) {
       this.sectionService
         .deleteSection(section.number)
-        .subscribe(() => this.updateSections());
+        .subscribe(this.observer);
     }
   }
   saveSection() {
@@ -73,14 +91,16 @@ export class AdminSectionsComponent {
     }
     if (this.sectionToEdit.originalNumber !== null) {
       this.sectionService
-        .updateSection(this.sectionToEdit.originalNumber, this.sectionToEdit)
-        .subscribe(() => {
-          this.updateSections();
-        });
+        .updateSection(
+          this.sectionToEdit.originalNumber,
+          this.sectionToEdit,
+          'response'
+        )
+        .subscribe(this.observer);
     } else {
-      this.sectionService.createSection(this.sectionToEdit).subscribe(() => {
-        this.updateSections();
-      });
+      this.sectionService
+        .createSection(this.sectionToEdit, 'response')
+        .subscribe(this.observer);
     }
     this.sectionToEdit = null;
   }
