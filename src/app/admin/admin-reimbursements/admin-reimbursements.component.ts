@@ -6,6 +6,4 @@ import { Component } from '@angular/core';
   templateUrl: './admin-reimbursements.component.html',
   styleUrl: './admin-reimbursements.component.css'
 })
-export class AdminReimbursementsComponent {
-
-}
+export class AdminReimbursementsComponent {}

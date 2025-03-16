@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { OidcSecurityService } from 'angular-auth-oidc-client';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
@@ -11,7 +11,7 @@ import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbu
   styleUrls: ['./header.component.css'],
   imports: [CommonModule, RouterLink]
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   private readonly controlService = inject(ReimbursementControlService);
   private readonly router = inject(Router);
   private readonly oidcSecurityService = inject(OidcSecurityService);
@@ -20,8 +20,8 @@ export class HeaderComponent {
     ? 'Verwaltung'
     : 'Reisekostenabrechnung';
 
-  userName: string | undefined;
-  loggedIn: boolean = false;
+  userName: string | undefined = undefined;
+  loggedIn = false;
 
   logout() {
     this.oidcSecurityService.logoff().subscribe(result => console.log(result));

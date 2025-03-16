@@ -1,39 +1,39 @@
-.admin-container{
-    display: flex;
-    min-height: 100%;
-    width: 100%;
-    padding-right: 20px;
-    padding-left: 20px
+.admin-container {
+  display: flex;
+  min-height: 100%;
+  width: 100%;
+  padding-right: 20px;
+  padding-left: 20px;
 }
-.admin-content{
-    width: 100%;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+.admin-content {
+  width: 100%;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 :host {
   display: block;
   width: 100%;
   background-color: var(--bg-gray);
 }
-nav{
-    display: flex;
-    flex-direction: column;
+nav {
+  display: flex;
+  flex-direction: column;
 }
-nav ul{
-    list-style: none;
-    padding: 0;
-    margin: 0;
+nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
-a{
-    text-decoration: none;
-    color: var(--color-body);
+a {
+  text-decoration: none;
+  color: var(--color-body);
 }
-nav ul li{
-    padding: 10px;
-    border-bottom: 1px solid #f0f0f0;
-    background-color: #ffffff;
+nav ul li {
+  padding: 10px;
+  border-bottom: 1px solid #f0f0f0;
+  background-color: #ffffff;
 }
-nav ul li.active-link{
-    background-color: #d8d5d5;
+nav ul li.active-link {
+  background-color: #d8d5d5;
 }
