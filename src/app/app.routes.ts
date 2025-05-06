@@ -1,4 +1,9 @@
 import { Routes } from '@angular/router';
+import { autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
+import { AdminCoursesComponent } from './admin/admin-courses/admin-courses.component';
+import { AdminReimbursementsComponent } from './admin/admin-reimbursements/admin-reimbursements.component';
+import { AdminSectionsComponent } from './admin/admin-sections/admin-sections.component';
+import { AdminComponent } from './admin/admin.component';
 import { DataProtectionComponent } from './info/data-protection/data-protection.component';
 import { ExpenseRatesComponent } from './info/expense-rates/expense-rates.component';
 import { InfoComponent } from './info/info.component';
@@ -84,6 +89,33 @@ export const routes: Routes = [
         path: 'zusammenfassung',
         component: OverviewStepComponent,
         canActivate: [meetingGuard, participantGuard, expensesGuard]
+      }
+    ]
+  },
+  {
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [autoLoginPartialRoutesGuard],
+    children: [
+      {
+        path: '',
+        redirectTo: 'sektionen',
+        pathMatch: 'full'
+      },
+      {
+        path: 'abrechnungen',
+        component: AdminReimbursementsComponent,
+        title: 'Abrechnungen verwalten'
+      },
+      {
+        path: 'sektionen',
+        component: AdminSectionsComponent,
+        title: 'Sektionen verwalten'
+      },
+      {
+        path: 'kurse',
+        component: AdminCoursesComponent,
+        title: 'Kurse verwalten'
       }
     ]
   }

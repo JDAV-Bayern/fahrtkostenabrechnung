@@ -6,9 +6,18 @@
       alt="JDAV Bayern"
     />
   </a>
-  <h1 class="heading">Reisekostenabrechnung</h1>
-  <button class="jdav-btn tertiary icon delete-data" (click)="deleteAllData()">
-    <span class="material-symbols-outlined">delete</span>
-    Gespeicherte Daten löschen
-  </button>
+  <h1 class="heading">{{ heading }}</h1>
+  <div *ngIf="loggedIn" class="user_display">
+    <p>Hallo, {{ userName }}</p>
+    <button class="jdav-btn tertiary" (click)="logout()">Abmelden</button>
+  </div>
+  <div *ngIf="!loggedIn">
+    <button
+      class="jdav-btn tertiary icon delete-data"
+      (click)="deleteAllData()"
+    >
+      <span class="material-symbols-outlined">delete</span>
+      Gespeicherte Daten löschen
+    </button>
+  </div>
 </div>
