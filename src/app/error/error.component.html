@@ -1,0 +1,11 @@
+<div class="error-container">
+  <!-- Component to display a nice error page with the information retrieved from the error service -->
+  <h1 class="error-title">Es ist ein Fehler aufgetreten.</h1>
+  <h2 class="error-subtitle"> {{ error.errorTitle ?? "Unbekannter Fehler" }}</h2>
+  <p class="error-message">
+    {{ error.errorMessage }}
+  </p>
+  <p class="error-redirect">
+    <a href="/">Zurück</a>
+  </p>
+</div>

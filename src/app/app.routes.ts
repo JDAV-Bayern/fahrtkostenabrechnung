@@ -17,8 +17,17 @@ import {
   participantGuard,
   transportExpensesGuard
 } from './reimbursement/shared/finished-step.guard';
+import { isAdmin } from './auth/guards';
+import { autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
+import { AdminComponent } from './admin/admin.component';
+import { ErrorComponent } from './error/error.component';
 
 export const routes: Routes = [
+  {
+    path: 'error',
+    title: 'Ein Fehler ist aufgetreten',
+    component: ErrorComponent
+  },
   {
     path: '',
     redirectTo: 'kurs',
@@ -84,7 +93,13 @@ export const routes: Routes = [
         path: 'zusammenfassung',
         component: OverviewStepComponent,
         canActivate: [meetingGuard, participantGuard, expensesGuard]
-      }
-    ]
+      },
+      {
+        path: 'admin',
+        component: AdminComponent,
+        canActivate: [autoLoginPartialRoutesGuard, isAdmin],
+      },
+    ],
+
   }
 ];

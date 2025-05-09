@@ -1,0 +1,26 @@
+:host {
+  display: block;
+  width: 100%;
+  background-color: var(--bg-gray);
+}
+
+.error-container {
+  text-align: center;
+  margin-top: 50px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.error-title {
+  font-size: 2em;
+}
+.error-subtitle {
+  font-size: 1.5em;
+}
+.error-message {
+  font-size: 1.2em;
+}
+.error-redirect {
+  margin-top: 50px;
+  font-size: 1em;
+  text-decoration: underline;
+}

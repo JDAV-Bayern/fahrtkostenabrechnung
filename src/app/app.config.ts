@@ -6,7 +6,7 @@ import { MAT_DATE_LOCALE, MatDateFormats } from '@angular/material/core';
 import { MatDatepickerIntl } from '@angular/material/datepicker';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter, withHashLocation } from '@angular/router';
-import { authInterceptor, provideAuth } from 'angular-auth-oidc-client';
+import { authInterceptor, provideAuth, withAppInitializerAuthCheck } from 'angular-auth-oidc-client';
 import { de } from 'date-fns/locale';
 import { environment } from 'src/environments/environment';
 import { routes } from './app.routes';
@@ -40,7 +40,8 @@ export const DATE_FORMATS: MatDateFormats = {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideAuth(authConfig),
+    provideAuth(authConfig,
+      withAppInitializerAuthCheck()),
     provideRouter(
       routes,
       ...(environment.useHashRouting ? [withHashLocation()] : [])
