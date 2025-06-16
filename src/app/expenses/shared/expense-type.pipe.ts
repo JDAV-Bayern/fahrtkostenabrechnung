@@ -14,8 +14,7 @@ export function formatExpenseType(value: string): string | null {
 }
 
 @Pipe({
-  name: 'expenseType',
-  standalone: true
+  name: 'expenseType'
 })
 export class ExpenseTypePipe implements PipeTransform {
   transform(value: string): string | null {

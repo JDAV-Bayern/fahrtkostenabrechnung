@@ -3,8 +3,7 @@ import { Expense } from 'src/domain/expense.model';
 import { ExpenseService } from './expense.service';
 
 @Pipe({
-  name: 'expenseAmount',
-  standalone: true
+  name: 'expenseAmount'
 })
 export class ExpenseAmountPipe implements PipeTransform {
   private readonly expenseService = inject(ExpenseService);

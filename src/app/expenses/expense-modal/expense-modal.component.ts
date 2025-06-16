@@ -25,7 +25,6 @@ export type ExpenseExtraData<T extends Expense> = T extends TransportExpense
 
 @Component({
   selector: 'app-expense-modal',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     TransportExpenseModalComponent,

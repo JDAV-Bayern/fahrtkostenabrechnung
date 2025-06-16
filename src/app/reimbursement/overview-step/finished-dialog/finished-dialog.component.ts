@@ -5,8 +5,7 @@ import { Meeting } from 'src/domain/meeting.model';
 @Component({
   selector: 'app-finished-dialog',
   templateUrl: './finished-dialog.component.html',
-  styleUrls: ['./finished-dialog.component.css'],
-  standalone: true
+  styleUrls: ['./finished-dialog.component.css']
 })
 export class FinishedDialogComponent {
   private readonly data = inject<{ meeting: Meeting; givenName: string }>(
