@@ -15,8 +15,7 @@ export function formatTransportMode(value: TransportMode) {
 }
 
 @Pipe({
-  name: 'transportMode',
-  standalone: true
+  name: 'transportMode'
 })
 export class TransportModePipe implements PipeTransform {
   transform(value: TransportMode): string {

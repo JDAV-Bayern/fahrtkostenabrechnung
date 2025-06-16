@@ -2,8 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Direction } from 'src/domain/expense.model';
 
 @Pipe({
-  name: 'direction',
-  standalone: true
+  name: 'direction'
 })
 export class DirectionPipe implements PipeTransform {
   transform(value: Direction): string {

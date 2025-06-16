@@ -17,8 +17,7 @@ export function formatAbsence(value: string | null | undefined): string | null {
 }
 
 @Pipe({
-  name: 'discount',
-  standalone: true
+  name: 'discount'
 })
 export class DiscountPipe implements PipeTransform {
   transform(value: string): string | null {
@@ -36,8 +35,7 @@ export class DiscountPipe implements PipeTransform {
 }
 
 @Pipe({
-  name: 'engineType',
-  standalone: true
+  name: 'engineType'
 })
 export class EngineTypePipe implements PipeTransform {
   transform(value: string): string | null {
@@ -55,8 +53,7 @@ export class EngineTypePipe implements PipeTransform {
 }
 
 @Pipe({
-  name: 'absence',
-  standalone: true
+  name: 'absence'
 })
 export class AbsencePipe implements PipeTransform {
   transform(value: string | null | undefined): string | null {
@@ -65,8 +62,7 @@ export class AbsencePipe implements PipeTransform {
 }
 
 @Pipe({
-  name: 'meals',
-  standalone: true
+  name: 'meals'
 })
 export class MealsPipe implements PipeTransform {
   transform(value: FoodExpense): (string | null)[] {

@@ -4,8 +4,7 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-form-card',
   templateUrl: './form-card.component.html',
-  styleUrls: ['./form-card.component.css'],
-  standalone: true
+  styleUrls: ['./form-card.component.css']
 })
 export class FormCardComponent {
   private readonly router = inject(Router);

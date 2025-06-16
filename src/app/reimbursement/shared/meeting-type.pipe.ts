@@ -2,8 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { MeetingType } from 'src/domain/meeting.model';
 
 @Pipe({
-  name: 'meetingType',
-  standalone: true
+  name: 'meetingType'
 })
 export class MeetingTypePipe implements PipeTransform {
   transform(value: MeetingType): string {
