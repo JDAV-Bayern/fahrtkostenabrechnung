@@ -12,7 +12,7 @@ RUN npm run build:$BUILD_CONFIG
 
 FROM nginx:alpine AS runner
 
-COPY --from=builder /usr/src/app/dist/portal-jdav-bayern/browser/de /usr/share/nginx/html
+COPY --from=builder /usr/src/app/dist/portal-jdav-bayern/browser /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80

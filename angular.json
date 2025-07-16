@@ -10,16 +10,12 @@
       "sourceRoot": "src",
       "prefix": "app",
       "i18n": {
-        "sourceLocale": {
-          "code": "de",
-          "baseHref": "/"
-        }
+        "sourceLocale": "de"
       },
       "architect": {
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "localize": true,
             "outputPath": {
               "base": "dist/portal-jdav-bayern"
             },
