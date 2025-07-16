@@ -3,14 +3,13 @@ import { CurrencyPipe, KeyValuePipe, formatDate } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import jsPDF from 'jspdf';
 import { NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
-import { PDFDocument } from 'pdf-lib';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { ReimbursementValidatorService } from 'src/app/reimbursement/shared/reimbursement-validator.service';
-import * as imageprocessor from 'ts-image-processor';
 import { FinishedDialogComponent } from './finished-dialog/finished-dialog.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
+import { createPdf } from 'src/app/shared/pdf-creation';
 import { ProgressIndicatorComponent } from 'src/app/shared/progress-indicator/progress-indicator.component';
 import { ExpenseTypePipe } from '../../expenses/shared/expense-type.pipe';
 import { ReimbursementService } from '../shared/reimbursement.service';
@@ -78,88 +77,6 @@ export class OverviewStepComponent {
     return this.validationService.validateReimbursement(this.reimbursement);
   }
 
-  async addImageToPdf(imageFile: File, pdf: jsPDF) {
-    const maxWidth = 575;
-    const maxHeight = 802;
-
-    const image = await imageprocessor.fileToBase64(imageFile);
-    const exifRotated = await imageprocessor.imageProcessor
-      .src(image)
-      .pipe(imageprocessor.applyExifOrientation());
-
-    const preprocessedImage =
-      await imageprocessor.base64ToImgElement(exifRotated);
-
-    let originalHeight = preprocessedImage.height;
-    let originalWidth = preprocessedImage.width;
-
-    let finalImageData: string;
-    if (originalWidth > originalHeight) {
-      //The image is in landscape, lets rotate it to view it larger
-      finalImageData = await imageprocessor.imageProcessor
-        .src(exifRotated)
-        .pipe(
-          imageprocessor.rotate({ degree: 90, clockwise: false }),
-          imageprocessor.resize({ maxWidth: 1240, maxHeight: 1713 }),
-          imageprocessor.sharpen()
-        );
-      //Swap originalHeight and originalWidth because we rotated by 90 degrees
-      const x = originalHeight;
-      originalHeight = originalWidth;
-      originalWidth = x;
-    } else {
-      //only resize to 150dpi
-      finalImageData = await imageprocessor.imageProcessor
-        .src(exifRotated)
-        .pipe(
-          imageprocessor.resize({ maxWidth: 1240, maxHeight: 1713 }),
-          imageprocessor.sharpen()
-        );
-    }
-
-    let newWidth = originalWidth;
-    let newHeight = originalHeight;
-
-    if (originalWidth > maxWidth || originalHeight > maxHeight) {
-      const aspectRatio = originalWidth / originalHeight;
-
-      if (originalWidth > maxWidth) {
-        newWidth = maxWidth;
-        newHeight = newWidth / aspectRatio;
-      }
-
-      if (newHeight > maxHeight) {
-        newHeight = maxHeight;
-        newWidth = newHeight * aspectRatio;
-      }
-    }
-
-    pdf.addPage();
-    pdf.addImage(
-      finalImageData,
-      10,
-      10,
-      newWidth,
-      newHeight,
-      undefined,
-      'FAST'
-    );
-  }
-
-  async addPdfToPdf(pdfFile: File, pdf: PDFDocument) {
-    const fileExtension = pdfFile.name.split('.').pop();
-    if (fileExtension !== 'pdf') {
-      return;
-    }
-    const arrayBuffer = await pdfFile.arrayBuffer();
-    const pdfDocument = await PDFDocument.load(arrayBuffer);
-    (await pdf.copyPages(pdfDocument, pdfDocument.getPageIndices())).forEach(
-      page => {
-        pdf.addPage(page);
-      }
-    );
-  }
-
   async onSubmit() {
     this.loading.set(true);
     this.showPdf.set(true);
@@ -190,41 +107,24 @@ export class OverviewStepComponent {
 
     this.showPdf.set(false);
 
-    // go through files and add image attachments
-    for (const file of this.files) {
-      const fileExtension = file.name.split('.').pop();
-      if (fileExtension && fileExtension !== 'pdf') {
-        await this.addImageToPdf(file, doc);
-      }
+    const subject = JSON.stringify(this.reimbursement);
+
+    try {
+      const blob = await createPdf(doc, this.files, subject);
+      this.downloadPdf(blob);
+    } finally {
+      this.loading.set(false);
     }
 
-    const arrayBuffer = doc.output('arraybuffer');
-    const startPdfDocument = await PDFDocument.load(arrayBuffer);
-
-    const combinedPdfDocument = await PDFDocument.create();
-    (
-      await combinedPdfDocument.copyPages(
-        startPdfDocument,
-        startPdfDocument.getPageIndices()
-      )
-    ).forEach(page => {
-      combinedPdfDocument.addPage(page);
+    this.dialog.open(FinishedDialogComponent, {
+      data: {
+        givenName: this.reimbursement.participant.givenName,
+        meeting: this.reimbursement.meeting
+      }
     });
+  }
 
-    // go through files and add pdf attachments
-    for (const file of this.files) {
-      const fileExtension = file.name.split('.').pop();
-      if (fileExtension && fileExtension === 'pdf') {
-        await this.addPdfToPdf(file, combinedPdfDocument);
-      }
-    }
-
-    combinedPdfDocument.setSubject(JSON.stringify(this.reimbursement));
-
-    const pdfBytes = await combinedPdfDocument.save();
-    const file = new Blob([pdfBytes], { type: 'application/ pdf' });
-    const fileURL = URL.createObjectURL(file);
-
+  downloadPdf(blob: Blob) {
     let fileName;
     const meeting = this.reimbursement.meeting;
     const lastName = this.reimbursement.participant.familyName;
@@ -245,19 +145,11 @@ export class OverviewStepComponent {
       }
     }
 
+    const fileURL = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = fileURL;
     link.download = fileName;
     link.click();
-    link.remove();
-    this.loading.set(false);
-
-    this.dialog.open(FinishedDialogComponent, {
-      data: {
-        givenName: this.reimbursement.participant.givenName,
-        meeting: this.reimbursement.meeting
-      }
-    });
   }
 
   fileDropped(files: NgxFileDropEntry[]) {
