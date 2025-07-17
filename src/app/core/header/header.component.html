@@ -10,7 +10,7 @@
   </a>
   <h1 class="hidden md:block grow text-2xl">{{ title() }}</h1>
   @if (!hideRemoveDataButton()) {
-    <button class="jdav-btn tertiary icon" (click)="deleteAllData()">
+    <button jdavButton type="button" variant="ghost" (click)="deleteAllData()">
       <span class="material-symbols-outlined">delete</span>
       Gespeicherte Daten löschen
     </button>

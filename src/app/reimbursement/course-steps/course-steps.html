@@ -14,8 +14,8 @@
     </cdk-step>
     <ng-template #submitButton>
       <button
+        jdavButton
         type="submit"
-        class="jdav-btn"
         [disabled]="isRenderingPdf() || form.invalid"
       >
         @if (isRenderingPdf()) {

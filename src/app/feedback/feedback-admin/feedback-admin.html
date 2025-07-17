@@ -15,7 +15,7 @@
 
   <!-- Create Feedback Section -->
   <div class="create-feedback-section">
-    <button (click)="toggleCreateForm()" class="jdav-btn">
+    <button jdavButton type="button" (click)="toggleCreateForm()">
       {{ showCreateForm() ? 'Abbrechen' : 'Neues Feedback erstellen' }}
     </button>
 
@@ -57,9 +57,10 @@
         </div>
 
         <button
+          jdavButton
+          type="button"
           (click)="createFeedback()"
           [disabled]="loading()"
-          class="jdav-btn"
         >
           Feedback erstellen
         </button>
@@ -73,6 +74,7 @@
     <div class="feedback-list">
       @for (feedback of feedbacks(); track feedback.id) {
         <button
+          type="button"
           class="feedback-item"
           [class.selected]="selectedFeedback()?.id === feedback.id"
           (click)="selectFeedback(feedback)"
@@ -108,7 +110,12 @@
             <option value="get_feedback">Feedback einsehen</option>
           </select>
         </div>
-        <button (click)="createToken()" [disabled]="loading()" class="jdav-btn">
+        <button
+          jdavButton
+          type="button"
+          (click)="createToken()"
+          [disabled]="loading()"
+        >
           Token erstellen
         </button>
       </div>
@@ -143,21 +150,24 @@
             </div>
             <div class="token-actions">
               <button
+                jdavButton
+                type="button"
+                variant="outline"
                 (click)="deleteToken(token.id)"
                 [disabled]="loading()"
-                class="jdav-btn secondary icon"
               >
                 <span class="material-symbols-outlined">delete</span>
                 Löschen
               </button>
               <button
+                jdavButton
+                type="button"
                 (click)="copyToClipboard(feedbackLink(token))"
-                class="jdav-btn icon"
               >
                 <span class="material-symbols-outlined">content_copy</span>
                 Kopieren
               </button>
-              <button (click)="openQrCode(token)" class="jdav-btn icon">
+              <button jdavButton type="button" (click)="openQrCode(token)">
                 <span class="material-symbols-outlined">qr_code</span>
                 QR-Code
               </button>

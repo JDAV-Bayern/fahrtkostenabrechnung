@@ -13,6 +13,7 @@ import {
   FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { Button } from 'src/app/shared/ui/button';
 import { Expense } from 'src/domain/expense.model';
 import { ExpenseCardComponent } from '../expense-card/expense-card.component';
 import {
@@ -26,6 +27,7 @@ import {
   templateUrl: './expense-list.component.html',
   styleUrls: ['./expense-list.component.css'],
   imports: [
+    Button,
     ReactiveFormsModule,
     DialogModule,
     CdkDrag,

@@ -4,14 +4,22 @@
 
 @import 'survey-core/survey-core.min.css';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-titillium: 'Titillium Web', sans-serif;
+  --color-background: oklch(1 0 0);
+  --color-foreground: oklch(0.13 0.028 261.692);
+  --color-input: oklch(0.928 0.006 264.531);
+  --color-border: oklch(21.863% 0.00389 285.987);
+  --color-accent-foreground: oklch(0.21 0.034 264.665);
+  --color-accent: oklch(0.967 0.003 264.542);
+  --color-primary-foreground: oklch(0.985 0.002 247.839);
   --color-primary: oklch(0.67 0.1817 138.9);
 }
 
 /* You can add global styles to this file, and also import other style files */
 :root {
-  --color-primary: #52ae32;
   --color-primary-darken: #609e66;
   --color-body: #51565d;
   --bg-gray: #f3f4f6;
@@ -95,54 +103,6 @@ fieldset {
 .form-checkbox label {
   display: inline;
   font-weight: normal;
-}
-
-button.jdav-btn {
-  font-size: 13px;
-  box-sizing: border-box;
-  padding: 10px 20px;
-  background-color: var(--color-primary);
-  text-transform: uppercase;
-  color: #fff;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s;
-
-  &:hover {
-    background-color: var(--color-primary-darken);
-  }
-}
-
-button.jdav-btn.icon {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px;
-}
-
-button.jdav-btn.secondary {
-  background-color: transparent;
-  border: 2px solid var(--color-body);
-  color: var(--color-body);
-  font-weight: bold;
-
-  &:hover {
-    background-color: #d8d8d8;
-  }
-}
-
-button.jdav-btn.tertiary {
-  border: none;
-  background-color: transparent;
-  text-transform: none;
-  color: var(--color-body);
-}
-
-button.jdav-btn:disabled {
-  background-color: #ccc;
-  color: #fff;
-  cursor: not-allowed;
 }
 
 .form-control {

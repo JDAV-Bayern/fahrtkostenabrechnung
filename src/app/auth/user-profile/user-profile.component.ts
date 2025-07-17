@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject, Signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { OidcSecurityService, UserDataResult } from 'angular-auth-oidc-client';
+import { Button } from 'src/app/shared/ui/button';
 
 interface ParticipatedTraining {
   id: number;
@@ -25,7 +26,7 @@ interface ProfileData {
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css'],
-  imports: [CommonModule],
+  imports: [Button, CommonModule],
   host: {
     class: 'block bg-gray-50',
   },
