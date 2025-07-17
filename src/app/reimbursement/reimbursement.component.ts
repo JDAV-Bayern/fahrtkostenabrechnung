@@ -4,10 +4,12 @@ import { RouterOutlet } from '@angular/router';
 import { ReimbursementControlService } from './shared/reimbursement-control.service';
 
 @Component({
-  selector: 'app-reimbursement',
+  selector: 'jdav-reimbursement',
   templateUrl: './reimbursement.component.html',
-  styleUrls: ['./reimbursement.component.css'],
-  imports: [RouterOutlet, ReactiveFormsModule]
+  imports: [RouterOutlet, ReactiveFormsModule],
+  host: {
+    class: 'block h-full bg-gray-50'
+  }
 })
 export class ReimbursementComponent {
   private readonly controlService = inject(ReimbursementControlService);

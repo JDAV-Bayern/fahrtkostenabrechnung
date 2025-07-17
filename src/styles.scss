@@ -3,24 +3,21 @@
 
 @use 'tailwindcss';
 
+@theme {
+  --font-titillium: 'Titillium Web', sans-serif;
+  --color-primary: oklch(0.67 0.1817 138.9);
+}
+
 /* You can add global styles to this file, and also import other style files */
 :root {
   --color-primary: #52ae32;
-  --color-primary-light: #ddefd6;
   --color-primary-darken: #609e66;
   --color-body: #51565d;
   --color-footer: #66797f;
   --bg-gray: #f3f4f6;
 }
 
-body,
 html {
-  font-family: 'Titillium Web', sans-serif;
-  color: var(--color-body);
-  margin: 0;
-  padding: 0;
-  max-width: 100vw;
-  overflow-x: hidden;
   @include mat.theme(
     (
       color: (
