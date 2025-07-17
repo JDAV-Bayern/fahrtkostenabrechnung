@@ -1,20 +1,22 @@
-<div class="container">
-  <div class="branding">
+<div
+  class="container mx-auto px-10 py-8 flex flex-col lg:flex-row items-center lg:items-start gap-12"
+>
+  <div class="grow text-center lg:text-left">
     <a routerLink="/">
       <img
-        class="logo"
+        class="inline w-38"
         src="logo-jdav-bayern-light-white.svg"
         alt="JDAV Bayern"
       />
     </a>
-    <p class="contact-info">
+    <p class="mt-4 text-sm">
       Preysingstr. 71, 81667 München<br />
       <a href="mailto:lgs@jdav-bayern.de">lgs&#64;jdav-bayern.de</a><br />
       +49 89 44900195
     </p>
   </div>
   <nav>
-    <ul class="footer-links">
+    <ul class="flex flex-col md:flex-row items-center gap-x-12 gap-y-4">
       <li>
         <a href="https://jdav-bayern.de" target="_blank" rel="noopener">
           Homepage
@@ -36,7 +38,7 @@
       </li>
       <li><a routerLink="/datenschutz">Datenschutz</a></li>
       <li>
-        <ul class="footer-icons">
+        <ul class="flex gap-6">
           <li>
             <a
               href="https://instagram.com/jdavbayern"
