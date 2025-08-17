@@ -8,7 +8,7 @@ import { RouterLink } from '@angular/router';
   styleUrls: ['./footer.component.css'],
   imports: [RouterLink]
 })
-export class FooterComponent{
+export class FooterComponent {
   currentYearShort = new Date().getFullYear().toString().substring(2);
-  schulungenUrl = 'https://jdav-bayern.de/schulungen' + this.currentYearShort
+  schulungenUrl = 'https://jdav-bayern.de/schulungen' + this.currentYearShort;
 }
