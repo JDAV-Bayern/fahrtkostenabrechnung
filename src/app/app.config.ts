@@ -1,5 +1,10 @@
 import { DEFAULT_DIALOG_CONFIG, DialogConfig } from '@angular/cdk/dialog';
-import { ApplicationConfig, DEFAULT_CURRENCY_CODE } from '@angular/core';
+import {
+  ApplicationConfig,
+  DEFAULT_CURRENCY_CODE,
+  provideBrowserGlobalErrorListeners,
+  provideZonelessChangeDetection
+} from '@angular/core';
 import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { MAT_DATE_LOCALE, MatDateFormats } from '@angular/material/core';
 import { MatDatepickerIntl } from '@angular/material/datepicker';
@@ -36,6 +41,8 @@ export const DATE_FORMATS: MatDateFormats = {
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideBrowserGlobalErrorListeners(),
+    provideZonelessChangeDetection(),
     provideRouter(
       routes,
       ...(environment.useHashRouting ? [withHashLocation()] : [])
