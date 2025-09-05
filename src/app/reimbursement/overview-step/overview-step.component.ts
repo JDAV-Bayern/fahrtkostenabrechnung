@@ -1,6 +1,6 @@
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { CurrencyPipe, KeyValuePipe, formatDate } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import jsPDF from 'jspdf';
 import { NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
 import { PDFDocument } from 'pdf-lib';
@@ -41,8 +41,8 @@ export class OverviewStepComponent {
   form = this.controlService.overviewStep;
 
   files: File[] = [];
-  showPdf = false;
-  loading = false;
+  readonly showPdf = signal(false);
+  readonly loading = signal(false);
 
   readonly originalOrder = () => 0;
 
@@ -161,15 +161,15 @@ export class OverviewStepComponent {
   }
 
   async onSubmit() {
-    this.loading = true;
-    this.showPdf = true;
+    this.loading.set(true);
+    this.showPdf.set(true);
     await new Promise(resolve => setTimeout(resolve, 0));
     await this.pdfFullyRenderedPromise;
 
     const htmlElement = document.getElementById('pdf-container');
     if (!htmlElement || !this.form.valid) {
-      this.loading = false;
-      this.showPdf = false;
+      this.loading.set(false);
+      this.showPdf.set(false);
       return;
     }
     await new Promise(resolve => setTimeout(resolve, 0));
@@ -188,7 +188,7 @@ export class OverviewStepComponent {
         .finally(() => resolve())
     );
 
-    this.showPdf = false;
+    this.showPdf.set(false);
 
     // go through files and add image attachments
     for (const file of this.files) {
@@ -250,7 +250,7 @@ export class OverviewStepComponent {
     link.download = fileName;
     link.click();
     link.remove();
-    this.loading = false;
+    this.loading.set(false);
 
     this.dialog.open(FinishedDialogComponent, {
       data: {
