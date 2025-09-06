@@ -1,6 +1,4 @@
-export interface Environment {
-  environment: 'development' | 'staging' | 'production';
-}
+import { Environment } from './environment.interface';
 
 export const environment: Environment = {
   environment: 'production'
