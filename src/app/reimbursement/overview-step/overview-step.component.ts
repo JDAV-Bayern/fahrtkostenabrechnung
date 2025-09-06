@@ -1,7 +1,6 @@
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { CurrencyPipe, KeyValuePipe, formatDate } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
-import jsPDF from 'jspdf';
 import { NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { ReimbursementValidatorService } from 'src/app/reimbursement/shared/reimbursement-validator.service';
@@ -9,7 +8,7 @@ import { FinishedDialogComponent } from './finished-dialog/finished-dialog.compo
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
-import { createPdf } from 'src/app/shared/pdf-creation';
+import { combinePdf, createPdf } from 'src/app/shared/pdf-creation';
 import { ProgressIndicatorComponent } from 'src/app/shared/progress-indicator/progress-indicator.component';
 import { ExpenseTypePipe } from '../../expenses/shared/expense-type.pipe';
 import { ReimbursementService } from '../shared/reimbursement.service';
@@ -39,18 +38,10 @@ export class OverviewStepComponent {
 
   form = this.controlService.overviewStep;
 
-  files: File[] = [];
-  readonly showPdf = signal(false);
-  readonly loading = signal(false);
+  readonly files = signal<File[]>([]);
+  readonly isRenderingPdf = signal(false);
 
   readonly originalOrder = () => 0;
-
-  pdfFullyRendered = () => {
-    console.error('pdfFullyRendered not set');
-  };
-  pdfFullyRenderedPromise = new Promise<void>(resolve => {
-    this.pdfFullyRendered = resolve;
-  });
 
   get reimbursement() {
     return this.controlService.getReimbursement();
@@ -77,43 +68,26 @@ export class OverviewStepComponent {
     return this.validationService.validateReimbursement(this.reimbursement);
   }
 
-  async onSubmit() {
-    this.loading.set(true);
-    this.showPdf.set(true);
-    await new Promise(resolve => setTimeout(resolve, 0));
-    await this.pdfFullyRenderedPromise;
+  onSubmit() {
+    this.isRenderingPdf.set(true);
+  }
 
+  async renderPdf() {
     const htmlElement = document.getElementById('pdf-container');
+
     if (!htmlElement || !this.form.valid) {
-      this.loading.set(false);
-      this.showPdf.set(false);
+      this.isRenderingPdf.set(false);
       return;
     }
-    await new Promise(resolve => setTimeout(resolve, 0));
-    const doc = new jsPDF('p', 'pt', [595, 822], true);
-    //Add mailto link and logo
-    doc.link(170, 57, 70, 10, {
-      url: 'mailto:lgs@jdav-bayern.de'
-    });
-
-    //add the first page
-    await new Promise<void>(resolve =>
-      doc
-        .html(htmlElement, {
-          autoPaging: true
-        })
-        .finally(() => resolve())
-    );
-
-    this.showPdf.set(false);
 
     const subject = JSON.stringify(this.reimbursement);
 
     try {
-      const blob = await createPdf(doc, this.files, subject);
+      const pdfData = await createPdf(htmlElement);
+      const blob = await combinePdf(pdfData, this.files(), subject);
       this.downloadPdf(blob);
     } finally {
-      this.loading.set(false);
+      this.isRenderingPdf.set(false);
     }
 
     this.dialog.open(FinishedDialogComponent, {
@@ -158,13 +132,13 @@ export class OverviewStepComponent {
       if (droppedFile.fileEntry.isFile) {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
         fileEntry.file((file: File) => {
-          this.files.push(file);
+          this.files.set([...this.files(), file]);
         });
       }
     }
   }
 
   removeFile(fileName: string) {
-    this.files = this.files.filter(f => f.name !== fileName);
+    this.files.set(this.files().filter(f => f.name !== fileName));
   }
 }

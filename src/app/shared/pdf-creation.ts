@@ -9,18 +9,40 @@ const MAX_IMAGE_SIZE = 1920;
 const PAGE_MARGIN = 10;
 
 export async function createPdf(
-  doc: jsPDF,
+  htmlElement: HTMLElement
+): Promise<ArrayBuffer> {
+  const doc = new jsPDF({
+    unit: 'pt',
+    compress: true
+  });
+
+  // Add mailto link
+  doc.link(170, 57, 70, 10, {
+    url: 'mailto:lgs@jdav-bayern.de'
+  });
+
+  // Add the form content
+  await doc.html(htmlElement, {
+    autoPaging: true
+  });
+
+  return doc.output('arraybuffer');
+}
+
+export async function combinePdf(
+  pdfData: ArrayBuffer,
   attachments: File[],
   subject: string
 ): Promise<Blob> {
-  const arrayBuffer = doc.output('arraybuffer');
-  const pdfDoc = await PDFDocument.load(arrayBuffer);
+  const pdfDoc = await PDFDocument.load(pdfData);
 
   for (const file of attachments) {
     if (file.type === MIME_TYPE_PDF) {
       await addPdfPages(pdfDoc, file);
     } else if (file.type.match(MIME_TYPE_IMAGE)) {
       await addImage(pdfDoc, file);
+    } else {
+      throw new Error(`Unsupported attachment type: ${file.type}`);
     }
   }
 

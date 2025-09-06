@@ -1,12 +1,5 @@
 import { CurrencyPipe, DatePipe } from '@angular/common';
-import {
-  AfterViewInit,
-  Component,
-  inject,
-  input,
-  OnInit,
-  output
-} from '@angular/core';
+import { Component, inject, input, OnInit, output } from '@angular/core';
 import { SectionService } from 'src/app/core/section.service';
 import { ExpenseAmountPipe } from 'src/app/expenses/shared/expense-amount.pipe';
 import { ExpenseDetailsComponent } from 'src/app/expenses/shared/expense-details/expense-details.component';
@@ -32,7 +25,7 @@ import { ReimbursementService } from '../../shared/reimbursement.service';
     ExpenseDetailsComponent
   ]
 })
-export class PdfViewComponent implements OnInit, AfterViewInit {
+export class PdfViewComponent implements OnInit {
   private readonly reimbursementService = inject(ReimbursementService);
   private readonly sectionService = inject(SectionService);
 
@@ -67,7 +60,8 @@ export class PdfViewComponent implements OnInit, AfterViewInit {
     this.section = this.sectionService.getSection(sectionId);
   }
 
-  ngAfterViewInit() {
+  onLogoLoaded() {
+    // the logo loads after the view, so we can render the PDF only after that
     this.fullyRendered.emit();
   }
 }
