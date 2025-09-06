@@ -81,10 +81,10 @@
         </button>
       </ng-template>
     </ngx-file-drop>
-    @if (files.length) {
+    @if (files().length) {
       <fieldset class="files-list">
         <legend style="color: #999">Belege</legend>
-        @for (file of files; track file) {
+        @for (file of files(); track file) {
           <p class="file-list-entry">
             <button
               class="jdav-btn tertiary icon"
@@ -102,11 +102,11 @@
   <button
     submitButton
     type="submit"
-    [disabled]="loading() || form.parent?.invalid"
+    [disabled]="isRenderingPdf() || form.parent?.invalid"
     (click)="onSubmit()"
     class="jdav-btn"
   >
-    @if (loading()) {
+    @if (isRenderingPdf()) {
       <app-progress-indicator></app-progress-indicator>
     } @else {
       PDF herunterladen
@@ -115,10 +115,10 @@
 </app-form-card>
 
 <div style="position: absolute; top: 2000px">
-  @if (showPdf()) {
+  @if (isRenderingPdf()) {
     <app-pdf-view
       [reimbursement]="reimbursement"
-      (fullyRendered)="pdfFullyRendered()"
+      (fullyRendered)="renderPdf()"
     ></app-pdf-view>
   }
 </div>

@@ -28,12 +28,11 @@
     "@angular/platform-browser-dynamic": "^20.2.4",
     "@angular/router": "^20.2.4",
     "date-fns": "^4.1.0",
-    "jspdf": "^2.5.1",
+    "jspdf": "^3.0.1",
     "ngx-file-drop": "^16.0.0",
     "ngx-iban-validator": "^1.2.0",
     "pdf-lib": "^1.17.1",
     "rxjs": "~7.8.0",
-    "ts-image-processor": "^1.1.17",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
