@@ -1,24 +1,22 @@
 @use '@angular/material' as mat;
 @use 'app/jdav_theme-colors' as jdav;
 
+@use 'tailwindcss';
+
+@theme {
+  --font-titillium: 'Titillium Web', sans-serif;
+  --color-primary: oklch(0.67 0.1817 138.9);
+}
+
 /* You can add global styles to this file, and also import other style files */
 :root {
   --color-primary: #52ae32;
-  --color-primary-light: #ddefd6;
   --color-primary-darken: #609e66;
   --color-body: #51565d;
-  --color-footer: #66797f;
   --bg-gray: #f3f4f6;
 }
 
-body,
 html {
-  font-family: 'Titillium Web', sans-serif;
-  color: var(--color-body);
-  margin: 0;
-  padding: 0;
-  max-width: 100vw;
-  overflow-x: hidden;
   @include mat.theme(
     (
       color: (
@@ -29,13 +27,38 @@ html {
   );
 }
 
-a {
-  text-decoration: none;
+.typography h1,
+h1.typography {
+  font-size: 2em;
+  margin-block: 0.67em;
+  font-weight: bold;
+}
+
+.typography h2,
+h2.typography {
+  font-size: 1.5em;
+  margin-block: 0.83em;
+  font-weight: bold;
+}
+
+.typography h3,
+h3.typography {
+  font-size: 1.17em;
+  margin-block: 1em;
+  font-weight: bold;
+}
+
+.typography p,
+p.typography {
+  margin-block: 1em;
+}
+
+.typography a {
   color: var(--color-primary);
   transition: color 0.2s;
 }
 
-a:hover {
+.typography a:hover {
   color: var(--color-primary-darken);
 }
 
@@ -173,15 +196,22 @@ select {
 
 @font-face {
   font-family: 'Titillium Web';
-  font-weight: normal;
   font-style: normal;
+  font-weight: 400;
   src: url(/fonts/TitilliumWeb/TitilliumWeb-Regular.ttf) format('truetype');
 }
 
 @font-face {
   font-family: 'Titillium Web';
-  font-weight: bold;
   font-style: normal;
+  font-weight: 600;
+  src: url(/fonts/TitilliumWeb/TitilliumWeb-SemiBold.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'Titillium Web';
+  font-style: normal;
+  font-weight: 700;
   src: url(/fonts/TitilliumWeb/TitilliumWeb-Bold.ttf) format('truetype');
 }
 

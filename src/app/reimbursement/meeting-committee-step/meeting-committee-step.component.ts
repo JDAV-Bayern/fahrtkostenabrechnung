@@ -9,7 +9,6 @@ import { FormDatetimeComponent } from 'src/app/shared/form-datetime/form-datetim
 @Component({
   selector: 'app-meeting-committee-step',
   templateUrl: './meeting-committee-step.component.html',
-  styleUrls: ['./meeting-committee-step.component.css'],
   imports: [
     RouterLink,
     ReactiveFormsModule,

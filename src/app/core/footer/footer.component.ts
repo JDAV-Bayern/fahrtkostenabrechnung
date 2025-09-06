@@ -3,10 +3,12 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'footer[app-footer]',
+  selector: 'footer[jdav-footer]',
   templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.css'],
-  imports: [RouterLink]
+  imports: [RouterLink],
+  host: {
+    class: 'bg-gray-800 text-gray-50'
+  }
 })
 export class FooterComponent {
   currentYearShort = new Date().getFullYear().toString().substring(2);

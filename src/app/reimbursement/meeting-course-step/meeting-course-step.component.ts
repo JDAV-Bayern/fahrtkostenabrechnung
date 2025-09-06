@@ -7,7 +7,6 @@ import { FormCardComponent } from 'src/app/shared/form-card/form-card.component'
 @Component({
   selector: 'app-meeting-course-step',
   templateUrl: './meeting-course-step.component.html',
-  styleUrls: ['./meeting-course-step.component.css'],
   imports: [ReactiveFormsModule, FormCardComponent]
 })
 export class MeetingCourseStepComponent implements OnInit {

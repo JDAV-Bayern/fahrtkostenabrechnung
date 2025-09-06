@@ -4,10 +4,12 @@ import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbu
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
-  selector: 'header[app-header]',
+  selector: 'header[jdav-header]',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css'],
-  imports: [RouterLink]
+  imports: [RouterLink],
+  host: {
+    class: 'z-1 shadow-md'
+  }
 })
 export class HeaderComponent {
   private readonly controlService = inject(ReimbursementControlService);

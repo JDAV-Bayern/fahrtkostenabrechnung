@@ -9,7 +9,10 @@ import { MeetingType } from 'src/domain/meeting.model';
   selector: 'app-expense-rates',
   templateUrl: './expense-rates.component.html',
   styleUrls: ['./expense-rates.component.css'],
-  imports: [CurrencyPipe, KeyValuePipe, PercentPipe, DiscountPipe]
+  imports: [CurrencyPipe, KeyValuePipe, PercentPipe, DiscountPipe],
+  host: {
+    class: 'typography'
+  }
 })
 export class ExpenseRatesComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
