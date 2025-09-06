@@ -1,6 +1,8 @@
 @use '@angular/material' as mat;
 @use 'app/jdav_theme-colors' as jdav;
 
+@use 'tailwindcss';
+
 /* You can add global styles to this file, and also import other style files */
 :root {
   --color-primary: #52ae32;

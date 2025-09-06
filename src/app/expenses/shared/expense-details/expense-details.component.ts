@@ -11,7 +11,6 @@ import { Expense } from 'src/domain/expense.model';
 @Component({
   selector: 'app-expense-details',
   templateUrl: './expense-details.component.html',
-  styleUrls: ['./expense-details.component.css'],
   imports: [
     DecimalPipe,
     CurrencyPipe,
