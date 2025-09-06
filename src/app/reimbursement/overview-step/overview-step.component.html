@@ -102,11 +102,11 @@
   <button
     submitButton
     type="submit"
-    [disabled]="loading || form.parent?.invalid"
+    [disabled]="loading() || form.parent?.invalid"
     (click)="onSubmit()"
     class="jdav-btn"
   >
-    @if (loading) {
+    @if (loading()) {
       <app-progress-indicator></app-progress-indicator>
     } @else {
       PDF herunterladen
@@ -115,7 +115,7 @@
 </app-form-card>
 
 <div style="position: absolute; top: 2000px">
-  @if (showPdf) {
+  @if (showPdf()) {
     <app-pdf-view
       [reimbursement]="reimbursement"
       (fullyRendered)="pdfFullyRendered()"
