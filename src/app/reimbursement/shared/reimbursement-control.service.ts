@@ -384,7 +384,6 @@ export class ReimbursementControlService {
     },
     isOvernight?: boolean
   ) {
-    // update food expenses
     if (!time.start || !time.end) {
       return;
     }
@@ -393,12 +392,10 @@ export class ReimbursementControlService {
       { start: time.start, end: time.end },
       isOvernight || false
     );
-    this.foodExpenses.clear();
+    const controls = expenses.map(expense => this.formBuilder.control(expense));
 
-    for (const expense of expenses) {
-      const form = this.formBuilder.control(expense);
-      this.foodExpenses.push(form);
-    }
+    this.foodExpenses.clear();
+    this.foodExpenses.push(controls);
 
     if (this.foodSettings.controls.isEnabled.value) {
       this.foodExpenses.enable();

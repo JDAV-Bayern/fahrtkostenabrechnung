@@ -4,6 +4,7 @@ import {
   differenceInHours,
   eachDayOfInterval,
   Interval,
+  isValid,
   startOfDay
 } from 'date-fns';
 import { SectionService } from 'src/app/core/section.service';
@@ -70,6 +71,10 @@ export class ReimbursementService {
   }
 
   getFoodExpenses(time: Interval, isOvernight: boolean): FoodExpense[] {
+    if (!isValid(time.start) || !isValid(time.end)) {
+      return [];
+    }
+
     // too short
     if (differenceInHours(time.end, time.start) < 8) {
       return [];

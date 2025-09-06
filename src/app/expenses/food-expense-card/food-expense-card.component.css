@@ -24,6 +24,10 @@ p {
   margin-bottom: 0.5rem;
 }
 
+.form-checkbox input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
 .form-checkbox:not(:last-child) {
   margin-right: 1rem;
 }

@@ -1,6 +1,6 @@
 import { Dialog, DialogModule, DialogRef } from '@angular/cdk/dialog';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
-import { Component, inject, input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, input, OnInit } from '@angular/core';
 import {
   FormArray,
   FormControl,
@@ -29,6 +29,7 @@ import {
 })
 export class ExpenseListComponent<T extends Expense> implements OnInit {
   private readonly dialog = inject(Dialog);
+  private readonly changeDetector = inject(ChangeDetectorRef);
 
   readonly type = input.required<T['type']>();
   readonly form = input.required<FormArray<FormControl<T>>>();
@@ -48,6 +49,7 @@ export class ExpenseListComponent<T extends Expense> implements OnInit {
     this.openEditDialog(control).closed.subscribe(() => {
       if (control?.valid) {
         this.form().push(control);
+        this.changeDetector.markForCheck();
       }
     });
   }
