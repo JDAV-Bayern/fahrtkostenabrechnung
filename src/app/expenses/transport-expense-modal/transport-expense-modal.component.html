@@ -1,5 +1,5 @@
 <form [formGroup]="form" (ngSubmit)="submitForm()" class="model-content">
-  <h2>
+  <h2 class="typography">
     {{ mode.value ? (mode.value | transportMode) : 'Fahrtkosten' }} erfassen
   </h2>
 
@@ -153,7 +153,7 @@
         <div class="form-group">
           <fieldset>
             <legend>Mitfahrer*innen</legend>
-            <p>
+            <p class="typography">
               <b>Hinweis:</b> Bist Du Teile der Strecke mit unterschiedlicher
               Anzahl an Mitfahrer*innen gefahren? Dann gib bitte jede
               Teilstrecke als einzelne Auslage an.

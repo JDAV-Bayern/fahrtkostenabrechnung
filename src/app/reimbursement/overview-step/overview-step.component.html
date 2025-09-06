@@ -1,5 +1,5 @@
 <app-form-card [prevStep]="prevStep" [formGroup]="form">
-  <h2>Zusammenfassung</h2>
+  <h2 class="typography">Zusammenfassung</h2>
 
   <table>
     <tr>
@@ -37,18 +37,20 @@
     </tr>
   </table>
 
-  @if (report.totalReduced) {
-    <p>
-      <b
-        >Da deine Sektion nicht in Bayern liegt, ist der Erstattungsbetrag gemäß
-        unserer Reisekostenrichtlinien auf
-        {{ report.total | currency }} begrenzt.</b
-      >
-    </p>
-  }
-  @for (warning of getWarnings(); track warning) {
-    <p><b>Warnung</b> {{ warning }}</p>
-  }
+  <div class="typography">
+    @if (report.totalReduced) {
+      <p>
+        <b
+          >Da deine Sektion nicht in Bayern liegt, ist der Erstattungsbetrag
+          gemäß unserer Reisekostenrichtlinien auf
+          {{ report.total | currency }} begrenzt.</b
+        >
+      </p>
+    }
+    @for (warning of getWarnings(); track warning) {
+      <p><b>Warnung</b> {{ warning }}</p>
+    }
+  </div>
 
   <div class="form-group">
     <label for="note">Bemerkung zu deiner Abrechnung</label>
@@ -57,16 +59,18 @@
   </div>
 
   @if (report.receiptsRequired) {
-    <h2>Belege</h2>
-    <p>Bitte denke daran, dass wir die Belege für deine Tickets benötigen.</p>
-    @if (reimbursement.meeting.type === 'committee') {
-      <p>
-        Falls du eine BahnCard benutzt hast, hänge bitte die Rechnung für diese
-        an. Die BahnCard wird für Gremien im angezeigten Betrag aktuell nicht
-        berücksichtigt, wird jedoch durch die LGS entsprechend zusätzlich
-        erstattet.
-      </p>
-    }
+    <div class="typography">
+      <h2>Belege</h2>
+      <p>Bitte denke daran, dass wir die Belege für deine Tickets benötigen.</p>
+      @if (reimbursement.meeting.type === 'committee') {
+        <p>
+          Falls du eine BahnCard benutzt hast, hänge bitte die Rechnung für
+          diese an. Die BahnCard wird für Gremien im angezeigten Betrag aktuell
+          nicht berücksichtigt, wird jedoch durch die LGS entsprechend
+          zusätzlich erstattet.
+        </p>
+      }
+    </div>
     <ngx-file-drop
       (onFileDrop)="fileDropped($event)"
       [accept]="'.pdf,.jpg,.png,.jpeg,.JPG,.JPEG,.PDF,.PNG'"

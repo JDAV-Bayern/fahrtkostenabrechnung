@@ -6,7 +6,7 @@
   <fieldset [formGroup]="parentForm">
     <div>
       <div class="heading">
-        <h2>Tagegelder</h2>
+        <h2 class="typography">Tagegelder</h2>
         @if (foodForm.length > 0) {
           @if (foodForm.disabled) {
             <button
@@ -28,12 +28,12 @@
         }
       </div>
       @if (foodForm.length === 0) {
-        <p>
+        <p class="typography">
           Für diese Reise können keine Tagegelder beantragt werden, da die Dauer
           der Abwesenheit unter 8 Stunden betrug.
         </p>
       } @else if (foodForm.enabled) {
-        <p>
+        <p class="typography">
           Bitte wähle aus, welche Mahlzeiten du kostenlos erhalten hast. Die
           angegebene Verpflegungspauschale wird um diese gekürzt.
         </p>
@@ -59,7 +59,7 @@
         [form]="materialForm"
         formArrayName="material"
       >
-        <h2>Sonstige Auslagen</h2>
+        <h2 class="typography">Sonstige Auslagen</h2>
       </app-expense-list>
       <p class="subtotal">
         Summe:

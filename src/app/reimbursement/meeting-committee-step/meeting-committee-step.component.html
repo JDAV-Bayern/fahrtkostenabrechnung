@@ -1,13 +1,15 @@
 <app-form-card nextStep="teilnehmer_in" [nextDisabled]="form.invalid">
   <fieldset [formGroup]="form">
-    <h1>Angaben zur Reise</h1>
-    <p>
-      <b>Hinweis:</b> Dieses Formular ist nur für Gremien der JDAV Bayern und
-      ihrer Bezirke (Landesjugendleitung, Landesjugendausschuss,
-      Bezirksjugendleitung, ...) gültig. Über dieses Formular eingereichte Kurse
-      können nicht berücksichtigt werden. Bitte verwende stattdessen das
-      <a routerLink="/kurs">Formular für Kurse</a>.
-    </p>
+    <div class="typography">
+      <h1>Angaben zur Reise</h1>
+      <p>
+        <b>Hinweis:</b> Dieses Formular ist nur für Gremien der JDAV Bayern und
+        ihrer Bezirke (Landesjugendleitung, Landesjugendausschuss,
+        Bezirksjugendleitung, ...) gültig. Über dieses Formular eingereichte
+        Kurse können nicht berücksichtigt werden. Bitte verwende stattdessen das
+        <a routerLink="/kurs">Formular für Kurse</a>.
+      </p>
+    </div>
 
     <div class="form-group">
       <label for="purpose">Zweck der Reise</label>
