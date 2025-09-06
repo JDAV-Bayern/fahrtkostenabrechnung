@@ -1,4 +1,7 @@
-export const environment = {
-  useHashRouting: false,
+export interface Environment {
+  environment: 'development' | 'staging' | 'production';
+}
+
+export const environment: Environment = {
   environment: 'production'
 };

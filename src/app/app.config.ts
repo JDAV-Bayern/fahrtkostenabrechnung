@@ -8,9 +8,8 @@ import {
 import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { MAT_DATE_LOCALE, MatDateFormats } from '@angular/material/core';
 import { MatDatepickerIntl } from '@angular/material/datepicker';
-import { provideRouter, withHashLocation } from '@angular/router';
+import { provideRouter } from '@angular/router';
 import { de } from 'date-fns/locale';
-import { environment } from 'src/environments/environment';
 import { routes } from './app.routes';
 import { JdavDatepickerIntl } from './core/date-time-intl';
 
@@ -43,10 +42,7 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    provideRouter(
-      routes,
-      ...(environment.useHashRouting ? [withHashLocation()] : [])
-    ),
+    provideRouter(routes),
     provideDateFnsAdapter(DATE_FORMATS),
     { provide: DEFAULT_CURRENCY_CODE, useValue: 'EUR' },
     { provide: DEFAULT_DIALOG_CONFIG, useValue: DIALOG_CONFIG },
