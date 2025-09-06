@@ -1,6 +1,12 @@
 import { Dialog, DialogModule, DialogRef } from '@angular/cdk/dialog';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
-import { ChangeDetectorRef, Component, inject, input, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  inject,
+  input,
+  OnInit
+} from '@angular/core';
 import {
   FormArray,
   FormControl,
