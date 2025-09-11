@@ -317,14 +317,6 @@ export class ReimbursementControlService {
         form.controls.time.disable();
         transport.setValidators(anyRequired);
         break;
-      case 'assembly':
-        form.removeControl('code');
-        form.controls.location.disable();
-        form.controls.time.disable();
-        transport.setValidators(anyRequired);
-
-        form.controls.name.setValue('Landesjugendversammlung');
-        break;
       case 'committee':
         form.removeControl('code');
         form.controls.location.enable();

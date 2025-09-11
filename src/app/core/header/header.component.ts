@@ -24,9 +24,6 @@ export class HeaderComponent {
       case 'course':
         originUrl = 'kurs';
         break;
-      case 'assembly':
-        originUrl = 'ljv';
-        break;
       case 'committee':
         originUrl = 'gremium';
         break;

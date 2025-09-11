@@ -20,8 +20,6 @@ export class ExpenseRatesComponent implements OnInit {
   config = expenseConfig.course;
   meetingType: MeetingType = 'course';
 
-  readonly originalOrder = () => 0;
-
   ngOnInit() {
     this.route.queryParamMap.subscribe((params) => {
       const param = params.get('veranstaltung')!;
@@ -41,8 +39,6 @@ export class ExpenseRatesComponent implements OnInit {
     switch (param) {
       case 'kurs':
         return 'course';
-      case 'ljv':
-        return 'assembly';
       case 'gremium':
         return 'committee';
       default:

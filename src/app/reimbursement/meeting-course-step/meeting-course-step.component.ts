@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
@@ -14,6 +15,12 @@ export class MeetingCourseStepComponent implements OnInit {
   private readonly controlService = inject(ReimbursementControlService);
 
   form = this.controlService.meetingStep;
+
+  constructor() {
+    this.code?.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe(value => this.onCodeInput(value));
+  }
 
   ngOnInit() {
     this.form.controls.type.setValue('course');
@@ -34,5 +41,16 @@ export class MeetingCourseStepComponent implements OnInit {
 
   get name() {
     return this.form.controls.name;
+  }
+
+  onCodeInput(value: string) {
+    const upperCase = value.toUpperCase();
+    if (value !== upperCase) {
+      this.code?.setValue(upperCase);
+    }
+
+    if (value === 'LJV') {
+      this.name?.setValue('Landesjugendversammlung');
+    }
   }
 }

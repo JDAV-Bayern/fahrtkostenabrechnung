@@ -55,8 +55,6 @@ export class ExpensesStepComponent {
     switch (this.meetingType) {
       case 'course':
         return { veranstaltung: 'kurs' };
-      case 'assembly':
-        return { veranstaltung: 'ljv' };
       case 'committee':
         return { veranstaltung: 'gremium' };
     }

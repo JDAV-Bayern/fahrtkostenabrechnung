@@ -1,5 +1,8 @@
 <div id="pdf-container" class="typography">
-  <h1>Fahrtkostenabrechnung {{ meeting.type | meetingType }}</h1>
+  <h1>
+    Fahrtkostenabrechnung
+    {{ meeting.type === 'committee' ? 'Gremium' : 'Kurs' }}
+  </h1>
   <p>
     <b>Datum: {{ now | date }}</b>
   </p>

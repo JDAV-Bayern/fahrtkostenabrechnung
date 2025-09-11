@@ -93,8 +93,6 @@ export class ParticipantStepComponent implements OnInit {
     switch (this.controlService.meetingStep.value.type) {
       case 'course':
         return 'kurs';
-      case 'assembly':
-        return 'ljv';
       case 'committee':
         return 'gremium';
       default:

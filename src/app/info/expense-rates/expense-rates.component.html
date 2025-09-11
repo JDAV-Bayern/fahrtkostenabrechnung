@@ -63,7 +63,7 @@
   @if (meetingType !== 'committee') {
     <table>
       @for (
-        entry of config.transport.public | keyvalue: originalOrder;
+        entry of config.transport.public | keyvalue: null;
         track entry.key
       ) {
         <tr>

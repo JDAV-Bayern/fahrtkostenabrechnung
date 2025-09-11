@@ -24,9 +24,6 @@ export class FinishedDialogComponent {
       case 'course':
         subject = this.meeting.code;
         break;
-      case 'assembly':
-        subject = 'Landesjugendversammlung';
-        break;
     }
     const emailSubject = `Fahrtkostenabrechnung ${subject}`;
     const emailBody = `Hallo liebe Landesgeschäftsstelle,\n\nanbei meine Reisekostenabrechnung für die Veranstaltung "${subject}".\n\nVielen Dank und beste Grüße\n\n${this.givenName}`;

@@ -5,7 +5,6 @@ import { ExpenseAmountPipe } from 'src/app/expenses/shared/expense-amount.pipe';
 import { ExpenseDetailsComponent } from 'src/app/expenses/shared/expense-details/expense-details.component';
 import { ExpenseTitlePipe } from 'src/app/expenses/shared/expense-title.pipe';
 import { DirectionPipe } from 'src/app/reimbursement/shared/direction.pipe';
-import { MeetingTypePipe } from 'src/app/reimbursement/shared/meeting-type.pipe';
 import { Direction } from 'src/domain/expense.model';
 import { Reimbursement } from 'src/domain/reimbursement.model';
 import { Section } from 'src/domain/section.model';
@@ -18,7 +17,6 @@ import { ReimbursementService } from '../../shared/reimbursement.service';
   imports: [
     DatePipe,
     CurrencyPipe,
-    MeetingTypePipe,
     DirectionPipe,
     ExpenseTitlePipe,
     ExpenseAmountPipe,

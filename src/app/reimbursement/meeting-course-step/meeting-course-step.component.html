@@ -8,7 +8,6 @@
         id="courseCode"
         formControlName="code"
         class="form-control"
-        oninput="this.value = this.value.toUpperCase();"
         required
       />
       @if (code?.hasError('required') && code?.touched) {
