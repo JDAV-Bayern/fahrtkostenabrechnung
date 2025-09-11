@@ -4,7 +4,7 @@ import { Expense } from 'src/domain/expense.model';
 import { formatTransportMode } from './transport-mode.pipe';
 
 @Pipe({
-  name: 'expenseTitle'
+  name: 'expenseTitle',
 })
 export class ExpenseTitlePipe implements PipeTransform {
   transform(value: Expense): string {

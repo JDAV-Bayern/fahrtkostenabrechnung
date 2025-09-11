@@ -7,7 +7,7 @@ import { FormCardComponent } from 'src/app/shared/form-card/form-card.component'
 @Component({
   selector: 'app-meeting-course-step',
   templateUrl: './meeting-course-step.component.html',
-  imports: [ReactiveFormsModule, FormCardComponent]
+  imports: [ReactiveFormsModule, FormCardComponent],
 })
 export class MeetingCourseStepComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
@@ -18,11 +18,11 @@ export class MeetingCourseStepComponent implements OnInit {
   ngOnInit() {
     this.form.controls.type.setValue('course');
 
-    this.route.queryParamMap.subscribe(params => {
+    this.route.queryParamMap.subscribe((params) => {
       if (params.has('nummer') || params.has('name')) {
         this.form.patchValue({
           code: params.get('nummer') || '',
-          name: params.get('name') || ''
+          name: params.get('name') || '',
         });
       }
     });

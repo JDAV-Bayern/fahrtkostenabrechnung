@@ -8,7 +8,7 @@ import { FormCardComponent } from 'src/app/shared/form-card/form-card.component'
   selector: 'app-meeting-assembly-step',
   templateUrl: './meeting-assembly-step.component.html',
   styleUrls: ['./meeting-assembly-step.component.css'],
-  imports: [RouterLink, ReactiveFormsModule, FormCardComponent]
+  imports: [RouterLink, ReactiveFormsModule, FormCardComponent],
 })
 export class MeetingAssemblyStepComponent implements OnInit {
   private readonly controlService = inject(ReimbursementControlService);

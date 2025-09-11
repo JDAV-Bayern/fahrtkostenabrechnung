@@ -2,7 +2,7 @@ import {
   Direction,
   FoodExpense,
   MaterialExpense,
-  TransportExpense
+  TransportExpense,
 } from './expense.model';
 import { Meeting } from './meeting.model';
 import { Participant } from './participant.model';

@@ -3,7 +3,7 @@ import {
   ApplicationConfig,
   DEFAULT_CURRENCY_CODE,
   provideBrowserGlobalErrorListeners,
-  provideZonelessChangeDetection
+  provideZonelessChangeDetection,
 } from '@angular/core';
 import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { MAT_DATE_LOCALE, MatDateFormats } from '@angular/material/core';
@@ -20,13 +20,13 @@ export const DIALOG_CONFIG: DialogConfig = {
   restoreFocus: true,
   maxWidth: '80vw',
   maxHeight: '90vh',
-  width: '700px'
+  width: '700px',
 };
 
 export const DATE_FORMATS: MatDateFormats = {
   parse: {
     dateInput: ['d.M.yy', 'd.M.yyyy'],
-    timeInput: 'p'
+    timeInput: 'p',
   },
   display: {
     dateInput: 'P',
@@ -34,8 +34,8 @@ export const DATE_FORMATS: MatDateFormats = {
     monthYearLabel: 'LLL uuuu',
     dateA11yLabel: 'PP',
     monthYearA11yLabel: 'LLLL uuuu',
-    timeOptionLabel: 'p'
-  }
+    timeOptionLabel: 'p',
+  },
 };
 
 export const appConfig: ApplicationConfig = {
@@ -47,6 +47,6 @@ export const appConfig: ApplicationConfig = {
     { provide: DEFAULT_CURRENCY_CODE, useValue: 'EUR' },
     { provide: DEFAULT_DIALOG_CONFIG, useValue: DIALOG_CONFIG },
     { provide: MAT_DATE_LOCALE, useValue: de },
-    { provide: MatDatepickerIntl, useClass: JdavDatepickerIntl }
-  ]
+    { provide: MatDatepickerIntl, useClass: JdavDatepickerIntl },
+  ],
 };

@@ -8,8 +8,8 @@ import { ReimbursementControlService } from './shared/reimbursement-control.serv
   templateUrl: './reimbursement.component.html',
   imports: [RouterOutlet, ReactiveFormsModule],
   host: {
-    class: 'block h-full bg-gray-50'
-  }
+    class: 'block h-full bg-gray-50',
+  },
 })
 export class ReimbursementComponent {
   private readonly controlService = inject(ReimbursementControlService);

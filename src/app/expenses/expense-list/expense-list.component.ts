@@ -5,20 +5,20 @@ import {
   Component,
   inject,
   input,
-  OnInit
+  OnInit,
 } from '@angular/core';
 import {
   FormArray,
   FormControl,
   FormGroup,
-  ReactiveFormsModule
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { Expense } from 'src/domain/expense.model';
 import { ExpenseCardComponent } from '../expense-card/expense-card.component';
 import {
   ExpenseDialogData,
   ExpenseExtraData,
-  ExpenseModalComponent
+  ExpenseModalComponent,
 } from '../expense-modal/expense-modal.component';
 
 @Component({
@@ -30,8 +30,8 @@ import {
     DialogModule,
     CdkDrag,
     CdkDropList,
-    ExpenseCardComponent
-  ]
+    ExpenseCardComponent,
+  ],
 })
 export class ExpenseListComponent<T extends Expense> implements OnInit {
   private readonly dialog = inject(Dialog);
@@ -67,9 +67,9 @@ export class ExpenseListComponent<T extends Expense> implements OnInit {
         data: {
           type: this.type(),
           control: control,
-          extra: this.dialogData()
-        }
-      }
+          extra: this.dialogData(),
+        },
+      },
     );
   }
 

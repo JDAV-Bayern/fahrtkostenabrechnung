@@ -5,7 +5,7 @@ import { TransportExpenseCompletion } from 'src/app/reimbursement/shared/reimbur
 import {
   Expense,
   TransportExpense,
-  TransportMode
+  TransportMode,
 } from 'src/domain/expense.model';
 import { MaterialExpenseModalComponent } from '../material-expense-modal/material-expense-modal.component';
 import { TransportExpenseModalComponent } from '../transport-expense-modal/transport-expense-modal.component';
@@ -28,9 +28,9 @@ export type ExpenseExtraData<T extends Expense> = T extends TransportExpense
   imports: [
     ReactiveFormsModule,
     TransportExpenseModalComponent,
-    MaterialExpenseModalComponent
+    MaterialExpenseModalComponent,
   ],
-  templateUrl: './expense-modal.component.html'
+  templateUrl: './expense-modal.component.html',
 })
 export class ExpenseModalComponent<T extends Expense> {
   readonly data = inject<ExpenseDialogData<T>>(DIALOG_DATA);

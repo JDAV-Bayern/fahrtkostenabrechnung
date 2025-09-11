@@ -3,7 +3,7 @@ import {
   ElementRef,
   inject,
   OnInit,
-  viewChild
+  viewChild,
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -23,8 +23,8 @@ import { JdavState } from 'src/domain/section.model';
     RouterLink,
     ReactiveFormsModule,
     MatAutocompleteModule,
-    FormCardComponent
-  ]
+    FormCardComponent,
+  ],
 })
 export class ParticipantStepComponent implements OnInit {
   private readonly plzService = inject(PlzService);
@@ -54,7 +54,7 @@ export class ParticipantStepComponent implements OnInit {
     });
 
     // Sort sections within the same state alphabetically
-    this.states.forEach(state => {
+    this.states.forEach((state) => {
       state.sections.sort((a, b) => a.name.localeCompare(b.name));
     });
 
@@ -104,15 +104,15 @@ export class ParticipantStepComponent implements OnInit {
 
   filter() {
     const filterValue = this.sectionInput().nativeElement.value.toLowerCase();
-    const filteredStates = this.states.map(state => ({
+    const filteredStates = this.states.map((state) => ({
       id: state.id,
       name: state.name,
-      sections: state.sections.filter(section =>
-        section.name.toLowerCase().includes(filterValue)
-      )
+      sections: state.sections.filter((section) =>
+        section.name.toLowerCase().includes(filterValue),
+      ),
     }));
     this.filteredStates = filteredStates.filter(
-      state => state.sections.length > 0
+      (state) => state.sections.length > 0,
     );
   }
 

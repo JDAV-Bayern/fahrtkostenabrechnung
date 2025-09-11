@@ -6,8 +6,8 @@ import { version } from '../../../../package.json';
   selector: 'app-data-protection',
   templateUrl: './data-protection.component.html',
   host: {
-    class: 'typography'
-  }
+    class: 'typography',
+  },
 })
 export class DataProtectionComponent {
   version = version;

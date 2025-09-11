@@ -12,35 +12,41 @@ module.exports = tseslint.config(
       ...tseslint.configs.recommended,
       ...tseslint.configs.stylistic,
       ...angular.configs.tsRecommended,
-      prettier
+      prettier,
     ],
     processor: angular.processInlineTemplates,
     rules: {
+      '@typescript-eslint/no-empty-function': [
+        'error',
+        {
+          allow: ['arrowFunctions'],
+        },
+      ],
       '@angular-eslint/directive-selector': [
         'error',
         {
           type: 'attribute',
           prefix: ['app', 'jdav'],
-          style: 'camelCase'
-        }
+          style: 'camelCase',
+        },
       ],
       '@angular-eslint/component-selector': [
         'error',
         {
           type: 'element',
           prefix: ['app', 'jdav'],
-          style: 'kebab-case'
-        }
-      ]
-    }
+          style: 'kebab-case',
+        },
+      ],
+    },
   },
   {
     files: ['**/*.html'],
     extends: [
       ...angular.configs.templateRecommended,
       ...angular.configs.templateAccessibility,
-      prettier
+      prettier,
     ],
-    rules: {}
-  }
+    rules: {},
+  },
 );

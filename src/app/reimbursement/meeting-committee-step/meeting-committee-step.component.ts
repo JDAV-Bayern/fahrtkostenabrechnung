@@ -14,8 +14,8 @@ import { FormDatetimeComponent } from 'src/app/shared/form-datetime/form-datetim
     ReactiveFormsModule,
     FormCardComponent,
     MatAutocompleteModule,
-    FormDatetimeComponent
-  ]
+    FormDatetimeComponent,
+  ],
 })
 export class MeetingCommitteeStepComponent implements OnInit {
   private readonly controlService = inject(ReimbursementControlService);

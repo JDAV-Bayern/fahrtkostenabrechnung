@@ -31,9 +31,9 @@ export function preprocessImage(image: Blob, maxSize: number): Promise<Blob> {
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
       canvas.toBlob(
-        blob => (blob ? resolve(blob) : reject('Failed to resize image')),
+        (blob) => (blob ? resolve(blob) : reject('Failed to resize image')),
         'image/jpeg',
-        0.95
+        0.95,
       );
     };
   });
@@ -53,7 +53,7 @@ export function preprocessImage(image: Blob, maxSize: number): Promise<Blob> {
  */
 export function fitImage(
   imgSize: ImageSize,
-  maxSize: ImageSize
+  maxSize: ImageSize,
 ): { scale: number; rotate: boolean } {
   const rotate =
     imgSize.width > imgSize.height != maxSize.width > maxSize.height;
@@ -66,6 +66,6 @@ export function fitImage(
 
   return {
     scale: Math.min(xScale, yScale, 1),
-    rotate
+    rotate,
   };
 }

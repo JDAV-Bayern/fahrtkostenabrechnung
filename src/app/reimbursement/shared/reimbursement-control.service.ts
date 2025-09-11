@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import {
   FormControl,
   NonNullableFormBuilder,
-  Validators
+  Validators,
 } from '@angular/forms';
 import { eachDayOfInterval } from 'date-fns';
 import { validateIBAN } from 'ngx-iban-validator';
@@ -14,20 +14,20 @@ import {
   EngineType,
   FoodExpense,
   MaterialExpense,
-  TransportExpense
+  TransportExpense,
 } from 'src/domain/expense.model';
 import { Meeting, MeetingType } from 'src/domain/meeting.model';
 import { Reimbursement } from 'src/domain/reimbursement.model';
 import { validateCourseCode } from '../../shared/validators/course-code.validator';
 import {
   orderedDateRange,
-  pastDateRange
+  pastDateRange,
 } from '../../shared/validators/date-range.validator';
 import { MeetingForm } from './meeting-form';
 import { ReimbursementService } from './reimbursement.service';
 import {
   allowedTransportModes,
-  limitedTransportMode
+  limitedTransportMode,
 } from './transport-mode.validator';
 
 const LOCAL_STORAGE_KEY_REIMBURSEMENT = 'reimbursement';
@@ -49,7 +49,7 @@ export interface TransportExpenseCompletion {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ReimbursementControlService {
   private readonly formBuilder = inject(NonNullableFormBuilder);
@@ -57,24 +57,24 @@ export class ReimbursementControlService {
 
   private courseCodeControl = this.formBuilder.control('', [
     Validators.required,
-    validateCourseCode
+    validateCourseCode,
   ]);
   form = this.formBuilder.group({
     meeting: this.formBuilder.group<MeetingForm>({
       type: this.formBuilder.control<MeetingType>(
         'course',
-        Validators.required
+        Validators.required,
       ),
       name: this.formBuilder.control('', Validators.required),
       location: this.formBuilder.control('', Validators.required),
       time: this.formBuilder.group(
         {
           start: new FormControl<Date | null>(null, Validators.required),
-          end: new FormControl<Date | null>(null, Validators.required)
+          end: new FormControl<Date | null>(null, Validators.required),
         },
-        { validators: [orderedDateRange, pastDateRange] }
+        { validators: [orderedDateRange, pastDateRange] },
       ),
-      code: this.courseCodeControl
+      code: this.courseCodeControl,
     }),
     participant: this.formBuilder.group({
       givenName: ['', Validators.required],
@@ -85,8 +85,8 @@ export class ReimbursementControlService {
       iban: ['', [Validators.required, validateIBAN]],
       bic: [
         { value: '', disabled: true },
-        [Validators.required, Validators.pattern(BIC_PATTERN)]
-      ]
+        [Validators.required, Validators.pattern(BIC_PATTERN)],
+      ],
     }),
     expenses: this.formBuilder.group(
       {
@@ -94,55 +94,55 @@ export class ReimbursementControlService {
           {
             inbound: this.formBuilder.array<TransportExpense>(
               [],
-              limitedTransportMode('plan', 1)
+              limitedTransportMode('plan', 1),
             ),
             onsite: this.formBuilder.array<TransportExpense>(
               [],
-              allowedTransportModes(['car', 'public'])
+              allowedTransportModes(['car', 'public']),
             ),
             outbound: this.formBuilder.array<TransportExpense>(
               [],
-              limitedTransportMode('plan', 1)
-            )
+              limitedTransportMode('plan', 1),
+            ),
           },
-          { validators: anyRequired }
+          { validators: anyRequired },
         ),
         food: this.formBuilder.array<FoodExpense>([]),
-        material: this.formBuilder.array<MaterialExpense>([])
+        material: this.formBuilder.array<MaterialExpense>([]),
       },
-      { validators: anyRequired }
+      { validators: anyRequired },
     ),
     overview: this.formBuilder.group({
       note: [''],
-      file: [undefined]
-    })
+      file: [undefined],
+    }),
   });
 
   // local state not included in the final data
   foodSettings = this.formBuilder.group({
     isEnabled: [false],
-    isOvernight: [false]
+    isOvernight: [false],
   });
 
   constructor() {
     this.form.valueChanges.subscribe(() => this.saveForm());
 
     const iban = this.participantStep.controls.iban;
-    iban.valueChanges.subscribe(value => this.onIbanChanged(value));
+    iban.valueChanges.subscribe((value) => this.onIbanChanged(value));
 
     const meetingType = this.meetingStep.controls.type;
-    meetingType.valueChanges.subscribe(value => {
+    meetingType.valueChanges.subscribe((value) => {
       this.onMeetingTypeChanged(value);
       this.reimbursementService.meetingType = value;
     });
 
     const meetingTime = this.meetingStep.controls.time;
-    meetingTime.valueChanges.subscribe(value =>
-      this.onMeetingTimeChanged(value)
+    meetingTime.valueChanges.subscribe((value) =>
+      this.onMeetingTimeChanged(value),
     );
 
-    this.foodSettings.valueChanges.subscribe(value =>
-      this.onFoodSettingsChanged(value)
+    this.foodSettings.valueChanges.subscribe((value) =>
+      this.onFoodSettingsChanged(value),
     );
 
     this.loadForm();
@@ -189,12 +189,12 @@ export class ReimbursementControlService {
     if (storedData) {
       // parse JSON from local storage
       const storedValue = JSON.parse(storedData, (key, value) =>
-        value && DATE_KEYS.includes(key) ? new Date(value) : value
+        value && DATE_KEYS.includes(key) ? new Date(value) : value,
       );
 
       // add controls for form arrays
       reviveFormArrays(this.form, storedValue, () =>
-        this.formBuilder.control({})
+        this.formBuilder.control({}),
       );
 
       this.form.patchValue(storedValue);
@@ -221,8 +221,8 @@ export class ReimbursementControlService {
 
   deleteStoredData(): void {
     this.form.reset();
-    Object.values(this.transportExpensesStep.controls).forEach(expenses =>
-      expenses.clear()
+    Object.values(this.transportExpensesStep.controls).forEach((expenses) =>
+      expenses.clear(),
     );
     this.foodExpenses.clear();
     this.materialExpenses.clear();
@@ -237,7 +237,7 @@ export class ReimbursementControlService {
     if (meeting.type === 'committee') {
       meeting.time = {
         start: meeting.time.start || new Date(NaN),
-        end: meeting.time.end || new Date(NaN)
+        end: meeting.time.end || new Date(NaN),
       };
     }
 
@@ -251,16 +251,16 @@ export class ReimbursementControlService {
       meeting: this.getMeeting(),
       participant: {
         ...participant,
-        sectionId: participant.sectionId || 0
+        sectionId: participant.sectionId || 0,
       },
       expenses: {
         transport: this.transportExpensesStep.getRawValue(),
         food: this.foodExpenses.enabled ? this.foodExpenses.value : [],
         material: this.materialExpenses.enabled
           ? this.materialExpenses.value
-          : []
+          : [],
       },
-      note: this.overviewStep.controls.note.value
+      note: this.overviewStep.controls.note.value,
     };
   }
 
@@ -269,8 +269,9 @@ export class ReimbursementControlService {
     const expenses = Object.values(transport).flat();
 
     const origin = this.completeOrigin(direction);
-    const engineType = expenses.find(e => e.mode === 'car')?.carTrip.engineType;
-    const discount = expenses.find(e => e.mode === 'public')?.ticket.discount;
+    const engineType = expenses.find((e) => e.mode === 'car')?.carTrip
+      .engineType;
+    const discount = expenses.find((e) => e.mode === 'public')?.ticket.discount;
 
     return { origin, engineType, discount };
   }
@@ -288,7 +289,7 @@ export class ReimbursementControlService {
       control.setValue({
         ...value,
         origin: value.destination,
-        destination: value.origin
+        destination: value.origin,
       });
 
       outbound.push(control);
@@ -372,7 +373,7 @@ export class ReimbursementControlService {
   }) {
     this.updateFoodExpenses(
       this.meetingStep.controls.time.value,
-      value.isOvernight
+      value.isOvernight,
     );
     this.saveForm();
   }
@@ -382,7 +383,7 @@ export class ReimbursementControlService {
       start?: Date | null;
       end?: Date | null;
     },
-    isOvernight?: boolean
+    isOvernight?: boolean,
   ) {
     if (!time.start || !time.end) {
       return;
@@ -390,9 +391,11 @@ export class ReimbursementControlService {
 
     const expenses = this.reimbursementService.getFoodExpenses(
       { start: time.start, end: time.end },
-      isOvernight || false
+      isOvernight || false,
     );
-    const controls = expenses.map(expense => this.formBuilder.control(expense));
+    const controls = expenses.map((expense) =>
+      this.formBuilder.control(expense),
+    );
 
     this.foodExpenses.clear();
     this.foodExpenses.push(controls);

@@ -7,8 +7,8 @@ import { RouterLink } from '@angular/router';
   templateUrl: './footer.component.html',
   imports: [RouterLink],
   host: {
-    class: 'bg-gray-800 text-gray-50'
-  }
+    class: 'bg-gray-800 text-gray-50',
+  },
 })
 export class FooterComponent {
   currentYearShort = new Date().getFullYear().toString().substring(2);

@@ -17,7 +17,7 @@ export function formatAbsence(value: string | null | undefined): string | null {
 }
 
 @Pipe({
-  name: 'discount'
+  name: 'discount',
 })
 export class DiscountPipe implements PipeTransform {
   transform(value: string): string | null {
@@ -35,7 +35,7 @@ export class DiscountPipe implements PipeTransform {
 }
 
 @Pipe({
-  name: 'engineType'
+  name: 'engineType',
 })
 export class EngineTypePipe implements PipeTransform {
   transform(value: string): string | null {
@@ -53,7 +53,7 @@ export class EngineTypePipe implements PipeTransform {
 }
 
 @Pipe({
-  name: 'absence'
+  name: 'absence',
 })
 export class AbsencePipe implements PipeTransform {
   transform(value: string | null | undefined): string | null {
@@ -62,14 +62,14 @@ export class AbsencePipe implements PipeTransform {
 }
 
 @Pipe({
-  name: 'meals'
+  name: 'meals',
 })
 export class MealsPipe implements PipeTransform {
   transform(value: FoodExpense): (string | null)[] {
     return [
       ...(value.breakfast ? ['Frühstück'] : []),
       ...(value.lunch ? ['Mittag'] : []),
-      ...(value.dinner ? ['Abend'] : [])
+      ...(value.dinner ? ['Abend'] : []),
     ];
   }
 }

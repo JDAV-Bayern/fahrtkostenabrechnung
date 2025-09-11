@@ -15,6 +15,6 @@ function isEmptyInput(control: AbstractControl): boolean {
   return false;
 }
 
-export const anyRequired: ValidatorFn = control => {
+export const anyRequired: ValidatorFn = (control) => {
   return isEmptyInput(control) ? { anyRequired: true } : null;
 };

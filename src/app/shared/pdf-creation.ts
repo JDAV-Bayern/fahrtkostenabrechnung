@@ -9,21 +9,21 @@ const MAX_IMAGE_SIZE = 1920;
 const PAGE_MARGIN = 10;
 
 export async function createPdf(
-  htmlElement: HTMLElement
+  htmlElement: HTMLElement,
 ): Promise<ArrayBuffer> {
   const doc = new jsPDF({
     unit: 'pt',
-    compress: true
+    compress: true,
   });
 
   // Add mailto link
   doc.link(170, 57, 70, 10, {
-    url: 'mailto:lgs@jdav-bayern.de'
+    url: 'mailto:lgs@jdav-bayern.de',
   });
 
   // Add the form content
   await doc.html(htmlElement, {
-    autoPaging: true
+    autoPaging: true,
   });
 
   return doc.output('arraybuffer');
@@ -32,7 +32,7 @@ export async function createPdf(
 export async function combinePdf(
   pdfData: ArrayBuffer,
   attachments: File[],
-  subject: string
+  subject: string,
 ): Promise<Blob> {
   const pdfDoc = await PDFDocument.load(pdfData);
 
@@ -66,7 +66,7 @@ async function addImage(pdfDoc: PDFDocument, attachment: Blob) {
 
   const pageSize = {
     width: page.getWidth() - 2 * PAGE_MARGIN,
-    height: page.getHeight() - 2 * PAGE_MARGIN
+    height: page.getHeight() - 2 * PAGE_MARGIN,
   };
 
   const { scale, rotate } = fitImage(image.size(), pageSize);
@@ -78,14 +78,14 @@ async function addImage(pdfDoc: PDFDocument, attachment: Blob) {
       y: page.getHeight() / 2 - width / 2,
       width,
       height,
-      rotate: degrees(90)
+      rotate: degrees(90),
     });
   } else {
     page.drawImage(image, {
       x: page.getWidth() / 2 - width / 2,
       y: page.getHeight() / 2 - height / 2,
       width,
-      height
+      height,
     });
   }
 }
@@ -99,5 +99,5 @@ async function addPdfPages(pdfDoc: PDFDocument, attachment: Blob) {
   const srcDoc = await PDFDocument.load(arrayBuffer);
 
   const pages = await pdfDoc.copyPages(srcDoc, srcDoc.getPageIndices());
-  pages.forEach(page => pdfDoc.addPage(page));
+  pages.forEach((page) => pdfDoc.addPage(page));
 }

@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { CanActivateFn, createUrlTreeFromSnapshot } from '@angular/router';
 import { ReimbursementControlService } from './reimbursement-control.service';
 
-export const disabledStepGuard: CanActivateFn = route => {
+export const disabledStepGuard: CanActivateFn = (route) => {
   const controlService = inject(ReimbursementControlService);
   const meetingType = controlService.meetingStep.controls.type.value;
 

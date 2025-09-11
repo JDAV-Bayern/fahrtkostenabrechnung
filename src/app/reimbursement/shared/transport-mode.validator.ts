@@ -2,9 +2,9 @@ import { FormArray, ValidatorFn } from '@angular/forms';
 import { TransportMode } from 'src/domain/expense.model';
 
 export function allowedTransportModes(allowed: TransportMode[]): ValidatorFn {
-  return control => {
+  return (control) => {
     if (control instanceof FormArray) {
-      const unallowed = control.controls.find(control => {
+      const unallowed = control.controls.find((control) => {
         const mode = control.get('mode');
         return mode && !allowed.includes(mode.value);
       });
@@ -18,11 +18,11 @@ export function allowedTransportModes(allowed: TransportMode[]): ValidatorFn {
 
 export function limitedTransportMode(
   limited: TransportMode,
-  max: number
+  max: number,
 ): ValidatorFn {
-  return control => {
+  return (control) => {
     if (control instanceof FormArray) {
-      const planExpenses = control.controls.filter(control => {
+      const planExpenses = control.controls.filter((control) => {
         const mode = control.get('mode');
         return mode && mode.value === limited;
       });

@@ -6,6 +6,6 @@ import { BreadcrumbsComponent } from '../shared/breadcrumbs/breadcrumbs.componen
   selector: 'app-info',
   templateUrl: './info.component.html',
   styleUrls: ['./info.component.css'],
-  imports: [RouterOutlet, BreadcrumbsComponent]
+  imports: [RouterOutlet, BreadcrumbsComponent],
 })
 export class InfoComponent {}

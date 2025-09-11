@@ -5,7 +5,7 @@ import {
   inject,
   input,
   OnInit,
-  viewChildren
+  viewChildren,
 } from '@angular/core';
 import {
   ControlValueAccessor,
@@ -16,14 +16,14 @@ import {
   ReactiveFormsModule,
   Validator,
   ValidatorFn,
-  Validators
+  Validators,
 } from '@angular/forms';
 import { TransportExpenseCompletion } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import {
   Discount,
   EngineType,
   TransportExpense,
-  TransportMode
+  TransportMode,
 } from 'src/domain/expense.model';
 import { TransportModePipe } from '../shared/transport-mode.pipe';
 
@@ -36,14 +36,14 @@ import { TransportModePipe } from '../shared/transport-mode.pipe';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: TransportExpenseModalComponent,
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: TransportExpenseModalComponent,
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class TransportExpenseModalComponent
   implements ControlValueAccessor, Validator, OnInit
@@ -64,24 +64,20 @@ export class TransportExpenseModalComponent
     distance: [0, [Validators.required, Validators.min(0)]],
     carTrip: this.formBuilder.group({
       engineType: ['combustion' as EngineType, Validators.required],
-      passengers: this.formBuilder.array<string>([])
+      passengers: this.formBuilder.array<string>([]),
     }),
     ticket: this.formBuilder.group({
       price: [0, [Validators.required, Validators.min(0)]],
-      discount: ['none' as Discount, Validators.required]
-    })
+      discount: ['none' as Discount, Validators.required],
+    }),
   });
 
-  onChange: (val: TransportExpense) => void = () => {
-    // do nothing
-  };
-  onTouched: () => void = () => {
-    // do nothing
-  };
+  onChange: (val: TransportExpense) => void = () => {};
+  onTouched: () => void = () => {};
 
   ngOnInit() {
-    this.form.controls.mode.valueChanges.subscribe(val =>
-      this.onTransportModeChanged(val)
+    this.form.controls.mode.valueChanges.subscribe((val) =>
+      this.onTransportModeChanged(val),
     );
   }
 
@@ -159,7 +155,7 @@ export class TransportExpenseModalComponent
   submitForm() {
     this.onChange({
       type: 'transport',
-      ...this.form.value
+      ...this.form.value,
     } as TransportExpense);
     this.dialogRef.close();
   }

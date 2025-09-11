@@ -24,12 +24,12 @@ export const expenseConfig: ExpenseConfig = {
       public: {
         none: 1,
         BC25: 1.05,
-        BC50: 1.1
+        BC50: 1.1,
       },
       plan: 14.5,
-      bike: 0.13
+      bike: 0.13,
     },
-    maxTotal: 75
+    maxTotal: 75,
   },
   assembly: {
     allowed: ['transport'],
@@ -38,11 +38,11 @@ export const expenseConfig: ExpenseConfig = {
       public: {
         none: 1,
         BC25: 1.05,
-        BC50: 1.1
+        BC50: 1.1,
       },
       plan: 14.5,
-      bike: 0.13
-    }
+      bike: 0.13,
+    },
   },
   committee: {
     allowed: ['transport', 'food', 'material'],
@@ -52,16 +52,16 @@ export const expenseConfig: ExpenseConfig = {
         // for committee reimbursement, the discount is not handled by the form
         none: 1,
         BC25: 1,
-        BC50: 1
+        BC50: 1,
       },
       plan: 14.5,
-      bike: 0.13
+      bike: 0.13,
     },
     food: {
       arrival: 14,
       return: 14,
       intermediate: 28,
-      single: 14
-    }
-  }
+      single: 14,
+    },
+  },
 };

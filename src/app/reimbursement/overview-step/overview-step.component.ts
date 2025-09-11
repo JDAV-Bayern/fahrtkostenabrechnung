@@ -27,8 +27,8 @@ import { PdfViewComponent } from './pdf-view/pdf-view.component';
     FormCardComponent,
     ProgressIndicatorComponent,
     PdfViewComponent,
-    ExpenseTypePipe
-  ]
+    ExpenseTypePipe,
+  ],
 })
 export class OverviewStepComponent {
   private readonly reimbursementService = inject(ReimbursementService);
@@ -93,8 +93,8 @@ export class OverviewStepComponent {
     this.dialog.open(FinishedDialogComponent, {
       data: {
         givenName: this.reimbursement.participant.givenName,
-        meeting: this.reimbursement.meeting
-      }
+        meeting: this.reimbursement.meeting,
+      },
     });
   }
 
@@ -139,6 +139,6 @@ export class OverviewStepComponent {
   }
 
   removeFile(fileName: string) {
-    this.files.set(this.files().filter(f => f.name !== fileName));
+    this.files.set(this.files().filter((f) => f.name !== fileName));
   }
 }

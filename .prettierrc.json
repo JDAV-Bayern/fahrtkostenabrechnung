@@ -1,6 +1,12 @@
 {
   "singleQuote": true,
-  "trailingComma": "none",
-  "arrowParens": "avoid",
-  "plugins": ["prettier-plugin-organize-imports"]
+  "plugins": ["prettier-plugin-organize-imports"],
+  "overrides": [
+    {
+      "files": "*.html",
+      "options": {
+        "parser": "angular"
+      }
+    }
+  ]
 }

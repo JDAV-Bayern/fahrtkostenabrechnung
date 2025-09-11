@@ -4,7 +4,7 @@ import { TransportExpense } from 'src/domain/expense.model';
 import { Reimbursement } from 'src/domain/reimbursement.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ReimbursementValidatorService {
   private readonly plzService = inject(PlzService);
@@ -17,7 +17,7 @@ export class ReimbursementValidatorService {
     const city = reimbursement.participant.city;
     if (!this.plzService.exists(plz, city)) {
       findings.push(
-        `Dein Wohnort (${plz} ${city}) ist uns unbekannt. Bitte überprüfe deine Angaben noch einmal.`
+        `Dein Wohnort (${plz} ${city}) ist uns unbekannt. Bitte überprüfe deine Angaben noch einmal.`,
       );
     }
 
@@ -26,8 +26,8 @@ export class ReimbursementValidatorService {
     findings.push(
       ...this.checkValidityOfRoute([
         ...transportExpenses.inbound,
-        ...transportExpenses.outbound
-      ])
+        ...transportExpenses.outbound,
+      ]),
     );
 
     return findings;
@@ -41,7 +41,7 @@ export class ReimbursementValidatorService {
       const startPosition = expenses[i].origin;
       if (startPosition !== currentPosition) {
         findings.push(
-          `Deine Abrechnung weist eine Lücke auf. Wir wissen nicht, wie Du von ${currentPosition} nach ${startPosition} gekommen bist. Wenn Du hier ein kostenfreies Verkehrsmittel benutzt hast, oder mitgefahren bist, kannst Du diese Warnung ignorieren.`
+          `Deine Abrechnung weist eine Lücke auf. Wir wissen nicht, wie Du von ${currentPosition} nach ${startPosition} gekommen bist. Wenn Du hier ein kostenfreies Verkehrsmittel benutzt hast, oder mitgefahren bist, kannst Du diese Warnung ignorieren.`,
         );
       }
       currentPosition = endPosition;

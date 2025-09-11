@@ -22,8 +22,8 @@ import { ReimbursementService } from '../../shared/reimbursement.service';
     DirectionPipe,
     ExpenseTitlePipe,
     ExpenseAmountPipe,
-    ExpenseDetailsComponent
-  ]
+    ExpenseDetailsComponent,
+  ],
 })
 export class PdfViewComponent implements OnInit {
   private readonly reimbursementService = inject(ReimbursementService);

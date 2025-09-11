@@ -11,8 +11,8 @@ import { MeetingType } from 'src/domain/meeting.model';
   styleUrls: ['./expense-rates.component.css'],
   imports: [CurrencyPipe, KeyValuePipe, PercentPipe, DiscountPipe],
   host: {
-    class: 'typography'
-  }
+    class: 'typography',
+  },
 })
 export class ExpenseRatesComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
@@ -23,7 +23,7 @@ export class ExpenseRatesComponent implements OnInit {
   readonly originalOrder = () => 0;
 
   ngOnInit() {
-    this.route.queryParamMap.subscribe(params => {
+    this.route.queryParamMap.subscribe((params) => {
       const param = params.get('veranstaltung')!;
       const meetingType = this.getMeetingType(param);
 

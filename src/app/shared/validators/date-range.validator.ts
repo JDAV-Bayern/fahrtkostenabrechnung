@@ -1,7 +1,7 @@
 import { ValidatorFn } from '@angular/forms';
 import { isAfter, isFuture } from 'date-fns';
 
-export const pastDateRange: ValidatorFn = control => {
+export const pastDateRange: ValidatorFn = (control) => {
   const start = control.get('start')?.value;
   const end = control.get('end')?.value;
 
@@ -11,7 +11,7 @@ export const pastDateRange: ValidatorFn = control => {
   return startIsFuture || endIsFuture ? { dateRangePast: true } : null;
 };
 
-export const orderedDateRange: ValidatorFn = control => {
+export const orderedDateRange: ValidatorFn = (control) => {
   const start = control.get('start')?.value;
   const end = control.get('end')?.value;
 

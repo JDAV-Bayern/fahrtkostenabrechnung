@@ -5,7 +5,7 @@ import {
   eachDayOfInterval,
   Interval,
   isValid,
-  startOfDay
+  startOfDay,
 } from 'date-fns';
 import { SectionService } from 'src/app/core/section.service';
 import { expenseConfig } from 'src/app/expenses/expense.config';
@@ -16,7 +16,7 @@ import {
   ExpenseType,
   FoodExpense,
   MaterialExpense,
-  TransportExpense
+  TransportExpense,
 } from 'src/domain/expense.model';
 import { MeetingType } from 'src/domain/meeting.model';
 import { Reimbursement } from 'src/domain/reimbursement.model';
@@ -27,7 +27,7 @@ const createFoodExpense = (date: Date, absence: Absence): FoodExpense => ({
   absence,
   breakfast: false,
   lunch: false,
-  dinner: false
+  dinner: false,
 });
 
 export interface ReimbursementReport {
@@ -38,7 +38,7 @@ export interface ReimbursementReport {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ReimbursementService {
   private readonly expenseService = inject(ExpenseService);
@@ -53,12 +53,12 @@ export class ReimbursementService {
 
   getExpenses(
     type: 'transport',
-    reimbursement: Reimbursement
+    reimbursement: Reimbursement,
   ): TransportExpense[];
   getExpenses(type: 'food', reimbursement: Reimbursement): FoodExpense[];
   getExpenses(
     type: 'material',
-    reimbursement: Reimbursement
+    reimbursement: Reimbursement,
   ): MaterialExpense[];
   getExpenses(type: ExpenseType, reimbursement: Reimbursement): Expense[];
 
@@ -96,7 +96,9 @@ export class ReimbursementService {
     }
 
     // add all days
-    const expenses = dates.map(date => createFoodExpense(date, 'intermediate'));
+    const expenses = dates.map((date) =>
+      createFoodExpense(date, 'intermediate'),
+    );
     expenses[0].absence = 'arrival';
     expenses[expenses.length - 1].absence = 'return';
 
@@ -111,7 +113,7 @@ export class ReimbursementService {
     for (const type of this.config.allowed) {
       categories[type] = this.getExpenses(type, reimbursement).reduce(
         reducer,
-        0
+        0,
       );
     }
 
@@ -133,8 +135,8 @@ export class ReimbursementService {
     }
 
     // check if receipt is required
-    const publicExpense = this.getExpenses('transport', reimbursement).some(e =>
-      ['public', 'plan'].includes(e.mode)
+    const publicExpense = this.getExpenses('transport', reimbursement).some(
+      (e) => ['public', 'plan'].includes(e.mode),
     );
     const materialExpenses = (categories.material || 0) > 0;
     const receiptsRequired = publicExpense || materialExpenses;

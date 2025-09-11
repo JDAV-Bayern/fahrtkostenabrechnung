@@ -13,7 +13,7 @@ type FormKey =
 type RouteOptions = string | Record<MeetingType, string>;
 
 function createGuard(form: FormKey, routeTo: RouteOptions): CanActivateFn {
-  return route => {
+  return (route) => {
     const controlService = inject(ReimbursementControlService);
 
     if (!controlService[form].valid) {
@@ -32,15 +32,15 @@ function createGuard(form: FormKey, routeTo: RouteOptions): CanActivateFn {
 export const meetingGuard = createGuard('meetingStep', {
   course: 'kurs',
   assembly: 'ljv',
-  committee: 'gremium'
+  committee: 'gremium',
 });
 export const participantGuard = createGuard('participantStep', 'teilnehmer_in');
 export const transportExpensesGuard = createGuard(
   'transportExpensesStep',
-  'auslagen'
+  'auslagen',
 );
 export const expensesGuard = createGuard('expensesStep', {
   course: 'auslagen',
   assembly: 'auslagen',
-  committee: 'auslagen-gremium'
+  committee: 'auslagen-gremium',
 });

@@ -4,7 +4,7 @@ import {
   JdavOrganisation,
   JdavState,
   Section,
-  SectionData
+  SectionData,
 } from 'src/domain/section.model';
 
 function matchId(id: number) {
@@ -13,12 +13,12 @@ function matchId(id: number) {
 
 function mapStateData(data: JdavOrganisation): JdavState {
   const children = sections
-    .filter(section => section.jdavStateId === data.id)
-    .map(child => ({ id: child.id, name: child.name }));
+    .filter((section) => section.jdavStateId === data.id)
+    .map((child) => ({ id: child.id, name: child.name }));
   return {
     id: data.id,
     name: data.name,
-    sections: children
+    sections: children,
   };
 }
 
@@ -28,12 +28,12 @@ function mapSectionData(data: SectionData): Section {
     id: data.id,
     name: data.name,
     jdavState: jdavStates.find(matchId(data.jdavStateId))!,
-    jdavRegion: regionId ? jdavRegions.find(matchId(regionId))! : null
+    jdavRegion: regionId ? jdavRegions.find(matchId(regionId))! : null,
   };
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SectionService {
   getJdavStates(): JdavState[] {

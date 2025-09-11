@@ -10,7 +10,7 @@ import { FormCardComponent } from 'src/app/shared/form-card/form-card.component'
 import {
   Direction,
   TransportExpense,
-  TransportMode
+  TransportMode,
 } from 'src/domain/expense.model';
 import { ReimbursementService } from '../shared/reimbursement.service';
 
@@ -24,13 +24,13 @@ import { ReimbursementService } from '../shared/reimbursement.service';
     CurrencyPipe,
     CdkDropListGroup,
     FormCardComponent,
-    ExpenseListComponent
-  ]
+    ExpenseListComponent,
+  ],
 })
 export class ExpensesStepComponent {
   private readonly reimbursementService = inject(ReimbursementService);
   private readonly reimbursementControlService = inject(
-    ReimbursementControlService
+    ReimbursementControlService,
   );
 
   form = this.reimbursementControlService.transportExpensesStep;
@@ -83,7 +83,7 @@ export class ExpensesStepComponent {
       const expenses =
         this.reimbursementControlService.getTransportExpenses(direction);
       const planExists = expenses.value.some(
-        expense => expense.mode === 'plan'
+        (expense) => expense.mode === 'plan',
       );
 
       if (!planExists) {

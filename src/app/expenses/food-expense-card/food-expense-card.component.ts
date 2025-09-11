@@ -4,7 +4,7 @@ import {
   ControlValueAccessor,
   NG_VALUE_ACCESSOR,
   NonNullableFormBuilder,
-  ReactiveFormsModule
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { map, Subscription } from 'rxjs';
 import { ReimbursementService } from 'src/app/reimbursement/shared/reimbursement.service';
@@ -23,15 +23,15 @@ let nextInputId = 0;
     DatePipe,
     ReactiveFormsModule,
     AbsencePipe,
-    ExpenseAmountPipe
+    ExpenseAmountPipe,
   ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: FoodExpenseCardComponent,
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class FoodExpenseCardComponent implements ControlValueAccessor {
   private readonly formBuilder = inject(NonNullableFormBuilder);
@@ -40,13 +40,11 @@ export class FoodExpenseCardComponent implements ControlValueAccessor {
   form = this.formBuilder.group({
     breakfast: false,
     lunch: false,
-    dinner: false
+    dinner: false,
   });
 
   onChangeSub?: Subscription;
-  onTouched: () => void = () => {
-    // do nothing
-  };
+  onTouched: () => void = () => {};
 
   inputId = nextInputId++;
   expense: FoodExpense | null = null;
@@ -60,7 +58,7 @@ export class FoodExpenseCardComponent implements ControlValueAccessor {
       this.expense = val;
       this.form.setValue(
         { breakfast: val.breakfast, lunch: val.lunch, dinner: val.dinner },
-        { emitEvent: false }
+        { emitEvent: false },
       );
     } else {
       this.expense = null;
@@ -71,7 +69,9 @@ export class FoodExpenseCardComponent implements ControlValueAccessor {
   registerOnChange(fn: (val: FoodExpense | null) => void): void {
     this.onChangeSub?.unsubscribe();
     this.onChangeSub = this.form.valueChanges
-      .pipe(map(meals => (this.expense ? { ...this.expense, ...meals } : null)))
+      .pipe(
+        map((meals) => (this.expense ? { ...this.expense, ...meals } : null)),
+      )
       .subscribe(fn);
   }
 

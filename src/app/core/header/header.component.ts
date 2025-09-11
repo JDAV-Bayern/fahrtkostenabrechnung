@@ -8,8 +8,8 @@ import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbu
   templateUrl: './header.component.html',
   imports: [RouterLink],
   host: {
-    class: 'z-1 shadow-md'
-  }
+    class: 'z-1 shadow-md',
+  },
 })
 export class HeaderComponent {
   private readonly controlService = inject(ReimbursementControlService);

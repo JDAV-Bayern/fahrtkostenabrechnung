@@ -15,14 +15,14 @@ import {
   expensesGuard,
   meetingGuard,
   participantGuard,
-  transportExpensesGuard
+  transportExpensesGuard,
 } from './reimbursement/shared/finished-step.guard';
 
 export const routes: Routes = [
   {
     path: '',
     redirectTo: 'kurs',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: '',
@@ -33,15 +33,15 @@ export const routes: Routes = [
         path: 'datenschutz',
         title: 'Datenschutzerklärung',
         component: DataProtectionComponent,
-        data: { breadcrumb: 'Datenschutzerklärung' }
+        data: { breadcrumb: 'Datenschutzerklärung' },
       },
       {
         path: 'erstattungssaetze',
         title: 'Erstattungssätze',
         component: ExpenseRatesComponent,
-        data: { breadcrumb: 'Erstattungssätze' }
-      }
-    ]
+        data: { breadcrumb: 'Erstattungssätze' },
+      },
+    ],
   },
   {
     path: '',
@@ -50,25 +50,25 @@ export const routes: Routes = [
     children: [
       {
         path: 'kurs',
-        component: MeetingCourseStepComponent
+        component: MeetingCourseStepComponent,
       },
       {
         path: 'ljv',
-        component: MeetingAssemblyStepComponent
+        component: MeetingAssemblyStepComponent,
       },
       {
         path: 'gremium',
-        component: MeetingCommitteeStepComponent
+        component: MeetingCommitteeStepComponent,
       },
       {
         path: 'teilnehmer_in',
         component: ParticipantStepComponent,
-        canActivate: [meetingGuard]
+        canActivate: [meetingGuard],
       },
       {
         path: 'auslagen',
         component: ExpensesStepComponent,
-        canActivate: [meetingGuard, participantGuard]
+        canActivate: [meetingGuard, participantGuard],
       },
       {
         path: 'auslagen-gremium',
@@ -77,14 +77,14 @@ export const routes: Routes = [
           meetingGuard,
           participantGuard,
           transportExpensesGuard,
-          disabledStepGuard
-        ]
+          disabledStepGuard,
+        ],
       },
       {
         path: 'zusammenfassung',
         component: OverviewStepComponent,
-        canActivate: [meetingGuard, participantGuard, expensesGuard]
-      }
-    ]
-  }
+        canActivate: [meetingGuard, participantGuard, expensesGuard],
+      },
+    ],
+  },
 ];

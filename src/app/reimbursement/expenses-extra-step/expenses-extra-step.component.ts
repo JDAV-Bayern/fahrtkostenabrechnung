@@ -16,8 +16,8 @@ import { ReimbursementService } from '../shared/reimbursement.service';
     CurrencyPipe,
     FormCardComponent,
     ExpenseListComponent,
-    FoodExpenseCardComponent
-  ]
+    FoodExpenseCardComponent,
+  ],
 })
 export class ExpensesExtraStepComponent {
   private readonly reimbursementService = inject(ReimbursementService);

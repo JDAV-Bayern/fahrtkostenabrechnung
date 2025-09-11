@@ -9,11 +9,11 @@ import {
   ReactiveFormsModule,
   Validator,
   ValidatorFn,
-  Validators
+  Validators,
 } from '@angular/forms';
 import {
   MatCalendarCellClassFunction,
-  MatDatepickerModule
+  MatDatepickerModule,
 } from '@angular/material/datepicker';
 import { MatTimepickerModule } from '@angular/material/timepicker';
 import {
@@ -22,7 +22,7 @@ import {
   isSameDay,
   isWithinInterval,
   set,
-  startOfDay
+  startOfDay,
 } from 'date-fns';
 import { Subscription } from 'rxjs';
 
@@ -36,14 +36,14 @@ import { Subscription } from 'rxjs';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: FormDatetimeComponent,
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: FormDatetimeComponent,
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class FormDatetimeComponent
   implements ControlValueAccessor, OnDestroy, OnInit, Validator
@@ -63,15 +63,13 @@ export class FormDatetimeComponent
    */
   form = new FormGroup({
     date: new FormControl<Date | null>(null, Validators.required),
-    time: new FormControl<Date | null>(null, Validators.required)
+    time: new FormControl<Date | null>(null, Validators.required),
   });
   isMobile = this.platform.ANDROID || this.platform.IOS;
 
   onDateChangeSub?: Subscription;
   onTimeChangeSub?: Subscription;
-  onTouched: () => void = () => {
-    // do nothing
-  };
+  onTouched: () => void = () => {};
 
   get date() {
     return this.form.controls.date;
@@ -82,13 +80,13 @@ export class FormDatetimeComponent
   }
 
   ngOnInit() {
-    this.onDateChangeSub = this.date.valueChanges.subscribe(date => {
+    this.onDateChangeSub = this.date.valueChanges.subscribe((date) => {
       let time = this.time.value;
       if (date && time) {
         time = set(time, {
           year: date.getFullYear(),
           month: date.getMonth(),
-          date: date.getDate()
+          date: date.getDate(),
         });
         this.time.setValue(time);
       } else {
@@ -129,7 +127,7 @@ export class FormDatetimeComponent
     if (this.date.errors || this.time.errors) {
       return {
         ...(this.date.errors ?? {}),
-        ...(this.time.errors ?? {})
+        ...(this.time.errors ?? {}),
       };
     }
 
@@ -155,8 +153,8 @@ export class FormDatetimeComponent
         'comparison-end': isSameDay(cellDate, end),
         'in-comparison-range': isWithinInterval(
           cellDate,
-          interval(startOfDay(start), startOfDay(end))
-        )
+          interval(startOfDay(start), startOfDay(end)),
+        ),
       };
     }
 

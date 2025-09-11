@@ -3,7 +3,7 @@ import { Component, input } from '@angular/core';
 import {
   DiscountPipe,
   EngineTypePipe,
-  MealsPipe
+  MealsPipe,
 } from 'src/app/expenses/shared/expense-data.pipe';
 import { JoinPipe } from 'src/app/shared/join.pipe';
 import { Expense } from 'src/domain/expense.model';
@@ -17,8 +17,8 @@ import { Expense } from 'src/domain/expense.model';
     DiscountPipe,
     EngineTypePipe,
     JoinPipe,
-    MealsPipe
-  ]
+    MealsPipe,
+  ],
 })
 export class ExpenseDetailsComponent {
   readonly expense = input.required<Expense>();

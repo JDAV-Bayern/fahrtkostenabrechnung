@@ -5,11 +5,11 @@ import { Meeting } from 'src/domain/meeting.model';
 @Component({
   selector: 'app-finished-dialog',
   templateUrl: './finished-dialog.component.html',
-  styleUrls: ['./finished-dialog.component.css']
+  styleUrls: ['./finished-dialog.component.css'],
 })
 export class FinishedDialogComponent {
   private readonly data = inject<{ meeting: Meeting; givenName: string }>(
-    DIALOG_DATA
+    DIALOG_DATA,
   );
 
   givenName = this.data.givenName;

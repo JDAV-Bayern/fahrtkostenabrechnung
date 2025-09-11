@@ -9,7 +9,7 @@ import {
   ReactiveFormsModule,
   Validator,
   ValidatorFn,
-  Validators
+  Validators,
 } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MaterialExpense } from 'src/domain/expense.model';
@@ -23,14 +23,14 @@ import { MaterialExpense } from 'src/domain/expense.model';
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: MaterialExpenseModalComponent,
-      multi: true
+      multi: true,
     },
     {
       provide: NG_VALIDATORS,
       useExisting: MaterialExpenseModalComponent,
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class MaterialExpenseModalComponent
   implements ControlValueAccessor, Validator
@@ -41,15 +41,11 @@ export class MaterialExpenseModalComponent
   form = this.formBuilder.group({
     date: new FormControl<Date | null>(null, Validators.required),
     purpose: ['', Validators.required],
-    amount: [0, [Validators.required, Validators.min(0)]]
+    amount: [0, [Validators.required, Validators.min(0)]],
   });
 
-  onChange: (val: MaterialExpense) => void = () => {
-    // do nothing
-  };
-  onTouched: () => void = () => {
-    // do nothing
-  };
+  onChange: (val: MaterialExpense) => void = () => {};
+  onTouched: () => void = () => {};
 
   get date() {
     return this.form.controls.date;
@@ -98,7 +94,7 @@ export class MaterialExpenseModalComponent
     this.onChange({
       type: 'material',
       ...this.form.value,
-      date
+      date,
     } as MaterialExpense);
     this.dialogRef.close();
   }

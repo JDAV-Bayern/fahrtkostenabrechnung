@@ -3,7 +3,7 @@ import { Expense } from 'src/domain/expense.model';
 import { expenseConfig } from '../expense.config';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ExpenseService {
   config = expenseConfig.course;

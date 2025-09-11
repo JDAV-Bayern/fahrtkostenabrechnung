@@ -14,8 +14,8 @@ import { ExpenseTitlePipe } from '../shared/expense-title.pipe';
     DatePipe,
     ExpenseTitlePipe,
     ExpenseAmountPipe,
-    ExpenseDetailsComponent
-  ]
+    ExpenseDetailsComponent,
+  ],
 })
 export class ExpenseCardComponent {
   readonly expense = input.required<Expense>();

@@ -7,7 +7,7 @@ export function reviveFormArrays(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value: any,
   factory: ControlFactory,
-  key?: string
+  key?: string,
 ) {
   if (!value) {
     return;
@@ -15,13 +15,13 @@ export function reviveFormArrays(
 
   if (control instanceof FormGroup && typeof value === 'object') {
     Object.entries(control.controls).forEach(([key, control]) =>
-      reviveFormArrays(control, value[key], factory, key)
+      reviveFormArrays(control, value[key], factory, key),
     );
   } else if (control instanceof FormArray && Array.isArray(value)) {
     reviveFormArray(key, control, value, factory);
 
     control.controls.forEach((control, i) =>
-      reviveFormArrays(control, value[i], factory)
+      reviveFormArrays(control, value[i], factory),
     );
   }
 }
@@ -30,7 +30,7 @@ export function reviveFormArray(
   key: string | undefined,
   control: FormArray,
   value: unknown[],
-  factory: ControlFactory
+  factory: ControlFactory,
 ) {
   control.clear();
 
@@ -44,9 +44,9 @@ export function reviveFormArray(
 
 export function deepMarkAsDirty(control: AbstractControl) {
   if (control instanceof FormGroup) {
-    Object.values(control.controls).forEach(child => deepMarkAsDirty(child));
+    Object.values(control.controls).forEach((child) => deepMarkAsDirty(child));
   } else if (control instanceof FormArray) {
-    control.controls.forEach(child => deepMarkAsDirty(child));
+    control.controls.forEach((child) => deepMarkAsDirty(child));
   } else if (control.value) {
     control.markAsDirty();
     control.markAsTouched();
