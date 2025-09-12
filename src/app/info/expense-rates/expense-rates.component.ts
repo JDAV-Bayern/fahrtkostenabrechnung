@@ -23,26 +23,10 @@ export class ExpenseRatesComponent implements OnInit {
   ngOnInit() {
     this.route.queryParamMap.subscribe((params) => {
       const param = params.get('veranstaltung')!;
-      const meetingType = this.getMeetingType(param);
+      const meetingType = param === 'gremium' ? 'committee' : 'course';
 
-      if (meetingType) {
-        this.meetingType = meetingType;
-        this.config = expenseConfig[meetingType];
-      } else {
-        this.meetingType = 'course';
-        this.config = expenseConfig.course;
-      }
+      this.meetingType = meetingType;
+      this.config = expenseConfig[meetingType];
     });
-  }
-
-  getMeetingType(param: string): MeetingType | undefined {
-    switch (param) {
-      case 'kurs':
-        return 'course';
-      case 'gremium':
-        return 'committee';
-      default:
-        return undefined;
-    }
   }
 }

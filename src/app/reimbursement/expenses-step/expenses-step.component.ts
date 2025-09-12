@@ -52,12 +52,9 @@ export class ExpensesStepComponent {
   }
 
   get queryParams() {
-    switch (this.meetingType) {
-      case 'course':
-        return { veranstaltung: 'kurs' };
-      case 'committee':
-        return { veranstaltung: 'gremium' };
-    }
+    return {
+      veranstaltung: this.meetingType === 'committee' ? 'gremium' : 'kurs',
+    };
   }
 
   get nextStep() {

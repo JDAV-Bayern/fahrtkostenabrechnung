@@ -19,7 +19,7 @@ export class MeetingCourseStepComponent implements OnInit {
   constructor() {
     this.code?.valueChanges
       .pipe(takeUntilDestroyed())
-      .subscribe(value => this.onCodeInput(value));
+      .subscribe((value) => this.onCodeInput(value));
   }
 
   ngOnInit() {
