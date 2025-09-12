@@ -90,16 +90,8 @@ export class ParticipantStepComponent implements OnInit {
   }
 
   get prevStep() {
-    switch (this.controlService.meetingStep.value.type) {
-      case 'course':
-        return 'kurs';
-      case 'assembly':
-        return 'ljv';
-      case 'committee':
-        return 'gremium';
-      default:
-        return 'kurs';
-    }
+    const meetingType = this.controlService.meetingStep.value.type;
+    return meetingType === 'committee' ? 'gremium' : 'kurs';
   }
 
   filter() {

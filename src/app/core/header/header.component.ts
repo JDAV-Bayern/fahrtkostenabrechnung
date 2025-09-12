@@ -19,18 +19,7 @@ export class HeaderComponent {
     const control = this.controlService.meetingStep.controls.type;
     const meetingType = control.value;
 
-    let originUrl: string;
-    switch (meetingType) {
-      case 'course':
-        originUrl = 'kurs';
-        break;
-      case 'assembly':
-        originUrl = 'ljv';
-        break;
-      case 'committee':
-        originUrl = 'gremium';
-        break;
-    }
+    const originUrl = meetingType === 'committee' ? 'gremium' : 'kurs';
 
     this.controlService.deleteStoredData();
     control.setValue(meetingType);

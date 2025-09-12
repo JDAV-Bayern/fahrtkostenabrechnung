@@ -16,18 +16,8 @@ export class FinishedDialogComponent {
   meeting = this.data.meeting;
 
   get emailHref(): string {
-    let subject;
-    switch (this.meeting.type) {
-      case 'committee':
-        subject = this.meeting.name;
-        break;
-      case 'course':
-        subject = this.meeting.code;
-        break;
-      case 'assembly':
-        subject = 'Landesjugendversammlung';
-        break;
-    }
+    const subject =
+      this.meeting.type === 'course' ? this.meeting.code : this.meeting.name;
     const emailSubject = `Fahrtkostenabrechnung ${subject}`;
     const emailBody = `Hallo liebe Landesgeschäftsstelle,\n\nanbei meine Reisekostenabrechnung für die Veranstaltung "${subject}".\n\nVielen Dank und beste Grüße\n\n${this.givenName}`;
     return `mailto:lgs@jdav-bayern.de?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
