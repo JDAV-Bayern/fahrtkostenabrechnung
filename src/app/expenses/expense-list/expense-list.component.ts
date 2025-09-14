@@ -55,13 +55,12 @@ export class ExpenseListComponent<T extends Expense> implements OnInit {
     this.openEditDialog(control).closed.subscribe(() => {
       if (control?.valid) {
         this.form().push(control);
-        this.changeDetector.markForCheck();
       }
     });
   }
 
   openEditDialog(control: FormControl<T>): DialogRef<never> {
-    return this.dialog.open<never, ExpenseDialogData<T>>(
+    const dialog = this.dialog.open<never, ExpenseDialogData<T>>(
       ExpenseModalComponent<T>,
       {
         data: {
@@ -71,6 +70,10 @@ export class ExpenseListComponent<T extends Expense> implements OnInit {
         },
       },
     );
+
+    dialog.closed.subscribe(() => this.changeDetector.markForCheck());
+
+    return dialog;
   }
 
   deleteExpense(index: number) {
