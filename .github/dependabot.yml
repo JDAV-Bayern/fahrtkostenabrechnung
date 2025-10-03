@@ -1,0 +1,67 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'daily'
+      time: '09:00'
+      timezone: 'Europe/Berlin'
+    open-pull-requests-limit: 5
+    groups:
+      angular:
+        patterns:
+          - '@angular/*'
+      angular-material:
+        patterns:
+          - '@angular/cdk'
+          - '@angular/material'
+          - '@angular/material-*'
+      testing:
+        patterns:
+          - 'jasmine*'
+          - 'karma*'
+          - '@types/jasmine'
+      eslint:
+        patterns:
+          - 'eslint'
+          - 'angular-eslint'
+          - 'typescript-eslint'
+          - 'eslint-*'
+      prettier:
+        patterns:
+          - 'prettier'
+          - 'prettier-*'
+    target-branch: 'main'
+    commit-message:
+      prefix: 'deps'
+      prefix-development: 'deps-dev'
+    auto-merge:
+      - dependency-type: 'development'
+        update-types:
+          - 'version-update:semver-patch'
+          - 'version-update:semver-minor'
+      - dependency-type: 'production'
+        update-types:
+          - 'version-update:semver-patch'
+          - 'version-update:semver-minor'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'daily'
+      time: '09:00'
+      timezone: 'Europe/Berlin'
+    open-pull-requests-limit: 5
+    target-branch: 'main'
+    commit-message:
+      prefix: 'ci'
+    auto-merge:
+      - dependency-type: 'all'
+        update-types:
+          - 'version-update:semver-patch'
+          - 'version-update:semver-minor'
