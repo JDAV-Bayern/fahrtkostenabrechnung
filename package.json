@@ -12,7 +12,9 @@
     "test:ci": "ng test --no-watch --no-progress --browsers=ChromeHeadless",
     "lint": "ng lint",
     "format": "prettier . --write",
-    "format:check": "prettier . --check"
+    "format:check": "prettier . --check",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "private": true,
   "dependencies": {
@@ -42,7 +44,9 @@
     "@angular/build": "^20.2.2",
     "@angular/cli": "^20.2.2",
     "@angular/compiler-cli": "^20.2.4",
+    "@playwright/test": "^1.49.2",
     "@types/jasmine": "~4.3.0",
+    "@types/node": "^22.10.1",
     "angular-eslint": "20.2.0",
     "eslint": "^9.28.0",
     "eslint-config-prettier": "^9.1.0",
@@ -52,6 +56,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "pdf-parse": "^1.1.1",
     "prettier": "^3.3.2",
     "prettier-plugin-organize-imports": "^4.1.0",
     "typescript": "~5.8.3",

@@ -40,3 +40,10 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+
+qdrant_storage
+# Playwright
+/playwright-report
+/test-results
+/.playwright-cache
