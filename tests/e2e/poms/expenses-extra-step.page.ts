@@ -1,10 +1,10 @@
 import { Locator, Page } from '@playwright/test';
 import { Meal } from 'src/domain/expense.model';
-import { ReimbursementStepPage } from './reimbursement-step.page';
 import {
   MaterialExpenseInput,
   MaterialExpenseModal,
 } from './material-expense.modal';
+import { ReimbursementStepPage } from './reimbursement-step.page';
 
 const MEAL_LABEL: Record<Meal, string> = {
   breakfast: 'Frühstück',
@@ -36,7 +36,9 @@ export class ExpensesExtraStepPage extends ReimbursementStepPage {
   private materialSection(): Locator {
     return this.page
       .locator('app-expense-list')
-      .filter({ has: this.page.getByRole('heading', { name: 'Sonstige Auslagen' }) })
+      .filter({
+        has: this.page.getByRole('heading', { name: 'Sonstige Auslagen' }),
+      })
       .first();
   }
 

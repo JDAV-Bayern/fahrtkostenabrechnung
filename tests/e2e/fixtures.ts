@@ -3,9 +3,9 @@ import {
   CommitteeStepPage,
   CourseStepPage,
   DataProtectionPage,
+  ExpenseRatesPage,
   ExpensesExtraStepPage,
   ExpensesStepPage,
-  ExpenseRatesPage,
   OverviewStepPage,
   ParticipantStepPage,
 } from './poms';

@@ -62,7 +62,9 @@ export class ParticipantStepPage extends ReimbursementStepPage {
 
   async selectSection(sectionName: string): Promise<void> {
     await this.sectionInput.fill(sectionName);
-    const option = this.page.getByRole('option', { name: sectionName, exact: false }).first();
+    const option = this.page
+      .getByRole('option', { name: sectionName, exact: false })
+      .first();
     await option.click();
   }
 }

@@ -8,7 +8,9 @@ export class BasePage {
   }
 
   get deleteStoredDataButton(): Locator {
-    return this.header.getByRole('button', { name: 'Gespeicherte Daten löschen' });
+    return this.header.getByRole('button', {
+      name: 'Gespeicherte Daten löschen',
+    });
   }
 
   get breadcrumbs(): Locator {
@@ -25,7 +27,9 @@ export class BasePage {
 
   async expectBreadcrumbTrail(items: readonly string[]): Promise<void> {
     for (const item of items) {
-      await expect(this.breadcrumbs.getByRole('link', { name: item })).toBeVisible();
+      await expect(
+        this.breadcrumbs.getByRole('link', { name: item }),
+      ).toBeVisible();
     }
   }
 }
