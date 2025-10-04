@@ -38,15 +38,6 @@ updates:
     commit-message:
       prefix: 'deps'
       prefix-development: 'deps-dev'
-    auto-merge:
-      - dependency-type: 'development'
-        update-types:
-          - 'version-update:semver-patch'
-          - 'version-update:semver-minor'
-      - dependency-type: 'production'
-        update-types:
-          - 'version-update:semver-patch'
-          - 'version-update:semver-minor'
 
   - package-ecosystem: 'github-actions'
     directory: '/'
@@ -56,8 +47,3 @@ updates:
     target-branch: 'main'
     commit-message:
       prefix: 'ci'
-    auto-merge:
-      - dependency-type: 'all'
-        update-types:
-          - 'version-update:semver-patch'
-          - 'version-update:semver-minor'
