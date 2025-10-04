@@ -8,7 +8,7 @@ export const environment: Environment = {
   authConfig: {
     issuer: 'https://staging.jdav-bayern.de/o',
     clientId: 'kUynptZkdi8hqQSYm0TmSYweE6VY3MHypyYm1Thu',
-    redirectUri: 'http://localhost:4200/callback',
+    redirectUri: 'https://localhost:4200/callback',
     scopes: ['read'],
   },
 };

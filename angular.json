@@ -80,6 +80,11 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
+          "options": {
+            "ssl": true,
+            "sslKey": "ssl/server.key",
+            "sslCert": "ssl/server.crt"
+          },
           "configurations": {
             "production": {
               "buildTarget": "portal-jdav-bayern:build:production"
