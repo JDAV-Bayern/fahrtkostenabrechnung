@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
 import { Badges } from './badges/badges';
 import { PageNotFound } from './core/page-not-found/page-not-found';
 import { DataProtectionComponent } from './info/data-protection/data-protection.component';
@@ -6,6 +7,8 @@ import { ExpenseRatesComponent } from './info/expense-rates/expense-rates.compon
 import { InfoComponent } from './info/info.component';
 import { CommitteeSteps } from './reimbursement/committee-steps/committee-steps';
 import { CourseSteps } from './reimbursement/course-steps/course-steps';
+
+const todo = autoLoginPartialRoutesGuard;
 
 export const routes: Routes = [
   {
