@@ -5,4 +5,5 @@ export const environment: Environment = {
   featureFlags: {
     enableLogin: false,
   },
+  backendUrl: 'https://api.portal.jdav-bayern.de',
 };

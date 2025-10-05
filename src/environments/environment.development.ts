@@ -5,6 +5,7 @@ export const environment: Environment = {
   featureFlags: {
     enableLogin: true,
   },
+  backendUrl: '/api',
   authConfig: {
     issuer: 'https://staging.jdav-bayern.de/o',
     clientId: 'kUynptZkdi8hqQSYm0TmSYweE6VY3MHypyYm1Thu',
