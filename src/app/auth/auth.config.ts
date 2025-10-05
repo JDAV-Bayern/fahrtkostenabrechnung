@@ -1,4 +1,4 @@
-import { PassedInitialConfig } from 'angular-auth-oidc-client';
+import { LogLevel, PassedInitialConfig } from 'angular-auth-oidc-client';
 import { environment } from 'src/environments/environment';
 
 export const authConfig: PassedInitialConfig = {
@@ -13,5 +13,8 @@ export const authConfig: PassedInitialConfig = {
     silentRenew: true,
     useRefreshToken: true,
     renewTimeBeforeTokenExpiresInSeconds: 30,
+    logLevel: LogLevel.Debug,
+    autoUserInfo: false,
+    renewUserInfoAfterTokenRenew: false,
   },
 };
