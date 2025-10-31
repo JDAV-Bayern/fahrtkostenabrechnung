@@ -1,6 +1,6 @@
 import { Dialog, DialogModule } from '@angular/cdk/dialog';
 import { CurrencyPipe, KeyValuePipe, formatDate } from '@angular/common';
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, signal } from '@angular/core';
 import { NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { ReimbursementValidatorService } from 'src/app/reimbursement/shared/reimbursement-validator.service';
@@ -34,11 +34,11 @@ export class OverviewStepComponent {
   private readonly reimbursementService = inject(ReimbursementService);
   private readonly controlService = inject(ReimbursementControlService);
   private readonly validationService = inject(ReimbursementValidatorService);
+  private readonly changeDetector = inject(ChangeDetectorRef);
   private readonly dialog = inject(Dialog);
 
   form = this.controlService.overviewStep;
 
-  readonly files = signal<File[]>([]);
   readonly isRenderingPdf = signal(false);
 
   readonly originalOrder = () => 0;
@@ -84,7 +84,8 @@ export class OverviewStepComponent {
 
     try {
       const pdfData = await createPdf(htmlElement);
-      const blob = await combinePdf(pdfData, this.files(), subject);
+      const files = this.form.controls.files.value;
+      const blob = await combinePdf(pdfData, files, subject);
       this.downloadPdf(blob);
     } finally {
       this.isRenderingPdf.set(false);
@@ -122,14 +123,17 @@ export class OverviewStepComponent {
       // Is it a file?
       if (droppedFile.fileEntry.isFile) {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+        const files = this.form.controls.files;
         fileEntry.file((file: File) => {
-          this.files.set([...this.files(), file]);
+          files.setValue([...files.value, file]);
+          this.changeDetector.markForCheck();
         });
       }
     }
   }
 
   removeFile(fileName: string) {
-    this.files.set(this.files().filter((f) => f.name !== fileName));
+    const files = this.form.controls.files;
+    files.setValue(files.value.filter((f) => f.name !== fileName));
   }
 }

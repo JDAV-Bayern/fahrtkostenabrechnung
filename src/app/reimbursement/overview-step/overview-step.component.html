@@ -85,10 +85,11 @@
         </button>
       </ng-template>
     </ngx-file-drop>
-    @if (files().length) {
+    @let files = form.controls.files.value;
+    @if (files.length) {
       <fieldset class="files-list">
         <legend style="color: #999">Belege</legend>
-        @for (file of files(); track file) {
+        @for (file of files; track file) {
           <p class="file-list-entry">
             <button
               class="jdav-btn tertiary icon"
