@@ -1,0 +1,32 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <jdav-stepper linear>
+    <cdk-step label="reise" [stepControl]="form.controls.meeting">
+      <app-meeting-committee-step></app-meeting-committee-step>
+    </cdk-step>
+    <cdk-step label="teilnehmer_in" [stepControl]="form.controls.participant">
+      <app-participant-step></app-participant-step>
+    </cdk-step>
+    <cdk-step label="fahrten" [stepControl]="form.controls.expenses">
+      <app-expenses-step></app-expenses-step>
+    </cdk-step>
+    <cdk-step label="zusatzkosten" [stepControl]="form.controls.expenses">
+      <app-expenses-extra-step></app-expenses-extra-step>
+    </cdk-step>
+    <cdk-step label="zusammenfassung">
+      <app-overview-step></app-overview-step>
+    </cdk-step>
+    <ng-template #submitButton>
+      <button
+        type="submit"
+        class="jdav-btn"
+        [disabled]="isRenderingPdf() || form.invalid"
+      >
+        @if (isRenderingPdf()) {
+          <app-progress-indicator></app-progress-indicator>
+        } @else {
+          PDF herunterladen
+        }
+      </button>
+    </ng-template>
+  </jdav-stepper>
+</form>

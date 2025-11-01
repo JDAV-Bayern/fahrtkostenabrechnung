@@ -1,81 +1,76 @@
-<app-form-card
-  prevStep="teilnehmer_in"
-  [nextStep]="nextStep"
-  [nextDisabled]="form.invalid"
->
-  <fieldset [formGroup]="form">
-    <div class="typography">
-      <h1>Auslagen für Fahrtkosten</h1>
-      <p>
-        Bitte beachte die richtige Reihenfolge. Du kannst sie per Drag-and-Drop
-        anpassen. Informationen zu den Erstattungssätzen findest du
-        <a routerLink="/erstattungssaetze" [queryParams]="queryParams">hier.</a>
-      </p>
-    </div>
-
-    <div cdkDropListGroup>
-      <app-expense-list
-        type="transport"
-        [form]="inbound"
-        formArrayName="inbound"
-        [dialogData]="getDialogData('inbound')"
-        [enterPredicate]="getPredicateFn('inbound')"
-      >
-        <h3 class="typography">Hinfahrt</h3>
-      </app-expense-list>
-      @if (inbound.hasError('transportModeLimited')) {
-        <div class="error-message">
-          Du kannst pro Fahrtrichtung maximal eine Auslage für Abotickets
-          angeben.
-        </div>
-      }
-
-      <app-expense-list
-        type="transport"
-        [form]="onsite"
-        formArrayName="onsite"
-        [dialogData]="getDialogData('onsite')"
-        [enterPredicate]="getPredicateFn('onsite')"
-      >
-        <h3 class="typography">Vor Ort</h3>
-      </app-expense-list>
-      @if (onsite.hasError('transportModesAllowed')) {
-        <div class="error-message">
-          Vor Ort können keine Fahrradfahrten oder Abotickets abgerechnet
-          werden.
-        </div>
-      }
-
-      <app-expense-list
-        type="transport"
-        [form]="form.controls.outbound"
-        formArrayName="outbound"
-        [dialogData]="getDialogData('outbound')"
-        [enterPredicate]="getPredicateFn('outbound')"
-      >
-        <div class="heading">
-          <h3 class="typography">Rückfahrt</h3>
-          <button class="jdav-btn icon" (click)="completeReturnTrip()">
-            <span class="material-symbols-outlined">swap_horiz</span>
-            Rückfahrt wie Hinfahrt
-          </button>
-        </div>
-      </app-expense-list>
-      @if (outbound.hasError('transportModeLimited')) {
-        <div class="error-message">
-          Du kannst pro Fahrtrichtung maximal eine Auslage für Abotickets
-          angeben.
-        </div>
-      }
-    </div>
-
-    <p class="subtotal">
-      Summe:
-      <span>{{ total | currency }}</span>
+<fieldset [formGroup]="form">
+  <div class="typography">
+    <h1>Auslagen für Fahrtkosten</h1>
+    <p>
+      Bitte beachte die richtige Reihenfolge. Du kannst sie per Drag-and-Drop
+      anpassen. Informationen zu den Erstattungssätzen findest du
+      <a routerLink="/erstattungssaetze" [queryParams]="queryParams">hier.</a>
     </p>
+  </div>
 
-    @if (form.hasError('anyRequired')) {
-      <div class="error-message">Bitte gib mindestens eine Auslage an.</div>
+  <div cdkDropListGroup>
+    <app-expense-list
+      type="transport"
+      [form]="inbound"
+      formArrayName="inbound"
+      [dialogData]="getDialogData('inbound')"
+      [enterPredicate]="getPredicateFn('inbound')"
+    >
+      <h3 class="typography">Hinfahrt</h3>
+    </app-expense-list>
+    @if (inbound.hasError('transportModeLimited')) {
+      <div class="error-message">
+        Du kannst pro Fahrtrichtung maximal eine Auslage für Abotickets angeben.
+      </div>
     }
-  </fieldset>
-</app-form-card>
+
+    <app-expense-list
+      type="transport"
+      [form]="onsite"
+      formArrayName="onsite"
+      [dialogData]="getDialogData('onsite')"
+      [enterPredicate]="getPredicateFn('onsite')"
+    >
+      <h3 class="typography">Vor Ort</h3>
+    </app-expense-list>
+    @if (onsite.hasError('transportModesAllowed')) {
+      <div class="error-message">
+        Vor Ort können keine Fahrradfahrten oder Abotickets abgerechnet werden.
+      </div>
+    }
+
+    <app-expense-list
+      type="transport"
+      [form]="form.controls.outbound"
+      formArrayName="outbound"
+      [dialogData]="getDialogData('outbound')"
+      [enterPredicate]="getPredicateFn('outbound')"
+    >
+      <div class="heading">
+        <h3 class="typography">Rückfahrt</h3>
+        <button
+          type="button"
+          class="jdav-btn icon"
+          (click)="completeReturnTrip()"
+        >
+          <span class="material-symbols-outlined">swap_horiz</span>
+          Rückfahrt wie Hinfahrt
+        </button>
+      </div>
+    </app-expense-list>
+    @if (outbound.hasError('transportModeLimited')) {
+      <div class="error-message">
+        Du kannst pro Fahrtrichtung maximal eine Auslage für Abotickets angeben.
+      </div>
+    }
+  </div>
+
+  <p class="subtotal">
+    Summe:
+    <span>{{ total | currency }}</span>
+  </p>
+
+  @if (form.hasError('anyRequired')) {
+    <div class="error-message">Bitte gib mindestens eine Auslage an.</div>
+  }
+</fieldset>

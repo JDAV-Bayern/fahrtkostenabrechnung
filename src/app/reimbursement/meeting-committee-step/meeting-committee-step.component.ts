@@ -3,7 +3,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { RouterLink } from '@angular/router';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
-import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { FormDatetimeComponent } from 'src/app/shared/form-datetime/form-datetime.component';
 
 @Component({
@@ -12,7 +11,6 @@ import { FormDatetimeComponent } from 'src/app/shared/form-datetime/form-datetim
   imports: [
     RouterLink,
     ReactiveFormsModule,
-    FormCardComponent,
     MatAutocompleteModule,
     FormDatetimeComponent,
   ],

@@ -1,129 +1,106 @@
-<app-form-card [prevStep]="prevStep" [formGroup]="form">
-  <h2 class="typography">Zusammenfassung</h2>
+<h2 class="typography">Zusammenfassung</h2>
 
-  <table>
-    <tr>
-      <td>Veranstaltung:</td>
-      <td>
-        @if (meeting.type === 'course') {
-          {{ meeting.code }} &ndash;
-        }
-        {{ meeting.name }}
-      </td>
-    </tr>
-    <tr>
-      <td>Teilnehmer:</td>
-      <td>{{ participant.givenName }} {{ participant.familyName }}</td>
-    </tr>
-    <tr>
-      <td>IBAN:</td>
-      <td>{{ participant.iban }}</td>
-    </tr>
-  </table>
-
-  <table class="expenses">
-    @for (
-      entry of report.categories | keyvalue: originalOrder;
-      track entry.key
-    ) {
-      <tr>
-        <td>{{ entry.key | expenseType }}:</td>
-        <td>{{ entry.value | currency }}</td>
-      </tr>
-    }
-    <tr>
-      <td>Erstattungsbetrag:</td>
-      <td>{{ report.total | currency }}</td>
-    </tr>
-  </table>
-
-  <div class="typography">
-    @if (report.totalReduced) {
-      <p>
-        <b
-          >Da deine Sektion nicht in Bayern liegt, ist der Erstattungsbetrag
-          gemäß unserer Reisekostenrichtlinien auf
-          {{ report.total | currency }} begrenzt.</b
-        >
-      </p>
-    }
-    @for (warning of getWarnings(); track warning) {
-      <p><b>Warnung</b> {{ warning }}</p>
-    }
-  </div>
-
-  <div class="form-group">
-    <label for="note">Bemerkung zu deiner Abrechnung</label>
-    <textarea class="form-control" rows="4" formControlName="note" id="note">
-    </textarea>
-  </div>
-
-  @if (report.receiptsRequired) {
-    <div class="typography">
-      <h2>Belege</h2>
-      <p>Bitte denke daran, dass wir die Belege für deine Tickets benötigen.</p>
-      @if (reimbursement.meeting.type === 'committee') {
-        <p>
-          Falls du eine BahnCard benutzt hast, hänge bitte die Rechnung für
-          diese an. Die BahnCard wird für Gremien im angezeigten Betrag aktuell
-          nicht berücksichtigt, wird jedoch durch die LGS entsprechend
-          zusätzlich erstattet.
-        </p>
+<table>
+  <tr>
+    <td>Veranstaltung:</td>
+    <td>
+      @if (meeting.type === 'course') {
+        {{ meeting.code }} &ndash;
       }
-    </div>
-    <ngx-file-drop
-      (onFileDrop)="fileDropped($event)"
-      [accept]="'.pdf,.jpg,.png,.jpeg,.JPG,.JPEG,.PDF,.PNG'"
-    >
-      <ng-template
-        ngx-file-drop-content-tmp
-        let-openFileSelector="openFileSelector"
-      >
-        <button class="jdav-btn tertiary icon" (click)="openFileSelector()">
-          <span class="material-symbols-outlined">upload_file</span>
-          Beleg hinzufügen
-        </button>
-      </ng-template>
-    </ngx-file-drop>
-    @let files = form.controls.files.value;
-    @if (files.length) {
-      <fieldset class="files-list">
-        <legend style="color: #999">Belege</legend>
-        @for (file of files; track file) {
-          <p class="file-list-entry">
-            <button
-              class="jdav-btn tertiary icon"
-              (click)="removeFile(file.name)"
-            >
-              <span class="material-symbols-outlined">delete</span>
-            </button>
-            {{ file.name }}
-          </p>
-        }
-      </fieldset>
-    }
+      {{ meeting.name }}
+    </td>
+  </tr>
+  <tr>
+    <td>Teilnehmer:</td>
+    <td>{{ participant.givenName }} {{ participant.familyName }}</td>
+  </tr>
+  <tr>
+    <td>IBAN:</td>
+    <td>{{ participant.iban }}</td>
+  </tr>
+</table>
+
+<table class="expenses">
+  @for (entry of report.categories | keyvalue: originalOrder; track entry.key) {
+    <tr>
+      <td>{{ entry.key | expenseType }}:</td>
+      <td>{{ entry.value | currency }}</td>
+    </tr>
   }
+  <tr>
+    <td>Erstattungsbetrag:</td>
+    <td>{{ report.total | currency }}</td>
+  </tr>
+</table>
 
-  <button
-    submitButton
-    type="submit"
-    [disabled]="isRenderingPdf() || form.parent?.invalid"
-    (click)="onSubmit()"
-    class="jdav-btn"
-  >
-    @if (isRenderingPdf()) {
-      <app-progress-indicator></app-progress-indicator>
-    } @else {
-      PDF herunterladen
-    }
-  </button>
-</app-form-card>
-
-<div style="position: absolute; top: 2000px">
-  @if (isRenderingPdf()) {
-    <app-pdf-view
-      [reimbursement]="reimbursement"
-      (fullyRendered)="renderPdf()"
-    ></app-pdf-view>
+<div class="typography">
+  @if (report.totalReduced) {
+    <p>
+      <b
+        >Da deine Sektion nicht in Bayern liegt, ist der Erstattungsbetrag gemäß
+        unserer Reisekostenrichtlinien auf
+        {{ report.total | currency }} begrenzt.</b
+      >
+    </p>
+  }
+  @for (warning of getWarnings(); track warning) {
+    <p><b>Warnung</b> {{ warning }}</p>
   }
 </div>
+
+<div class="form-group" [formGroup]="form">
+  <label for="note">Bemerkung zu deiner Abrechnung</label>
+  <textarea class="form-control" rows="4" formControlName="note" id="note">
+  </textarea>
+</div>
+
+@if (report.receiptsRequired) {
+  <div class="typography">
+    <h2>Belege</h2>
+    <p>Bitte denke daran, dass wir die Belege für deine Tickets benötigen.</p>
+    @if (reimbursement.meeting.type === 'committee') {
+      <p>
+        Falls du eine BahnCard benutzt hast, hänge bitte die Rechnung für diese
+        an. Die BahnCard wird für Gremien im angezeigten Betrag aktuell nicht
+        berücksichtigt, wird jedoch durch die LGS entsprechend zusätzlich
+        erstattet.
+      </p>
+    }
+  </div>
+  <ngx-file-drop
+    (onFileDrop)="fileDropped($event)"
+    [accept]="'.pdf,.jpg,.png,.jpeg,.JPG,.JPEG,.PDF,.PNG'"
+  >
+    <ng-template
+      ngx-file-drop-content-tmp
+      let-openFileSelector="openFileSelector"
+    >
+      <button
+        type="button"
+        class="jdav-btn tertiary icon"
+        (click)="openFileSelector()"
+      >
+        <span class="material-symbols-outlined">upload_file</span>
+        Beleg hinzufügen
+      </button>
+    </ng-template>
+  </ngx-file-drop>
+  @let files = form.controls.files.value;
+  @if (files.length) {
+    <fieldset class="files-list">
+      <legend style="color: #999">Belege</legend>
+      @for (file of files; track file) {
+        <p class="file-list-entry">
+          <button
+            type="button"
+            class="jdav-btn tertiary icon"
+            (click)="removeFile(file.name)"
+          >
+            <span class="material-symbols-outlined">delete</span>
+          </button>
+          {{ file.name }}
+        </p>
+      }
+    </fieldset>
+  }
+}

@@ -10,7 +10,6 @@ import { RouterLink } from '@angular/router';
 import { PlzService } from 'src/app/core/plz.service';
 import { SectionService } from 'src/app/core/section.service';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
-import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { JdavState } from 'src/domain/section.model';
@@ -19,12 +18,7 @@ import { JdavState } from 'src/domain/section.model';
   selector: 'app-participant-step',
   templateUrl: './participant-step.component.html',
   styleUrls: ['./participant-step.component.css'],
-  imports: [
-    RouterLink,
-    ReactiveFormsModule,
-    MatAutocompleteModule,
-    FormCardComponent,
-  ],
+  imports: [RouterLink, ReactiveFormsModule, MatAutocompleteModule],
 })
 export class ParticipantStepComponent implements OnInit {
   private readonly plzService = inject(PlzService);
@@ -87,11 +81,6 @@ export class ParticipantStepComponent implements OnInit {
 
   get bic() {
     return this.form.controls.bic;
-  }
-
-  get prevStep() {
-    const meetingType = this.controlService.meetingStep.value.type;
-    return meetingType === 'committee' ? 'gremium' : 'kurs';
   }
 
   filter() {

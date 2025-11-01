@@ -3,12 +3,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
-import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 
 @Component({
   selector: 'app-meeting-course-step',
   templateUrl: './meeting-course-step.component.html',
-  imports: [ReactiveFormsModule, FormCardComponent],
+  imports: [ReactiveFormsModule],
 })
 export class MeetingCourseStepComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);

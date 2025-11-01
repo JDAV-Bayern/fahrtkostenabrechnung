@@ -1,78 +1,76 @@
-<app-form-card nextStep="teilnehmer_in" [nextDisabled]="form.invalid">
-  <fieldset [formGroup]="form">
-    <div class="typography">
-      <h1>Angaben zur Reise</h1>
-      <p>
-        <b>Hinweis:</b> Dieses Formular ist nur für Gremien der JDAV Bayern und
-        ihrer Bezirke (Landesjugendleitung, Landesjugendausschuss,
-        Bezirksjugendleitung, ...) gültig. Über dieses Formular eingereichte
-        Kurse können nicht berücksichtigt werden. Bitte verwende stattdessen das
-        <a routerLink="/kurs">Formular für Kurse</a>.
-      </p>
-    </div>
+<fieldset [formGroup]="form">
+  <div class="typography">
+    <h1>Angaben zur Reise</h1>
+    <p>
+      <b>Hinweis:</b> Dieses Formular ist nur für Gremien der JDAV Bayern und
+      ihrer Bezirke (Landesjugendleitung, Landesjugendausschuss,
+      Bezirksjugendleitung, ...) gültig. Über dieses Formular eingereichte Kurse
+      können nicht berücksichtigt werden. Bitte verwende stattdessen das
+      <a routerLink="/kurs">Formular für Kurse</a>.
+    </p>
+  </div>
 
-    <div class="form-group">
-      <label for="purpose">Zweck der Reise</label>
-      <input
-        type="text"
-        id="purpose"
-        formControlName="name"
-        class="form-control"
-        required
-      />
-      @if (name.hasError('required') && name.touched) {
-        <div class="error-message">Bitte gib den Zweck deiner Reise an.</div>
-      }
-    </div>
+  <div class="form-group">
+    <label for="purpose">Zweck der Reise</label>
+    <input
+      type="text"
+      id="purpose"
+      formControlName="name"
+      class="form-control"
+      required
+    />
+    @if (name.hasError('required') && name.touched) {
+      <div class="error-message">Bitte gib den Zweck deiner Reise an.</div>
+    }
+  </div>
 
-    <div class="form-group">
-      <label for="location">Ort der Reise</label>
-      <input
-        type="text"
-        id="location"
-        formControlName="location"
-        class="form-control"
-        required
-      />
-      @if (location.hasError('required') && location.touched) {
-        <div class="error-message">Bitte gib den Zielort deiner Reise an.</div>
-      }
-    </div>
+  <div class="form-group">
+    <label for="location">Ort der Reise</label>
+    <input
+      type="text"
+      id="location"
+      formControlName="location"
+      class="form-control"
+      required
+    />
+    @if (location.hasError('required') && location.touched) {
+      <div class="error-message">Bitte gib den Zielort deiner Reise an.</div>
+    }
+  </div>
 
-    <fieldset [formGroup]="time">
-      <app-form-datetime
-        legend="Beginn der Reise"
-        [formControl]="start"
-        [max]="end.value || now"
-        [comparisonStart]="start.value"
-        [comparisonEnd]="end.value"
-      ></app-form-datetime>
-      <app-form-datetime
-        legend="Ende der Reise"
-        [formControl]="end"
-        [min]="start.value"
-        [max]="now"
-        [comparisonStart]="start.value"
-        [comparisonEnd]="end.value"
-      ></app-form-datetime>
+  <fieldset [formGroup]="time">
+    <app-form-datetime
+      legend="Beginn der Reise"
+      [formControl]="start"
+      [max]="end.value || now"
+      [comparisonStart]="start.value"
+      [comparisonEnd]="end.value"
+    ></app-form-datetime>
+    <app-form-datetime
+      legend="Ende der Reise"
+      [formControl]="end"
+      [min]="start.value"
+      [max]="now"
+      [comparisonStart]="start.value"
+      [comparisonEnd]="end.value"
+    ></app-form-datetime>
 
-      @if (time.hasError('dateRangeOrder')) {
-        <div class="error-message">
-          Das Ende der Reise darf nicht vor dem Start liegen.
-        </div>
-      }
-      @if (time.hasError('dateRangePast')) {
-        <div class="error-message">
-          Die Reise muss bereits vollständig abgeschlossen sein.
-        </div>
-      }
+    @if (time.hasError('dateRangeOrder')) {
+      <div class="error-message">
+        Das Ende der Reise darf nicht vor dem Start liegen.
+      </div>
+    }
+    @if (time.hasError('dateRangePast')) {
+      <div class="error-message">
+        Die Reise muss bereits vollständig abgeschlossen sein.
+      </div>
+    }
 
-      @if (overnight.enabled) {
-        <div class="form-checkbox">
-          <input type="checkbox" id="overnight" [formControl]="overnight" />
-          <label for="overnight">Mit Übernachtung</label>
-        </div>
-      }
-    </fieldset>
+    @if (overnight.enabled) {
+      <div class="form-checkbox">
+        <input type="checkbox" id="overnight" [formControl]="overnight" />
+        <label for="overnight">Mit Übernachtung</label>
+      </div>
+    }
   </fieldset>
-</app-form-card>
+</fieldset>

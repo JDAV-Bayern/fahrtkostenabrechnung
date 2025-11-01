@@ -1,4 +1,4 @@
-#pdf-container {
+.pdf-content {
   width: 595px;
   box-sizing: border-box;
   height: fit-content;
@@ -10,7 +10,7 @@
   font-size: 6pt;
 }
 
-#pdf-container .logo {
+.pdf-content .logo {
   position: absolute;
   border: 0;
   top: 57px;

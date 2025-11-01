@@ -3,25 +3,13 @@ import { PageNotFound } from './core/page-not-found/page-not-found';
 import { DataProtectionComponent } from './info/data-protection/data-protection.component';
 import { ExpenseRatesComponent } from './info/expense-rates/expense-rates.component';
 import { InfoComponent } from './info/info.component';
-import { ExpensesExtraStepComponent } from './reimbursement/expenses-extra-step/expenses-extra-step.component';
-import { ExpensesStepComponent } from './reimbursement/expenses-step/expenses-step.component';
-import { MeetingCommitteeStepComponent } from './reimbursement/meeting-committee-step/meeting-committee-step.component';
-import { MeetingCourseStepComponent } from './reimbursement/meeting-course-step/meeting-course-step.component';
-import { OverviewStepComponent } from './reimbursement/overview-step/overview-step.component';
-import { ParticipantStepComponent } from './reimbursement/participant-step/participant-step.component';
-import { ReimbursementComponent } from './reimbursement/reimbursement.component';
-import { disabledStepGuard } from './reimbursement/shared/disabled-step.guard';
-import {
-  expensesGuard,
-  meetingGuard,
-  participantGuard,
-  transportExpensesGuard,
-} from './reimbursement/shared/finished-step.guard';
+import { CommitteeSteps } from './reimbursement/committee-steps/committee-steps';
+import { CourseSteps } from './reimbursement/course-steps/course-steps';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'kurs',
+    redirectTo: 'fahrtkosten/kurs',
     pathMatch: 'full',
   },
   {
@@ -44,48 +32,24 @@ export const routes: Routes = [
     ],
   },
   {
-    path: '',
-    title: 'Fahrtkostenabrechnung JDAV Bayern',
-    component: ReimbursementComponent,
-    children: [
-      {
-        path: 'kurs',
-        component: MeetingCourseStepComponent,
-      },
-      {
-        path: 'ljv',
-        redirectTo: 'kurs',
-      },
-      {
-        path: 'gremium',
-        component: MeetingCommitteeStepComponent,
-      },
-      {
-        path: 'teilnehmer_in',
-        component: ParticipantStepComponent,
-        canActivate: [meetingGuard],
-      },
-      {
-        path: 'auslagen',
-        component: ExpensesStepComponent,
-        canActivate: [meetingGuard, participantGuard],
-      },
-      {
-        path: 'auslagen-gremium',
-        component: ExpensesExtraStepComponent,
-        canActivate: [
-          meetingGuard,
-          participantGuard,
-          transportExpensesGuard,
-          disabledStepGuard,
-        ],
-      },
-      {
-        path: 'zusammenfassung',
-        component: OverviewStepComponent,
-        canActivate: [meetingGuard, participantGuard, expensesGuard],
-      },
-    ],
+    path: 'fahrtkosten',
+    redirectTo: 'fahrtkosten/kurs',
+    pathMatch: 'full',
+  },
+  {
+    path: 'fahrtkosten/:step',
+    title: 'Fahrtkostenabrechnung | JDAV Bayern',
+    component: CourseSteps,
+  },
+  {
+    path: 'fahrtkosten-gremien',
+    redirectTo: 'fahrtkosten-gremien/reise',
+    pathMatch: 'full',
+  },
+  {
+    path: 'fahrtkosten-gremien/:step',
+    title: 'Fahrtkostenabrechnung Gremien | JDAV Bayern',
+    component: CommitteeSteps,
   },
   {
     path: '**',

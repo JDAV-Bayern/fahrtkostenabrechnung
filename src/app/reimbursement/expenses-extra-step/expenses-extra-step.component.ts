@@ -3,7 +3,6 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
-import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
 import { FoodExpenseCardComponent } from '../../expenses/food-expense-card/food-expense-card.component';
 import { ReimbursementService } from '../shared/reimbursement.service';
 
@@ -14,7 +13,6 @@ import { ReimbursementService } from '../shared/reimbursement.service';
   imports: [
     ReactiveFormsModule,
     CurrencyPipe,
-    FormCardComponent,
     ExpenseListComponent,
     FoodExpenseCardComponent,
   ],

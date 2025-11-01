@@ -1,18 +1,13 @@
-import { Dialog, DialogModule } from '@angular/cdk/dialog';
-import { CurrencyPipe, KeyValuePipe, formatDate } from '@angular/common';
-import { ChangeDetectorRef, Component, inject, signal } from '@angular/core';
+import { DialogModule } from '@angular/cdk/dialog';
+import { CurrencyPipe, KeyValuePipe } from '@angular/common';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { ReimbursementValidatorService } from 'src/app/reimbursement/shared/reimbursement-validator.service';
-import { FinishedDialogComponent } from './finished-dialog/finished-dialog.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
-import { FormCardComponent } from 'src/app/shared/form-card/form-card.component';
-import { combinePdf, createPdf } from 'src/app/shared/pdf-creation';
-import { ProgressIndicatorComponent } from 'src/app/shared/progress-indicator/progress-indicator.component';
 import { ExpenseTypePipe } from '../../expenses/shared/expense-type.pipe';
 import { ReimbursementService } from '../shared/reimbursement.service';
-import { PdfViewComponent } from './pdf-view/pdf-view.component';
 
 @Component({
   selector: 'app-overview-step',
@@ -24,9 +19,6 @@ import { PdfViewComponent } from './pdf-view/pdf-view.component';
     KeyValuePipe,
     DialogModule,
     NgxFileDropModule,
-    FormCardComponent,
-    ProgressIndicatorComponent,
-    PdfViewComponent,
     ExpenseTypePipe,
   ],
 })
@@ -35,11 +27,8 @@ export class OverviewStepComponent {
   private readonly controlService = inject(ReimbursementControlService);
   private readonly validationService = inject(ReimbursementValidatorService);
   private readonly changeDetector = inject(ChangeDetectorRef);
-  private readonly dialog = inject(Dialog);
 
   form = this.controlService.overviewStep;
-
-  readonly isRenderingPdf = signal(false);
 
   readonly originalOrder = () => 0;
 
@@ -55,67 +44,12 @@ export class OverviewStepComponent {
     return this.reimbursement.participant;
   }
 
-  get prevStep() {
-    const meeting = this.controlService.meetingStep.controls.type.value;
-    return meeting === 'committee' ? 'auslagen-gremium' : 'auslagen';
-  }
-
   get report() {
     return this.reimbursementService.getReport(this.reimbursement);
   }
 
   getWarnings(): string[] {
     return this.validationService.validateReimbursement(this.reimbursement);
-  }
-
-  onSubmit() {
-    this.isRenderingPdf.set(true);
-  }
-
-  async renderPdf() {
-    const htmlElement = document.getElementById('pdf-container');
-
-    if (!htmlElement || !this.form.valid) {
-      this.isRenderingPdf.set(false);
-      return;
-    }
-
-    const subject = JSON.stringify(this.reimbursement);
-
-    try {
-      const pdfData = await createPdf(htmlElement);
-      const files = this.form.controls.files.value;
-      const blob = await combinePdf(pdfData, files, subject);
-      this.downloadPdf(blob);
-    } finally {
-      this.isRenderingPdf.set(false);
-    }
-
-    this.dialog.open(FinishedDialogComponent, {
-      data: {
-        givenName: this.reimbursement.participant.givenName,
-        meeting: this.reimbursement.meeting,
-      },
-    });
-  }
-
-  downloadPdf(blob: Blob) {
-    let fileName;
-    const meeting = this.reimbursement.meeting;
-    const lastName = this.reimbursement.participant.familyName;
-
-    if (meeting.type === 'course') {
-      fileName = `Fahrtkostenabrechnung_${meeting.code}_${lastName}.pdf`;
-    } else {
-      const timestamp = formatDate(meeting.time.start, 'yyyyMMdd', 'de-DE');
-      fileName = `Fahrtkostenabrechnung_${lastName}_${timestamp}.pdf`;
-    }
-
-    const fileURL = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = fileURL;
-    link.download = fileName;
-    link.click();
   }
 
   fileDropped(files: NgxFileDropEntry[]) {
