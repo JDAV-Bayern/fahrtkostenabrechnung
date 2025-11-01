@@ -41,9 +41,9 @@ testem.log
 .DS_Store
 Thumbs.db
 
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
 
 qdrant_storage
-# Playwright
-/playwright-report
-/test-results
-/.playwright-cache

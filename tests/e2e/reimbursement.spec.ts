@@ -72,17 +72,17 @@ test.describe('Reimbursement workflow', () => {
   }) => {
     await courseStepPage.goto();
     await courseStepPage.clearPersistedForm();
-    await expect(page).toHaveURL(/\/kurs$/);
+    await expect(page).toHaveURL(/\/fahrtkosten\/kurs$/);
     await expect(courseStepPage.courseCodeInput).toBeVisible();
 
     await courseStepPage.fill(COURSE_DETAILS);
     await courseStepPage.continue();
-    await expect(page).toHaveURL(/\/teilnehmer_in$/);
+    await expect(page).toHaveURL(/\/fahrtkosten\/teilnehmer_in$/);
 
     await participantStepPage.fillParticipant(PARTICIPANT);
     await participantStepPage.selectSection('Aachen');
     await participantStepPage.continue();
-    await expect(page).toHaveURL(/\/auslagen$/);
+    await expect(page).toHaveURL(/\/fahrtkosten\/auslagen$/);
 
     await expensesStepPage.addTransportExpense('Hinfahrt', BIKE__TRIP);
     await expensesStepPage.addTransportExpense(
@@ -103,7 +103,7 @@ test.describe('Reimbursement workflow', () => {
     );
 
     await expensesStepPage.continue();
-    await expect(page).toHaveURL(/\/zusammenfassung$/);
+    await expect(page).toHaveURL(/\/fahrtkosten\/zusammenfassung$/);
 
     await expect(
       page.getByRole('heading', { name: 'Zusammenfassung' }),

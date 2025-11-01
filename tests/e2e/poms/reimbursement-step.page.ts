@@ -7,7 +7,7 @@ export abstract class ReimbursementStepPage extends BasePage {
   }
 
   protected get formCard(): Locator {
-    return this.page.locator('app-form-card');
+    return this.page.locator('jdav-stepper');
   }
 
   get nextButton(): Locator {
@@ -19,7 +19,7 @@ export abstract class ReimbursementStepPage extends BasePage {
   }
 
   get submitButton(): Locator {
-    return this.formCard.locator('[submitButton]');
+    return this.formCard.getByRole('button', { name: 'PDF herunterladen' });
   }
 
   async continue(): Promise<void> {
