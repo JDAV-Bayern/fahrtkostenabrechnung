@@ -42,12 +42,12 @@ export const routes: Routes = [
     component: CourseSteps,
   },
   {
-    path: 'fahrtkosten-gremien',
-    redirectTo: 'fahrtkosten-gremien/reise',
+    path: 'fahrtkosten-gremium',
+    redirectTo: 'fahrtkosten-gremium/reisedaten',
     pathMatch: 'full',
   },
   {
-    path: 'fahrtkosten-gremien/:step',
+    path: 'fahrtkosten-gremium/:step',
     title: 'Fahrtkostenabrechnung Gremien | JDAV Bayern',
     component: CommitteeSteps,
   },

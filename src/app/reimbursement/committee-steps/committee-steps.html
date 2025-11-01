@@ -1,15 +1,15 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <jdav-stepper linear>
-    <cdk-step label="reise" [stepControl]="form.controls.meeting">
+    <cdk-step label="reisedaten" [stepControl]="form.controls.meeting">
       <app-meeting-committee-step></app-meeting-committee-step>
     </cdk-step>
     <cdk-step label="teilnehmer_in" [stepControl]="form.controls.participant">
       <app-participant-step></app-participant-step>
     </cdk-step>
-    <cdk-step label="fahrten" [stepControl]="form.controls.expenses">
+    <cdk-step label="auslagen" [stepControl]="form.controls.expenses">
       <app-expenses-step></app-expenses-step>
     </cdk-step>
-    <cdk-step label="zusatzkosten" [stepControl]="form.controls.expenses">
+    <cdk-step label="auslagen-sonstiges" [stepControl]="form.controls.expenses">
       <app-expenses-extra-step></app-expenses-extra-step>
     </cdk-step>
     <cdk-step label="zusammenfassung">
