@@ -19,7 +19,8 @@ export class HeaderComponent {
     const control = this.controlService.meetingStep.controls.type;
     const meetingType = control.value;
 
-    const originUrl = meetingType === 'committee' ? 'fahrtkosten-gremien' : 'fahrtkosten';
+    const originUrl =
+      meetingType === 'committee' ? 'fahrtkosten-gremien' : 'fahrtkosten';
 
     this.controlService.deleteStoredData();
     control.setValue(meetingType);
