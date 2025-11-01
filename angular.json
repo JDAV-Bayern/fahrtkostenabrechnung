@@ -115,6 +115,17 @@
           "options": {
             "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
           }
+        },
+        "e2e": {
+          "builder": "playwright-ng-schematics:playwright",
+          "options": {
+            "devServerTarget": "portal-jdav-bayern:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "portal-jdav-bayern:serve:production"
+            }
+          }
         }
       }
     }

@@ -114,7 +114,7 @@ export class ReimbursementControlService {
     ),
     overview: this.formBuilder.group({
       note: [''],
-      file: [undefined],
+      files: this.formBuilder.control<File[]>([]),
     }),
   });
 
@@ -198,6 +198,7 @@ export class ReimbursementControlService {
       );
 
       this.form.patchValue(storedValue);
+      this.overviewStep.controls.files.reset();
 
       // mark controls with values as touched
       deepMarkAsDirty(this.form);
@@ -210,7 +211,6 @@ export class ReimbursementControlService {
   }
 
   saveForm() {
-    // TODO: exclude file field?
     const data = JSON.stringify(this.form.value);
     localStorage.setItem(LOCAL_STORAGE_KEY_REIMBURSEMENT, data);
 

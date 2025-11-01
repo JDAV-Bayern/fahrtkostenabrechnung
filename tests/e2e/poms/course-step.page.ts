@@ -20,7 +20,7 @@ export class CourseStepPage extends ReimbursementStepPage {
   }
 
   async goto(): Promise<void> {
-    await super.goto('/kurs');
+    await super.goto('/fahrtkosten/kurs');
   }
 
   async fill(details: CourseDetails): Promise<void> {
