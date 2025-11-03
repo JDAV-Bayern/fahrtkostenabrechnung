@@ -2,7 +2,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { PDFDocument } from 'pdf-lib';
-import pdfParse from 'pdf-parse';
+import { PDFParse } from 'pdf-parse';
 import { expect, test } from './fixtures';
 import { TransportExpenseInput } from './poms';
 
@@ -116,10 +116,10 @@ test.describe('Reimbursement workflow', () => {
     const receiptName = `Beleg-${Date.now()}-${Math.random().toString(16).slice(2)}.pdf`;
     const receiptPath = join(tmpdir(), receiptName);
     const attachmentPdf = await PDFDocument.create();
-    const attachmentPage = attachmentPdf.addPage([300, 200]);
+    const attachmentPage = attachmentPdf.addPage([1200, 600]);
     attachmentPage.drawText(
       'OePNV Ticket 9b3ea5f2-e43b-44d0-83f3-e2d97dfff065',
-      { x: 24, y: 120, size: 18 },
+      { x: 24, y: 120, size: 16 },
     );
     const attachmentBytes = await attachmentPdf.save();
     await writeFile(receiptPath, attachmentBytes);
@@ -150,18 +150,17 @@ test.describe('Reimbursement workflow', () => {
       pdfBuffer = Buffer.concat(chunks);
     }
 
-    const pdfContents = await pdfParse(pdfBuffer);
-    expect(pdfContents.text).toContain(COURSE_DETAILS.name);
-    expect(pdfContents.text).toContain(
+    const pdfContents = new PDFParse({ data: pdfBuffer });
+    const pdfText = (await pdfContents.getText()).text;
+    expect(pdfText).toContain(COURSE_DETAILS.name);
+    expect(pdfText).toContain(
       `${PARTICIPANT.givenName} ${PARTICIPANT.familyName}`,
     );
-    expect(pdfContents.text).toContain('Fahrtkostenabrechnung');
-    expect(pdfContents.text).toContain(totalExpectedRefund);
-    expect(pdfContents.text).toContain(
-      PARTICIPANT.iban.replace(/(.{4})/g, '$1 '),
-    );
-    expect(pdfContents.text).toContain(COURSE_DETAILS.code);
-    expect(pdfContents.text).toContain(
+    expect(pdfText).toContain('Fahrtkostenabrechnung');
+    expect(pdfText).toContain(totalExpectedRefund);
+    expect(pdfText).toContain(PARTICIPANT.iban.replace(/(.{4})/g, '$1 '));
+    expect(pdfText).toContain(COURSE_DETAILS.code);
+    expect(pdfText).toContain(
       'OePNV Ticket 9b3ea5f2-e43b-44d0-83f3-e2d97dfff065',
     );
 
