@@ -9,6 +9,9 @@ updates:
     directory: '/'
     schedule:
       interval: 'daily'
+    allow:
+      - dependency-type: 'all'
+    versioning-strategy: 'increase'
     open-pull-requests-limit: 5
     groups:
       angular:
