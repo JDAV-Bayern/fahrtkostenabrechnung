@@ -48,7 +48,7 @@ export async function combinePdf(
 
   pdfDoc.setSubject(subject);
 
-  const pdfBytes = await pdfDoc.save();
+  const pdfBytes = new Uint8Array(await pdfDoc.save());
   return new Blob([pdfBytes], { type: MIME_TYPE_PDF });
 }
 
