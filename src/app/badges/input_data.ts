@@ -217,9 +217,12 @@ export function readAdditionalFile(file: File): Promise<ReadResult<AdditionalFil
           }
 
           let geburtsdatum = record['Geburtsdatum'];
+          console.log("importing birthday...", geburtsdatum)
           if (geburtsdatum instanceof Date) {
+            console.log("is date")
             geburtsdatum = `${geburtsdatum.getDate().toString().padStart(2, '0')}.${(geburtsdatum.getMonth() + 1).toString().padStart(2, '0')}.${geburtsdatum.getFullYear()}`;
           } else if (typeof geburtsdatum === 'number') {
+            console.log("is number")
             const date = new Date((geburtsdatum - 25569) * 86400 * 1000);
             geburtsdatum = `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()}`;
           }
