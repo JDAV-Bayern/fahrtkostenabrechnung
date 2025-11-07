@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef, computed } from '@angular/core';
+import { readMvManager, MvManagerRecord, ReadResult, readAdditionalFile, AdditionalFileRecord } from './input_data';
 
 @Component({
   selector: 'jdav-badges',
@@ -7,35 +8,59 @@ import { Component } from '@angular/core';
   styleUrl: './badges.css',
 })
 export class Badges {
+  constructor(private cdr: ChangeDetectorRef) { }
 
-  navisionStatus = 'Keine Datei hochgeladen';
   mvStatus = 'Keine Datei hochgeladen';
-  kvStatus = 'Keine Datei hochgeladen';
+  additionalFilesStatus: string[] = []
 
-  onKvManagerFileSelected(event: any) {
-    this.kvStatus = 'Datei wird verarbeitet...';
-    const file: File = event.target.files[0];
-    if (file) {
-      console.log(`Selected file: ${file.name}`);
-      // Further processing can be done here
+  mvResult: ReadResult<MvManagerRecord> | null = null;
+  additionalFilesResult: ReadResult<AdditionalFileRecord>[] = [];
+
+  onAdditionalFilesSelected(event: any) {
+    this.cdr.detectChanges();
+    this.additionalFilesStatus = [];
+    const files: File [] = event.target.files;
+    for (const file of files) {
+      if (file) {
+        readAdditionalFile(file)
+          .then((result) => {
+            this.additionalFilesResult.push(result);
+            this.additionalFilesStatus.push(`${file.name}: ${result.records.length} Datensätze erfolgreich gelesen`);
+            console.log(`Additional file ${file.name} read result:`, result);
+            this.cdr.detectChanges();
+          })
+          .catch((error) => {
+            console.error('Error reading KV Manager file:', error);
+            this.cdr.detectChanges();
+          });
+      }
     }
   }
 
   onMvManagerFileSelected(event: any) {
     this.mvStatus = 'Datei wird verarbeitet...';
+    this.cdr.detectChanges();
     const file: File = event.target.files[0];
     if (file) {
-      console.log(`Selected file: ${file.name}`);
-      // Further processing can be done here
-    }
-  }
-
-  onNavisionFileSelected(event: any) {
-    this.navisionStatus = 'Datei wird verarbeitet...';
-    const file: File = event.target.files[0];
-    if (file) {
-      console.log(`Selected file: ${file.name}`);
-      // Further processing can be done here
+      readMvManager(file)
+        .then((result) => {
+          this.mvResult = result;
+          this.mvStatus = `${result.records.length} Datensätze erfolgreich gelesen`;
+          if (result.errors.length > 0) {
+            this.mvStatus += '\nFehler beim Einlesen der Datei:';
+            for (const error of result.errors) {
+              this.mvStatus += `\n${error}`;
+            }
+          } else {
+            this.mvStatus += '\nKeine Fehler beim Einlesen der Datei.';
+          }
+          this.cdr.detectChanges();
+        })
+        .catch((error) => {
+          this.mvStatus = `Fehler: ${error.message}`;
+          console.error('Error reading MV Manager file:', error);
+          this.cdr.detectChanges();
+        });
     }
   }
 }
