@@ -1,0 +1,67 @@
+<div class="mt-4 ml-auto mr-auto max-w-[1000px]">
+  <div class="typography">
+    <h2>
+      Wenn du das hier gefunden hast ohne dass es Dir jemand gezeigt hast, geh
+      weiter. <br />Hier ist nichts zu sehen, wirklich ;)
+    </h2>
+    <h4>Etwas mehr Info</h4>
+    <p>
+      Hier ist wirklich nichts zu sehen: Wir benutzen diese Seite intern um
+      Excel files für die Jugendleitermarkenbestellung zu erzeugen. Dabei werden
+      die Daten aller Jugendleitenden aus unseren (leider noch manigfaltigen)
+      Systemen zusammengeführt und in einer Excel Liste pro Sektion ausgegeben.
+      Diese Excel liste wird dann an die Jugendreferent*innen der jeweiligen
+      Sektionen geschickt, die dann die Bestellung der Marken vornehmen können.
+      Die Datenverarbeitung erfolgt ausschließlich im Browser, es werden keine
+      Daten an unseren Server geschickt.
+    </p>
+    <p>
+      Wenn du Interesse an dem Quellcode hast, findest du ihn auf
+      <a href="https://github.com/JDAV-Bayern/fahrtkostenabrechnung">GitHub</a>.
+    </p>
+  </div>
+  <div class="typography">
+    <h2>Hier können die Dateien aus den Quellsystemen hochgeladen werden</h2>
+    <div>
+      <div class="flex flex-row items-center">
+        <label class="min-w-35" for="kvManager">KV Manager</label>
+        <input
+          type="file"
+          id="kvManager"
+          (change)="onKvManagerFileSelected($event)"
+          accept=".xlsx, .xls, .csv"
+          class="form-control mx-5"
+        />
+        <div class="min-w-55">
+          {{ kvStatus }}
+        </div>
+      </div>
+      <div class="flex flex-row items-center">
+        <label class="min-w-35" for="mvManager">MV Manager</label>
+        <input
+          type="file"
+          id="mvManager"
+          (change)="onMvManagerFileSelected($event)"
+          accept=".xlsx, .xls, .csv"
+          class="form-control mx-5"
+        />
+        <div class="min-w-55">
+          {{ mvStatus }}
+        </div>
+      </div>
+      <div class="flex flex-row items-center">
+        <label class="min-w-35" for="navision">Navision Export</label>
+        <input
+          type="file"
+          id="navision"
+          (change)="onNavisionFileSelected($event)"
+          accept=".xlsx, .xls, .csv"
+          class="form-control mx-5"
+        />
+        <div class="min-w-55">
+          {{ navisionStatus }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

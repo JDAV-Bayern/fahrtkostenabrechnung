@@ -5,6 +5,7 @@ import { ExpenseRatesComponent } from './info/expense-rates/expense-rates.compon
 import { InfoComponent } from './info/info.component';
 import { CommitteeSteps } from './reimbursement/committee-steps/committee-steps';
 import { CourseSteps } from './reimbursement/course-steps/course-steps';
+import { Badges } from './badges/badges';
 
 export const routes: Routes = [
   {
@@ -50,6 +51,11 @@ export const routes: Routes = [
     path: 'fahrtkosten-gremium/:step',
     title: 'Fahrtkostenabrechnung Gremien | JDAV Bayern',
     component: CommitteeSteps,
+  },
+  {
+    path: 'marken',
+    title: 'Markenbestellung | JDAV Bayern',
+    component: Badges,
   },
   {
     path: '**',
