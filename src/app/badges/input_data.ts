@@ -1,11 +1,24 @@
 /* eslint-disable @typescript-eslint/consistent-indexed-object-style */
 import * as XLSX from 'xlsx';
 
+
 export interface BaseRecord {
   id: string;
   Vorname: string;
   Nachname: string;
   Geburtsdatum: string;
+}
+
+export class AdditionalColumn {
+  name: string;
+  file: string;
+  constructor(name: string, file: string) {
+    this.name = name;
+    this.file = file;
+  }
+  id(): string {
+    return this.name + '_' + this.file;
+  }
 }
 
 export interface MvManagerRecord extends BaseRecord {
@@ -18,9 +31,10 @@ export interface AdditionalFileRecord extends BaseRecord {
 }
 
 export interface ReadResult<T extends BaseRecord> {
+  file: string;
   records: T[];
   errors: string[];
-  additionalColumns: string[];
+  additionalColumns: AdditionalColumn[];
 }
 
 function generateId(vorname: string, nachname: string, geburtsdatum: string): string {
@@ -85,7 +99,7 @@ export function readMvManager(file: File): Promise<ReadResult<MvManagerRecord>> 
         const availableColumns = Object.keys(records[0]);
         const missingColumns = requiredColumns.filter(col => !availableColumns.includes(col));
         if (missingColumns.length > 0) {
-          reject(new Error('Fehlende erforderliche Spalten: '+ missingColumns.join(', ')));
+          reject(new Error('Fehlende erforderliche Spalten: ' + missingColumns.join(', ')));
           return;
         }
 
@@ -137,7 +151,12 @@ export function readMvManager(file: File): Promise<ReadResult<MvManagerRecord>> 
           });
         }
 
-        resolve({ records: result, errors, additionalColumns: Array.from(additionalColumns) });
+        resolve({
+          file: file.name,
+          records: result,
+          errors,
+          additionalColumns: Array.from(additionalColumns).map(col => new AdditionalColumn(col, file.name))
+        });
       } catch (error) {
         reject(error);
       }
@@ -180,7 +199,7 @@ export function readAdditionalFile(file: File): Promise<ReadResult<AdditionalFil
         const requiredColumns = ['Vorname', 'Nachname', 'Geburtsdatum'];
         const missingColumns = requiredColumns.filter(col => !availableColumns.includes(col));
         if (missingColumns.length > 0) {
-          reject(new Error('Fehlende erforderliche Spalten: '+ missingColumns.join(', ')));
+          reject(new Error('Fehlende erforderliche Spalten: ' + missingColumns.join(', ')));
           return;
         }
 
@@ -216,7 +235,12 @@ export function readAdditionalFile(file: File): Promise<ReadResult<AdditionalFil
           });
         }
 
-        resolve({ records: result, errors: [], additionalColumns: Array.from(additionalColumns) });
+        resolve({
+          file: file.name,
+          records: result,
+          errors: [],
+          additionalColumns: Array.from(additionalColumns).map(col => new AdditionalColumn(col, file.name))
+        });
       } catch (error) {
         reject(error);
       }

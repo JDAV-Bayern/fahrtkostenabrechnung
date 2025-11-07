@@ -1,5 +1,5 @@
-import { Component, ChangeDetectorRef, computed } from '@angular/core';
-import { readMvManager, MvManagerRecord, ReadResult, readAdditionalFile, AdditionalFileRecord } from './input_data';
+import { Component, ChangeDetectorRef } from '@angular/core';
+import { readMvManager, MvManagerRecord, ReadResult, readAdditionalFile, AdditionalFileRecord, AdditionalColumn } from './input_data';
 
 @Component({
   selector: 'jdav-badges',
@@ -15,6 +15,15 @@ export class Badges {
 
   mvResult: ReadResult<MvManagerRecord> | null = null;
   additionalFilesResult: ReadResult<AdditionalFileRecord>[] = [];
+
+  getAllAdditionalColumns(): AdditionalColumn[] {
+    return [
+      ...(this.mvResult ? this.mvResult.additionalColumns : []),
+      ...this.additionalFilesResult.flatMap(result =>
+        result.additionalColumns
+      )
+    ];
+  }
 
   onAdditionalFilesSelected(event: any) {
     this.cdr.detectChanges();

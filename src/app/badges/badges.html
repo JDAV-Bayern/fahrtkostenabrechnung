@@ -60,9 +60,28 @@
       Bitte lade mindestens die Daten aus dem mv manager hoch um fortzufahren.
     }
     @else {
-      <div>
-
-      </div>
+      <form>
+        @for (column of getAllAdditionalColumns(); track column.id()) {
+          <div class="flex flex-row items-center mb-2">
+            <p class="min-w-75">{{ column.file }}: {{ column.name }}</p>
+            <input
+              type="checkbox"
+              id="include-{{ column.id() }}"
+              name="includeColumns"
+              [value]="column"
+              class="mx-2"
+            />
+            <label for="include-{{ column.id() }}" class="mr-3">hinzufügen</label>
+            <input
+              type="text"
+              id="rename-{{ column.id() }}"
+              name="renameColumns"
+              [placeholder]="'Neuer Name für ' + column.name"
+              class="form-control"
+            />
+          </div>
+        }
+      </form>
     }
   </div>
 </div>
