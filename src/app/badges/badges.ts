@@ -1,7 +1,8 @@
-import { Component, DOCUMENT, inject, signal, computed } from '@angular/core';
+import { Component, DOCUMENT, inject, signal, computed, OnInit } from '@angular/core';
 import { readMvManager, MvManagerRecord, ReadResult, readAdditionalFile, AdditionalFileRecord, AdditionalColumn } from './input_data';
 
 import * as XLSX from 'xlsx-js-style';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'jdav-badges',
@@ -9,8 +10,22 @@ import * as XLSX from 'xlsx-js-style';
   templateUrl: './badges.html',
   styleUrl: './badges.css',
 })
-export class Badges {
+export class Badges implements OnInit {
   document = inject(DOCUMENT);
+  route = inject(ActivatedRoute);
+  router = inject(Router);
+
+  ngOnInit() {
+    this.route.queryParamMap.subscribe(map => {
+      const key = map.get('l');
+      if('9b3ea5f2-e43b-44d0-83f3-e2d97dfff065' !== key)
+      {
+        console.error('Ungültiger Link für Markenbestellung');
+        this.router.navigate(['/']);
+      }
+    })
+    this.document.title = 'Markenbestellung | JDAV Bayern';
+  }
 
   mvStatus = signal('Keine Datei hochgeladen');
   additionalFilesStatus = signal<string[]>([]);
