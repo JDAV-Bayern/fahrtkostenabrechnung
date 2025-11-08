@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-indexed-object-style */
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 
 
 export interface BaseRecord {

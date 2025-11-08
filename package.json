@@ -40,7 +40,7 @@
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.1.11",
     "tslib": "^2.3.0",
-    "xlsx": "^0.18.5"
+    "xlsx-js-style": "1.2.0"
   },
   "devDependencies": {
     "@angular/build": "^20.3.9",
