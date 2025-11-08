@@ -1,14 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-indexed-object-style */
 import * as XLSX from 'xlsx-js-style';
-
-
-export interface BaseRecord {
-  id: string;
-  Vorname: string;
-  Nachname: string;
-  Geburtsdatum: string;
-}
-
 export class AdditionalColumn {
   name: string;
   file: string;
@@ -21,16 +12,21 @@ export class AdditionalColumn {
   }
 }
 
-export interface MvManagerRecord extends BaseRecord {
+export interface MvManagerRecord {
+  id: string;
+  Vorname: string;
+  Nachname: string;
+  Geburtsdatum: string;
   Sektion: string;
-  [additionalField: string]: string;
+  [additionalField: string]: unknown;
 }
 
-export interface AdditionalFileRecord extends BaseRecord {
-  [additionalField: string]: string;
+export interface AdditionalFileRecord {
+  id: string;
+  [additionalField: string]: unknown;
 }
 
-export interface ReadResult<T extends BaseRecord> {
+export interface ReadResult<T> {
   file: string;
   records: T[];
   errors: string[];
@@ -41,11 +37,11 @@ function generateId(vorname: string, nachname: string, geburtsdatum: string): st
   return `${vorname.toLowerCase().trim()}_${nachname.toLowerCase().trim()}_${geburtsdatum.replace(/\./g, '-')}`;
 }
 
-function validateRequiredFields(record: any, requiredFields: string[]): boolean {
+function validateRequiredFields(record: Record<string, unknown>, requiredFields: string[]): boolean {
   return requiredFields.every(field => record[field] && record[field].toString().trim() !== '');
 }
 
-function isEmptyRecord(record: any): boolean {
+function isEmptyRecord(record: Record<string, unknown>): boolean {
   return Object.values(record).every(value =>
     value === null || value === undefined || value.toString().trim() === ''
   );
@@ -60,14 +56,14 @@ function parseCsv(text: string): string[][] {
   });
 }
 
-function csvToArrayOfObjects(data: string[][]): any[] {
+function csvToArrayOfObjects(data: string[][]): Record<string, unknown>[] {
   if (data.length === 0) return [];
 
   const headers = data[0];
   const rows = data.slice(1);
 
   return rows.map(row => {
-    const obj: any = {};
+    const obj: Record<string, unknown> = {};
     headers.forEach((header, index) => {
       obj[header] = row[index] || '';
     });
@@ -80,7 +76,7 @@ export function readMvManager(file: File): Promise<ReadResult<MvManagerRecord>> 
     const reader = new FileReader();
     reader.onload = (event) => {
       try {
-        let records: any[];
+        let records: Record<string, unknown>[];
         const additionalColumns = new Set<string>();
 
         if (file.name.endsWith('.csv')) {
@@ -134,7 +130,7 @@ export function readMvManager(file: File): Promise<ReadResult<MvManagerRecord>> 
             }
           }
 
-          const id = generateId(record['Vorname'], record['Nachname'], record['Geburtsdatum']);
+          const id = generateId(String(record['Vorname']), String(record['Nachname']), String(record['Geburtsdatum']));
 
           if (seenIds.has(id)) {
             console.warn(`Jugendleiter*in ${JSON.stringify(record)} ist doppelt im MV Manager Datensatz.`);
@@ -147,7 +143,10 @@ export function readMvManager(file: File): Promise<ReadResult<MvManagerRecord>> 
           result.push({
             ...record,
             id,
-            Geburtsdatum: record['Geburtsdatum'],
+            Vorname: String(record['Vorname']),
+            Nachname: String(record['Nachname']),
+            Sektion: String(record['Sektion']),
+            Geburtsdatum: String(record['Geburtsdatum']),
           });
         }
 
@@ -180,7 +179,7 @@ export function readAdditionalFile(file: File): Promise<ReadResult<AdditionalFil
 
     reader.onload = (event) => {
       try {
-        let records: any[];
+        let records: Record<string, unknown>[];
         const additionalColumns = new Set<string>();
 
         if (file.name.endsWith('.csv')) {
@@ -229,12 +228,12 @@ export function readAdditionalFile(file: File): Promise<ReadResult<AdditionalFil
 
           record['Geburtsdatum'] = geburtsdatum;
 
-          const id = generateId(record['Vorname'], record['Nachname'], record['Geburtsdatum']);
+          const id = generateId(String(record['Vorname']), String(record['Nachname']), String(record['Geburtsdatum']));
 
           result.push({
             ...record,
             id,
-            Geburtsdatum: record['Geburtsdatum'],
+            Geburtsdatum: String(record['Geburtsdatum']),
           });
         }
 

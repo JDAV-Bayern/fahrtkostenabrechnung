@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, Inject, DOCUMENT } from '@angular/core';
+import { Component, DOCUMENT, inject, signal, computed } from '@angular/core';
 import { readMvManager, MvManagerRecord, ReadResult, readAdditionalFile, AdditionalFileRecord, AdditionalColumn } from './input_data';
 
 import * as XLSX from 'xlsx-js-style';
@@ -10,89 +10,87 @@ import * as XLSX from 'xlsx-js-style';
   styleUrl: './badges.css',
 })
 export class Badges {
-  constructor(private cdr: ChangeDetectorRef, @Inject(DOCUMENT) document: Document) { }
+  document = inject(DOCUMENT);
 
-  mvStatus = 'Keine Datei hochgeladen';
-  additionalFilesStatus: string[] = []
+  mvStatus = signal('Keine Datei hochgeladen');
+  additionalFilesStatus = signal<string[]>([]);
 
-  mvResult: ReadResult<MvManagerRecord> | null = null;
-  additionalFilesResult: ReadResult<AdditionalFileRecord>[] = [];
+  mvResult = signal<ReadResult<MvManagerRecord> | null>(null);
+  additionalFilesResult = signal<ReadResult<AdditionalFileRecord>[]>([]);
 
-  mergedResult: { keys: string[], records: Record<string, string>[] } | null = null;
+  mergedResult = signal<{ keys: string[], records: Record<string, string>[] } | null>(null);
 
-  getAllAdditionalColumns(): AdditionalColumn[] {
+  additionalColumns = computed<AdditionalColumn[]>(() => {
     return [
-      ...(this.mvResult ? this.mvResult.additionalColumns : []),
-      ...this.additionalFilesResult.flatMap(result =>
+      ...(this.mvResult()?.additionalColumns ?? []),
+      ...this.additionalFilesResult().flatMap(result =>
         result.additionalColumns
       )
     ];
-  }
+  });
 
-  onAdditionalFilesSelected(event: any) {
-    this.additionalFilesStatus = [];
-    this.cdr.detectChanges();
-    const files: File[] = event.target.files;
+  onAdditionalFilesSelected(event: Event) {
+    this.additionalFilesStatus.set([]);
+    const files = (event.target as HTMLInputElement).files;
+    if (!files) {
+      return;
+    }
     for (const file of files) {
       if (file) {
         readAdditionalFile(file)
           .then((result) => {
-            this.additionalFilesResult.push(result);
-            this.additionalFilesStatus.push(`${file.name}: ${result.records.length} Datensätze erfolgreich gelesen`);
+            this.additionalFilesResult.update(current => [...current, result]);
+            this.additionalFilesStatus.update(current => [...current, `${file.name}: ${result.records.length} Datensätze erfolgreich gelesen`]);
             this.updateMergedResult()
-            this.cdr.detectChanges();
           })
           .catch((error) => {
-            console.error('Error reading KV Manager file:', error);
-            this.cdr.detectChanges();
+            console.error('Error reading Additional files', error);
+            this.additionalFilesStatus.update(current => [...current, `${file.name}: Fehler: ${error.message}`]);
           });
       }
     }
   }
 
-  onMvManagerFileSelected(event: any) {
-    this.mvStatus = 'Datei wird verarbeitet...';
-    this.cdr.detectChanges();
-    const file: File = event.target.files[0];
+  onMvManagerFileSelected(event: Event) {
+    this.mvStatus.set('Datei wird verarbeitet...');
+    const file: File | undefined = (event.target as HTMLInputElement).files?.[0];
     if (file) {
       readMvManager(file)
         .then((result) => {
-          this.mvResult = result;
-          this.mvStatus = `${result.records.length} Datensätze erfolgreich gelesen`;
+          this.mvResult.set(result);
+          this.mvStatus.set(`${result.records.length} Datensätze erfolgreich gelesen`);
           if (result.errors.length > 0) {
-            this.mvStatus += '\nFehler beim Einlesen der Datei:';
+            this.mvStatus.update(current => `${current}\nFehler beim Einlesen der Datei:`);
             for (const error of result.errors) {
-              this.mvStatus += `\n${error}`;
+              this.mvStatus.update(current => `${current}\n${error}`);
             }
           } else {
-            this.mvStatus += '\nKeine Fehler beim Einlesen der Datei.';
+            this.mvStatus.update(current => `${current}\nKeine Fehler beim Einlesen der Datei.`);
           }
           this.updateMergedResult()
-          this.cdr.detectChanges();
         })
         .catch((error) => {
-          this.mvStatus = `Fehler: ${error.message}`;
+          this.mvStatus.set(`Fehler: ${error.message}`);
           console.error('Error reading MV Manager file:', error);
-          this.cdr.detectChanges();
         });
     }
   }
 
 
   updateMergedResult() {
-    if (!this.mvResult) {
-      this.mergedResult = { keys: [], records: [] }
-      this.cdr.detectChanges()
+    const mvResult = this.mvResult();
+    if (mvResult === null) {
+      this.mergedResult.set({ keys: [], records: [] });
       return;
     }
     const records: Record<string, string>[] = [];
     const keys = new Set<string>(["Vorname", "Nachname", "Sektion", "Geburtsdatum"]);
     const fileToResult = new Map<string, ReadResult<AdditionalFileRecord>>();
-    for (const result of this.additionalFilesResult) {
+    for (const result of this.additionalFilesResult()) {
       fileToResult.set(result.file, result);
     }
-    fileToResult.set(this.mvResult.file, this.mvResult);
-    const selectedAdditionalColumns = this.getAllAdditionalColumns()
+    fileToResult.set(mvResult.file, mvResult);
+    const selectedAdditionalColumns = this.additionalColumns()
       .filter(
         col => (document.getElementById(`include-${col.id()}`) as HTMLInputElement)?.checked)
       .map(col => ({
@@ -100,7 +98,7 @@ export class Badges {
         newName: (document.getElementById(`rename-${col.id()}`) as HTMLInputElement)?.value || col.name,
         isDate: (document.getElementById(`date-${col.id()}`) as HTMLInputElement)?.checked
       }));
-    for (const mvRecord of this.mvResult.records) {
+    for (const mvRecord of mvResult.records) {
       const record: Record<string, string> = {
         'Vorname': mvRecord.Vorname,
         'Nachname': mvRecord.Nachname,
@@ -125,31 +123,19 @@ export class Badges {
       }
       records.push(record);
     }
-    this.mergedResult = { records, keys: Array.from(keys) };
-    this.cdr.detectChanges()
-  }
-
-  onFieldNameInputChanged(event: any) {
-    this.updateMergedResult()
-  }
-
-  onIncludeCheckboxChanged(event: any) {
-    this.updateMergedResult()
-  }
-
-  onDateCheckboxChanged(event: any) {
-    this.updateMergedResult()
+    this.mergedResult.set({ records, keys: Array.from(keys) });
   }
 
   downloadExcels() {
-    if (!this.mergedResult) {
+    const mergedResult = this.mergedResult();
+    if (mergedResult === null) {
       return;
     }
 
-    const sections = new Set<string>(this.mergedResult.records.map(r => r['Sektion']));
+    const sections = new Set<string>(mergedResult.records.map(r => r['Sektion']));
 
     for (const section of sections) {
-      const sectionRecords = this.mergedResult.records.filter(r => r['Sektion'] === section).map(r => {
+      const sectionRecords = mergedResult.records.filter(r => r['Sektion'] === section).map(r => {
         const newRecord = { ...r };
         delete newRecord['Sektion'];
         return newRecord;
@@ -182,13 +168,13 @@ export class Badges {
       XLSX.utils.sheet_add_aoa(ws, [[{ v: '', s: { border: { bottom: { style: 'thin' } } } }]], { origin: { c: 3, r: sectionRecords.length + 13 } })
 
       ws['!merges'] = [
-        { s: { c: 0, r: 0 }, e: { r: 0, c: this.mergedResult.keys.length + 1 } },
-        { s: { c: 0, r: 1 }, e: { r: 1, c: this.mergedResult.keys.length + 1 } },
+        { s: { c: 0, r: 0 }, e: { r: 0, c: mergedResult.keys.length + 1 } },
+        { s: { c: 0, r: 1 }, e: { r: 1, c: mergedResult.keys.length + 1 } },
         { s: { c: 0, r: sectionRecords.length + 12 }, e: { r: sectionRecords.length + 12, c: 2 } },
         { s: { c: 0, r: sectionRecords.length + 13 }, e: { r: sectionRecords.length + 13, c: 2 } }
       ]
 
-      ws['!cols'] = [...Array.from({ length: this.mergedResult.keys.length - 1 }).map(() => ({ width: 20 })), ...Array.from({ length: 3 }).map(() => ({ width: 40 }))]
+      ws['!cols'] = [...Array.from({ length: mergedResult.keys.length - 1 }).map(() => ({ width: 20 })), ...Array.from({ length: 3 }).map(() => ({ width: 40 }))]
       ws['!rows'] = [{}, { hpt: 30 }]
 
       XLSX.writeFile(wb, `${section}.xlsx`)
