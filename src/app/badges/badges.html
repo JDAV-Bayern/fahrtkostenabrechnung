@@ -80,9 +80,7 @@
               class="mx-2"
               (change)="updateMergedResult()"
             />
-            <label for="date-{{ column.id() }}" class="mr-3"
-              >Datum</label
-            >
+            <label for="date-{{ column.id() }}" class="mr-3">Datum</label>
             <input
               type="text"
               id="rename-{{ column.id() }}"
@@ -113,7 +111,10 @@
           </tr>
         </thead>
         <tbody>
-          @for (record of (mergedResult()?.records || []).slice(0,10); track record) {
+          @for (
+            record of (mergedResult()?.records || []).slice(0, 10);
+            track record
+          ) {
             <tr class="border-b border-gray-200 hover:bg-gray-50">
               @for (key of mergedResult()?.keys || []; track key) {
                 <td class="py-2 px-4">{{ record[key] }}</td>
@@ -122,7 +123,9 @@
           }
         </tbody>
       </table>
-      <button class="jdav-btn mt-4" (click)="downloadExcels()">Excel Dateien Speichern</button>
+      <button class="jdav-btn mt-4" (click)="downloadExcels()">
+        Excel Dateien Speichern
+      </button>
     </div>
   }
 </div>

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/consistent-indexed-object-style */
 import * as XLSX from 'xlsx-js-style';
 export class AdditionalColumn {
   name: string;
@@ -33,24 +32,34 @@ export interface ReadResult<T> {
   additionalColumns: AdditionalColumn[];
 }
 
-function generateId(vorname: string, nachname: string, geburtsdatum: string): string {
+function generateId(
+  vorname: string,
+  nachname: string,
+  geburtsdatum: string,
+): string {
   return `${vorname.toLowerCase().trim()}_${nachname.toLowerCase().trim()}_${geburtsdatum.replace(/\./g, '-')}`;
 }
 
-function validateRequiredFields(record: Record<string, unknown>, requiredFields: string[]): boolean {
-  return requiredFields.every(field => record[field] && record[field].toString().trim() !== '');
+function validateRequiredFields(
+  record: Record<string, unknown>,
+  requiredFields: string[],
+): boolean {
+  return requiredFields.every(
+    (field) => record[field] && record[field].toString().trim() !== '',
+  );
 }
 
 function isEmptyRecord(record: Record<string, unknown>): boolean {
-  return Object.values(record).every(value =>
-    value === null || value === undefined || value.toString().trim() === ''
+  return Object.values(record).every(
+    (value) =>
+      value === null || value === undefined || value.toString().trim() === '',
   );
 }
 
 function parseCsv(text: string): string[][] {
   const lines = text.split('\n');
-  return lines.map(line => {
-    return line.split(';').map(field => {
+  return lines.map((line) => {
+    return line.split(';').map((field) => {
       return field.trim().replace(/^"(.*)"$/, '$1');
     });
   });
@@ -62,7 +71,7 @@ function csvToArrayOfObjects(data: string[][]): Record<string, unknown>[] {
   const headers = data[0];
   const rows = data.slice(1);
 
-  return rows.map(row => {
+  return rows.map((row) => {
     const obj: Record<string, unknown> = {};
     headers.forEach((header, index) => {
       obj[header] = row[index] || '';
@@ -71,7 +80,9 @@ function csvToArrayOfObjects(data: string[][]): Record<string, unknown>[] {
   });
 }
 
-export function readMvManager(file: File): Promise<ReadResult<MvManagerRecord>> {
+export function readMvManager(
+  file: File,
+): Promise<ReadResult<MvManagerRecord>> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (event) => {
@@ -91,11 +102,22 @@ export function readMvManager(file: File): Promise<ReadResult<MvManagerRecord>> 
           records = XLSX.utils.sheet_to_json(worksheet);
         }
 
-        const requiredColumns = ['Vorname', 'Nachname', 'Geburtsdatum', 'Sektion'];
+        const requiredColumns = [
+          'Vorname',
+          'Nachname',
+          'Geburtsdatum',
+          'Sektion',
+        ];
         const availableColumns = Object.keys(records[0]);
-        const missingColumns = requiredColumns.filter(col => !availableColumns.includes(col));
+        const missingColumns = requiredColumns.filter(
+          (col) => !availableColumns.includes(col),
+        );
         if (missingColumns.length > 0) {
-          reject(new Error('Fehlende erforderliche Spalten: ' + missingColumns.join(', ')));
+          reject(
+            new Error(
+              'Fehlende erforderliche Spalten: ' + missingColumns.join(', '),
+            ),
+          );
           return;
         }
 
@@ -120,7 +142,9 @@ export function readMvManager(file: File): Promise<ReadResult<MvManagerRecord>> 
           record['Geburtsdatum'] = geburtsdatum;
 
           if (!validateRequiredFields(record, requiredColumns)) {
-            errors.push(`Fehlende erforderliche Felder in Datensatz: ${JSON.stringify(record)}`);
+            errors.push(
+              `Fehlende erforderliche Felder in Datensatz: ${JSON.stringify(record)}`,
+            );
             continue;
           }
 
@@ -130,11 +154,19 @@ export function readMvManager(file: File): Promise<ReadResult<MvManagerRecord>> 
             }
           }
 
-          const id = generateId(String(record['Vorname']), String(record['Nachname']), String(record['Geburtsdatum']));
+          const id = generateId(
+            String(record['Vorname']),
+            String(record['Nachname']),
+            String(record['Geburtsdatum']),
+          );
 
           if (seenIds.has(id)) {
-            console.warn(`Jugendleiter*in ${JSON.stringify(record)} ist doppelt im MV Manager Datensatz.`);
-            errors.push(`Jugendleiter*in ${record['Vorname']} ${record['Nachname']} (${record['Geburtsdatum']}) ist doppelt im MV Manager Datensatz.`);
+            console.warn(
+              `Jugendleiter*in ${JSON.stringify(record)} ist doppelt im MV Manager Datensatz.`,
+            );
+            errors.push(
+              `Jugendleiter*in ${record['Vorname']} ${record['Nachname']} (${record['Geburtsdatum']}) ist doppelt im MV Manager Datensatz.`,
+            );
             continue;
           }
 
@@ -154,7 +186,9 @@ export function readMvManager(file: File): Promise<ReadResult<MvManagerRecord>> 
           file: file.name,
           records: result,
           errors,
-          additionalColumns: Array.from(additionalColumns).map(col => new AdditionalColumn(col, file.name))
+          additionalColumns: Array.from(additionalColumns).map(
+            (col) => new AdditionalColumn(col, file.name),
+          ),
         });
       } catch (error) {
         reject(error);
@@ -173,7 +207,9 @@ export function readMvManager(file: File): Promise<ReadResult<MvManagerRecord>> 
   });
 }
 
-export function readAdditionalFile(file: File): Promise<ReadResult<AdditionalFileRecord>> {
+export function readAdditionalFile(
+  file: File,
+): Promise<ReadResult<AdditionalFileRecord>> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
 
@@ -196,9 +232,15 @@ export function readAdditionalFile(file: File): Promise<ReadResult<AdditionalFil
 
         const availableColumns = Object.keys(records[0]);
         const requiredColumns = ['Vorname', 'Nachname', 'Geburtsdatum'];
-        const missingColumns = requiredColumns.filter(col => !availableColumns.includes(col));
+        const missingColumns = requiredColumns.filter(
+          (col) => !availableColumns.includes(col),
+        );
         if (missingColumns.length > 0) {
-          reject(new Error('Fehlende erforderliche Spalten: ' + missingColumns.join(', ')));
+          reject(
+            new Error(
+              'Fehlende erforderliche Spalten: ' + missingColumns.join(', '),
+            ),
+          );
           return;
         }
 
@@ -216,19 +258,23 @@ export function readAdditionalFile(file: File): Promise<ReadResult<AdditionalFil
           }
 
           let geburtsdatum = record['Geburtsdatum'];
-          console.log("importing birthday...", geburtsdatum)
+          console.log('importing birthday...', geburtsdatum);
           if (geburtsdatum instanceof Date) {
-            console.log("is date")
+            console.log('is date');
             geburtsdatum = `${geburtsdatum.getDate().toString().padStart(2, '0')}.${(geburtsdatum.getMonth() + 1).toString().padStart(2, '0')}.${geburtsdatum.getFullYear()}`;
           } else if (typeof geburtsdatum === 'number') {
-            console.log("is number")
+            console.log('is number');
             const date = new Date((geburtsdatum - 25569) * 86400 * 1000);
             geburtsdatum = `${date.getDate().toString().padStart(2, '0')}.${(date.getMonth() + 1).toString().padStart(2, '0')}.${date.getFullYear()}`;
           }
 
           record['Geburtsdatum'] = geburtsdatum;
 
-          const id = generateId(String(record['Vorname']), String(record['Nachname']), String(record['Geburtsdatum']));
+          const id = generateId(
+            String(record['Vorname']),
+            String(record['Nachname']),
+            String(record['Geburtsdatum']),
+          );
 
           result.push({
             ...record,
@@ -241,7 +287,9 @@ export function readAdditionalFile(file: File): Promise<ReadResult<AdditionalFil
           file: file.name,
           records: result,
           errors: [],
-          additionalColumns: Array.from(additionalColumns).map(col => new AdditionalColumn(col, file.name))
+          additionalColumns: Array.from(additionalColumns).map(
+            (col) => new AdditionalColumn(col, file.name),
+          ),
         });
       } catch (error) {
         reject(error);

@@ -5,7 +5,8 @@ table {
   margin-top: 1rem;
 }
 
-th, td {
+th,
+td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
@@ -30,7 +31,8 @@ tr:hover {
     font-size: 0.8rem;
   }
 
-  th, td {
+  th,
+  td {
     padding: 4px;
   }
 }

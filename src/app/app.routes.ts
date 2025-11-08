@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
+import { Badges } from './badges/badges';
 import { PageNotFound } from './core/page-not-found/page-not-found';
 import { DataProtectionComponent } from './info/data-protection/data-protection.component';
 import { ExpenseRatesComponent } from './info/expense-rates/expense-rates.component';
 import { InfoComponent } from './info/info.component';
 import { CommitteeSteps } from './reimbursement/committee-steps/committee-steps';
 import { CourseSteps } from './reimbursement/course-steps/course-steps';
-import { Badges } from './badges/badges';
 
 export const routes: Routes = [
   {
