@@ -1,0 +1,225 @@
+.feedback-admin-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+h2 {
+  color: var(--color-body);
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 1.5em;
+  margin-block: 0.83em;
+}
+
+h3 {
+  color: var(--color-body);
+  margin-top: 30px;
+  margin-bottom: 15px;
+  border-bottom: 2px solid var(--bg-gray);
+  padding-bottom: 5px;
+  font-weight: bold;
+  font-size: 1.17em;
+  margin-block: 1em;
+}
+
+h4 {
+  color: var(--color-body);
+  margin: 0 0 10px 0;
+  font-weight: bold;
+}
+
+.error-message {
+  /* Styles will be inherited from global .error-message */
+}
+
+.loading {
+  color: var(--color-primary);
+  font-style: italic;
+  margin: 10px 0;
+}
+
+.create-feedback-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background-color: var(--bg-gray);
+  border-radius: 4px;
+}
+
+.toggle-form-button {
+  /* Styles will be inherited from .jdav-btn */
+}
+
+.create-feedback-form {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  margin-top: 20px;
+  color: var(--color-body);
+}
+
+.form-group input,
+.form-group select {
+  /* Styles will be inherited from .form-control */
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  /* Styles will be inherited from .form-control */
+}
+
+.create-button,
+.delete-button,
+.toggle-form-button {
+  /* Styles will be inherited from .jdav-btn */
+}
+
+.create-button:hover,
+.delete-button:hover,
+.toggle-form-button:hover {
+  /* Styles will be inherited from .jdav-btn */
+}
+
+.create-button:disabled,
+.delete-button:disabled {
+  /* Styles will be inherited from .jdav-btn */
+}
+
+.delete-button {
+  /* Styles will be inherited from .jdav-btn */
+}
+
+.delete-button:hover {
+  /* Styles will be inherited from .jdav-btn */
+}
+
+.feedback-section {
+  margin-bottom: 30px;
+}
+
+.feedback-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 15px;
+}
+
+.feedback-item {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: #fff;
+}
+
+.feedback-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-color: var(--color-primary);
+}
+
+.feedback-item.selected {
+  border-color: var(--color-primary);
+  background-color: #e3f2fd;
+}
+
+.feedback-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.feedback-header h4 {
+  margin: 0;
+  color: var(--color-primary);
+}
+
+.course-id {
+  background-color: var(--color-primary);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8em;
+}
+
+.teamers {
+  font-size: 0.9em;
+  color: var(--color-body);
+}
+
+.token-section {
+  background-color: var(--bg-gray);
+  border-radius: 4px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.create-token-form {
+  background-color: white;
+  padding: 15px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+}
+
+.token-list {
+  margin-top: 20px;
+}
+
+.no-tokens {
+  color: var(--color-body);
+  font-style: italic;
+  padding: 10px;
+}
+
+.token-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 12px 15px;
+  margin-bottom: 10px;
+}
+
+.token-info {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.token-role {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.token-role.give {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.token-role.get {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.token-value {
+  font-family: monospace;
+  font-size: 0.9em;
+  color: var(--color-body);
+}
