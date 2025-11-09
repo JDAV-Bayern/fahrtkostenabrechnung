@@ -265,7 +265,7 @@ export class Badges implements OnInit {
             'Geburtsdatum',
             'Jugendleiter*in seit',
             `Marke ${new Date().getFullYear()}? (ja/nein)`,
-            'Letzte Fortbidlung',
+            'Letzte Fortbildung',
             `Jugendleitermarke ${new Date().getFullYear() + 1} erteilen? (ja/nein)`,
           ],
         ],
