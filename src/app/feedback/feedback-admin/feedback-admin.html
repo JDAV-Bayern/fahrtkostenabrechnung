@@ -1,1 +1,137 @@
-<p>feedback-admin works!</p>
+<div class="feedback-admin-container">
+  <h2>Feedback Administration</h2>
+
+  <!-- Error Message -->
+  <div *ngIf="error()" class="error-message">
+    {{ error() }}
+  </div>
+
+  <!-- Loading Indicator -->
+  <div *ngIf="loading()" class="loading">Lade Daten...</div>
+
+  <!-- Create Feedback Section -->
+  <div class="create-feedback-section">
+    <button (click)="toggleCreateForm()" class="toggle-form-button jdav-btn">
+      {{ showCreateForm() ? 'Abbrechen' : 'Neues Feedback erstellen' }}
+    </button>
+
+    <!-- Create Feedback Form -->
+    <div *ngIf="showCreateForm()" class="create-feedback-form">
+      <h3>Neues Feedback erstellen</h3>
+      <div class="form-group">
+        <label for="courseId">Kurs-ID *</label>
+        <input
+          type="text"
+          id="courseId"
+          [(ngModel)]="newFeedbackCourseId"
+          placeholder="z.B. B123XY"
+          class="form-control"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="courseName">Kursname *</label>
+        <input
+          type="text"
+          id="courseName"
+          [(ngModel)]="newFeedbackCourseName"
+          placeholder="z.B. FreeRiden bei Anke und Ben"
+          class="form-control"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="teamers">Teamer (durch Komma getrennt)</label>
+        <input
+          type="text"
+          id="teamers"
+          [(ngModel)]="newFeedbackTeamers"
+          placeholder="z.B. Anke, Ben"
+          class="form-control"
+        />
+      </div>
+
+      <button
+        (click)="createFeedback()"
+        [disabled]="loading()"
+        class="create-button jdav-btn"
+      >
+        Feedback erstellen
+      </button>
+    </div>
+  </div>
+
+  <!-- Feedback List -->
+  <div class="feedback-section">
+    <h3>Verfügbare Feedbacks</h3>
+    <div class="feedback-list">
+      <div
+        *ngFor="let feedback of feedbacks()"
+        class="feedback-item"
+        [class.selected]="selectedFeedback()?.id === feedback.id"
+        (click)="selectFeedback(feedback)"
+      >
+        <div class="feedback-header">
+          <h4>{{ feedback.course_name }}</h4>
+          <span class="course-id">{{ feedback.course_id }}</span>
+        </div>
+        <div class="teamers">
+          <strong>Teamer:</strong> {{ feedback.teamers.join(', ') }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Token Management (only shown when a feedback is selected) -->
+  <div *ngIf="selectedFeedback()" class="token-section">
+    <h3>Tokens für "{{ selectedFeedback()?.course_name }}"</h3>
+
+    <!-- Create Token Form -->
+    <div class="create-token-form">
+      <h4>Neuen Token erstellen</h4>
+      <div class="form-group">
+        <label for="tokenRole">Rolle:</label>
+        <select id="tokenRole" [(ngModel)]="newTokenRole">
+          <option value="give_feedback">give_feedback</option>
+          <option value="get_feedback">get_feedback</option>
+        </select>
+      </div>
+      <button
+        (click)="createToken()"
+        [disabled]="loading()"
+        class="create-button jdav-btn"
+      >
+        Token erstellen
+      </button>
+    </div>
+
+    <!-- Token List -->
+    <div class="token-list">
+      <h4>Vorhandene Tokens</h4>
+      <div *ngIf="tokens().length === 0" class="no-tokens">
+        Keine Tokens vorhanden
+      </div>
+      <div *ngFor="let token of tokens()" class="token-item">
+        <div class="token-info">
+          <span
+            class="token-role"
+            [class.give]="token.role === 'give_feedback'"
+            [class.get]="token.role === 'get_feedback'"
+          >
+            {{ token.role }}
+          </span>
+          <span class="token-value">
+            {{ token.token }}
+          </span>
+        </div>
+        <button
+          (click)="deleteToken(token.id)"
+          [disabled]="loading()"
+          class="delete-button jdav-btn"
+        >
+          Löschen
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

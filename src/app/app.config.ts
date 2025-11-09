@@ -1,4 +1,5 @@
 import { DEFAULT_DIALOG_CONFIG, DialogConfig } from '@angular/cdk/dialog';
+import { provideHttpClient } from '@angular/common/http';
 import {
   ApplicationConfig,
   DEFAULT_CURRENCY_CODE,
@@ -48,5 +49,6 @@ export const appConfig: ApplicationConfig = {
     { provide: DEFAULT_DIALOG_CONFIG, useValue: DIALOG_CONFIG },
     { provide: MAT_DATE_LOCALE, useValue: de },
     { provide: MatDatepickerIntl, useClass: JdavDatepickerIntl },
+    provideHttpClient(),
   ],
 };
