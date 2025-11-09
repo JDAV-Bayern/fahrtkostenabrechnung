@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { Badges } from './badges/badges';
 import { PageNotFound } from './core/page-not-found/page-not-found';
 import { DataProtectionComponent } from './info/data-protection/data-protection.component';
 import { ExpenseRatesComponent } from './info/expense-rates/expense-rates.component';
@@ -50,6 +51,12 @@ export const routes: Routes = [
     path: 'fahrtkosten-gremium/:step',
     title: 'Fahrtkostenabrechnung Gremien | JDAV Bayern',
     component: CommitteeSteps,
+  },
+  {
+    path: 'marken',
+    title: 'Markenbestellung | JDAV Bayern',
+    component: Badges,
+    data: { headerTitle: 'Markenbestellung', headerHideRemoveDataButton: true },
   },
   {
     path: '**',

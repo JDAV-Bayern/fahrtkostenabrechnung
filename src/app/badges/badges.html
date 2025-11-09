@@ -1,0 +1,131 @@
+<div class="mt-4 ml-auto mr-auto max-w-[1000px]">
+  <div class="typography">
+    <h2>
+      Wenn du das hier gefunden hast ohne dass es Dir jemand gezeigt hat, geh
+      weiter. <br />Hier ist nichts zu sehen, wirklich ;)
+    </h2>
+    <h4>Etwas mehr Info</h4>
+    <p>
+      Hier ist wirklich nichts zu sehen: Wir benutzen diese Seite intern um
+      Excel files für die Jugendleitermarkenbestellung zu erzeugen. Dabei werden
+      die Daten aller Jugendleitenden aus unseren (leider noch mannigfaltigen)
+      Systemen zusammengeführt und in einer Excel Liste pro Sektion ausgegeben.
+      Diese Excel liste wird dann an die Jugendreferent*innen der jeweiligen
+      Sektionen geschickt, die dann die Bestellung der Marken vornehmen können.
+      Die Datenverarbeitung erfolgt ausschließlich im Browser, es werden keine
+      Daten an unseren Server geschickt.
+    </p>
+    <p>
+      Wenn du Interesse an dem Quellcode hast, findest du ihn auf
+      <a href="https://github.com/JDAV-Bayern/fahrtkostenabrechnung">GitHub</a>.
+    </p>
+  </div>
+  <div class="typography">
+    <h2>Hier können die Dateien aus den Quellsystemen eingelesen werden</h2>
+    <div>
+      <div class="flex flex-row items-center">
+        <label class="min-w-35" for="mvManager">MV Manager</label>
+        <input
+          type="file"
+          id="mvManager"
+          (change)="onMvManagerFileSelected($event)"
+          accept=".xlsx, .xls, .csv"
+          class="form-control mx-5"
+        />
+        <div class="min-w-75 max-w-75">
+          {{ mvStatus() }}
+        </div>
+      </div>
+      <div class="flex flex-row items-center">
+        <label class="min-w-35" for="kvManager">Zusätzliche Dateien</label>
+        <input
+          type="file"
+          multiple
+          id="kvManager"
+          (change)="onAdditionalFilesSelected($event)"
+          accept=".xlsx, .xls, .csv"
+          class="form-control mx-5"
+        />
+        <div class="min-w-75 max-w-75">
+          @for (status of additionalFilesStatus(); track status) {
+            {{ status }} <br />
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr class="my-5" />
+  <div>
+    @if (mvResult() === null) {
+      Bitte lade mindestens die Daten aus dem mv manager hoch um fortzufahren.
+    } @else {
+      <form>
+        @for (column of additionalColumns(); track column.id()) {
+          <div class="flex flex-row items-center mb-2">
+            <p class="min-w-75">{{ column.file }}: {{ column.name }}</p>
+            <input
+              type="checkbox"
+              id="include-{{ column.id() }}"
+              name="includeColumns"
+              class="mx-2"
+              (change)="updateMergedResult()"
+            />
+            <label for="include-{{ column.id() }}" class="mr-3"
+              >hinzufügen</label
+            >
+            <input
+              type="checkbox"
+              id="date-{{ column.id() }}"
+              name="includeColumns"
+              class="mx-2"
+              (change)="updateMergedResult()"
+            />
+            <label for="date-{{ column.id() }}" class="mr-3">Datum</label>
+            <input
+              type="text"
+              id="rename-{{ column.id() }}"
+              name="renameColumns"
+              [placeholder]="'Neuer Name für ' + column.name"
+              class="form-control"
+              (change)="updateMergedResult()"
+            />
+          </div>
+        }
+      </form>
+    }
+  </div>
+  @if (mergedResult() !== null) {
+    <hr class="my-5" />
+    <div class="typography" class="mb-5">
+      <h1>Vorschau</h1>
+      <table class="min-w-full bg-white border border-gray-200">
+        <thead>
+          <tr>
+            @for (key of mergedResult()?.keys || []; track key) {
+              <th
+                class="py-2 px-4 bg-gray-100 border-b border-gray-200 text-left"
+              >
+                {{ key }}
+              </th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (
+            record of (mergedResult()?.records || []).slice(0, 10);
+            track record
+          ) {
+            <tr class="border-b border-gray-200 hover:bg-gray-50">
+              @for (key of mergedResult()?.keys || []; track key) {
+                <td class="py-2 px-4">{{ record[key] }}</td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+      <button class="jdav-btn mt-4" (click)="downloadExcels()">
+        Excel Dateien Speichern
+      </button>
+    </div>
+  }
+</div>

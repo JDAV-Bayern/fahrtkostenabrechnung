@@ -8,9 +8,11 @@
       alt="JDAV Bayern"
     />
   </a>
-  <h1 class="hidden md:block grow text-2xl">Reisekostenabrechnung</h1>
-  <button class="jdav-btn tertiary icon" (click)="deleteAllData()">
-    <span class="material-symbols-outlined">delete</span>
-    Gespeicherte Daten löschen
-  </button>
+  <h1 class="hidden md:block grow text-2xl">{{ title() }}</h1>
+  @if (!hideRemoveDataButton()) {
+    <button class="jdav-btn tertiary icon" (click)="deleteAllData()">
+      <span class="material-symbols-outlined">delete</span>
+      Gespeicherte Daten löschen
+    </button>
+  }
 </div>
