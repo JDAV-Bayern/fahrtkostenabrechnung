@@ -56,6 +56,7 @@ export const routes: Routes = [
     path: 'marken',
     title: 'Markenbestellung | JDAV Bayern',
     component: Badges,
+    data: { headerTitle: 'Markenbestellung', headerHideRemoveDataButton: true },
   },
   {
     path: '**',

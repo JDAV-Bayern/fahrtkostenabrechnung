@@ -1,5 +1,11 @@
-import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterLink,
+} from '@angular/router';
+import { filter } from 'rxjs';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 
 @Component({
@@ -11,9 +17,41 @@ import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbu
     class: 'z-1 shadow-md',
   },
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   private readonly controlService = inject(ReimbursementControlService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+
+  title = signal('Reisekostenabrechnung');
+  hideRemoveDataButton = signal(false);
+
+  ngOnInit() {
+    this.updateHeaderData();
+
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe(() => {
+        this.updateHeaderData();
+      });
+  }
+
+  private updateHeaderData() {
+    this.title.set('Reisekostenabrechnung');
+    this.hideRemoveDataButton.set(false);
+
+    let route = this.route;
+    while (route.firstChild) {
+      route = route.firstChild;
+    }
+
+    const data = route.snapshot.data;
+    if (data['headerTitle']) {
+      this.title.set(data['headerTitle']);
+    }
+    if (data['headerHideRemoveDataButton']) {
+      this.hideRemoveDataButton.set(data['headerHideRemoveDataButton']);
+    }
+  }
 
   deleteAllData() {
     const control = this.controlService.meetingStep.controls.type;
