@@ -242,7 +242,6 @@ export class Badges implements OnInit {
         newRecord[`Jugendleiter*in löschen? (ja/nein)`] = 'nein';
         return newRecord;
       });
-      console.log('jsonData', jsonData);
 
       XLSX.utils.sheet_add_json(ws, jsonData, { origin: 'A3' });
       XLSX.utils.sheet_add_aoa(
