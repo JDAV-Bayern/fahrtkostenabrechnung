@@ -49,7 +49,7 @@
     "@playwright/test": "^1.49.2",
     "@types/jasmine": "~5.1.12",
     "@types/node": "^24.9.2",
-    "angular-eslint": "20.5.1",
+    "angular-eslint": "20.6.0",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "jasmine-core": "~5.12.1",
