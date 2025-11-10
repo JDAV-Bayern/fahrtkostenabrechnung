@@ -32,7 +32,7 @@
     "@angular/router": "^20.3.10",
     "@tailwindcss/postcss": "^4.1.11",
     "date-fns": "^4.1.0",
-    "jspdf": "^3.0.1",
+    "jspdf": "^3.0.3",
     "ngx-file-drop": "^16.0.0",
     "ngx-iban-validator": "^1.2.3",
     "pdf-lib": "^1.17.1",
