@@ -30,7 +30,7 @@
     "@angular/platform-browser": "^20.3.10",
     "@angular/platform-browser-dynamic": "^20.3.10",
     "@angular/router": "^20.3.10",
-    "@tailwindcss/postcss": "^4.1.11",
+    "@tailwindcss/postcss": "^4.1.17",
     "date-fns": "^4.1.0",
     "jspdf": "^3.0.3",
     "ngx-file-drop": "^16.0.0",
