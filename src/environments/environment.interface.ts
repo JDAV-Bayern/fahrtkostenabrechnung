@@ -1,4 +1,5 @@
 export interface Environment {
+  origin: string;
   environment: 'development' | 'staging' | 'production';
   featureFlags: {
     enableLogin: boolean;

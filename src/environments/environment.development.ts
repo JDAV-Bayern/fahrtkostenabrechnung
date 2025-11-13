@@ -1,6 +1,7 @@
 import { Environment } from './environment.interface';
 
 export const environment: Environment = {
+  origin: 'https://localhost:4200',
   environment: 'development',
   featureFlags: {
     enableLogin: true,

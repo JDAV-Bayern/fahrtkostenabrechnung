@@ -1,0 +1,94 @@
+<section class="auth-playground container mx-auto max-w-4xl px-4 py-8">
+  <div class="space-y-2">
+    <h1 class="text-3xl font-semibold text-slate-900">Benutzerprofil</h1>
+    <p class="text-slate-600">
+      Diese Seite ist nur über den OIDC-Auto-Login erreichbar. Nach erfolgreicher
+      Anmeldung zeigen wir hier die Stammdaten und deine letzten Fortbildungen,
+      wie sie vom Userinfo-Endpunkt geliefert werden.
+    </p>
+  </div>
+
+  <article class="auth-card mt-6">
+    <header class="card-header">
+      <h2>Basisdaten</h2>
+      <span class="status-pill" [class.online]="authState().isAuthenticated">
+        {{
+          authState().isAuthenticated ? 'eingeloggt' : 'Anmeldung erforderlich'
+        }}
+      </span>
+    </header>
+
+    @if (profile(); as data) {
+      <dl class="profile-grid">
+        <div>
+          <dt>Vorname</dt>
+          <dd>{{ data.given_name || '–' }}</dd>
+        </div>
+        <div>
+          <dt>Nachname</dt>
+          <dd>{{ data.family_name || '–' }}</dd>
+        </div>
+        <div>
+          <dt>Vollständiger Name</dt>
+          <dd>{{ data.name || '–' }}</dd>
+        </div>
+        <div>
+          <dt>Mitgliedsnummer</dt>
+          <dd class="font-mono break-all">
+            {{ data.jdav_membership_number || '–' }}
+          </dd>
+        </div>
+        <div>
+          <dt>E-Mail</dt>
+          <dd>{{ data.email || '–' }}</dd>
+        </div>
+        <div>
+          <dt>E-Mail bestätigt</dt>
+          <dd>
+            {{ data.email_verified ? 'Ja' : 'Nein' }}
+          </dd>
+        </div>
+        <div>
+          <dt>Benutzer-ID (sub)</dt>
+          <dd class="font-mono break-all">{{ data.sub || '–' }}</dd>
+        </div>
+      </dl>
+    } @else {
+      <p class="text-sm text-slate-500">
+        Profil wird geladen … die Weiterleitung startet automatisch.
+      </p>
+    }
+  </article>
+
+  <article class="auth-card mt-4">
+    <header class="card-header">
+      <h2>Teilnahmen an Fortbildungen</h2>
+    </header>
+    @if (profile(); as data) {
+      @if (data.participated_trainings?.length) {
+        <ul class="training-list">
+          @for (training of data.participated_trainings; track training.id) {
+            <li class="training-item">
+              <p class="training-title">
+                {{ training.title }}
+                <span class="training-code">{{ training.code }}</span>
+              </p>
+              <p class="training-date">
+                Start: {{ training.date_from | date: 'dd.MM.yyyy' }}
+              </p>
+              <p class="training-id">ID: {{ training.id }}</p>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="text-sm text-slate-500">
+          Für dieses Konto liegen aktuell keine Fortbildungen vor.
+        </p>
+      }
+    } @else {
+      <p class="text-sm text-slate-500">
+        Lade Fortbildungsdaten… bitte einen Moment.
+      </p>
+    }
+  </article>
+</section>

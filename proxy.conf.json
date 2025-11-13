@@ -7,5 +7,14 @@
     "pathRewrite": {
       "^/api": ""
     }
+  },
+  "/auth-proxy": {
+    "target": "https://staging.jdav-bayern.de/o/",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/auth-proxy": ""
+    }
   }
 }

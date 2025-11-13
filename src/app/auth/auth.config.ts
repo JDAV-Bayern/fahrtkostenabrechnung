@@ -5,6 +5,10 @@ export const authConfig: PassedInitialConfig = {
   config: {
     authority: environment.authConfig?.issuer,
     secureRoutes: [environment.backendUrl ?? ''],
+    authWellknownEndpoints: {
+      // We need this proxy for now as CORS setup is not working on the identity provider
+      userInfoEndpoint: environment.origin + '/auth-proxy/userinfo/',
+    },
     redirectUrl: environment.authConfig?.redirectUri,
     postLogoutRedirectUri: window.location.origin,
     clientId: environment.authConfig?.clientId,
@@ -14,7 +18,5 @@ export const authConfig: PassedInitialConfig = {
     useRefreshToken: true,
     renewTimeBeforeTokenExpiresInSeconds: 30,
     logLevel: LogLevel.Debug,
-    autoUserInfo: false,
-    renewUserInfoAfterTokenRenew: false,
   },
 };
