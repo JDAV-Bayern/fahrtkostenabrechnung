@@ -12,7 +12,7 @@ export const authConfig: PassedInitialConfig = {
     redirectUrl: environment.authConfig?.redirectUri,
     postLogoutRedirectUri: window.location.origin,
     clientId: environment.authConfig?.clientId,
-    scope: environment.authConfig?.scopes.join(' '),
+    scope: 'read openid email profile participations',
     responseType: 'code',
     silentRenew: true,
     useRefreshToken: true,
