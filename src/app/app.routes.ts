@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
+import { UserProfileComponent } from './auth/user-profile/user-profile.component';
 import { Badges } from './badges/badges';
 import { PageNotFound } from './core/page-not-found/page-not-found';
 import { DataProtectionComponent } from './info/data-protection/data-protection.component';
@@ -57,6 +59,16 @@ export const routes: Routes = [
     title: 'Markenbestellung | JDAV Bayern',
     component: Badges,
     data: { headerTitle: 'Markenbestellung', headerHideRemoveDataButton: true },
+  },
+  {
+    path: 'profilinfo',
+    title: 'User Profile | JDAV Bayern',
+    component: UserProfileComponent,
+    canActivate: [autoLoginPartialRoutesGuard],
+    data: {
+      headerTitle: 'Dein Nutzerprofil',
+      headerHideRemoveDataButton: true,
+    },
   },
   {
     path: '**',
