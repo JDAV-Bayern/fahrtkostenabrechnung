@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { environment } from 'src/environments/environment';
 import {
   FeedbackAccessTokenDTO,
   FeedbackDTO,
@@ -154,6 +155,16 @@ export class FeedbackAdmin implements OnInit {
         this.error.set('Fehler beim Erstellen des Feedbacks: ' + error.message);
         this.loading.set(false);
       },
+    });
+  }
+
+  feedbackLink(token: FeedbackAccessTokenDTO): string {
+    return `${environment.origin}/feedback?query=${token.token}`;
+  }
+
+  copyToClipboard(text: string): void {
+    navigator.clipboard.writeText(text).catch((err) => {
+      this.error.set('Fehler beim Kopieren in die Zwischenablage: ' + err);
     });
   }
 }

@@ -11,7 +11,7 @@
 
   <!-- Create Feedback Section -->
   <div class="create-feedback-section">
-    <button (click)="toggleCreateForm()" class="toggle-form-button jdav-btn">
+    <button (click)="toggleCreateForm()" class="jdav-btn">
       {{ showCreateForm() ? 'Abbrechen' : 'Neues Feedback erstellen' }}
     </button>
 
@@ -54,7 +54,7 @@
       <button
         (click)="createFeedback()"
         [disabled]="loading()"
-        class="create-button jdav-btn"
+        class="jdav-btn"
       >
         Feedback erstellen
       </button>
@@ -96,11 +96,7 @@
           <option value="get_feedback">get_feedback</option>
         </select>
       </div>
-      <button
-        (click)="createToken()"
-        [disabled]="loading()"
-        class="create-button jdav-btn"
-      >
+      <button (click)="createToken()" [disabled]="loading()" class="jdav-btn">
         Token erstellen
       </button>
     </div>
@@ -118,19 +114,34 @@
             [class.give]="token.role === 'give_feedback'"
             [class.get]="token.role === 'get_feedback'"
           >
-            {{ token.role }}
+            {{
+              token.role === 'give_feedback'
+                ? 'Feedback geben'
+                : 'Feedback erhalten'
+            }}
           </span>
-          <span class="token-value">
-            {{ token.token }}
-          </span>
+          <span> {{ token.used }} Mal verwendet </span>
+          <a class="token-value" href="{{ feedbackLink(token) }}">
+            {{ feedbackLink(token) }}
+          </a>
         </div>
-        <button
-          (click)="deleteToken(token.id)"
-          [disabled]="loading()"
-          class="delete-button jdav-btn"
-        >
-          Löschen
-        </button>
+        <div class="flex flex-row gap-1">
+          <button
+            (click)="deleteToken(token.id)"
+            [disabled]="loading()"
+            class="jdav-btn secondary icon"
+          >
+            <span class="material-symbols-outlined">delete</span>
+            Löschen
+          </button>
+          <button
+            (click)="copyToClipboard(feedbackLink(token))"
+            class="jdav-btn icon"
+          >
+            <span class="material-symbols-outlined">content_copy</span>
+            Kopieren
+          </button>
+        </div>
       </div>
     </div>
   </div>
