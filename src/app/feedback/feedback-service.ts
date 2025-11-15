@@ -54,6 +54,18 @@ export class FeedbackService {
   }
 
   /**
+   * Retrieves a single feedback by token.
+   * @param token Access token with 'get_feedback' role.
+   * @returns The feedback entry associated with the token or null.
+   */
+  getFeedbackByToken(token: string): Observable<FeedbackDTO> {
+    const params = new HttpParams().set('token', token);
+    return this.http.get<FeedbackDTO>(`${this.baseUrl}/feedback/by-token`, {
+      params,
+    });
+  }
+
+  /**
    * Create a new feedback entry.
    * @param feedbackCreateDTO The feedback data to create.
    * @param token Access token with 'give_feedback' role.
@@ -97,7 +109,7 @@ export class FeedbackService {
   ): Observable<FeedbackRecordDTO> {
     const params = new HttpParams().set('token', token);
     return this.http.post<FeedbackRecordDTO>(
-      `${this.baseUrl}/feedback/records`,
+      `${this.baseUrl}/feedback/by-token`,
       feedbackRecordDTO,
       { params },
     );
