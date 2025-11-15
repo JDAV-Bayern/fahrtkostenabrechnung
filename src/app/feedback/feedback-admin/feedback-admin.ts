@@ -159,7 +159,7 @@ export class FeedbackAdmin implements OnInit {
   }
 
   feedbackLink(token: FeedbackAccessTokenDTO): string {
-    return `${environment.origin}/feedback?query=${token.token}`;
+    return `${environment.origin}/feedback?token=${token.token}`;
   }
 
   copyToClipboard(text: string): void {
