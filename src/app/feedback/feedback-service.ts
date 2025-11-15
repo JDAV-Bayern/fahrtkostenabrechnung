@@ -34,6 +34,7 @@ export interface FeedbackAccessTokenDTO {
   token: string;
   course_id: string;
   role: string;
+  used: number;
 }
 
 @Injectable({

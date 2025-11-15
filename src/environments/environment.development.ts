@@ -3,7 +3,7 @@ import { Environment } from './environment.interface';
 export const environment: Environment = {
   origin: 'http://localhost:4200',
   environment: 'development',
-  backendUrl: '/api',
+  backendUrl: 'http://localhost:8000',
   authConfig: {
     issuer: 'https://staging.jdav-bayern.de/o',
     /* 
