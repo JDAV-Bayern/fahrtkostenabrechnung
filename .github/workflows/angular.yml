@@ -16,15 +16,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: '22.x'
-          cache: 'npm'
+          node-version: '24.x'
+          cache: 'pnpm'
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install
       - name: Run linter
-        run: npm run lint
+        run: pnpm lint
 
   check-format:
     runs-on: ubuntu-latest
@@ -32,15 +34,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: '22.x'
-          cache: 'npm'
+          node-version: '24.x'
+          cache: 'pnpm'
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install
       - name: Check formatting
-        run: npm run format:check
+        run: pnpm format:check
 
   test:
     runs-on: ubuntu-latest
@@ -48,15 +52,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: '22.x'
-          cache: 'npm'
+          node-version: '24.x'
+          cache: 'pnpm'
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install
       - name: Run tests
-        run: npm run test:ci
+        run: pnpm test:ci
 
   build:
     runs-on: ubuntu-latest
@@ -64,15 +70,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: '22.x'
-          cache: 'npm'
+          node-version: '24.x'
+          cache: 'pnpm'
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install
       - name: Build application
-        run: npm run build
+        run: pnpm build
 
   e2e:
     needs: [lint, check-format, test, build]
@@ -81,14 +89,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: '22.x'
-          cache: 'npm'
+          node-version: '24.x'
+          cache: 'pnpm'
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+        run: pnpm exec playwright install --with-deps
       - name: Run e2e tests
-        run: npm run test:e2e -- --reporter=line
+        run: pnpm test:e2e
+      - name: Upload Playwright report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

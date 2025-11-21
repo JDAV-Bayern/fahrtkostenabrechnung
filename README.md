@@ -27,13 +27,13 @@ Zur lokalen Entwicklung wird die [Angular CLI](https://angular.dev/tools/cli) ge
 Du benötigst eine Installation von [Node.js 22](https://nodejs.org/en/download/package-manager). Über den mitgelieferten Package Manager NPM werden alle weiteren Abhängigkeiten installiert:
 
 ```bash
-npm install
+pnpm install
 ```
 
 Im Normalfall ist es außerdem ratsam, die Angular CLI als globales Paket zu installieren, um sie unabhängig vom Projektkontext nutzen zu können:
 
 ```bash
-npm install -g @angular/cli
+pnpm install -g @angular/cli
 ```
 
 ### Entwicklungsserver
@@ -71,7 +71,7 @@ ng lint
 Für eine einheitliche Formatierung des Codes wird [Prettier](https://prettier.io/) genutzt. Du kannst alle Dateien des Projekts mit dem folgenden Befehl formatieren:
 
 ```bash
-npm run format
+pnpm format
 ```
 
 ### Unit Tests ausführen
@@ -101,7 +101,7 @@ Wenn das nächste Release-Tag erstellt wird, wird ein [Docker](https://www.docke
 Um ein neues Release zu erstellen, einfach folgenden Befehl ausführen:
 
 ```bash
-npm version <patch|minor|major>
+pnpm version <patch|minor|major>
 ```
 
 Dadurch wird automatisch die Versionsnummer entsprechend des Arguments (patch, minor oder major) in der `package.json` erhöht und ein Commit sowie ein Tag erstellt. Nach dem Pushen des Tags wird automatisch eine neue Version des Containers gebaut und veröffentlicht.
