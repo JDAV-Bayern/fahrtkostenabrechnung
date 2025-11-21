@@ -15,7 +15,6 @@ export interface FeedbackCreateDTO {
   course_id: string;
   course_name: string;
   teamers: string[];
-  surveyJson: any;
 }
 
 export interface FeedbackRecordDTO {

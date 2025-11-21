@@ -16,16 +16,36 @@ import { FeedbackService } from '../feedback-service';
 export class Feedback {
   surveyModel = signal<Model | null>(null);
   error = signal<string | null>(null);
+  feedbackId = signal<string>('');
   feedbackService: FeedbackService = inject(FeedbackService);
   router = inject(Router);
 
   saveSurveyResults(sender: { data: any }) {
-    console.log('Survey results: ', sender.data);
+    this.feedbackService
+      .createFeedbackRecord(
+        {
+          feedback_id: this.feedbackId(),
+          feedback: sender.data,
+        },
+        this.getTokenFromUrl(),
+      )
+      .subscribe({
+        error: (error) => {
+          console.error(
+            'Fehler beim Speichern der Feedback-Antworten: ',
+            error,
+          );
+          this.error.set(
+            'Fehler beim Speichern der Feedback-Antworten: ' + error.message,
+          );
+        },
+      });
   }
 
   ngOnInit() {
     this.feedbackService.getFeedbackByToken(this.getTokenFromUrl()).subscribe({
       next: (feedback) => {
+        this.feedbackId.set(feedback.id);
         this.initializeSurvey(feedback.surveyJson);
       },
       error: (error) => {
@@ -40,7 +60,9 @@ export class Feedback {
   }
   initializeSurvey(surveyJson: unknown) {
     const survey = new Model(surveyJson);
-    survey.onComplete.add(this.saveSurveyResults);
+    survey.onComplete.add((sender: { data: any }) =>
+      this.saveSurveyResults(sender),
+    );
     this.surveyModel.set(survey);
   }
   getTokenFromUrl(): string {
