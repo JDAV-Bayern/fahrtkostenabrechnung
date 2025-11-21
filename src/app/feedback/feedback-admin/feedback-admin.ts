@@ -139,7 +139,6 @@ export class FeedbackAdmin implements OnInit {
       course_id: this.newFeedbackCourseId,
       course_name: this.newFeedbackCourseName,
       teamers: teamersArray,
-      surveyJson: {}, // Empty survey JSON for now
     };
 
     this.feedbackService.createFeedback(feedbackCreateDTO).subscribe({
