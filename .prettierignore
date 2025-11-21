@@ -1,3 +1,5 @@
+pnpm-lock.yaml
+
 # Large files containing lookup data
 src/data/
 src/app/jdav_theme-colors.scss
