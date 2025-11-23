@@ -1,4 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import {
+  FeedbackDTO,
+  FeedbackRecordDTO,
+  FeedbackService,
+} from '../feedback-service';
 
 @Component({
   selector: 'jdav-feedback-results',
@@ -6,6 +11,200 @@ import { Component } from '@angular/core';
   templateUrl: './feedback-results.html',
   styleUrl: './feedback-results.css',
 })
-export class FeedbackResults {
+export class FeedbackResults implements OnInit {
+  feedbackService = inject(FeedbackService);
 
+  feedback = signal<FeedbackDTO | null>(null);
+  results = signal<FeedbackRecordDTO[] | null>(null);
+
+  json = JSON;
+
+  result_order = signal<
+    (
+      | {
+          type: 'histogram';
+          title: string;
+          key: string;
+          labelMap: { value: string; text: string }[];
+        }
+      | {
+          type: 'text';
+          title: string;
+          key: string;
+        }
+    )[]
+  >([]);
+
+  ngOnInit() {
+    this.feedbackService.listFeedbackRecords(this.getTokenFromUrl()).subscribe({
+      next: (feedback) => {
+        this.results.set(feedback);
+        this.makeResultOrder();
+      },
+      error: (error) => {
+        console.error('Fehler beim Abrufen des Feedbacks: ', error);
+      },
+    });
+    this.feedbackService.getFeedbackByToken(this.getTokenFromUrl()).subscribe({
+      next: (feedback) => {
+        this.feedback.set(feedback);
+        this.makeResultOrder();
+      },
+      error: (error) => {
+        console.error('Fehler beim Abrufen des Feedbacks: ', error);
+      },
+    });
+  }
+
+  getTokenFromUrl(): string {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('token') || '';
+  }
+
+  getHistogramData(key: string): { [key: string]: number } {
+    const data: { [key: string]: number } = {};
+    for (const result of this.results() || []) {
+      // Keys might be nested, e.g., "section1.question2"
+      const feedbackData = result.feedback;
+      const value = key
+        .split('.')
+        .reduce((obj, k) => (obj ? obj[k] : undefined), feedbackData);
+      if (value !== undefined) {
+        data[String(value)] = (data[String(value)] || 0) + 1;
+      }
+    }
+    return data;
+  }
+
+  getHistogramSum(data: { [key: string]: number }): number {
+    return Object.values(data).reduce((a, b) => a + b, 0);
+  }
+
+  getTextAnswers(key: string): string[] {
+    const answers: string[] = [];
+    for (const result of this.results() || []) {
+      const feedbackData = result.feedback;
+      const value = key
+        .split('.')
+        .reduce((obj, k) => (obj ? obj[k] : undefined), feedbackData);
+      if (typeof value === 'string' && value.trim() !== '') {
+        answers.push(value);
+      }
+    }
+    return answers;
+  }
+
+  keys = (o: {}) => Object.keys(o);
+
+  getAllFeedbackElements(feedback: unknown): Record<string, unknown>[] {
+    if (typeof feedback !== 'object' || feedback === null) {
+      return [];
+    }
+
+    const fb = feedback as Record<string, unknown>;
+
+    if ('pages' in fb && Array.isArray(fb['pages'])) {
+      return fb['pages']
+        .map((page: any) => this.getAllFeedbackElements(page))
+        .flat();
+    }
+    if ('elements' in fb && Array.isArray(fb['elements'])) {
+      return fb['elements']
+        .map((element: any) => this.getAllFeedbackElements(element))
+        .flat();
+    }
+    if (
+      'type' in fb &&
+      typeof fb['type'] === 'string' &&
+      ['radiogroup', 'boolean', 'comment', 'matrix', 'text'].includes(
+        fb['type'] as string,
+      )
+    ) {
+      return [fb];
+    }
+    return [];
+  }
+
+  makeResultOrder() {
+    const results = this.results();
+    const feedback = this.feedback();
+    if (!results || !feedback) {
+      return;
+    }
+
+    const allFeedbackElements: Record<string, unknown>[] =
+      this.getAllFeedbackElements(feedback.surveyJson);
+
+    this.result_order.set(
+      allFeedbackElements
+        .map((element: Record<string, unknown>) => {
+          if (element['type'] === 'matrix') {
+            if (
+              !Array.isArray(element['rows']) ||
+              !Array.isArray(element['columns']) ||
+              typeof element['title'] !== 'string' ||
+              typeof element['name'] !== 'string'
+            ) {
+              throw new Error('Invalid matrix element structure');
+            }
+            return element['rows'].map((row: any) => {
+              if (
+                typeof row !== 'object' ||
+                row === null ||
+                typeof row['text'] !== 'string' ||
+                typeof row['value'] !== 'string'
+              ) {
+                throw new Error('Invalid row structure in matrix element');
+              }
+              return {
+                type: 'histogram' as const,
+                title: row['text'] as string,
+                key: `${element['name']}.${row['value']}`,
+                labelMap: element['columns'] as {
+                  value: string;
+                  text: string;
+                }[],
+              };
+            });
+          }
+          if (element['type'] === 'boolean') {
+            return {
+              type: 'histogram' as const,
+              title: (element['title'] as string) ?? '',
+              key: element['name'] as string,
+              labelMap: [
+                {
+                  value: 'true',
+                  text: (element['labelTrue'] as string) ?? 'Ja',
+                },
+                {
+                  value: 'false',
+                  text: (element['labelFalse'] as string) ?? 'Nein',
+                },
+              ],
+            };
+          }
+          if (element['type'] === 'radiogroup') {
+            return {
+              type: 'histogram' as const,
+              title: (element['title'] as string) ?? '',
+              key: element['name'] as string,
+              labelMap: element['choices'] as { value: string; text: string }[],
+            };
+          }
+          if (element['type'] === 'comment' || element['type'] === 'text') {
+            return {
+              type: 'text' as const,
+              title: (element['title'] as string) ?? '',
+              key: element['name'] as string,
+            };
+          }
+          console.error('Unsupported element type:', element);
+          throw new Error(
+            `Unsupported element type in result order generation.`,
+          );
+        })
+        .flat(),
+    );
+  }
 }

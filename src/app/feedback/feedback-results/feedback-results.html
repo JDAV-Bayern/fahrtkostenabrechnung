@@ -1,1 +1,41 @@
-<p>feedback-results works!</p>
+<div class="typography feedback-results-container">
+  @if (results() === null || feedback() === null) {
+    <p>Lade Feedback-Ergebnisse...</p>
+  } @else {
+    <h2>Ergebnisse</h2>
+    <div class="flex flex-col gap-15">
+      @for (result of result_order(); track result.key) {
+        <div>
+          <p class="title">{{ result.title }}</p>
+          @if (result.type === 'histogram') {
+            <div class="w-full flex flex-row items-end gap-2 h-48">
+              @let histogramData = getHistogramData(result.key);
+              @let sum = getHistogramSum(histogramData);
+              @for (label of result.labelMap; track label.value) {
+                <div
+                  class="bg-blue-200 rounded-sm flex-grow items-end justify-center flex"
+                  style="height: {{
+                    ((histogramData[label.value] || 0) / sum) * 100
+                  }}%;"
+                >
+                  {{ label.text }} ({{ histogramData[label.value] || 0 }})
+                </div>
+              }
+            </div>
+          }
+          @if (result.type === 'text') {
+            <div class="flex flex-row w-full gap-3 flex-wrap">
+              @for (answer of getTextAnswers(result.key); track answer) {
+                <span
+                  class="bg-gray-20 border-2 border-gray-300 rounded-sm p-3"
+                >
+                  {{ answer }}
+                </span>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

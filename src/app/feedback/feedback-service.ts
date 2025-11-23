@@ -85,13 +85,10 @@ export class FeedbackService {
    * @param token Access token with 'get_feedback' role.
    * @returns A list of feedback records.
    */
-  listFeedbackRecords(
-    feedbackId: string,
-    token: string,
-  ): Observable<FeedbackRecordDTO[]> {
+  listFeedbackRecords(token: string): Observable<FeedbackRecordDTO[]> {
     const params = new HttpParams().set('token', token);
     return this.http.get<FeedbackRecordDTO[]>(
-      `${this.baseUrl}/feedback/${feedbackId}/records`,
+      `${this.baseUrl}/feedback/by-token/records`,
       { params },
     );
   }
