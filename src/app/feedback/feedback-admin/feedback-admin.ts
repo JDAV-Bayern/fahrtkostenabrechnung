@@ -57,6 +57,7 @@ export class FeedbackAdmin implements OnInit {
   loadTokens(feedbackId: string): void {
     this.loading.set(true);
     this.error.set(null);
+    this.tokens.set([]);
     this.feedbackService.listFeedbackTokens(feedbackId).subscribe({
       next: (tokens) => {
         this.tokens.set(tokens);
@@ -94,7 +95,9 @@ export class FeedbackAdmin implements OnInit {
     this.feedbackService.deleteFeedbackToken(tokenId).subscribe({
       next: () => {
         this.tokens.update((tokens) =>
-          tokens.filter((token: any) => token.id !== tokenId),
+          tokens.filter(
+            (token: FeedbackAccessTokenDTO) => token.id !== tokenId,
+          ),
         );
         this.loading.set(false);
       },

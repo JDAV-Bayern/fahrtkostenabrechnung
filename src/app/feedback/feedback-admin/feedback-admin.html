@@ -65,7 +65,7 @@
   <div class="feedback-section">
     <h3>Verfügbare Feedbacks</h3>
     <div class="feedback-list">
-      <div
+      <button
         *ngFor="let feedback of feedbacks()"
         class="feedback-item"
         [class.selected]="selectedFeedback()?.id === feedback.id"
@@ -78,7 +78,7 @@
         <div class="teamers">
           <strong>Teamer:</strong> {{ feedback.teamers.join(', ') }}
         </div>
-      </div>
+      </button>
     </div>
   </div>
 
@@ -91,9 +91,9 @@
       <h4>Neuen Token erstellen</h4>
       <div class="form-group">
         <label for="tokenRole">Rolle:</label>
-        <select id="tokenRole" [(ngModel)]="newTokenRole">
-          <option value="give_feedback">give_feedback</option>
-          <option value="get_feedback">get_feedback</option>
+        <select class="form-control" id="tokenRole" [(ngModel)]="newTokenRole">
+          <option value="give_feedback">Feedback geben</option>
+          <option value="get_feedback">Feedback einsehen</option>
         </select>
       </div>
       <button (click)="createToken()" [disabled]="loading()" class="jdav-btn">
@@ -104,6 +104,7 @@
     <!-- Token List -->
     <div class="token-list">
       <h4>Vorhandene Tokens</h4>
+
       <div *ngIf="tokens().length === 0" class="no-tokens">
         Keine Tokens vorhanden
       </div>
@@ -117,11 +118,15 @@
             {{
               token.role === 'give_feedback'
                 ? 'Feedback geben'
-                : 'Feedback erhalten'
+                : 'Feedback einsehen'
             }}
           </span>
           <span> {{ token.used }} Mal verwendet </span>
-          <a class="token-value" href="{{ feedbackLink(token) }}">
+          <a
+            class="token-value"
+            href="{{ feedbackLink(token) }}"
+            target="”_blank”"
+          >
             {{ feedbackLink(token) }}
           </a>
         </div>

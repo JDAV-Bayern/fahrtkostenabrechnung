@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { SurveyModule } from 'survey-angular-ui';
 import { Model } from 'survey-core';
 
@@ -13,14 +13,14 @@ import { FeedbackService } from '../feedback-service';
   templateUrl: './feedback.html',
   styleUrl: './feedback.css',
 })
-export class Feedback {
+export class Feedback implements OnInit {
   surveyModel = signal<Model | null>(null);
   error = signal<string | null>(null);
   feedbackId = signal<string>('');
   feedbackService: FeedbackService = inject(FeedbackService);
   router = inject(Router);
 
-  saveSurveyResults(sender: { data: any }) {
+  saveSurveyResults(sender: { data: unknown }) {
     this.feedbackService
       .createFeedbackRecord(
         {
@@ -60,7 +60,7 @@ export class Feedback {
   }
   initializeSurvey(surveyJson: unknown) {
     const survey = new Model(surveyJson);
-    survey.onComplete.add((sender: { data: any }) =>
+    survey.onComplete.add((sender: { data: unknown }) =>
       this.saveSurveyResults(sender),
     );
     this.surveyModel.set(survey);
