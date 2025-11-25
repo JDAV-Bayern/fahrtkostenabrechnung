@@ -61,14 +61,21 @@ export class FeedbackResults implements OnInit {
     return urlParams.get('token') || '';
   }
 
-  getHistogramData(key: string): { [key: string]: number } {
-    const data: { [key: string]: number } = {};
+  getNestedValue(obj: unknown, key: string): unknown {
+    return key.split('.').reduce((obj, k) => {
+      if (obj && typeof obj === 'object' && obj !== null && k in obj) {
+        return (obj as Record<string, unknown>)[k];
+      }
+      return undefined;
+    }, obj);
+  }
+
+  getHistogramData(key: string): Record<string, number> {
+    const data: Record<string, number> = {};
     for (const result of this.results() || []) {
       // Keys might be nested, e.g., "section1.question2"
       const feedbackData = result.feedback;
-      const value = key
-        .split('.')
-        .reduce((obj, k) => (obj ? obj[k] : undefined), feedbackData);
+      const value = this.getNestedValue(feedbackData, key);
       if (value !== undefined) {
         data[String(value)] = (data[String(value)] || 0) + 1;
       }
@@ -76,7 +83,7 @@ export class FeedbackResults implements OnInit {
     return data;
   }
 
-  getHistogramSum(data: { [key: string]: number }): number {
+  getHistogramSum(data: Record<string, number>): number {
     return Object.values(data).reduce((a, b) => a + b, 0);
   }
 
@@ -84,17 +91,13 @@ export class FeedbackResults implements OnInit {
     const answers: string[] = [];
     for (const result of this.results() || []) {
       const feedbackData = result.feedback;
-      const value = key
-        .split('.')
-        .reduce((obj, k) => (obj ? obj[k] : undefined), feedbackData);
+      const value = this.getNestedValue(feedbackData, key);
       if (typeof value === 'string' && value.trim() !== '') {
         answers.push(value);
       }
     }
     return answers;
   }
-
-  keys = (o: {}) => Object.keys(o);
 
   getAllFeedbackElements(feedback: unknown): Record<string, unknown>[] {
     if (typeof feedback !== 'object' || feedback === null) {
@@ -105,12 +108,12 @@ export class FeedbackResults implements OnInit {
 
     if ('pages' in fb && Array.isArray(fb['pages'])) {
       return fb['pages']
-        .map((page: any) => this.getAllFeedbackElements(page))
+        .map((page: unknown) => this.getAllFeedbackElements(page))
         .flat();
     }
     if ('elements' in fb && Array.isArray(fb['elements'])) {
       return fb['elements']
-        .map((element: any) => this.getAllFeedbackElements(element))
+        .map((element: unknown) => this.getAllFeedbackElements(element))
         .flat();
     }
     if (
@@ -147,10 +150,12 @@ export class FeedbackResults implements OnInit {
             ) {
               throw new Error('Invalid matrix element structure');
             }
-            return element['rows'].map((row: any) => {
+            return element['rows'].map((row: unknown) => {
               if (
                 typeof row !== 'object' ||
                 row === null ||
+                !('text' in row) ||
+                !('value' in row) ||
                 typeof row['text'] !== 'string' ||
                 typeof row['value'] !== 'string'
               ) {

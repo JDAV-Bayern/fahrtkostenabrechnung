@@ -1,5 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 // DTO Interfaces
@@ -8,7 +8,7 @@ export interface FeedbackDTO {
   course_id: string;
   course_name: string;
   teamers: string[];
-  surveyJson: any;
+  surveyJson: Record<string, unknown>;
 }
 
 export interface FeedbackCreateDTO {
@@ -20,12 +20,12 @@ export interface FeedbackCreateDTO {
 export interface FeedbackRecordDTO {
   id: string;
   feedback_id: string;
-  feedback: any;
+  feedback: unknown;
 }
 
 export interface FeedbackRecordCreateDTO {
   feedback_id: string;
-  feedback: any;
+  feedback: unknown;
 }
 
 export interface FeedbackAccessTokenDTO {
@@ -41,8 +41,7 @@ export interface FeedbackAccessTokenDTO {
 })
 export class FeedbackService {
   private baseUrl = 'http://localhost:8000'; // Adjust this to your API base URL
-
-  constructor(private http: HttpClient) {}
+  http = inject(HttpClient);
 
   /**
    * Retrieve all feedback entries.
