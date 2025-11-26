@@ -21,7 +21,36 @@
     </p>
   </div>
   <div class="typography">
-    <h2>Hier können die Dateien aus den Quellsystemen eingelesen werden</h2>
+    <h2>
+      Schritt 1: Hier können die Dateien aus den Quellsystemen eingelesen werden
+    </h2>
+    <p>
+      In der excel Liste, die an eine Sektion geschickt wird, sind informationen
+      zu jeder Jugendleiter*in enthalten. Mit diesem Tool können wir Excel
+      Dateien und CSV Dateien aus verschiedenen Quellen zusammenführeun und dann
+      wieder nach Sektion geordnet in neue Excel Datein schreiben.
+    </p>
+    <p>
+      <b>MV-Manager:</b>
+      Die Stammdaten und auch die Sektionszuordnung kommen aus dem mv-manager.
+      In dieser Datei muss jede Jugendleiter*in, die am Ende auf einer Liste
+      landet <b>genau einmal</b> auftauchen. Diese Datei muss die Spalten
+      "Vorname", "Nachname', "Geburtsdatum" und "Sektion" enthalten um die
+      Jugendleiter*innen eindeutig zuordnen zu können. Sie kann weitere Spalten
+      enthalten.
+    </p>
+    <p>
+      <b>Weitere Dateien</b>
+      Informationen über die Jugendleiter*innen, wie beispielsweise Schulungen,
+      die am Ende auch in die Excel Dateien wandern sollen sind oft in anderen
+      Systemen gespeichert. Bei uns sind das insbesonder Navision und der
+      KV-Manager. Es können hier beliebig viele weitere Dateien zum
+      zusammenführen ausgewählt werden. Auch diese Dateien müssen die Spalten
+      "Vorname", "Nachname', "Geburtsdatum" und "Sektion" mit genau dieser
+      Bezeichnung enthalten umd die Jugendleiter*innen zordnen zu können.
+      Weitere Spalten können frei hinzugefügt werden. In diesen Datein dürfen
+      Jugendleiter*innen <b>mehrfach vorkommen.</b>
+    </p>
     <div>
       <div class="flex flex-row items-center">
         <label class="min-w-35" for="mvManager">MV Manager</label>
@@ -55,10 +84,40 @@
     </div>
   </div>
   <hr class="my-5" />
-  <div>
+  <div class="typography">
     @if (mvResult() === null) {
       Bitte lade mindestens die Daten aus dem mv manager hoch um fortzufahren.
     } @else {
+      <h2>
+        Schritt 2: Spalten auswählen, die in den einzelnen Excel Dateien
+        enthalten sein sollen
+      </h2>
+      <p>
+        Im folgenden können diejenigen Spalten aus den verschiedenen
+        hochgeladenen Dateien ausgewählt werden, die später in den
+        Sektions-Excel-Dateien aufgelistet werden sollen. Auch zusätzliche
+        Spalten in der Datei aus dem MV manager können ausgewählt werden
+        (zuletzt relevant für die Information ob im letzten Jahr eine Marke
+        vergeben wurde oder nicht). Die Überschrift die im Ergebnis auftaucht
+        kann mit dem jeweiligen Textfeld auf der rechten Seite überschrieben
+        werden. Sollte es sich bei den Daten in der Spalte um ein Datum handeln,
+        muss die Checkbox für "Datum" aktiviert werden, da die Daten aus Excel
+        Dateien sonst als Zahl inerpretiert werden.
+      </p>
+      <p>
+        <b>Beispiel:</b> Ich möchte für Jugendleiter*innen Informationen über
+        Schulungen, die sie im LV Bayern gemacht haben hinzufügen. Neben dem
+        MV-Manager habe ich eine Datei, die aus dem KV-Manager exportiert wurde
+        ausgewählt. In dieser Datei mit dem Namen "kv-manager.csv" gibt es die
+        Spalte "KursNr" und "Bezeichnung". Ich möchte, dass lediglich die
+        Bezeichnung in die Ergebnis Excel Dateien geschrieben wird mit dem Namen
+        "Schulung 2025 in Bayern". Dann markiere ich in der Liste unten die
+        Checkbox "hinzufügen" in der Zeile "kv-manager.csv: Bezeichnung" und
+        trage den neuen Namen der Spalte weiter rechts in dieser Zeile ein.
+      </p>
+      <p>
+        Unten können die ersten zehn Beispiele zur Kontrolle angesehen werden.
+      </p>
       <form>
         @for (column of additionalColumns(); track column.id()) {
           <div class="flex flex-row items-center mb-2">
@@ -96,8 +155,8 @@
   </div>
   @if (mergedResult() !== null) {
     <hr class="my-5" />
-    <div class="typography" class="mb-5">
-      <h1>Vorschau</h1>
+    <div class="typography mb-5">
+      <h2>Schritt 3: Ergebnis überprüfen und herunterladen</h2>
       <table class="min-w-full bg-white border border-gray-200">
         <thead>
           <tr>
