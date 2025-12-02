@@ -203,7 +203,7 @@ export class Badges implements OnInit {
       mergedResult.records.map((r) => r['Sektion']),
     );
 
-    const excelBinarys: { [section: string]: Uint8Array } = {};
+    const excelBinarys: Record<string, Uint8Array> = {};
 
     for (const section of sections) {
       const sectionRecords = mergedResult.records
