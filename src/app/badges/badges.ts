@@ -16,6 +16,7 @@ import {
 } from './input_data';
 
 import { ActivatedRoute, Router } from '@angular/router';
+import JSZip from 'jszip';
 import * as XLSX from 'xlsx-js-style';
 
 @Component({
@@ -202,6 +203,8 @@ export class Badges implements OnInit {
       mergedResult.records.map((r) => r['Sektion']),
     );
 
+    const excelBinarys: { [section: string]: Uint8Array } = {};
+
     for (const section of sections) {
       const sectionRecords = mergedResult.records
         .filter((r) => r['Sektion'] === section)
@@ -313,7 +316,22 @@ export class Badges implements OnInit {
       ];
       ws['!rows'] = [{}, { hpt: 30 }];
 
-      XLSX.writeFile(wb, `${section}.xlsx`);
+      excelBinarys[section] = XLSX.write(wb, { type: 'binary' });
     }
+
+    // Create a zip file with all excels
+    const zip = new JSZip();
+    for (const section of sections) {
+      const binary = excelBinarys[section];
+      zip.file(`${section}.xlsx`, binary, { binary: true });
+    }
+    zip.generateAsync({ type: 'blob' }).then((content) => {
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(content);
+      link.download = `Jugendleitermarken_${new Date()
+        .getFullYear()
+        .toString()}.zip`;
+      link.click();
+    });
   }
 }
