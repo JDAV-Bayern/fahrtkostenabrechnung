@@ -316,7 +316,7 @@ export class Badges implements OnInit {
       ];
       ws['!rows'] = [{}, { hpt: 30 }];
 
-      excelBinarys[section] = XLSX.write(wb, { type: 'binary' });
+      excelBinarys[section] = XLSX.write(wb, { type: 'array' });
     }
 
     // Create a zip file with all excels
