@@ -242,8 +242,8 @@ export class Badges implements OnInit {
         newRecord['Andere Schulung besucht? (z.B. LJV / BJV)'] = '';
         newRecord[
           `Jugendleitermarke ${new Date().getFullYear() + 1} erteilen? (ja/nein)`
-        ] = 'ja';
-        newRecord[`Jugendleiter*in löschen? (ja/nein)`] = 'nein';
+        ] = '';
+        newRecord[`Jugendleiter*in löschen? (ja/nein)`] = '';
         return newRecord;
       });
 
