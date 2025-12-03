@@ -1,4 +1,6 @@
+import * as jschardet from 'jschardet';
 import * as XLSX from 'xlsx-js-style';
+
 export class AdditionalColumn {
   name: string;
   file: string;
@@ -56,6 +58,21 @@ function isEmptyRecord(record: Record<string, unknown>): boolean {
   );
 }
 
+function binaryToText(binary: Uint8Array): string {
+  let binaryString = '';
+  const sampleLength = Math.min(binary.length, 64 * 1024);
+  for (let i = 0; i < sampleLength; i++) {
+    binaryString += String.fromCharCode(binary[i]);
+  }
+
+  const detected = jschardet.detect(binaryString);
+  console.log('Detected encoding:', detected);
+  const encoding =
+    detected.encoding === 'ascii' ? 'utf-8' : detected.encoding || 'utf-8';
+
+  return new TextDecoder(encoding).decode(binary);
+}
+
 function parseCsv(text: string): string[][] {
   const lines = text.split('\n');
   return lines.map((line) => {
@@ -91,8 +108,8 @@ export function readMvManager(
         const additionalColumns = new Set<string>();
 
         if (file.name.endsWith('.csv')) {
-          const csvData = event.target?.result as string;
-          const parsedData = parseCsv(csvData);
+          const csvBinary = new Uint8Array(event.target?.result as ArrayBuffer);
+          const parsedData = parseCsv(binaryToText(csvBinary));
           records = csvToArrayOfObjects(parsedData);
         } else {
           const data = new Uint8Array(event.target?.result as ArrayBuffer);
@@ -199,11 +216,7 @@ export function readMvManager(
       reject(new Error('Fehler beim Lesen der Datei'));
     };
 
-    if (file.name.endsWith('.csv')) {
-      reader.readAsText(file, 'utf-8');
-    } else {
-      reader.readAsArrayBuffer(file);
-    }
+    reader.readAsArrayBuffer(file);
   });
 }
 
@@ -219,8 +232,8 @@ export function readAdditionalFile(
         const additionalColumns = new Set<string>();
 
         if (file.name.endsWith('.csv')) {
-          const csvData = event.target?.result as string;
-          const parsedData = parseCsv(csvData);
+          const csvBinary = new Uint8Array(event.target?.result as ArrayBuffer);
+          const parsedData = parseCsv(binaryToText(csvBinary));
           records = csvToArrayOfObjects(parsedData);
         } else {
           const data = new Uint8Array(event.target?.result as ArrayBuffer);
@@ -297,10 +310,6 @@ export function readAdditionalFile(
       reject(new Error('Fehler beim Lesen der Datei'));
     };
 
-    if (file.name.endsWith('.csv')) {
-      reader.readAsText(file, 'utf-8');
-    } else {
-      reader.readAsArrayBuffer(file);
-    }
+    reader.readAsArrayBuffer(file);
   });
 }
