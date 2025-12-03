@@ -204,6 +204,7 @@ export class Badges implements OnInit {
     );
 
     const excelBinarys: Record<string, Uint8Array> = {};
+    const editColor = 'FFFFDD';
 
     for (const section of sections) {
       const sectionRecords = mergedResult.records
@@ -224,7 +225,7 @@ export class Badges implements OnInit {
         ],
         [
           {
-            v: 'Bitte trag in die folgenden Tabelle ein welche Jugendleiter*innen eine Marke erhalten sollen. Die Jugendleiter*in sollte in der Jugendarbeit aktiv sein und muss ihrer Fortbildungspflicht nachgekommen sein. Bitte fehlende Schulungen eintragen. Trage außerdem ganz unten ein, wer euch bei welchem Stadt- oder Kreisjugendring vertritt. Vielen Dank für deine Mithilfe!',
+            v: 'Bitte trag in die folgenden Tabelle ein welche Jugendleiter*innen eine Marke erhalten sollen. Fülle dafür bitte die gelb markierten Zellen aus. Die Jugendleiter*in sollte in der Jugendarbeit aktiv sein und muss ihrer Fortbildungspflicht nachgekommen sein. Trage außerdem ganz unten ein, wer euch bei welchem Stadt- oder Kreisjugendring vertritt. Vielen Dank für deine Mithilfe!',
             s: {
               font: { italic: true },
               alignment: { wrapText: true, vertical: 'top' },
@@ -253,7 +254,7 @@ export class Badges implements OnInit {
           [
             {
               v: 'Neue Jugendleiter*innen in der Sektion, die nicht in der Liste oben stehen',
-              s: { font: { bold: true } },
+              s: { font: { bold: true, sz: 16 } },
             },
           ],
         ],
@@ -286,12 +287,12 @@ export class Badges implements OnInit {
       );
       XLSX.utils.sheet_add_aoa(
         ws,
-        [[{ v: '', s: { border: { bottom: { style: 'thin' } } } }]],
+        [[{ v: '', s: { fill: { fgColor: { rgb: editColor } } } }]],
         { origin: { c: 3, r: sectionRecords.length + 12 } },
       );
       XLSX.utils.sheet_add_aoa(
         ws,
-        [[{ v: '', s: { border: { bottom: { style: 'thin' } } } }]],
+        [[{ v: '', s: { fill: { fgColor: { rgb: editColor } } } }]],
         { origin: { c: 3, r: sectionRecords.length + 13 } },
       );
 
@@ -315,6 +316,61 @@ export class Badges implements OnInit {
         ...Array.from({ length: 3 }).map(() => ({ width: 40 })),
       ];
       ws['!rows'] = [{}, { hpt: 30 }];
+
+      // Highlight cells in main table
+      for (let row = 3; row < sectionRecords.length + 3; row++) {
+        for (
+          let col = mergedResult.keys.length - 1;
+          col < mergedResult.keys.length + 2;
+          col++
+        ) {
+          const cellAddress = XLSX.utils.encode_cell({ r: row, c: col });
+          if (!ws[cellAddress]) {
+            ws[cellAddress] = { t: 's', v: '' };
+          }
+          ws[cellAddress].s = { fill: { fgColor: { rgb: editColor } } };
+        }
+      }
+
+      // Highlight cells in new entries table
+      for (
+        let row = sectionRecords.length + 6;
+        row < sectionRecords.length + 11;
+        row++
+      ) {
+        for (let col = 0; col < 7; col++) {
+          const cellAddress = XLSX.utils.encode_cell({ r: row, c: col });
+          if (!ws[cellAddress]) {
+            ws[cellAddress] = { t: 's', v: '' };
+          }
+          ws[cellAddress].s = { fill: { fgColor: { rgb: editColor } } };
+        }
+      }
+
+      // Highlight header row of main table
+      for (let col = 0; col < mergedResult.keys.length + 2; col++) {
+        const cellAddress = XLSX.utils.encode_cell({ r: 2, c: col });
+        if (ws[cellAddress]) {
+          ws[cellAddress].s = {
+            font: { bold: true },
+            fill: { fgColor: { rgb: 'CCCCCC' } },
+          };
+        }
+      }
+
+      // Highlight header row of new entries table
+      for (let col = 0; col < 7; col++) {
+        const cellAddress = XLSX.utils.encode_cell({
+          r: sectionRecords.length + 5,
+          c: col,
+        });
+        if (ws[cellAddress]) {
+          ws[cellAddress].s = {
+            font: { bold: true },
+            fill: { fgColor: { rgb: 'CCCCCC' } },
+          };
+        }
+      }
 
       excelBinarys[section] = XLSX.write(wb, { type: 'array' });
     }
