@@ -59,14 +59,12 @@ function isEmptyRecord(record: Record<string, unknown>): boolean {
 }
 
 function binaryToText(binary: Uint8Array): string {
-  let binaryString = '';
   const sampleLength = Math.min(binary.length, 64 * 1024);
-  for (let i = 0; i < sampleLength; i++) {
-    binaryString += String.fromCharCode(binary[i]);
-  }
+  const binaryString = Array.from(binary.slice(0, sampleLength), (byte) =>
+    String.fromCharCode(byte),
+  ).join('');
 
   const detected = jschardet.detect(binaryString);
-  console.log('Detected encoding:', detected);
   const encoding =
     detected.encoding === 'ascii' ? 'utf-8' : detected.encoding || 'utf-8';
 
