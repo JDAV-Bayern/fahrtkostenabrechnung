@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 // DTO Interfaces
 export interface FeedbackDTO {
@@ -40,7 +41,7 @@ export interface FeedbackAccessTokenDTO {
   providedIn: 'root',
 })
 export class FeedbackService {
-  private baseUrl = 'http://localhost:8000'; // Adjust this to your API base URL
+  private baseUrl = environment.backendUrl;
   http = inject(HttpClient);
 
   /**
