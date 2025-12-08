@@ -1,7 +1,8 @@
+@use 'tailwindcss';
 @use '@angular/material' as mat;
 @use 'app/jdav_theme-colors' as jdav;
 
-@use 'tailwindcss';
+@import 'survey-core/survey-core.min.css';
 
 @theme {
   --font-titillium: 'Titillium Web', sans-serif;

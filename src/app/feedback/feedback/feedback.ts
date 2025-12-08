@@ -4,7 +4,6 @@ import { Model } from 'survey-core';
 
 import { A11yModule } from '@angular/cdk/a11y';
 import { Router } from '@angular/router';
-import 'survey-core/survey-core.min.css';
 import { FeedbackService } from '../feedback-service';
 
 @Component({
