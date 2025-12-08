@@ -2,12 +2,16 @@
   <h2>Feedback Administration</h2>
 
   <!-- Error Message -->
-  <div *ngIf="error()" class="error-message">
-    {{ error() }}
-  </div>
+  @if (error()) {
+    <div class="error-message">
+      {{ error() }}
+    </div>
+  }
 
   <!-- Loading Indicator -->
-  <div *ngIf="loading()" class="loading">Lade Daten...</div>
+  @if (loading()) {
+    <div class="loading">Lade Daten...</div>
+  }
 
   <!-- Create Feedback Section -->
   <div class="create-feedback-section">
@@ -19,7 +23,7 @@
     <div *ngIf="showCreateForm()" class="create-feedback-form">
       <h3>Neues Feedback erstellen</h3>
       <div class="form-group">
-        <label for="courseId">Kurs-ID *</label>
+        <label for="courseId">Schulunsnummer *</label>
         <input
           type="text"
           id="courseId"
@@ -30,7 +34,7 @@
       </div>
 
       <div class="form-group">
-        <label for="courseName">Kursname *</label>
+        <label for="courseName">Schulungsname *</label>
         <input
           type="text"
           id="courseName"
@@ -65,89 +69,100 @@
   <div class="feedback-section">
     <h3>Verfügbare Feedbacks</h3>
     <div class="feedback-list">
-      <button
-        *ngFor="let feedback of feedbacks()"
-        class="feedback-item"
-        [class.selected]="selectedFeedback()?.id === feedback.id"
-        (click)="selectFeedback(feedback)"
-      >
-        <div class="feedback-header">
-          <h4>{{ feedback.course_name }}</h4>
-          <span class="course-id">{{ feedback.course_id }}</span>
-        </div>
-        <div class="teamers">
-          <strong>Teamer:</strong> {{ feedback.teamers.join(', ') }}
-        </div>
-      </button>
+      @for (feedback of feedbacks(); track feedback.id) {
+        <button
+          class="feedback-item"
+          [class.selected]="selectedFeedback()?.id === feedback.id"
+          (click)="selectFeedback(feedback)"
+        >
+          <div class="feedback-header">
+            <h4>{{ feedback.course_name }}</h4>
+            <span class="course-id">{{ feedback.course_id }}</span>
+          </div>
+          <div class="teamers">
+            <strong>Teamer:</strong> {{ feedback.teamers.join(', ') }}
+          </div>
+        </button>
+      }
     </div>
   </div>
 
   <!-- Token Management (only shown when a feedback is selected) -->
-  <div *ngIf="selectedFeedback()" class="token-section">
-    <h3>Tokens für "{{ selectedFeedback()?.course_name }}"</h3>
+  @if (selectedFeedback()) {
+    <div class="token-section">
+      <h3>Tokens für "{{ selectedFeedback()?.course_name }}"</h3>
 
-    <!-- Create Token Form -->
-    <div class="create-token-form">
-      <h4>Neuen Token erstellen</h4>
-      <div class="form-group">
-        <label for="tokenRole">Rolle:</label>
-        <select class="form-control" id="tokenRole" [(ngModel)]="newTokenRole">
-          <option value="give_feedback">Feedback geben</option>
-          <option value="get_feedback">Feedback einsehen</option>
-        </select>
-      </div>
-      <button (click)="createToken()" [disabled]="loading()" class="jdav-btn">
-        Token erstellen
-      </button>
-    </div>
-
-    <!-- Token List -->
-    <div class="token-list">
-      <h4>Vorhandene Tokens</h4>
-
-      <div *ngIf="tokens().length === 0" class="no-tokens">
-        Keine Tokens vorhanden
-      </div>
-      <div *ngFor="let token of tokens()" class="token-item">
-        <div class="token-info">
-          <span
-            class="token-role"
-            [class.give]="token.role === 'give_feedback'"
-            [class.get]="token.role === 'get_feedback'"
+      <!-- Create Token Form -->
+      <div class="create-token-form">
+        <h4>Neuen Token erstellen</h4>
+        <div class="form-group">
+          <label for="tokenRole">Rolle:</label>
+          <select
+            class="form-control"
+            id="tokenRole"
+            [(ngModel)]="newTokenRole"
           >
-            {{
-              token.role === 'give_feedback'
-                ? 'Feedback geben'
-                : 'Feedback einsehen'
-            }}
-          </span>
-          <span> {{ token.used }} Mal verwendet </span>
-          <a
-            class="token-value"
-            href="{{ feedbackLink(token) }}"
-            target="”_blank”"
-          >
-            {{ feedbackLink(token) }}
-          </a>
+            <option value="give_feedback">Feedback geben</option>
+            <option value="get_feedback">Feedback einsehen</option>
+          </select>
         </div>
-        <div class="flex flex-row gap-1">
-          <button
-            (click)="deleteToken(token.id)"
-            [disabled]="loading()"
-            class="jdav-btn secondary icon"
-          >
-            <span class="material-symbols-outlined">delete</span>
-            Löschen
-          </button>
-          <button
-            (click)="copyToClipboard(feedbackLink(token))"
-            class="jdav-btn icon"
-          >
-            <span class="material-symbols-outlined">content_copy</span>
-            Kopieren
-          </button>
-        </div>
+        <button (click)="createToken()" [disabled]="loading()" class="jdav-btn">
+          Token erstellen
+        </button>
+      </div>
+
+      <!-- Token List -->
+      <div class="token-list">
+        <h4>Vorhandene Tokens</h4>
+
+        @if (tokens().length === 0) {
+          <div class="no-tokens">Keine Tokens vorhanden</div>
+        }
+        @for (token of tokens(); track token.id) {
+          <div class="token-item">
+            <div class="token-info">
+              <span
+                class="token-role"
+                [class.give]="token.role === 'give_feedback'"
+                [class.get]="token.role === 'get_feedback'"
+              >
+                {{
+                  token.role === 'give_feedback'
+                    ? 'Feedback geben'
+                    : 'Feedback einsehen'
+                }}
+              </span>
+              @if (token.role === 'give_feedback') {
+                <span> {{ token.used }} Mal verwendet </span>
+              }
+              <a
+                class="token-value"
+                href="{{ feedbackLink(token) }}"
+                target="”_blank”"
+              >
+                {{ feedbackLink(token) }}
+              </a>
+            </div>
+            <div class="flex flex-row gap-1">
+              <button
+                (click)="deleteToken(token.id)"
+                [disabled]="loading()"
+                class="jdav-btn secondary icon"
+              >
+                <span class="material-symbols-outlined">delete</span>
+                Löschen
+              </button>
+              <button
+                (click)="copyToClipboard(feedbackLink(token))"
+                class="jdav-btn icon"
+              >
+                <span class="material-symbols-outlined">content_copy</span>
+                Kopieren
+              </button>
+            </div>
+          </div>
+        }
       </div>
     </div>
-  </div>
+  }
 </div>
