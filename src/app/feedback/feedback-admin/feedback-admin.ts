@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
 import {
   FeedbackAccessTokenDTO,
@@ -16,6 +17,7 @@ import {
   styleUrl: './feedback-admin.css',
 })
 export class FeedbackAdmin implements OnInit {
+  router = inject(Router);
   feedbackService: FeedbackService = inject(FeedbackService);
   feedbacks = signal<FeedbackDTO[]>([]);
   selectedFeedback = signal<FeedbackDTO | null>(null);
@@ -43,6 +45,9 @@ export class FeedbackAdmin implements OnInit {
         this.loading.set(false);
       },
       error: (error) => {
+        if (error.status === 401 || error.status === 403) {
+          this.router.navigate(['/']);
+        }
         this.error.set('Fehler beim Laden der Feedbacks: ' + error.message);
         this.loading.set(false);
       },
