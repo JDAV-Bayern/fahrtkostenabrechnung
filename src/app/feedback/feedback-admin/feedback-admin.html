@@ -20,49 +20,51 @@
     </button>
 
     <!-- Create Feedback Form -->
-    <div *ngIf="showCreateForm()" class="create-feedback-form">
-      <h3>Neues Feedback erstellen</h3>
-      <div class="form-group">
-        <label for="courseId">Schulunsnummer *</label>
-        <input
-          type="text"
-          id="courseId"
-          [(ngModel)]="newFeedbackCourseId"
-          placeholder="z.B. B123XY"
-          class="form-control"
-        />
-      </div>
+    @if (showCreateForm()) {
+      <div class="create-feedback-form">
+        <h3>Neues Feedback erstellen</h3>
+        <div class="form-group">
+          <label for="courseId">Schulungsnummer *</label>
+          <input
+            type="text"
+            id="courseId"
+            [(ngModel)]="newFeedbackCourseId"
+            placeholder="z.B. B123XY"
+            class="form-control"
+          />
+        </div>
 
-      <div class="form-group">
-        <label for="courseName">Schulungsname *</label>
-        <input
-          type="text"
-          id="courseName"
-          [(ngModel)]="newFeedbackCourseName"
-          placeholder="z.B. FreeRiden bei Anke und Ben"
-          class="form-control"
-        />
-      </div>
+        <div class="form-group">
+          <label for="courseName">Schulungsname *</label>
+          <input
+            type="text"
+            id="courseName"
+            [(ngModel)]="newFeedbackCourseName"
+            placeholder="z.B. FreeRiden bei Anke und Ben"
+            class="form-control"
+          />
+        </div>
 
-      <div class="form-group">
-        <label for="teamers">Teamer (durch Komma getrennt)</label>
-        <input
-          type="text"
-          id="teamers"
-          [(ngModel)]="newFeedbackTeamers"
-          placeholder="z.B. Anke, Ben"
-          class="form-control"
-        />
-      </div>
+        <div class="form-group">
+          <label for="teamers">Teamer (durch Komma getrennt)</label>
+          <input
+            type="text"
+            id="teamers"
+            [(ngModel)]="newFeedbackTeamers"
+            placeholder="z.B. Anke, Ben"
+            class="form-control"
+          />
+        </div>
 
-      <button
-        (click)="createFeedback()"
-        [disabled]="loading()"
-        class="jdav-btn"
-      >
-        Feedback erstellen
-      </button>
-    </div>
+        <button
+          (click)="createFeedback()"
+          [disabled]="loading()"
+          class="jdav-btn"
+        >
+          Feedback erstellen
+        </button>
+      </div>
+    }
   </div>
 
   <!-- Feedback List -->
@@ -138,7 +140,7 @@
               <a
                 class="token-value"
                 href="{{ feedbackLink(token) }}"
-                target="”_blank”"
+                target="_blank"
               >
                 {{ feedbackLink(token) }}
               </a>
