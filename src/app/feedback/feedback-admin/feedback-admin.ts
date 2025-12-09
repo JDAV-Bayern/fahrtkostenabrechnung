@@ -201,7 +201,15 @@ export class FeedbackAdmin implements OnInit {
         newTab.document.title =
           token.course_id + ' ' + this.roleToGerman(token.role);
         newTab.document.body.style.margin = '0';
-        newTab.document.body.innerHTML = `<img src="${dataUrl}" alt="QR Code" style="width:100%;height:100%;object-fit:none;" />`;
+        // Remove all children from the body
+        while (newTab.document.body.firstChild) {
+          newTab.document.body.removeChild(newTab.document.body.firstChild);
+        }
+        const img = newTab.document.createElement('img');
+        img.setAttribute('src', dataUrl);
+        img.setAttribute('alt', 'QR Code');
+        img.setAttribute('style', 'width:100%;height:100%;object-fit:none;');
+        newTab.document.body.appendChild(img);
         newTab.opener = null;
       })
       .catch((err: unknown) => {
