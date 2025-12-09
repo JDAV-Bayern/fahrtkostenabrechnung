@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import * as QRCode from 'qrcode';
 import { environment } from 'src/environments/environment';
 import {
   FeedbackAccessTokenDTO,
@@ -173,5 +174,39 @@ export class FeedbackAdmin implements OnInit {
     navigator.clipboard.writeText(text).catch((err) => {
       this.error.set('Fehler beim Kopieren in die Zwischenablage: ' + err);
     });
+  }
+
+  roleToGerman(role: string): string {
+    switch (role) {
+      case 'give_feedback':
+        return 'Feedback geben';
+      case 'get_feedback':
+        return 'Ergebnisse ansehen';
+      default:
+        return role;
+    }
+  }
+
+  openQrCode(token: FeedbackAccessTokenDTO): void {
+    const qrTarget = this.feedbackLink(token);
+    const newTab = window.open('', '_blank');
+
+    if (!newTab) {
+      this.error.set('QR-Code konnte nicht in neuem Tab geöffnet werden.');
+      return;
+    }
+
+    QRCode.toDataURL(qrTarget, { scale: 8 })
+      .then((dataUrl: string) => {
+        newTab.document.title =
+          token.course_id + ' ' + this.roleToGerman(token.role);
+        newTab.document.body.style.margin = '0';
+        newTab.document.body.innerHTML = `<img src="${dataUrl}" alt="QR Code" style="width:100%;height:100%;object-fit:none;" />`;
+        newTab.opener = null;
+      })
+      .catch((err: unknown) => {
+        newTab.close();
+        this.error.set('Fehler beim Erstellen des QR-Codes: ' + err);
+      });
   }
 }
