@@ -73,7 +73,6 @@ export class Feedback implements OnInit, OnDestroy {
 
     survey.onAfterRenderSurvey.add(() => {
       setContainerWidth();
-      requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
     });
     survey.onAfterRenderPage.add(setContainerWidth);
 
