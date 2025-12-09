@@ -58,7 +58,7 @@
     "angular-eslint": "21.1.0",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
-    "jsdom": "^27.2.0",
+    "jsdom": "^27.3.0",
     "pdf-parse": "^2.4.5",
     "playwright-ng-schematics": "^21.0.1",
     "prettier": "^3.6.2",
