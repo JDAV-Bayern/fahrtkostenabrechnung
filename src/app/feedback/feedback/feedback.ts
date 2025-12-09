@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import { SurveyModule } from 'survey-angular-ui';
 import { Model } from 'survey-core';
 
@@ -12,12 +12,13 @@ import { FeedbackService } from '../feedback-service';
   templateUrl: './feedback.html',
   styleUrl: './feedback.css',
 })
-export class Feedback implements OnInit {
+export class Feedback implements OnInit, OnDestroy {
   surveyModel = signal<Model | null>(null);
   error = signal<string | null>(null);
   feedbackId = signal<string>('');
   feedbackService: FeedbackService = inject(FeedbackService);
   router = inject(Router);
+  private resizeListener: (() => void) | null = null;
 
   saveSurveyResults(sender: { data: unknown }) {
     this.feedbackService
@@ -62,7 +63,29 @@ export class Feedback implements OnInit {
     survey.onComplete.add((sender: { data: unknown }) =>
       this.saveSurveyResults(sender),
     );
+    const setContainerWidth = () => {
+      const container = document.getElementById('feedback-container');
+      if (!container) return;
+      const width = Math.min(window.innerWidth, 1200);
+      container.style.width = `${width}px`;
+      container.style.margin = '0 auto';
+    };
+
+    survey.onAfterRenderSurvey.add(() => {
+      setContainerWidth();
+      requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
+    });
+    survey.onAfterRenderPage.add(setContainerWidth);
+
+    this.resizeListener = () => setContainerWidth();
+    window.addEventListener('resize', this.resizeListener);
+
     this.surveyModel.set(survey);
+  }
+  ngOnDestroy() {
+    if (this.resizeListener) {
+      window.removeEventListener('resize', this.resizeListener);
+    }
   }
   getTokenFromUrl(): string {
     const urlParams = new URLSearchParams(window.location.search);
