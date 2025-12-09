@@ -128,11 +128,7 @@
                 [class.give]="token.role === 'give_feedback'"
                 [class.get]="token.role === 'get_feedback'"
               >
-                {{
-                  token.role === 'give_feedback'
-                    ? 'Feedback geben'
-                    : 'Feedback einsehen'
-                }}
+                {{ roleToGerman(token.role) }}
               </span>
               @if (token.role === 'give_feedback') {
                 <span> {{ token.used }} Mal verwendet </span>
@@ -145,7 +141,7 @@
                 {{ feedbackLink(token) }}
               </a>
             </div>
-            <div class="flex flex-row gap-1">
+            <div class="token-actions">
               <button
                 (click)="deleteToken(token.id)"
                 [disabled]="loading()"
@@ -160,6 +156,10 @@
               >
                 <span class="material-symbols-outlined">content_copy</span>
                 Kopieren
+              </button>
+              <button (click)="openQrCode(token)" class="jdav-btn icon">
+                <span class="material-symbols-outlined">qr_code</span>
+                QR-Code
               </button>
             </div>
           </div>

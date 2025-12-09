@@ -158,19 +158,26 @@ h4 {
   border-radius: 4px;
   padding: 12px 15px;
   margin-bottom: 10px;
+  gap: 12px;
 }
 
 .token-info {
   display: flex;
   align-items: center;
   gap: 15px;
+  min-width: 0;
+  flex: 1;
 }
 
 .token-role {
   padding: 4px 10px;
-  border-radius: 12px;
+  border-radius: 6px;
   font-size: 0.8em;
   font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .token-role.give {
@@ -187,4 +194,15 @@ h4 {
   font-family: monospace;
   font-size: 0.9em;
   color: var(--color-body);
+}
+
+.token-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.token-actions .jdav-btn {
+  min-width: 120px;
+  justify-content: center;
 }
