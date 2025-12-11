@@ -41,20 +41,39 @@
             track training.id
           ) {
             <li class="training-item">
-              <p class="training-title">
-                <span class="training-code">{{ training.code }}</span>
-                {{ training.title }}
-              </p>
-              <div class="w-full flex flex-row justify-end gap-2 mt-4">
-                <button (click)="navigateToFeedback(training)" class="jdav-btn">
-                  Feedback geben
-                </button>
-                <button
-                  (click)="navigateToExpenseReport(training)"
-                  class="jdav-btn"
-                >
-                  Fahrtkosten abrechnen
-                </button>
+              @let futureTraining = isTrainingInFuture(training);
+              <div class="flex flex-col md:flex-row justify-between w-full">
+                <div>
+                  <p class="mb-5">
+                    <span class="training-code">{{ training.code }}</span>
+                  </p>
+                  <p class="training-title">
+                    {{ training.title }}
+                  </p>
+                  <p class="training-date">
+                    Start am {{ training.date_from | date: 'dd.MM.yyyy' }}
+                  </p>
+                </div>
+                <div class="flex flex-col justify-end gap-2 mt-4">
+                  <button
+                    (click)="navigateToFeedback(training)"
+                    class="jdav-btn h-10"
+                    [disabled]="futureTraining"
+                    [title]="
+                      futureTraining
+                        ? 'Feedback kannst du nach dem Kurs abgeben.'
+                        : ''
+                    "
+                  >
+                    Feedback geben
+                  </button>
+                  <button
+                    (click)="navigateToExpenseReport(training)"
+                    class="jdav-btn h-10"
+                  >
+                    Fahrtkosten abrechnen
+                  </button>
+                </div>
               </div>
             </li>
           }
