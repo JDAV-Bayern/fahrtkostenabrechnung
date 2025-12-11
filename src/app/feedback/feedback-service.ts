@@ -126,6 +126,7 @@ export class FeedbackService {
    * Create a new feedback record.
    *
    * @param feedbackRecordDTO The feedback record data to create.
+   * @param courseId The ID of the course to associate with the feedback record.
    * @returns The created feedback record.
    */
   createFeedbackRecord(
