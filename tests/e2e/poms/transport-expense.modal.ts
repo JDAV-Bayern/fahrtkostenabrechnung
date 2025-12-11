@@ -24,8 +24,7 @@ export interface PublicTransportExpenseInput extends BaseTransportExpenseInput {
   discount?: Discount;
 }
 
-export interface PublicTransportPlanExpenseInput
-  extends BaseTransportExpenseInput {
+export interface PublicTransportPlanExpenseInput extends BaseTransportExpenseInput {
   mode: 'plan';
 }
 

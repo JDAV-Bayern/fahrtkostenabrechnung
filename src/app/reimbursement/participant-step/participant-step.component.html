@@ -126,7 +126,7 @@
         class="form-control"
         formControlName="bic"
         id="bic"
-        onchange="this.value = this.value.toUpperCase();"
+        onchange="this.value = this.value.toUpperCase()"
         required
       />
       @if (bic.hasError('required') && bic.touched) {
