@@ -63,6 +63,17 @@ export class FeedbackService {
       params,
     });
   }
+  /**
+   *  Retrieve a single feedback by course ID, using the authenticated user's permissions.
+   * @param courseId The ID of the course to retrieve feedback for.
+   * @returns The feedback entry associated with the course ID.
+   */
+  getFeedbackByCourseId(courseId: string): Observable<FeedbackDTO> {
+    const params = new HttpParams().set('course_id', courseId);
+    return this.http.get<FeedbackDTO>(`${this.baseUrl}/feedback/by-course-id`, {
+      params,
+    });
+  }
 
   /**
    * Create a new feedback entry.
@@ -99,7 +110,7 @@ export class FeedbackService {
    * @param token Access token with 'give_feedback' role.
    * @returns The created feedback record.
    */
-  createFeedbackRecord(
+  createFeedbackRecordByToken(
     feedbackRecordDTO: FeedbackRecordCreateDTO,
     token: string,
   ): Observable<FeedbackRecordDTO> {
@@ -108,6 +119,23 @@ export class FeedbackService {
       `${this.baseUrl}/feedback/by-token`,
       feedbackRecordDTO,
       { params },
+    );
+  }
+
+  /**
+   * Create a new feedback record.
+   *
+   * @param feedbackRecordDTO The feedback record data to create.
+   * @returns The created feedback record.
+   */
+  createFeedbackRecord(
+    feedbackRecordDTO: FeedbackRecordCreateDTO,
+    courseId: string,
+  ): Observable<FeedbackRecordDTO> {
+    return this.http.post<FeedbackRecordDTO>(
+      `${this.baseUrl}/feedback/by-course-id`,
+      feedbackRecordDTO,
+      { params: new HttpParams().set('course_id', courseId) },
     );
   }
 
