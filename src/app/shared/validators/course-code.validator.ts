@@ -1,6 +1,6 @@
 import { ValidatorFn } from '@angular/forms';
 
-const COURSE_CODE_BY = /^B[0-9]{3}(FB|AM|GA)$/;
+const COURSE_CODE_BY = /^B[0-9]{3,4}(FB|AM|GA)$/;
 const COURSE_CODE_DE = /^J[0-9]{3}$/;
 
 export const validateCourseCode: ValidatorFn = (control) => {

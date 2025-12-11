@@ -168,4 +168,29 @@ test.describe('Reimbursement workflow', () => {
       page.getByRole('heading', { name: 'Schon fast fertig 🎉' }),
     ).toBeVisible();
   });
+
+  test('accepts 4-digit course codes', async ({
+    page,
+    courseStepPage,
+    participantStepPage,
+  }) => {
+    await courseStepPage.goto();
+    await courseStepPage.clearPersistedForm();
+    await expect(page).toHaveURL(/\/fahrtkosten\/kurs$/);
+    await expect(courseStepPage.courseCodeInput).toBeVisible();
+
+    // Test 4-digit course code
+    const COURSE_4_DIGIT = {
+      code: 'B1234FB',
+      name: 'Test Course with 4-digit code',
+    };
+
+    await courseStepPage.fill(COURSE_4_DIGIT);
+    await courseStepPage.continue();
+    await expect(page).toHaveURL(/\/fahrtkosten\/teilnehmer_in$/);
+
+    // Navigate back to verify the course code was saved correctly
+    await page.goBack();
+    await expect(courseStepPage.courseCodeInput).toHaveValue('B1234FB');
+  });
 });
