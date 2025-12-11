@@ -1,56 +1,25 @@
 <section class="auth-playground container mx-auto max-w-4xl px-4 py-8">
-  <div class="space-y-2">
-    <h1 class="text-3xl font-semibold text-slate-900">Benutzerprofil</h1>
-    <p class="text-slate-600">
-      Diese Seite ist nur über den OIDC-Auto-Login erreichbar. Nach
-      erfolgreicher Anmeldung zeigen wir hier die Stammdaten und deine letzten
-      Fortbildungen, wie sie vom Userinfo-Endpunkt geliefert werden.
-    </p>
-  </div>
-
   <article class="auth-card mt-6">
-    <header class="card-header">
-      <h2>Basisdaten</h2>
-      <span class="status-pill" [class.online]="authState().isAuthenticated">
-        {{
-          authState().isAuthenticated ? 'eingeloggt' : 'Anmeldung erforderlich'
-        }}
-      </span>
-    </header>
-
     @if (profile(); as data) {
+      <header class="card-header">
+        <h1 class="text-3xl font-semibold text-slate-900">
+          Hey {{ profile()?.given_name }} 👋🏼
+        </h1>
+      </header>
       <dl class="profile-grid">
         <div>
-          <dt>Vorname</dt>
-          <dd>{{ data.given_name || '–' }}</dd>
-        </div>
-        <div>
-          <dt>Nachname</dt>
-          <dd>{{ data.family_name || '–' }}</dd>
-        </div>
-        <div>
-          <dt>Vollständiger Name</dt>
+          <dt>Dein Name</dt>
           <dd>{{ data.name || '–' }}</dd>
         </div>
         <div>
-          <dt>Mitgliedsnummer</dt>
+          <dt>Deine Mitgliedsnummer</dt>
           <dd class="font-mono break-all">
             {{ data.jdav_membership_number || '–' }}
           </dd>
         </div>
         <div>
-          <dt>E-Mail</dt>
+          <dt>Deine E-Mail</dt>
           <dd>{{ data.email || '–' }}</dd>
-        </div>
-        <div>
-          <dt>E-Mail bestätigt</dt>
-          <dd>
-            {{ data.email_verified ? 'Ja' : 'Nein' }}
-          </dd>
-        </div>
-        <div>
-          <dt>Benutzer-ID (sub)</dt>
-          <dd class="font-mono break-all">{{ data.sub || '–' }}</dd>
         </div>
       </dl>
     } @else {
@@ -62,21 +31,31 @@
 
   <article class="auth-card mt-4">
     <header class="card-header">
-      <h2>Teilnahmen an Fortbildungen</h2>
+      <h2>Deine Schulungen</h2>
     </header>
     @if (profile(); as data) {
       @if (data.participated_trainings?.length) {
         <ul class="training-list">
-          @for (training of data.participated_trainings; track training.id) {
+          @for (
+            training of sortTrainingsByDate(data.participated_trainings);
+            track training.id
+          ) {
             <li class="training-item">
               <p class="training-title">
-                {{ training.title }}
                 <span class="training-code">{{ training.code }}</span>
+                {{ training.title }}
               </p>
-              <p class="training-date">
-                Start: {{ training.date_from | date: 'dd.MM.yyyy' }}
-              </p>
-              <p class="training-id">ID: {{ training.id }}</p>
+              <div class="w-full flex flex-row justify-end gap-2 mt-4">
+                <button (click)="navigateToFeedback(training)" class="jdav-btn">
+                  Feedback geben
+                </button>
+                <button
+                  (click)="navigateToExpenseReport(training)"
+                  class="jdav-btn"
+                >
+                  Fahrtkosten abrechnen
+                </button>
+              </div>
             </li>
           }
         </ul>
