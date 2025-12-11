@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, Signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { OidcSecurityService, UserDataResult } from 'angular-auth-oidc-client';
 
 interface ParticipatedTraining {
@@ -31,6 +32,7 @@ interface ProfileData {
 })
 export class UserProfileComponent {
   private readonly oidc = inject(OidcSecurityService);
+  private readonly router = inject(Router);
 
   readonly authState = this.oidc.authenticated;
   readonly userData = this.oidc.userData as Signal<UserDataResult>;
@@ -38,4 +40,34 @@ export class UserProfileComponent {
     const data = this.userData().userData as ProfileData | undefined;
     return data ?? null;
   });
+
+  sortTrainingsByDate(
+    trainings: ParticipatedTraining[] | undefined,
+  ): ParticipatedTraining[] {
+    if (!trainings) {
+      return [];
+    }
+    return trainings.slice().sort((a, b) => {
+      const dateA = new Date(a.date_from).getTime();
+      const dateB = new Date(b.date_from).getTime();
+      return dateA - dateB;
+    });
+  }
+
+  navigateToExpenseReport(training: ParticipatedTraining) {
+    this.router.navigate(['/fahrtkosten', 'kurs'], {
+      queryParams: {
+        nummer: training.code,
+        name: training.title,
+      },
+    });
+  }
+
+  navigateToFeedback(training: ParticipatedTraining) {
+    this.router.navigate(['/feedback'], {
+      queryParams: {
+        id: training.code,
+      },
+    });
+  }
 }
