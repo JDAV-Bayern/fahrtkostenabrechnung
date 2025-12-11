@@ -67,6 +67,10 @@ export class Feedback implements OnInit, OnDestroy {
       error: (error) => {
         if (error.status === 401) {
           this.error.set('Ungültiger oder abgelaufener Token.');
+        } else if (error.status === 404) {
+          this.error.set(
+            'Kein Feedback für die angegebene Schulungsnummer gefunden. Es kann sein, dass noch kein Feedback für diese Schulung erstellt wurde. Komm gerne später wieder.',
+          );
         } else {
           console.error('Fehler beim Abrufen des Feedbacks: ', error);
           this.error.set('Fehler beim Abrufen des Feedbacks: ' + error.message);
