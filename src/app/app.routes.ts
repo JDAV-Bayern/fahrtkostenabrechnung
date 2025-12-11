@@ -86,8 +86,8 @@ export const routes: Routes = [
     },
   },
   {
-    path: 'profilinfo',
-    title: 'User Profile | JDAV Bayern',
+    path: 'meine-kurse',
+    title: 'Meine Kurse | JDAV Bayern',
     component: UserProfileComponent,
     canActivate: [autoLoginPartialRoutesGuard],
     data: {
