@@ -54,6 +54,16 @@ export class UserProfileComponent {
     });
   }
 
+  isTrainingInFuture(training: ParticipatedTraining): boolean {
+    const startTime = new Date(training.date_from).getTime();
+    if (Number.isNaN(startTime)) {
+      return false;
+    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return startTime > today.getTime();
+  }
+
   navigateToExpenseReport(training: ParticipatedTraining) {
     this.router.navigate(['/fahrtkosten', 'kurs'], {
       queryParams: {
