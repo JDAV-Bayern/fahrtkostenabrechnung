@@ -78,8 +78,7 @@ export class Feedback implements OnInit, OnDestroy {
       this.feedbackService
         .getFeedbackByToken(token)
         .subscribe(feedbackInitializerSubscription);
-    }
-    if (courseId) {
+    } else if (courseId) {
       this.feedbackService
         .getFeedbackByCourseId(courseId)
         .subscribe(feedbackInitializerSubscription);
