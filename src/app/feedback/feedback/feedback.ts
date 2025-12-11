@@ -4,7 +4,8 @@ import { Model } from 'survey-core';
 
 import { A11yModule } from '@angular/cdk/a11y';
 import { Router } from '@angular/router';
-import { FeedbackService } from '../feedback-service';
+import { Observer } from 'rxjs';
+import { FeedbackDTO, FeedbackService } from '../feedback-service';
 
 @Component({
   selector: 'jdav-feedback',
@@ -21,29 +22,44 @@ export class Feedback implements OnInit, OnDestroy {
   private resizeListener: (() => void) | null = null;
 
   saveSurveyResults(sender: { data: unknown }) {
-    this.feedbackService
-      .createFeedbackRecord(
-        {
-          feedback_id: this.feedbackId(),
-          feedback: sender.data,
-        },
-        this.getTokenFromUrl(),
-      )
-      .subscribe({
-        error: (error) => {
-          console.error(
-            'Fehler beim Speichern der Feedback-Antworten: ',
-            error,
-          );
-          this.error.set(
-            'Fehler beim Speichern der Feedback-Antworten: ' + error.message,
-          );
-        },
-      });
+    const { token, courseId } = this.getUrlParameter();
+    if (!token && !courseId) {
+      this.error.set('Weder Token noch Schulungsnummer angegeben.');
+      return;
+    }
+    (token
+      ? this.feedbackService.createFeedbackRecordByToken(
+          {
+            feedback_id: this.feedbackId(),
+            feedback: sender.data,
+          },
+          token,
+        )
+      : this.feedbackService.createFeedbackRecord(
+          {
+            feedback_id: this.feedbackId(),
+            feedback: sender.data,
+          },
+          courseId!,
+        )
+    ).subscribe({
+      error: (error) => {
+        console.error('Fehler beim Speichern der Feedback-Antworten: ', error);
+        this.error.set(
+          'Fehler beim Speichern der Feedback-Antworten: ' + error.message,
+        );
+      },
+    });
   }
 
   ngOnInit() {
-    this.feedbackService.getFeedbackByToken(this.getTokenFromUrl()).subscribe({
+    const { token, courseId } = this.getUrlParameter();
+
+    if (!token && !courseId) {
+      this.error.set('Weder Token noch Schulungsnummer angegeben.');
+      return;
+    }
+    const feedbackInitializerSubscription: Partial<Observer<FeedbackDTO>> = {
       next: (feedback) => {
         this.feedbackId.set(feedback.id);
         this.initializeSurvey(feedback.surveyJson);
@@ -56,8 +72,28 @@ export class Feedback implements OnInit, OnDestroy {
           this.error.set('Fehler beim Abrufen des Feedbacks: ' + error.message);
         }
       },
-    });
+    };
+
+    if (token) {
+      this.feedbackService
+        .getFeedbackByToken(token)
+        .subscribe(feedbackInitializerSubscription);
+    }
+    if (courseId) {
+      this.feedbackService
+        .getFeedbackByCourseId(courseId)
+        .subscribe(feedbackInitializerSubscription);
+    }
   }
+
+  getUrlParameter() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return {
+      token: urlParams.get('token'),
+      courseId: urlParams.get('schulungsnummer'),
+    };
+  }
+
   initializeSurvey(surveyJson: unknown) {
     const survey = new Model(surveyJson);
     survey.onComplete.add((sender: { data: unknown }) =>
@@ -85,9 +121,5 @@ export class Feedback implements OnInit, OnDestroy {
     if (this.resizeListener) {
       window.removeEventListener('resize', this.resizeListener);
     }
-  }
-  getTokenFromUrl(): string {
-    const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('token') || '';
   }
 }

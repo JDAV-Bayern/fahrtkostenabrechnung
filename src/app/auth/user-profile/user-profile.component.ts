@@ -66,7 +66,7 @@ export class UserProfileComponent {
   navigateToFeedback(training: ParticipatedTraining) {
     this.router.navigate(['/feedback'], {
       queryParams: {
-        id: training.code,
+        schulungsnummer: training.code,
       },
     });
   }
