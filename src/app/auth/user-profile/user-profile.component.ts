@@ -50,7 +50,7 @@ export class UserProfileComponent {
     return trainings.slice().sort((a, b) => {
       const dateA = new Date(a.date_from).getTime();
       const dateB = new Date(b.date_from).getTime();
-      return dateA - dateB;
+      return dateB - dateA; // Sort descending: most recent first
     });
   }
 
