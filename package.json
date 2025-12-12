@@ -45,7 +45,7 @@
     "rxjs": "~7.8.0",
     "survey-angular-ui": "^2.3.14",
     "survey-core": "^2.4.1",
-    "tailwindcss": "^4.1.11",
+    "tailwindcss": "^4.1.18",
     "tslib": "^2.3.0",
     "xlsx-js-style": "1.2.0"
   },
