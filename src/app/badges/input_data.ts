@@ -67,9 +67,10 @@ function binaryToText(binary: Uint8Array): string {
   const detected = jschardet.detectAll(binaryString, {
     detectEncodings: ['UTF-8', 'UTF-16LE', 'UTF-16BE', 'Windows-1252'],
   });
-  const detectedEncoding: string = detected.length > 0 && detected[0].encoding
-    ? detected[0].encoding.toLowerCase()
-    : 'utf-8';
+  const detectedEncoding: string =
+    detected.length > 0 && detected[0].encoding
+      ? detected[0].encoding.toLowerCase()
+      : 'utf-8';
 
   try {
     console.log('Detect all result:', detected);
