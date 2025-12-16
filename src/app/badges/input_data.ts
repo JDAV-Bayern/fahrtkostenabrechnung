@@ -72,8 +72,7 @@ function binaryToText(binary: Uint8Array): string {
   try {
     console.log('Detect all result:', detected);
     console.log('Using encoding:', detectedEncoding);
-    const text = new TextDecoder(detectedEncoding).decode(binary);
-    return text;
+    return new TextDecoder(detectedEncoding).decode(binary);
   } catch (error) {
     // Fallback to UTF-8 if the chosen encoding is unsupported.
     console.error(
