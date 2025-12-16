@@ -65,10 +65,24 @@ function binaryToText(binary: Uint8Array): string {
   ).join('');
 
   const detected = jschardet.detect(binaryString);
+  const detectedEncoding = detected.encoding?.toLowerCase();
   const encoding =
-    detected.encoding === 'ascii' ? 'utf-8' : detected.encoding || 'utf-8';
+    // Treat any Cyrillic guess as a Windows-1252 file; these files are never Cyrillic.
+    detectedEncoding &&
+    ['windows-1251', 'iso-8859-5', 'koi8-r', 'ibm866', 'mac-cyrillic'].includes(
+      detectedEncoding,
+    )
+      ? 'windows-1252'
+      : detectedEncoding === 'ascii'
+        ? 'utf-8'
+        : detectedEncoding || 'utf-8';
 
-  return new TextDecoder(encoding).decode(binary);
+  try {
+    return new TextDecoder(encoding).decode(binary);
+  } catch {
+    // Fallback to UTF-8 if the chosen encoding is unsupported.
+    return new TextDecoder('utf-8').decode(binary);
+  }
 }
 
 function parseCsv(text: string): string[][] {
