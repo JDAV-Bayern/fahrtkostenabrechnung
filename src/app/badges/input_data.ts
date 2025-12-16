@@ -59,32 +59,25 @@ function isEmptyRecord(record: Record<string, unknown>): boolean {
 }
 
 function binaryToText(binary: Uint8Array): string {
-  const sampleLength = Math.min(binary.length, 64 * 1024);
+  const sampleLength = Math.min(binary.length, 64 * 4096);
   const binaryString = Array.from(binary.slice(0, sampleLength), (byte) =>
     String.fromCharCode(byte),
   ).join('');
 
-  const detected = jschardet.detect(binaryString);
-  const detectedEncoding: string | undefined = detected.encoding?.toLowerCase();
-  const encoding =
-    // Treat any Cyrillic guess as a Windows-1252 file.
-    // All input files are exported from the Swiss MV-Manager system, which only uses Latin-1/Windows-1252 encodings and never contains Cyrillic text.
-    // Therefore, any detection of a Cyrillic encoding is a false positive and should be mapped to Windows-1252.
-    detectedEncoding &&
-    ['windows-1251', 'iso-8859-5', 'koi8-r', 'ibm866', 'mac-cyrillic'].includes(
-      detectedEncoding,
-    )
-      ? 'windows-1252'
-      : detectedEncoding === 'ascii'
-        ? 'utf-8'
-        : detectedEncoding || 'utf-8';
+  const detected = jschardet.detectAll(binaryString, {
+    detectEncodings: ['UTF-8', 'UTF-16LE', 'UTF-16BE', 'Windows-1252'],
+  });
+  const detectedEncoding: string = detected[0].encoding.toLowerCase();
 
   try {
-    return new TextDecoder(encoding).decode(binary);
+    console.log('Detect all result:', detected);
+    console.log('Using encoding:', detectedEncoding);
+    const text = new TextDecoder(detectedEncoding).decode(binary);
+    return text;
   } catch (error) {
     // Fallback to UTF-8 if the chosen encoding is unsupported.
     console.error(
-      `Failed to decode binary with encoding "${encoding}":`,
+      `Failed to decode binary with encoding "${detectedEncoding}":`,
       error,
     );
     return new TextDecoder('utf-8').decode(binary);
