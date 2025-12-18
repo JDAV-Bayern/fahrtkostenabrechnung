@@ -167,6 +167,7 @@ h4 {
   gap: 15px;
   min-width: 0;
   flex: 1;
+  flex-wrap: wrap;
 }
 
 .token-role {
@@ -188,6 +189,21 @@ h4 {
 .token-role.get {
   background-color: #cce5ff;
   color: #004085;
+}
+
+.token-teamer {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.85em;
+  background-color: #f4f6f8;
+  color: var(--color-body);
+  border: 1px solid #d9dde2;
+  white-space: nowrap;
+}
+
+.token-usage {
+  color: var(--color-body);
+  font-size: 0.9em;
 }
 
 .token-value {
