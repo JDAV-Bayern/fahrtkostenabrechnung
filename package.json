@@ -50,8 +50,8 @@
     "xlsx-js-style": "1.2.0"
   },
   "devDependencies": {
-    "@angular/build": "^21.0.3",
-    "@angular/cli": "^21.0.3",
+    "@angular/build": "^21.0.4",
+    "@angular/cli": "^21.0.4",
     "@angular/compiler-cli": "^21.0.6",
     "@playwright/test": "^1.57.0",
     "@types/qrcode": "^1.5.6",
