@@ -27,6 +27,7 @@ export interface FeedbackRecordDTO {
 export interface FeedbackRecordCreateDTO {
   feedback_id: string;
   feedback: unknown;
+  correlation_id?: string;
 }
 
 export interface FeedbackAccessTokenDTO {
