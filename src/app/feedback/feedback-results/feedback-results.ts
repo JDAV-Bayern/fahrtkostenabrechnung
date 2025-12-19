@@ -16,8 +16,20 @@ export class FeedbackResults implements OnInit {
 
   feedback = signal<FeedbackDTO | null>(null);
   results = signal<FeedbackRecordDTO[] | null>(null);
+  chartTypes = signal<Record<string, 'histogram' | 'pie'>>({});
 
   json = JSON;
+
+  private colorPalette = [
+    '#10b981',
+    '#ef4444',
+    '#2563eb',
+    '#f59e0b',
+    '#8b5cf6',
+    '#06b6d4',
+    '#f97316',
+    '#22d3ee',
+  ];
 
   result_order = signal<
     (
@@ -85,6 +97,57 @@ export class FeedbackResults implements OnInit {
 
   getHistogramSum(data: Record<string, number>): number {
     return Object.values(data).reduce((a, b) => a + b, 0);
+  }
+
+  getChartType(key: string): 'histogram' | 'pie' {
+    return this.chartTypes()[key] ?? 'histogram';
+  }
+
+  setChartType(key: string, type: 'histogram' | 'pie') {
+    this.chartTypes.update((current) => ({
+      ...current,
+      [key]: type,
+    }));
+  }
+
+  toggleChartType(key: string) {
+    const next = this.getChartType(key) === 'histogram' ? 'pie' : 'histogram';
+    this.setChartType(key, next);
+  }
+
+  getLabelColor(index: number): string {
+    return this.colorPalette[index % this.colorPalette.length];
+  }
+
+  getPieGradient(
+    key: string,
+    labelMap: { value: string; text: string }[],
+  ): string {
+    const data = this.getHistogramData(key);
+    const total = this.getHistogramSum(data);
+    if (total === 0) {
+      return '#e5e7eb';
+    }
+
+    let startAngle = 0;
+    const segments: string[] = [];
+
+    labelMap.forEach((label, index) => {
+      const value = data[label.value] || 0;
+      if (value === 0) {
+        return;
+      }
+      const sliceAngle = (value / total) * 360;
+      const endAngle = startAngle + sliceAngle;
+      segments.push(
+        `${this.getLabelColor(index)} ${startAngle}deg ${endAngle}deg`,
+      );
+      startAngle = endAngle;
+    });
+
+    return segments.length > 0
+      ? `conic-gradient(${segments.join(', ')})`
+      : '#e5e7eb';
   }
 
   getTextAnswers(key: string): string[] {
