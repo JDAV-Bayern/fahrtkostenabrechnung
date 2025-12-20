@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router';
 import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
 import { ExpenseExtraData } from 'src/app/expenses/expense-modal/expense-modal.component';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
+import { Button } from 'src/app/shared/ui/button';
 import {
   Direction,
   TransportExpense,
@@ -18,6 +19,7 @@ import { ReimbursementService } from '../shared/reimbursement.service';
   templateUrl: './expenses-step.component.html',
   styleUrls: ['./expenses-step.component.css'],
   imports: [
+    Button,
     RouterLink,
     ReactiveFormsModule,
     CurrencyPipe,

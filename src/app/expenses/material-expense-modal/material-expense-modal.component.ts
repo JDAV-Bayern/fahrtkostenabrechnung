@@ -12,13 +12,14 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { Button } from 'src/app/shared/ui/button';
 import { MaterialExpense } from 'src/domain/expense.model';
 
 @Component({
   selector: 'app-material-expense-modal',
   templateUrl: './material-expense-modal.component.html',
   styleUrls: ['./material-expense-modal.component.css'],
-  imports: [ReactiveFormsModule, MatDatepickerModule],
+  imports: [Button, ReactiveFormsModule, MatDatepickerModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

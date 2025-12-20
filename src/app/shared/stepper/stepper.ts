@@ -2,12 +2,13 @@ import { CdkStep, CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
 import { NgTemplateOutlet } from '@angular/common';
 import { Component, contentChild, inject, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Button } from '../ui/button';
 
 @Component({
   selector: 'jdav-stepper',
   templateUrl: './stepper.html',
   providers: [{ provide: CdkStepper, useExisting: JdavStepper }],
-  imports: [CdkStepperModule, NgTemplateOutlet],
+  imports: [Button, CdkStepperModule, NgTemplateOutlet],
 })
 export class JdavStepper extends CdkStepper {
   private readonly router = inject(Router);

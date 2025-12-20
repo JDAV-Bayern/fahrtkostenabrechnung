@@ -18,10 +18,11 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import JSZip from 'jszip';
 import * as XLSX from 'xlsx-js-style';
+import { Button } from '../shared/ui/button';
 
 @Component({
   selector: 'jdav-badges',
-  imports: [],
+  imports: [Button],
   templateUrl: './badges.html',
   styleUrl: './badges.css',
 })

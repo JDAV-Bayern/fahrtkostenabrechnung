@@ -15,7 +15,7 @@
     ></ng-container>
 
     @if (selectedIndex > 0) {
-      <button type="button" class="jdav-btn secondary" cdkStepperPrevious>
+      <button jdavButton type="button" variant="ghost" cdkStepperPrevious>
         Zurück
       </button>
     }
@@ -24,8 +24,8 @@
 
 <ng-template #nextButton>
   <button
+    jdavButton
     type="button"
-    class="jdav-btn"
     [disabled]="selected?.stepControl?.invalid"
     cdkStepperNext
   >
@@ -34,11 +34,7 @@
 </ng-template>
 
 <ng-template #defaultSubmitButton>
-  <button
-    type="submit"
-    class="jdav-btn"
-    [disabled]="selected?.stepControl?.invalid"
-  >
+  <button jdavButton type="submit" [disabled]="selected?.stepControl?.invalid">
     Absenden
   </button>
 </ng-template>

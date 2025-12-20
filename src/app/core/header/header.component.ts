@@ -7,12 +7,13 @@ import {
 } from '@angular/router';
 import { filter } from 'rxjs';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
+import { Button } from 'src/app/shared/ui/button';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'header[jdav-header]',
   templateUrl: './header.component.html',
-  imports: [RouterLink],
+  imports: [Button, RouterLink],
   host: {
     class: 'z-1 shadow-md',
   },

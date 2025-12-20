@@ -6,6 +6,7 @@ import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbu
 import { ReimbursementValidatorService } from 'src/app/reimbursement/shared/reimbursement-validator.service';
 
 import { ReactiveFormsModule } from '@angular/forms';
+import { Button } from 'src/app/shared/ui/button';
 import { ExpenseTypePipe } from '../../expenses/shared/expense-type.pipe';
 import { ReimbursementService } from '../shared/reimbursement.service';
 
@@ -14,6 +15,7 @@ import { ReimbursementService } from '../shared/reimbursement.service';
   templateUrl: './overview-step.component.html',
   styleUrls: ['./overview-step.component.css'],
   imports: [
+    Button,
     ReactiveFormsModule,
     CurrencyPipe,
     KeyValuePipe,

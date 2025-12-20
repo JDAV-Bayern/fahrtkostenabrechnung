@@ -1,7 +1,7 @@
 {
   "name": "portal-jdav-bayern",
   "version": "1.2.0",
-  "packageManager": "pnpm@10.18.0",
+  "packageManager": "pnpm@10.26.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -50,9 +50,11 @@
     "xlsx-js-style": "1.2.0"
   },
   "devDependencies": {
+    "@angular-eslint/builder": "^21.1.0",
     "@angular/build": "^21.0.4",
     "@angular/cli": "^21.0.4",
     "@angular/compiler-cli": "^21.0.6",
+    "@eslint/js": "^9.39.2",
     "@playwright/test": "^1.57.0",
     "@types/qrcode": "^1.5.6",
     "angular-eslint": "21.1.0",

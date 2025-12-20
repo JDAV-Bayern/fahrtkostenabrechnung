@@ -76,8 +76,9 @@
       let-openFileSelector="openFileSelector"
     >
       <button
+        jdavButton
         type="button"
-        class="jdav-btn tertiary icon"
+        variant="ghost"
         (click)="openFileSelector()"
       >
         <span class="material-symbols-outlined">upload_file</span>
@@ -92,8 +93,9 @@
       @for (file of files; track file) {
         <p class="file-list-entry">
           <button
+            jdavButton
             type="button"
-            class="jdav-btn tertiary icon"
+            variant="ghost"
             (click)="removeFile(file.name)"
           >
             <span class="material-symbols-outlined">delete</span>

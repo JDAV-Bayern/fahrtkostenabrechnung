@@ -5,8 +5,8 @@
       @if (foodForm.length > 0) {
         @if (foodForm.disabled) {
           <button
+            jdavButton
             type="button"
-            class="jdav-btn icon"
             (click)="isFoodEnabled.setValue(true)"
           >
             <span class="material-symbols-outlined">restaurant</span>
@@ -14,8 +14,9 @@
           </button>
         } @else {
           <button
+            jdavButton
             type="button"
-            class="jdav-btn secondary icon"
+            variant="outline"
             (click)="isFoodEnabled.setValue(false)"
           >
             <span class="material-symbols-outlined">delete</span>

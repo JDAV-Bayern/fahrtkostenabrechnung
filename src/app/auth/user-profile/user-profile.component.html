@@ -56,8 +56,9 @@
                 </div>
                 <div class="flex flex-col justify-end gap-2 mt-4">
                   <button
+                    jdavButton
+                    type="button"
                     (click)="navigateToFeedback(training)"
-                    class="jdav-btn h-10"
                     [disabled]="futureTraining"
                     [title]="
                       futureTraining
@@ -68,8 +69,9 @@
                     Feedback geben
                   </button>
                   <button
+                    jdavButton
+                    type="button"
                     (click)="navigateToExpenseReport(training)"
-                    class="jdav-btn h-10"
                   >
                     Fahrtkosten abrechnen
                   </button>
