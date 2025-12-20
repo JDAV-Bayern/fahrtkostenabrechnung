@@ -157,7 +157,7 @@
     <hr class="my-5" />
     <div class="typography mb-5">
       <h2>Schritt 3: Ergebnis überprüfen und herunterladen</h2>
-      <table class="min-w-full bg-white border border-gray-200">
+      <table class="min-w-full mb-4 bg-white border border-gray-200">
         <thead>
           <tr>
             @for (key of mergedResult()?.keys || []; track key) {
@@ -171,7 +171,7 @@
         </thead>
         <tbody>
           @for (
-            record of (mergedResult()?.records || []).slice(0, 10);
+            record of (mergedResult()?.records || []).slice(0, 100);
             track record
           ) {
             <tr class="border-b border-gray-200 hover:bg-gray-50">
@@ -182,7 +182,7 @@
           }
         </tbody>
       </table>
-      <button class="jdav-btn mt-4" (click)="downloadExcels()">
+      <button jdavButton type="button" (click)="downloadExcels()">
         Excel Dateien Speichern
       </button>
     </div>

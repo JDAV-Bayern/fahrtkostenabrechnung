@@ -47,6 +47,8 @@ module.exports = tseslint.config(
       ...angular.configs.templateAccessibility,
       prettier,
     ],
-    rules: {},
+    rules: {
+      '@angular-eslint/template/button-has-type': 'error',
+    },
   },
 );

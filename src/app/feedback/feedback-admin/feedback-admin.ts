@@ -3,6 +3,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as QRCode from 'qrcode';
+import { Button } from 'src/app/shared/ui/button';
 import { environment } from 'src/environments/environment';
 import {
   FeedbackAccessTokenDTO,
@@ -13,7 +14,7 @@ import {
 @Component({
   selector: 'jdav-feedback-admin',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [Button, CommonModule, FormsModule],
   templateUrl: './feedback-admin.html',
   styleUrl: './feedback-admin.css',
 })

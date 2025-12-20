@@ -59,16 +59,31 @@ function isEmptyRecord(record: Record<string, unknown>): boolean {
 }
 
 function binaryToText(binary: Uint8Array): string {
-  const sampleLength = Math.min(binary.length, 64 * 1024);
+  const sampleLength = Math.min(binary.length, 64 * 4096);
   const binaryString = Array.from(binary.slice(0, sampleLength), (byte) =>
     String.fromCharCode(byte),
   ).join('');
 
-  const detected = jschardet.detect(binaryString);
-  const encoding =
-    detected.encoding === 'ascii' ? 'utf-8' : detected.encoding || 'utf-8';
+  const detected = jschardet.detectAll(binaryString, {
+    detectEncodings: ['UTF-8', 'UTF-16LE', 'UTF-16BE', 'Windows-1252'],
+  });
+  const detectedEncoding: string =
+    detected.length > 0 && detected[0].encoding
+      ? detected[0].encoding.toLowerCase()
+      : 'utf-8';
 
-  return new TextDecoder(encoding).decode(binary);
+  try {
+    console.log('Detect all result:', detected);
+    console.log('Using encoding:', detectedEncoding);
+    return new TextDecoder(detectedEncoding).decode(binary);
+  } catch (error) {
+    // Fallback to UTF-8 if the chosen encoding is unsupported.
+    console.error(
+      `Failed to decode binary with encoding "${detectedEncoding}":`,
+      error,
+    );
+    return new TextDecoder('utf-8').decode(binary);
+  }
 }
 
 function parseCsv(text: string): string[][] {

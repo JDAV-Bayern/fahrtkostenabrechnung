@@ -19,6 +19,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { TransportExpenseCompletion } from 'src/app/reimbursement/shared/reimbursement-control.service';
+import { Button } from 'src/app/shared/ui/button';
 import {
   Discount,
   EngineType,
@@ -31,7 +32,7 @@ import { TransportModePipe } from '../shared/transport-mode.pipe';
   selector: 'app-transport-expense-modal',
   templateUrl: './transport-expense-modal.component.html',
   styleUrls: ['./transport-expense-modal.component.css'],
-  imports: [ReactiveFormsModule, TransportModePipe],
+  imports: [Button, ReactiveFormsModule, TransportModePipe],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

@@ -7,8 +7,9 @@
     <div class="means-of-travel-buttons-container">
       @for (modeOption of allowedModes(); track modeOption) {
         <button
+          jdavButton
           type="button"
-          class="jdav-btn secondary icon"
+          variant="outline"
           (click)="chooseExpense(modeOption)"
         >
           <span class="material-symbols-outlined">
@@ -165,8 +166,9 @@
             ) {
               <div class="passengers-item" formArrayName="passengers">
                 <button
+                  jdavButton
                   type="button"
-                  class="jdav-btn tertiary icon"
+                  variant="ghost"
                   (click)="removePassenger($index)"
                 >
                   <span class="material-symbols-outlined">delete</span>
@@ -186,8 +188,9 @@
             }
 
             <button
+              jdavButton
               type="button"
-              class="jdav-btn add-passenger tertiary icon"
+              variant="ghost"
               (click)="addPassenger()"
             >
               <span class="material-symbols-outlined">add</span>
@@ -199,7 +202,7 @@
     }
 
     <div class="button-container">
-      <button type="submit" [disabled]="!form.valid" class="jdav-btn">
+      <button jdavButton type="submit" [disabled]="!form.valid">
         Speichern
       </button>
     </div>
