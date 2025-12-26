@@ -27,6 +27,7 @@ export interface FeedbackRecordDTO {
 export interface FeedbackRecordCreateDTO {
   feedback_id: string;
   feedback: unknown;
+  correlation_id?: string;
 }
 
 export interface FeedbackAccessTokenDTO {
@@ -35,6 +36,7 @@ export interface FeedbackAccessTokenDTO {
   course_id: string;
   role: string;
   used: number;
+  teamer_name: string | undefined;
 }
 
 @Injectable({
@@ -160,10 +162,11 @@ export class FeedbackService {
   createFeedbackToken(
     feedbackId: string,
     role: string,
+    teamer_name?: string,
   ): Observable<FeedbackAccessTokenDTO> {
     return this.http.post<FeedbackAccessTokenDTO>(
       `${this.baseUrl}/feedback/${feedbackId}/tokens`,
-      { role },
+      { role, teamer_name },
     );
   }
 

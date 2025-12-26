@@ -25,6 +25,7 @@ export class FeedbackAdmin implements OnInit {
   selectedFeedback = signal<FeedbackDTO | null>(null);
   tokens = signal<FeedbackAccessTokenDTO[]>([]);
   newTokenRole = 'give_feedback';
+  newTokenTeamer = '';
 
   newFeedbackCourseId = '';
   newFeedbackCourseName = '';
@@ -58,6 +59,7 @@ export class FeedbackAdmin implements OnInit {
 
   selectFeedback(feedback: FeedbackDTO): void {
     this.selectedFeedback.set(feedback);
+    this.newTokenTeamer = '';
     this.loadTokens(feedback.id);
   }
 
@@ -82,8 +84,16 @@ export class FeedbackAdmin implements OnInit {
 
     this.loading.set(true);
     this.error.set(null);
+    const teamerName =
+      this.newTokenRole === 'give_feedback'
+        ? undefined
+        : this.newTokenTeamer || undefined;
     this.feedbackService
-      .createFeedbackToken(this.selectedFeedback()!.id, this.newTokenRole)
+      .createFeedbackToken(
+        this.selectedFeedback()!.id,
+        this.newTokenRole,
+        teamerName,
+      )
       .subscribe({
         next: (token) => {
           this.tokens.update((tokens) => [...tokens, token]);
@@ -185,6 +195,20 @@ export class FeedbackAdmin implements OnInit {
         return 'Ergebnisse ansehen';
       default:
         return role;
+    }
+  }
+
+  tokenTeamerLabel(token: FeedbackAccessTokenDTO): string {
+    if (token.teamer_name && token.teamer_name.trim()) {
+      return `Teamer*in: ${token.teamer_name}`;
+    }
+    return 'Alle Teamer*innen';
+  }
+
+  onTokenRoleChange(role: string): void {
+    this.newTokenRole = role;
+    if (role === 'give_feedback') {
+      this.newTokenTeamer = '';
     }
   }
 

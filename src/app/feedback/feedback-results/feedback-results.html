@@ -7,34 +7,103 @@
       {{ feedback()?.course_id }}
       {{ feedback()?.course_name }}
     </h2>
-    <div class="flex flex-col gap-15">
+    <div class="flex flex-col gap-5">
       @for (result of result_order(); track result.key) {
-        <div>
-          <p class="title">{{ result.title }}</p>
+        <div class="border border-gray-300 p-5 rounded-sm shadow-lg">
           @if (result.type === 'histogram') {
+            @let chartType = getChartType(result.key);
             @let histogramData = getHistogramData(result.key);
             @let sum = getHistogramSum(histogramData);
-            <div
-              class="px-20 w-full grid auto-cols-fr grid-flow-col gap-5 h-75"
-            >
-              @for (label of result.labelMap; track label.value) {
-                <div
-                  class="bg-blue-200 rounded-sm w-full mt-auto"
-                  style="height: {{
-                    ((histogramData[label.value] || 0) / sum) * 100
-                  }}%;"
-                ></div>
-              }
+            <div class="chart-header">
+              <p class="title">{{ result.title }}</p>
+              <button
+                class="chart-toggle"
+                type="button"
+                (click)="toggleChartType(result.key)"
+                [attr.aria-label]="
+                  chartType === 'histogram'
+                    ? 'Diagrammtyp Kreisdiagramm aktivieren'
+                    : 'Diagrammtyp Balkendiagramm aktivieren'
+                "
+              >
+                <span
+                  class="chart-toggle-thumb"
+                  [class.right]="chartType === 'pie'"
+                ></span>
+                <span
+                  class="material-symbols-outlined chart-toggle-icon"
+                  [class.active]="chartType === 'histogram'"
+                  aria-hidden="true"
+                >
+                  bar_chart
+                </span>
+                <span
+                  class="material-symbols-outlined chart-toggle-icon"
+                  [class.active]="chartType === 'pie'"
+                  aria-hidden="true"
+                >
+                  pie_chart
+                </span>
+              </button>
             </div>
-            <div class="px-20 w-full grid auto-cols-fr grid-flow-col gap-5">
-              @for (label of result.labelMap; track label.value) {
-                <p class="w-full text-center">
-                  {{ label.text }} ({{ histogramData[label.value] || 0 }})
-                </p>
+            @if (chartType === 'histogram') {
+              <div
+                class="px-20 w-full grid auto-cols-fr grid-flow-col gap-5 h-75 border-gray-300"
+              >
+                @for (
+                  label of result.labelMap;
+                  track label.value;
+                  let i = $index
+                ) {
+                  <div
+                    class="rounded-sm w-full mt-auto histogram-bar"
+                    [style.background-color]="getLabelColor(i)"
+                    style="height: {{
+                      sum > 0
+                        ? ((histogramData[label.value] || 0) / sum) * 100
+                        : 0
+                    }}%;"
+                  ></div>
+                }
+              </div>
+            } @else if (chartType === 'pie') {
+              <div class="px-20 flex justify-center">
+                <div class="pie-chart-wrapper">
+                  <div
+                    class="pie-chart"
+                    [style.background]="
+                      getPieGradient(result.key, result.labelMap)
+                    "
+                  ></div>
+                  <div class="pie-chart-center">
+                    <p class="text-xs text-gray-500">Gesamt</p>
+                    <p class="text-lg font-semibold">{{ sum }}</p>
+                  </div>
+                </div>
+              </div>
+            }
+            <div
+              class="px-20 w-full grid auto-cols-fr grid-flow-col gap-5 legend"
+            >
+              @for (
+                label of result.labelMap;
+                track label.value;
+                let i = $index
+              ) {
+                <div class="legend-item">
+                  <span
+                    class="legend-swatch"
+                    [style.background-color]="getLabelColor(i)"
+                  ></span>
+                  <p class="w-full text-center">
+                    {{ label.text }} ({{ histogramData[label.value] || 0 }})
+                  </p>
+                </div>
               }
             </div>
           }
           @if (result.type === 'text') {
+            <p class="title">{{ result.title }}</p>
             <div class="flex flex-row w-full gap-3 flex-wrap">
               @for (answer of getTextAnswers(result.key); track answer) {
                 <span

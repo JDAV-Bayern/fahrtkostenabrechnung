@@ -17,6 +17,7 @@ export class Feedback implements OnInit, OnDestroy {
   surveyModel = signal<Model | null>(null);
   error = signal<string | null>(null);
   feedbackId = signal<string>('');
+  private correlationId = this.generateCorrelationId();
   feedbackService: FeedbackService = inject(FeedbackService);
   router = inject(Router);
   private resizeListener: (() => void) | null = null;
@@ -27,21 +28,14 @@ export class Feedback implements OnInit, OnDestroy {
       this.error.set('Weder Token noch Schulungsnummer angegeben.');
       return;
     }
+    const payload = {
+      feedback_id: this.feedbackId(),
+      feedback: sender.data,
+      correlation_id: this.correlationId,
+    };
     (token
-      ? this.feedbackService.createFeedbackRecordByToken(
-          {
-            feedback_id: this.feedbackId(),
-            feedback: sender.data,
-          },
-          token,
-        )
-      : this.feedbackService.createFeedbackRecord(
-          {
-            feedback_id: this.feedbackId(),
-            feedback: sender.data,
-          },
-          courseId!,
-        )
+      ? this.feedbackService.createFeedbackRecordByToken(payload, token)
+      : this.feedbackService.createFeedbackRecord(payload, courseId!)
     ).subscribe({
       error: (error) => {
         console.error('Fehler beim Speichern der Feedback-Antworten: ', error);
@@ -102,6 +96,19 @@ export class Feedback implements OnInit, OnDestroy {
     survey.onComplete.add((sender: { data: unknown }) =>
       this.saveSurveyResults(sender),
     );
+    survey.onCurrentPageChanged.add((sender: Model, options?: unknown) => {
+      // SurveyJS provides isNextPage on the options object when moving forward
+      const isNextPage =
+        typeof options === 'object' &&
+        options !== null &&
+        'isNextPage' in options &&
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore - runtime check is sufficient here
+        options.isNextPage;
+      if (isNextPage) {
+        this.saveSurveyResults({ data: sender.data });
+      }
+    });
     const setContainerWidth = () => {
       const container = document.getElementById('feedback-container');
       if (!container) return;
@@ -124,5 +131,12 @@ export class Feedback implements OnInit, OnDestroy {
     if (this.resizeListener) {
       window.removeEventListener('resize', this.resizeListener);
     }
+  }
+
+  private generateCorrelationId(): string {
+    if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+      return crypto.randomUUID();
+    }
+    return `corr-${Math.random().toString(36).slice(2, 10)}`;
   }
 }

@@ -46,7 +46,7 @@
         </div>
 
         <div class="form-group">
-          <label for="teamers">Teamer (durch Komma getrennt)</label>
+          <label for="teamers">Teamer*innen (durch Komma getrennt)</label>
           <input
             type="text"
             id="teamers"
@@ -84,7 +84,7 @@
             <span class="course-id">{{ feedback.course_id }}</span>
           </div>
           <div class="teamers">
-            <strong>Teamer:</strong> {{ feedback.teamers.join(', ') }}
+            <strong>Teamer*innen:</strong> {{ feedback.teamers.join(', ') }}
           </div>
         </button>
       }
@@ -105,11 +105,27 @@
             class="form-control"
             id="tokenRole"
             [(ngModel)]="newTokenRole"
+            (ngModelChange)="onTokenRoleChange($event)"
           >
             <option value="give_feedback">Feedback geben</option>
             <option value="get_feedback">Feedback einsehen</option>
           </select>
         </div>
+        @if (newTokenRole !== 'give_feedback') {
+          <div class="form-group">
+            <label for="tokenTeamer">Teamer*in:</label>
+            <select
+              class="form-control"
+              id="tokenTeamer"
+              [(ngModel)]="newTokenTeamer"
+            >
+              <option value="">Alle Teamer*innen</option>
+              @for (teamer of selectedFeedback()?.teamers || []; track teamer) {
+                <option [value]="teamer">{{ teamer }}</option>
+              }
+            </select>
+          </div>
+        }
         <button
           jdavButton
           type="button"
@@ -137,8 +153,15 @@
               >
                 {{ roleToGerman(token.role) }}
               </span>
+              @if (token.role !== 'give_feedback') {
+                <span class="token-teamer">
+                  {{ tokenTeamerLabel(token) }}
+                </span>
+              }
               @if (token.role === 'give_feedback') {
-                <span> {{ token.used }} Mal verwendet </span>
+                <span class="token-usage">
+                  {{ token.used }} Mal verwendet
+                </span>
               }
               <a
                 class="token-value"
