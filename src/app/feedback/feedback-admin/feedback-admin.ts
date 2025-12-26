@@ -200,9 +200,9 @@ export class FeedbackAdmin implements OnInit {
 
   tokenTeamerLabel(token: FeedbackAccessTokenDTO): string {
     if (token.teamer_name && token.teamer_name.trim()) {
-      return `Teamer: ${token.teamer_name}`;
+      return `Teamer*in: ${token.teamer_name}`;
     }
-    return 'Allgemeiner Link';
+    return 'Alle Teamer*innen';
   }
 
   onTokenRoleChange(role: string): void {
