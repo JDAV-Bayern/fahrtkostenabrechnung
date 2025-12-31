@@ -1,6 +1,6 @@
 {
   "name": "portal-jdav-bayern",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "packageManager": "pnpm@10.26.1",
   "scripts": {
     "ng": "ng",
