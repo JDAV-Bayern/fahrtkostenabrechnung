@@ -102,13 +102,10 @@ export class FeedbackResults implements OnInit {
       if (typeof mobilityType !== 'string') {
         continue;
       }
-      let key: string;
-      if (mobilityType === 'pkw') {
-        const carType = this.getNestedValue(feedbackData, 'auto-typ');
-        key = `${carType}`;
-      } else {
-        key = mobilityType;
-      }
+      const key =
+        mobilityType === 'pkw'
+          ? `${this.getNestedValue(feedbackData, 'auto-typ')}`
+          : mobilityType;
       mobilityHistogramData[key] = (mobilityHistogramData[key] || 0) + value;
     }
     return mobilityHistogramData;
