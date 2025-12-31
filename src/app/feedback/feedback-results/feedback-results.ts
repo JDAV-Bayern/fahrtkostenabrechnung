@@ -5,6 +5,14 @@ import {
   FeedbackService,
 } from '../feedback-service';
 
+const mobilityLabelMap = [
+  { value: 'elektro', text: 'PKW (Elektro)' },
+  { value: 'verbrenner', text: 'PKW (Verbrenner)' },
+  { value: 'hybrid', text: 'PKW (Hybrid)' },
+  { value: 'zug', text: 'Bahn/ÖPNV' },
+  { value: 'fair-means', text: 'Fair Means (Fahrrad, zu Fuß, etc.)' },
+];
+
 @Component({
   selector: 'jdav-feedback-results',
   imports: [],
@@ -82,7 +90,34 @@ export class FeedbackResults implements OnInit {
     }, obj);
   }
 
+  getMobilityHistogramData(): Record<string, number> {
+    const mobilityHistogramData: Record<string, number> = {};
+    for (const result of this.results() || []) {
+      const feedbackData = result.feedback;
+      const value = this.getNestedValue(feedbackData, 'distance-travelled');
+      if (typeof value !== 'number') {
+        continue;
+      }
+      const mobilityType = this.getNestedValue(feedbackData, 'mobility');
+      if (typeof mobilityType !== 'string') {
+        continue;
+      }
+      let key: string;
+      if (mobilityType === 'pkw') {
+        const carType = this.getNestedValue(feedbackData, 'auto-typ');
+        key = `${carType}`;
+      } else {
+        key = mobilityType;
+      }
+      mobilityHistogramData[key] = (mobilityHistogramData[key] || 0) + value;
+    }
+    return mobilityHistogramData;
+  }
+
   getHistogramData(key: string): Record<string, number> {
+    if (key === 'distance-travelled') {
+      return this.getMobilityHistogramData();
+    }
     const data: Record<string, number> = {};
     for (const result of this.results() || []) {
       // Keys might be nested, e.g., "section1.question2"
@@ -207,6 +242,14 @@ export class FeedbackResults implements OnInit {
     this.result_order.set(
       allFeedbackElements
         .map((element: Record<string, unknown>) => {
+          if (element['name'] === 'distance-travelled') {
+            return {
+              type: 'histogram' as const,
+              title: (element['title'] as string) ?? '',
+              key: element['name'] as string,
+              labelMap: mobilityLabelMap,
+            };
+          }
           if (element['type'] === 'matrix') {
             if (
               !Array.isArray(element['rows']) ||
