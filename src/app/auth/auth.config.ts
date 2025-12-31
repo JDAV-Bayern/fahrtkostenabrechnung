@@ -18,6 +18,6 @@ export const authConfig: PassedInitialConfig = {
     silentRenew: true,
     useRefreshToken: true,
     renewTimeBeforeTokenExpiresInSeconds: 30,
-    logLevel: LogLevel.Debug,
+    logLevel: LogLevel.Warn,
   },
 };
