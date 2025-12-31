@@ -158,6 +158,9 @@ export class FeedbackResults implements OnInit {
       if (typeof value === 'string' && value.trim() !== '') {
         answers.push(value);
       }
+      if (typeof value === 'number') {
+        answers.push(value.toString());
+      }
     }
     return answers;
   }
