@@ -90,23 +90,20 @@ export class ReimbursementControlService {
     }),
     expenses: this.formBuilder.group(
       {
-        transport: this.formBuilder.group(
-          {
-            inbound: this.formBuilder.array<TransportExpense>(
-              [],
-              limitedTransportMode('plan', 1),
-            ),
-            onsite: this.formBuilder.array<TransportExpense>(
-              [],
-              allowedTransportModes(['car', 'public']),
-            ),
-            outbound: this.formBuilder.array<TransportExpense>(
-              [],
-              limitedTransportMode('plan', 1),
-            ),
-          },
-          { validators: anyRequired },
-        ),
+        transport: this.formBuilder.group({
+          inbound: this.formBuilder.array<TransportExpense>(
+            [],
+            limitedTransportMode('plan', 1),
+          ),
+          onsite: this.formBuilder.array<TransportExpense>(
+            [],
+            allowedTransportModes(['car', 'public']),
+          ),
+          outbound: this.formBuilder.array<TransportExpense>(
+            [],
+            limitedTransportMode('plan', 1),
+          ),
+        }),
         food: this.formBuilder.array<FoodExpense>([]),
         material: this.formBuilder.array<MaterialExpense>([]),
       },
@@ -156,19 +153,15 @@ export class ReimbursementControlService {
     return this.form.controls.participant;
   }
 
-  get expensesStep() {
-    return this.form.controls.expenses;
-  }
-
   get transportExpensesStep() {
     return this.form.controls.expenses.controls.transport;
   }
 
-  get foodExpenses() {
+  get foodExpensesStep() {
     return this.form.controls.expenses.controls.food;
   }
 
-  get materialExpenses() {
+  get otherExpensesStep() {
     return this.form.controls.expenses.controls.material;
   }
 
@@ -224,8 +217,8 @@ export class ReimbursementControlService {
     Object.values(this.transportExpensesStep.controls).forEach((expenses) =>
       expenses.clear(),
     );
-    this.foodExpenses.clear();
-    this.materialExpenses.clear();
+    this.foodExpensesStep.clear();
+    this.otherExpensesStep.clear();
     this.foodSettings.reset();
     localStorage.removeItem(LOCAL_STORAGE_KEY_REIMBURSEMENT);
     localStorage.removeItem(LOCAL_STORAGE_KEY_SETTINGS);
@@ -255,10 +248,8 @@ export class ReimbursementControlService {
       },
       expenses: {
         transport: this.transportExpensesStep.getRawValue(),
-        food: this.foodExpenses.enabled ? this.foodExpenses.value : [],
-        material: this.materialExpenses.enabled
-          ? this.materialExpenses.value
-          : [],
+        food: this.foodExpensesStep.enabled ? this.foodExpensesStep.value : [],
+        material: this.otherExpensesStep.value,
       },
       note: this.overviewStep.controls.note.value,
     };
@@ -315,13 +306,11 @@ export class ReimbursementControlService {
         form.addControl('code', this.courseCodeControl);
         form.controls.location.disable();
         form.controls.time.disable();
-        transport.setValidators(anyRequired);
         break;
       case 'committee':
         form.removeControl('code');
         form.controls.location.enable();
         form.controls.time.enable();
-        transport.clearValidators();
         break;
     }
 
@@ -389,13 +378,13 @@ export class ReimbursementControlService {
       this.formBuilder.control(expense),
     );
 
-    this.foodExpenses.clear();
-    this.foodExpenses.push(controls);
+    this.foodExpensesStep.clear();
+    this.foodExpensesStep.push(controls);
 
     if (this.foodSettings.controls.isEnabled.value) {
-      this.foodExpenses.enable();
+      this.foodExpensesStep.enable();
     } else {
-      this.foodExpenses.disable();
+      this.foodExpensesStep.disable();
     }
   }
 }

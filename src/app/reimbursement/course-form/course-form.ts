@@ -7,6 +7,7 @@ import { ProgressIndicatorComponent } from 'src/app/shared/progress-indicator/pr
 import { Button } from 'src/app/shared/ui/button';
 import { JdavStepper } from '../../shared/stepper/stepper';
 import { CourseStep } from '../steps/course-step/course-step';
+import { OtherExpensesStep } from '../steps/other-expenses-step/other-expenses-step';
 import { OverviewStep } from '../steps/overview-step/overview-step';
 import { ParticipantStep } from '../steps/participant-step/participant-step';
 import { TransportExpensesStep } from '../steps/transport-expenses-step/transport-expenses-step';
@@ -23,6 +24,7 @@ import { TransportExpensesStep } from '../steps/transport-expenses-step/transpor
     TransportExpensesStep,
     OverviewStep,
     ProgressIndicatorComponent,
+    OtherExpensesStep,
   ],
   templateUrl: './course-form.html',
   host: { class: 'block h-full bg-gray-50' },

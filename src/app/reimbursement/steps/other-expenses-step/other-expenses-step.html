@@ -1,0 +1,22 @@
+<div [formArray]="form">
+  <app-expense-list type="material" [form]="form">
+    <div class="typography">
+      <h2>Sonstige Auslagen</h2>
+      @if (showExplanation()) {
+        <p class="text-sm">
+          Hier können sonstige Auslagen eingetragen werden, welche laut
+          Fahrtkostenrichtlinie erstattungsfähig sind. Dazu gehören
+          Parkgebühren, falls vom Auto auf den ÖPNV umgestiegen wurde, sowie
+          Lebensmitteleinkäufe für Selbstversorgerschulungen.
+        </p>
+      }
+    </div>
+  </app-expense-list>
+
+  <p class="mt-4 text-right font-bold">
+    Summe:
+    <span class="mx-2 px-2 pt-1 border-t-3 border-double border-border">{{
+      total() | currency
+    }}</span>
+  </p>
+</div>

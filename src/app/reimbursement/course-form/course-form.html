@@ -6,8 +6,17 @@
     <cdk-step label="teilnehmer_in" [stepControl]="form.controls.participant">
       <jdav-participant-step></jdav-participant-step>
     </cdk-step>
-    <cdk-step label="auslagen" [stepControl]="form.controls.expenses">
+    <cdk-step
+      label="fahrtstrecke"
+      [stepControl]="form.controls.expenses.controls.transport"
+    >
       <jdav-transport-expenses-step></jdav-transport-expenses-step>
+    </cdk-step>
+    <cdk-step
+      label="sonstige-auslagen"
+      [stepControl]="form.controls.expenses.controls.material"
+    >
+      <jdav-other-expenses-step showExplanation></jdav-other-expenses-step>
     </cdk-step>
     <cdk-step label="zusammenfassung">
       <jdav-overview-step></jdav-overview-step>

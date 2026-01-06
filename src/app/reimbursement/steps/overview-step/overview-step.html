@@ -34,6 +34,10 @@
 </table>
 
 <div class="typography">
+  @if (expenseForm.hasError('anyRequired')) {
+    <div class="error-message">Bitte gib mindestens eine Auslage an.</div>
+  }
+
   @if (report.totalReduced) {
     <p>
       <b
@@ -43,6 +47,7 @@
       >
     </p>
   }
+
   @for (warning of getWarnings(); track warning) {
     <p><b>Warnung</b> {{ warning }}</p>
   }

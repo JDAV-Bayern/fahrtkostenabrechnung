@@ -7,7 +7,8 @@ import { ProgressIndicatorComponent } from 'src/app/shared/progress-indicator/pr
 import { Button } from 'src/app/shared/ui/button';
 import { JdavStepper } from '../../shared/stepper/stepper';
 import { CommitteeStep } from '../steps/committee-step/committee-step';
-import { ExpensesExtraStep } from '../steps/expenses-extra-step/expenses-extra-step';
+import { FoodExpensesStep } from '../steps/food-expenses-step/food-expenses-step';
+import { OtherExpensesStep } from '../steps/other-expenses-step/other-expenses-step';
 import { OverviewStep } from '../steps/overview-step/overview-step';
 import { ParticipantStep } from '../steps/participant-step/participant-step';
 import { TransportExpensesStep } from '../steps/transport-expenses-step/transport-expenses-step';
@@ -23,8 +24,9 @@ import { TransportExpensesStep } from '../steps/transport-expenses-step/transpor
     TransportExpensesStep,
     OverviewStep,
     CommitteeStep,
-    ExpensesExtraStep,
+    OtherExpensesStep,
     ProgressIndicatorComponent,
+    FoodExpensesStep,
   ],
   templateUrl: './committee-form.html',
   host: { class: 'block h-full bg-gray-50' },

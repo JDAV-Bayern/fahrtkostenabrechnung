@@ -1,0 +1,46 @@
+<div [formArray]="form">
+  <div class="flex items-center gap-6">
+    <h2 class="typography">Tagegelder</h2>
+    @if (form.length > 0) {
+      @if (form.disabled) {
+        <button jdavButton type="button" (click)="isFoodEnabled.setValue(true)">
+          <span class="material-symbols-outlined">restaurant</span>
+          Tagegelder abrechnen
+        </button>
+      } @else {
+        <button
+          jdavButton
+          type="button"
+          variant="outline"
+          (click)="isFoodEnabled.setValue(false)"
+        >
+          <span class="material-symbols-outlined">delete</span>
+          Tagegelder entfernen
+        </button>
+      }
+    }
+  </div>
+  @if (form.length === 0) {
+    <p class="typography">
+      Für diese Reise können keine Tagegelder beantragt werden, da die Dauer der
+      Abwesenheit unter 8 Stunden betrug.
+    </p>
+  } @else if (form.enabled) {
+    <p class="typography">
+      Bitte wähle aus, welche Mahlzeiten du kostenlos erhalten hast. Die
+      angegebene Verpflegungspauschale wird um diese gekürzt.
+    </p>
+    <div>
+      @for (control of form.controls; track control) {
+        <app-food-expense-card [formControl]="control"></app-food-expense-card>
+      }
+    </div>
+
+    <p class="mt-4 text-right font-bold">
+      Summe:
+      <span class="mx-2 px-2 pt-1 border-t-3 border-double border-border">{{
+        total() | currency
+      }}</span>
+    </p>
+  }
+</div>

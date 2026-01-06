@@ -30,6 +30,7 @@ export class OverviewStep {
   private readonly changeDetector = inject(ChangeDetectorRef);
 
   form = this.controlService.overviewStep;
+  expenseForm = this.controlService.form.controls.expenses;
 
   readonly originalOrder = () => 0;
 
