@@ -6,9 +6,9 @@ import {
   inject,
   Injectable,
 } from '@angular/core';
-import { FinishedDialogComponent } from '../reimbursement/overview-step/finished-dialog/finished-dialog.component';
-import { PdfViewComponent } from '../reimbursement/overview-step/pdf-view/pdf-view.component';
+import { PdfView } from '../reimbursement/pdf-view/pdf-view';
 import { ReimbursementControlService } from '../reimbursement/shared/reimbursement-control.service';
+import { FinishedDialog } from '../reimbursement/steps/overview-step/finished-dialog/finished-dialog';
 import { combinePdf, createPdf } from './pdf-creation';
 
 @Injectable({
@@ -32,7 +32,7 @@ export class PdfService {
     document.body.appendChild(container);
 
     // create component
-    const compRef = createComponent(PdfViewComponent, {
+    const compRef = createComponent(PdfView, {
       environmentInjector: this.appRef.injector,
     });
     container.appendChild(compRef.location.nativeElement);
@@ -68,7 +68,7 @@ export class PdfService {
       return;
     }
 
-    this.dialog.open(FinishedDialogComponent, {
+    this.dialog.open(FinishedDialog, {
       data: {
         givenName: this.reimbursement.participant.givenName,
         meeting: this.reimbursement.meeting,

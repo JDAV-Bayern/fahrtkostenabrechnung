@@ -71,12 +71,6 @@ p.typography {
   color: var(--color-primary-darken);
 }
 
-fieldset {
-  border: none;
-  margin: 0;
-  padding: 0;
-}
-
 .dialog {
   background-color: #fff;
   border-radius: 4px;
@@ -84,7 +78,7 @@ fieldset {
     0px 11px 15px -7px rgba(0, 0, 0, 0.2),
     0px 24px 38px 3px rgba(0, 0, 0, 0.14),
     0px 9px 46px 8px rgba(0, 0, 0, 0.12);
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .form-group label,

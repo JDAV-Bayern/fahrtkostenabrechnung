@@ -6,14 +6,13 @@ import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbu
 import { ReimbursementValidatorService } from 'src/app/reimbursement/shared/reimbursement-validator.service';
 
 import { ReactiveFormsModule } from '@angular/forms';
+import { ExpenseTypePipe } from 'src/app/expenses/shared/expense-type.pipe';
 import { Button } from 'src/app/shared/ui/button';
-import { ExpenseTypePipe } from '../../expenses/shared/expense-type.pipe';
-import { ReimbursementService } from '../shared/reimbursement.service';
+import { ReimbursementService } from '../../shared/reimbursement.service';
 
 @Component({
-  selector: 'app-overview-step',
-  templateUrl: './overview-step.component.html',
-  styleUrls: ['./overview-step.component.css'],
+  selector: 'jdav-overview-step',
+  templateUrl: './overview-step.html',
   imports: [
     Button,
     ReactiveFormsModule,
@@ -24,7 +23,7 @@ import { ReimbursementService } from '../shared/reimbursement.service';
     ExpenseTypePipe,
   ],
 })
-export class OverviewStepComponent {
+export class OverviewStep {
   private readonly reimbursementService = inject(ReimbursementService);
   private readonly controlService = inject(ReimbursementControlService);
   private readonly validationService = inject(ReimbursementValidatorService);

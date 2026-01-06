@@ -9,8 +9,8 @@ import { Feedback } from './feedback/feedback/feedback';
 import { DataProtectionComponent } from './info/data-protection/data-protection.component';
 import { ExpenseRatesComponent } from './info/expense-rates/expense-rates.component';
 import { InfoComponent } from './info/info.component';
-import { CommitteeSteps } from './reimbursement/committee-steps/committee-steps';
-import { CourseSteps } from './reimbursement/course-steps/course-steps';
+import { CommitteeForm } from './reimbursement/committee-form/committee-form';
+import { CourseForm } from './reimbursement/course-form/course-form';
 
 export const routes: Routes = [
   {
@@ -45,7 +45,7 @@ export const routes: Routes = [
   {
     path: 'fahrtkosten/:step',
     title: 'Fahrtkostenabrechnung | JDAV Bayern',
-    component: CourseSteps,
+    component: CourseForm,
   },
   {
     path: 'fahrtkosten-gremium',
@@ -55,7 +55,7 @@ export const routes: Routes = [
   {
     path: 'fahrtkosten-gremium/:step',
     title: 'Fahrtkostenabrechnung Gremien | JDAV Bayern',
-    component: CommitteeSteps,
+    component: CommitteeForm,
   },
   {
     path: 'marken',

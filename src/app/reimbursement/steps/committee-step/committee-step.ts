@@ -6,8 +6,8 @@ import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbu
 import { FormDatetimeComponent } from 'src/app/shared/form-datetime/form-datetime.component';
 
 @Component({
-  selector: 'app-meeting-committee-step',
-  templateUrl: './meeting-committee-step.component.html',
+  selector: 'jdav-committee-step',
+  templateUrl: './committee-step.html',
   imports: [
     RouterLink,
     ReactiveFormsModule,
@@ -15,7 +15,7 @@ import { FormDatetimeComponent } from 'src/app/shared/form-datetime/form-datetim
     FormDatetimeComponent,
   ],
 })
-export class MeetingCommitteeStepComponent implements OnInit {
+export class CommitteeStep implements OnInit {
   private readonly controlService = inject(ReimbursementControlService);
   form = this.controlService.meetingStep;
 

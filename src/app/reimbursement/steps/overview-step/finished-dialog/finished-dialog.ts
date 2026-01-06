@@ -3,11 +3,10 @@ import { Component, inject } from '@angular/core';
 import { Meeting } from 'src/domain/meeting.model';
 
 @Component({
-  selector: 'app-finished-dialog',
-  templateUrl: './finished-dialog.component.html',
-  styleUrls: ['./finished-dialog.component.css'],
+  selector: 'jdav-finished-dialog',
+  templateUrl: './finished-dialog.html',
 })
-export class FinishedDialogComponent {
+export class FinishedDialog {
   private readonly data = inject<{ meeting: Meeting; givenName: string }>(
     DIALOG_DATA,
   );

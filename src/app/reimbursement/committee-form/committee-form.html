@@ -1,16 +1,19 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <jdav-stepper linear>
-    <cdk-step label="kurs" [stepControl]="form.controls.meeting">
-      <app-meeting-course-step></app-meeting-course-step>
+    <cdk-step label="reisedaten" [stepControl]="form.controls.meeting">
+      <jdav-committee-step></jdav-committee-step>
     </cdk-step>
     <cdk-step label="teilnehmer_in" [stepControl]="form.controls.participant">
-      <app-participant-step></app-participant-step>
+      <jdav-participant-step></jdav-participant-step>
     </cdk-step>
     <cdk-step label="auslagen" [stepControl]="form.controls.expenses">
-      <app-expenses-step></app-expenses-step>
+      <jdav-transport-expenses-step></jdav-transport-expenses-step>
+    </cdk-step>
+    <cdk-step label="auslagen-sonstiges" [stepControl]="form.controls.expenses">
+      <jdav-expenses-extra-step></jdav-expenses-extra-step>
     </cdk-step>
     <cdk-step label="zusammenfassung">
-      <app-overview-step></app-overview-step>
+      <jdav-overview-step></jdav-overview-step>
     </cdk-step>
     <ng-template #submitButton>
       <button

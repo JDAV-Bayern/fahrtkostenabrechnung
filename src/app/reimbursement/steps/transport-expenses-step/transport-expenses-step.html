@@ -46,7 +46,7 @@
       [dialogData]="getDialogData('outbound')"
       [enterPredicate]="getPredicateFn('outbound')"
     >
-      <div class="heading">
+      <div class="flex items-center gap-6">
         <h3 class="typography">Rückfahrt</h3>
         <button jdavButton type="button" (click)="completeReturnTrip()">
           <span class="material-symbols-outlined">swap_horiz</span>
@@ -61,9 +61,11 @@
     }
   </div>
 
-  <p class="subtotal">
+  <p class="mt-4 text-right font-bold">
     Summe:
-    <span>{{ total | currency }}</span>
+    <span class="mx-2 px-2 pt-1 border-t-3 border-double border-border">{{
+      total | currency
+    }}</span>
   </p>
 
   @if (form.hasError('anyRequired')) {

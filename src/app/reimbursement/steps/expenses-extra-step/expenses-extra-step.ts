@@ -2,15 +2,14 @@ import { CurrencyPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
+import { FoodExpenseCardComponent } from 'src/app/expenses/food-expense-card/food-expense-card.component';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { Button } from 'src/app/shared/ui/button';
-import { FoodExpenseCardComponent } from '../../expenses/food-expense-card/food-expense-card.component';
-import { ReimbursementService } from '../shared/reimbursement.service';
+import { ReimbursementService } from '../../shared/reimbursement.service';
 
 @Component({
-  selector: 'app-expenses-extra-step',
-  templateUrl: './expenses-extra-step.component.html',
-  styleUrls: ['./expenses-extra-step.component.css'],
+  selector: 'jdav-expenses-extra-step',
+  templateUrl: './expenses-extra-step.html',
   imports: [
     Button,
     ReactiveFormsModule,
@@ -19,7 +18,7 @@ import { ReimbursementService } from '../shared/reimbursement.service';
     FoodExpenseCardComponent,
   ],
 })
-export class ExpensesExtraStepComponent {
+export class ExpensesExtraStep {
   private readonly reimbursementService = inject(ReimbursementService);
   private readonly controlService = inject(ReimbursementControlService);
 

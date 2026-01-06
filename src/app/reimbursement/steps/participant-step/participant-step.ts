@@ -15,12 +15,11 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { JdavState } from 'src/domain/section.model';
 
 @Component({
-  selector: 'app-participant-step',
-  templateUrl: './participant-step.component.html',
-  styleUrls: ['./participant-step.component.css'],
+  selector: 'jdav-participant-step',
+  templateUrl: './participant-step.html',
   imports: [RouterLink, ReactiveFormsModule, MatAutocompleteModule],
 })
-export class ParticipantStepComponent implements OnInit {
+export class ParticipantStep implements OnInit {
   private readonly plzService = inject(PlzService);
   private readonly sectionService = inject(SectionService);
   private readonly controlService = inject(ReimbursementControlService);

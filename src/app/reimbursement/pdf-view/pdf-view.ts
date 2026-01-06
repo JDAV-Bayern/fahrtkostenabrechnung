@@ -5,15 +5,15 @@ import { ExpenseAmountPipe } from 'src/app/expenses/shared/expense-amount.pipe';
 import { ExpenseDetailsComponent } from 'src/app/expenses/shared/expense-details/expense-details.component';
 import { ExpenseTitlePipe } from 'src/app/expenses/shared/expense-title.pipe';
 import { DirectionPipe } from 'src/app/reimbursement/shared/direction.pipe';
+import { ReimbursementService } from 'src/app/reimbursement/shared/reimbursement.service';
 import { Direction } from 'src/domain/expense.model';
 import { Reimbursement } from 'src/domain/reimbursement.model';
 import { Section } from 'src/domain/section.model';
-import { ReimbursementService } from '../../shared/reimbursement.service';
 
 @Component({
-  selector: 'app-pdf-view',
-  templateUrl: './pdf-view.component.html',
-  styleUrls: ['./pdf-view.component.css'],
+  selector: 'jdav-pdf-view',
+  templateUrl: './pdf-view.html',
+  styleUrls: ['./pdf-view.css'],
   imports: [
     DatePipe,
     CurrencyPipe,
@@ -23,7 +23,7 @@ import { ReimbursementService } from '../../shared/reimbursement.service';
     ExpenseDetailsComponent,
   ],
 })
-export class PdfViewComponent implements OnInit {
+export class PdfView implements OnInit {
   private readonly reimbursementService = inject(ReimbursementService);
   private readonly sectionService = inject(SectionService);
 

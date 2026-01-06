@@ -1,6 +1,6 @@
 <h2 class="typography">Zusammenfassung</h2>
 
-<table>
+<table class="mb-4 [&_td]:p-1">
   <tr>
     <td>Veranstaltung:</td>
     <td>
@@ -20,16 +20,16 @@
   </tr>
 </table>
 
-<table class="expenses">
+<table class="mb-4 [&_td]:p-1">
   @for (entry of report.categories | keyvalue: originalOrder; track entry.key) {
     <tr>
       <td>{{ entry.key | expenseType }}:</td>
-      <td>{{ entry.value | currency }}</td>
+      <td class="w-20 text-right">{{ entry.value | currency }}</td>
     </tr>
   }
-  <tr>
+  <tr class="font-bold">
     <td>Erstattungsbetrag:</td>
-    <td>{{ report.total | currency }}</td>
+    <td class="w-20 text-right">{{ report.total | currency }}</td>
   </tr>
 </table>
 
@@ -88,10 +88,10 @@
   </ngx-file-drop>
   @let files = form.controls.files.value;
   @if (files.length) {
-    <fieldset class="files-list">
-      <legend style="color: #999">Belege</legend>
+    <fieldset class="mt-4 border border-gray-300 rounded-sm">
+      <legend class="ml-2 text-gray-400">Belege</legend>
       @for (file of files; track file) {
-        <p class="file-list-entry">
+        <p class="flex items-center">
           <button
             jdavButton
             type="button"

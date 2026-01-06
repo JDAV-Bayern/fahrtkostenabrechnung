@@ -12,12 +12,11 @@ import {
   TransportExpense,
   TransportMode,
 } from 'src/domain/expense.model';
-import { ReimbursementService } from '../shared/reimbursement.service';
+import { ReimbursementService } from '../../shared/reimbursement.service';
 
 @Component({
-  selector: 'app-expenses-step',
-  templateUrl: './expenses-step.component.html',
-  styleUrls: ['./expenses-step.component.css'],
+  selector: 'jdav-transport-expenses-step',
+  templateUrl: './transport-expenses-step.html',
   imports: [
     Button,
     RouterLink,
@@ -27,7 +26,7 @@ import { ReimbursementService } from '../shared/reimbursement.service';
     ExpenseListComponent,
   ],
 })
-export class ExpensesStepComponent {
+export class TransportExpensesStep {
   private readonly reimbursementService = inject(ReimbursementService);
   private readonly reimbursementControlService = inject(
     ReimbursementControlService,

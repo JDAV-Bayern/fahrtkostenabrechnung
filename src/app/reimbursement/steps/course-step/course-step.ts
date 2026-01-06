@@ -5,11 +5,11 @@ import { ActivatedRoute } from '@angular/router';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 
 @Component({
-  selector: 'app-meeting-course-step',
-  templateUrl: './meeting-course-step.component.html',
+  selector: 'jdav-course-step',
+  templateUrl: './course-step.html',
   imports: [ReactiveFormsModule],
 })
-export class MeetingCourseStepComponent implements OnInit {
+export class CourseStep implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly controlService = inject(ReimbursementControlService);
 
