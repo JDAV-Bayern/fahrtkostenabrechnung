@@ -6,6 +6,7 @@ import { PdfService } from 'src/app/shared/pdf-service';
 import { ProgressIndicatorComponent } from 'src/app/shared/progress-indicator/progress-indicator.component';
 import { Button } from 'src/app/shared/ui/button';
 import { JdavStepper } from '../../shared/stepper/stepper';
+import { ExpensesExtraStepComponent } from '../expenses-extra-step/expenses-extra-step.component';
 import { ExpensesStepComponent } from '../expenses-step/expenses-step.component';
 import { MeetingCourseStepComponent } from '../meeting-course-step/meeting-course-step.component';
 import { OverviewStepComponent } from '../overview-step/overview-step.component';
@@ -21,6 +22,7 @@ import { ParticipantStepComponent } from '../participant-step/participant-step.c
     MeetingCourseStepComponent,
     ParticipantStepComponent,
     ExpensesStepComponent,
+    ExpensesExtraStepComponent,
     OverviewStepComponent,
     ProgressIndicatorComponent,
   ],

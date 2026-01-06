@@ -245,17 +245,20 @@ export class ReimbursementControlService {
   }
 
   getReimbursement(): Reimbursement {
+    const meeting = this.getMeeting();
     const participant = this.participantStep.getRawValue();
+    const includeFood =
+      meeting.type === 'committee' && this.foodExpenses.enabled;
 
     return {
-      meeting: this.getMeeting(),
+      meeting,
       participant: {
         ...participant,
         sectionId: participant.sectionId || 0,
       },
       expenses: {
         transport: this.transportExpensesStep.getRawValue(),
-        food: this.foodExpenses.enabled ? this.foodExpenses.value : [],
+        food: includeFood ? this.foodExpenses.value : [],
         material: this.materialExpenses.enabled
           ? this.materialExpenses.value
           : [],
@@ -307,6 +310,11 @@ export class ReimbursementControlService {
     return lastExpense.destination;
   }
 
+  private disableFoodReimbursement() {
+    this.foodExpenses.disable({ emitEvent: false });
+    this.expensesStep.updateValueAndValidity();
+  }
+
   private onMeetingTypeChanged(value: MeetingType) {
     const form = this.meetingStep;
     const transport = this.transportExpensesStep;
@@ -316,16 +324,23 @@ export class ReimbursementControlService {
         form.controls.location.disable();
         form.controls.time.disable();
         transport.setValidators(anyRequired);
+        this.disableFoodReimbursement();
         break;
       case 'committee':
         form.removeControl('code');
         form.controls.location.enable();
         form.controls.time.enable();
         transport.clearValidators();
+        if (this.foodSettings.controls.isEnabled.value) {
+          this.foodExpenses.enable({ emitEvent: false });
+        } else {
+          this.foodExpenses.disable({ emitEvent: false });
+        }
         break;
     }
 
     transport.updateValueAndValidity();
+    this.expensesStep.updateValueAndValidity();
   }
 
   private onIbanChanged(value: string) {

@@ -9,6 +9,34 @@
     <cdk-step label="auslagen" [stepControl]="form.controls.expenses">
       <app-expenses-step></app-expenses-step>
     </cdk-step>
+    <cdk-step label="auslagen-sonstiges" [stepControl]="form.controls.expenses">
+      <app-expenses-extra-step [showFood]="false">
+        <div materialDescription class="typography">
+          <h3>Parkgebühren</h3>
+          <p>
+            Wir erstatten Parkgebühren zu 110% des Betrages, wenn sie angefallen
+            sind, um anschließend mit einer Fahrgemeinschaft oder öffentlichen
+            Verkehrsmitteln zum Kursort zu gelangen. Bitte trage direkt 110% des
+            von dir bezahlten Betrages ein.
+          </p>
+          <h3>Auslagen für Gemeinschaftsverpflegung</h3>
+          <p>
+            Hast du während des Kurses Auslagen für Gemeinschaftsverpflegung
+            (z.B. Einkäufe für das gemeinsame Frühstück oder Abendessen) gehabt,
+            kannst du diese hier eintragen.
+          </p>
+          <p>
+            <b
+              >Andere als die oben genannten Auslagen werden nicht erstattet.</b
+            >
+          </p>
+          <p>
+            Bitte denk daran für alle Auslagen
+            <b>entsprechende Belege</b> beizufügen.
+          </p>
+        </div>
+      </app-expenses-extra-step>
+    </cdk-step>
     <cdk-step label="zusammenfassung">
       <app-overview-step></app-overview-step>
     </cdk-step>
