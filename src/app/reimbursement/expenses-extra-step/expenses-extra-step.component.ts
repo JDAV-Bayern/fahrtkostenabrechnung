@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
@@ -22,6 +22,8 @@ import { ReimbursementService } from '../shared/reimbursement.service';
 export class ExpensesExtraStepComponent {
   private readonly reimbursementService = inject(ReimbursementService);
   private readonly controlService = inject(ReimbursementControlService);
+
+  readonly showFood = input(true);
 
   parentForm = this.controlService.expensesStep;
   foodForm = this.controlService.foodExpenses;

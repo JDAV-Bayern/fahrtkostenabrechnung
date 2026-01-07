@@ -68,8 +68,9 @@ test.describe('Reimbursement workflow', () => {
     courseStepPage,
     participantStepPage,
     expensesStepPage,
+    expensesExtraStepPage,
     overviewStepPage,
-  }) => {
+  }, testInfo) => {
     await courseStepPage.goto();
     await courseStepPage.clearPersistedForm();
     await expect(page).toHaveURL(/\/fahrtkosten\/kurs$/);
@@ -103,8 +104,15 @@ test.describe('Reimbursement workflow', () => {
     );
 
     await expensesStepPage.continue();
-    await expect(page).toHaveURL(/\/fahrtkosten\/zusammenfassung$/);
+    await expect(page).toHaveURL(/\/fahrtkosten\/auslagen-sonstiges$/);
+    await expensesExtraStepPage.addMaterialExpense({
+      date: '2024-06-01',
+      purpose: 'Parkgebühr',
+      amount: 5,
+    });
+    await expensesExtraStepPage.continue();
 
+    await expect(page).toHaveURL(/\/fahrtkosten\/zusammenfassung$/);
     await expect(
       page.getByRole('heading', { name: 'Zusammenfassung' }),
     ).toBeVisible();
@@ -149,6 +157,11 @@ test.describe('Reimbursement workflow', () => {
       }
       pdfBuffer = Buffer.concat(chunks);
     }
+
+    await testInfo.attach('Fahrtkostenabrechnung.pdf', {
+      body: pdfBuffer,
+      contentType: 'application/pdf',
+    });
 
     const pdfContents = new PDFParse({ data: pdfBuffer });
     const pdfText = (await pdfContents.getText()).text;
