@@ -47,7 +47,11 @@
     @for (entry of config.transport.car; track entry) {
       <tr>
         <td>{{ $index + 1 }} Personen</td>
-        <td>{{ entry | currency }} pro km</td>
+        @if (entry === 0) {
+          <td>keine Erstattung</td>
+        } @else {
+          <td>{{ entry | currency }} pro km</td>
+        }
       </tr>
     }
   </table>
@@ -152,11 +156,18 @@
 }
 
 @if (config.allowed.includes('material')) {
-  <h2>Sachkosten</h2>
-
-  <p class="important">Bitte eine Kopie der Belege anhängen!</p>
+  <h2>Sachkosten und sonstige Auslagen</h2>
+  <h3>Selbstversorgungsschulungen</h3>
   <p>
-    Ausgenommen hiervon ist die Erstattung im Rahmen der Sachkostenpauschale,
-    wie sie im Leitfaden für Abrechnungen für Gremien beschrieben ist.
+    Du hast für eine Selbstversorgungsschulung Auslagen für ein gemeinsam
+    gekochtes Essen? Diese bekommst Du natürlich in voller Höhe zurück.
   </p>
+  <h3>Parkgebühren</h3>
+  <p>
+    Wir erstatten Parkgebühren zu 110% des Betrages, wenn sie angefallen sind,
+    um anschließend mit einer Fahrgemeinschaft oder öffentlichen Verkehrsmitteln
+    zum Kursort zu gelangen.
+  </p>
+
+  <p class="important">Bitte stets eine Kopie der Belege anhängen!</p>
 }
