@@ -1,0 +1,24 @@
+<div id="jdav-pdf-content" class="pdf-content">
+  <div class="w-full text-center">
+    <img
+      class="mx-auto my-4 h-10"
+      src="logo-jdav-bayern-light-gray.png"
+      (load)="onLogoLoaded()"
+    />
+    <p class="font-semibold text-base">
+      Feedback {{ qrCodeType() === 'give_feedback' ? 'geben' : 'ansehen' }}
+    </p>
+    @if (teamerName()) {
+      <p class="font-semibold text-base">Teamer: {{ teamerName() }}</p>
+    }
+    <p class="text-[3em] font-bold my-4">
+      {{ courseName() }} ({{ courseId() }})
+    </p>
+    <img
+      class="mx-auto my-4"
+      [src]="imageUrl()"
+      alt="QR Code zum Feedback Link"
+      (load)="onQrCodeLoaded()"
+    />
+  </div>
+</div>

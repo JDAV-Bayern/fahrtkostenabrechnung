@@ -1,0 +1,11 @@
+.pdf-content {
+  width: 595px;
+  box-sizing: border-box;
+  height: fit-content;
+  overflow: none;
+  position: relative;
+  padding: 57px;
+  text-align: left;
+  font-family: Helvetica;
+  font-size: 6pt;
+}
