@@ -9,7 +9,6 @@ import {
 import { FinishedDialogComponent } from '../reimbursement/overview-step/finished-dialog/finished-dialog.component';
 import { PdfViewComponent } from '../reimbursement/overview-step/pdf-view/pdf-view.component';
 import { ReimbursementControlService } from '../reimbursement/shared/reimbursement-control.service';
-import { combinePdf, createPdf } from './pdf-creation';
 
 @Injectable({
   providedIn: 'root',
@@ -60,6 +59,7 @@ export class PdfService {
     const subject = JSON.stringify(this.reimbursement);
 
     try {
+      const { createPdf, combinePdf } = await import('./pdf-creation');
       const pdfData = await createPdf(htmlElement);
       const blob = await combinePdf(pdfData, files, subject);
       this.downloadPdf(blob);

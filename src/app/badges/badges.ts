@@ -26,7 +26,7 @@ import { Button } from '../shared/ui/button';
   templateUrl: './badges.html',
   styleUrl: './badges.css',
 })
-export class Badges implements OnInit {
+export default class Badges implements OnInit {
   document = inject(DOCUMENT);
   route = inject(ActivatedRoute);
   router = inject(Router);

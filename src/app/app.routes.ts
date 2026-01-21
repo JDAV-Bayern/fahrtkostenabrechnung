@@ -1,11 +1,7 @@
 import { Routes } from '@angular/router';
 import { autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
 import { UserProfileComponent } from './auth/user-profile/user-profile.component';
-import { Badges } from './badges/badges';
 import { PageNotFound } from './core/page-not-found/page-not-found';
-import { FeedbackAdmin } from './feedback/feedback-admin/feedback-admin';
-import { FeedbackResults } from './feedback/feedback-results/feedback-results';
-import { Feedback } from './feedback/feedback/feedback';
 import { DataProtectionComponent } from './info/data-protection/data-protection.component';
 import { ExpenseRatesComponent } from './info/expense-rates/expense-rates.component';
 import { InfoComponent } from './info/info.component';
@@ -65,30 +61,12 @@ export const routes: Routes = [
   {
     path: 'marken',
     title: 'Markenbestellung | JDAV Bayern',
-    component: Badges,
+    loadComponent: () => import('./badges/badges'),
     data: { headerTitle: 'Markenbestellung', headerHideRemoveDataButton: true },
   },
   {
     path: 'feedback',
-    title: 'Feedback | JDAV Bayern',
-    component: Feedback,
-    data: { headerTitle: 'Feedback', headerHideRemoveDataButton: true },
-  },
-  {
-    path: 'feedback-admin',
-    title: 'Feedback Admin | JDAV Bayern',
-    component: FeedbackAdmin,
-    canActivate: [autoLoginPartialRoutesGuard],
-    data: { headerTitle: 'Feedback Admin', headerHideRemoveDataButton: true },
-  },
-  {
-    path: 'feedback-ergebnisse',
-    title: 'Feedback Ergebnisse | JDAV Bayern',
-    component: FeedbackResults,
-    data: {
-      headerTitle: 'Feedback Ergebnisse',
-      headerHideRemoveDataButton: true,
-    },
+    loadChildren: () => import('./feedback/feedback.routes'),
   },
   {
     path: 'meine-kurse',
