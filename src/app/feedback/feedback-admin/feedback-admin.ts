@@ -1,8 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import {
+  ApplicationRef,
+  Component,
+  createComponent,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import * as QRCode from 'qrcode';
+import jsPDF from 'jspdf';
 import { Button } from 'src/app/shared/ui/button';
 import { environment } from 'src/environments/environment';
 import {
@@ -10,6 +17,8 @@ import {
   FeedbackDTO,
   FeedbackService,
 } from '../feedback-service';
+import { QrPdfViewComponent } from './qr-pdf-view/qr-pdf-view.component';
+const MIME_TYPE_PDF = 'application/pdf';
 
 @Component({
   selector: 'jdav-feedback-admin',
@@ -21,6 +30,7 @@ import {
 export class FeedbackAdmin implements OnInit {
   router = inject(Router);
   feedbackService: FeedbackService = inject(FeedbackService);
+  appRef: ApplicationRef = inject(ApplicationRef);
   feedbacks = signal<FeedbackDTO[]>([]);
   selectedFeedback = signal<FeedbackDTO | null>(null);
   tokens = signal<FeedbackAccessTokenDTO[]>([]);
@@ -212,34 +222,56 @@ export class FeedbackAdmin implements OnInit {
     }
   }
 
-  openQrCode(token: FeedbackAccessTokenDTO): void {
-    const qrTarget = this.feedbackLink(token);
-    const newTab = window.open('', '_blank');
+  async downloadPdf(token: FeedbackAccessTokenDTO): Promise<void> {
+    // create container
+    const feedback = this.selectedFeedback();
+    if (!feedback) return;
 
-    if (!newTab) {
-      this.error.set('QR-Code konnte nicht in neuem Tab geöffnet werden.');
-      return;
-    }
+    const container = document.createElement('div');
+    container.id = 'jdav-pdf-container';
+    container.style.position = 'absolute';
+    container.style.top = '-9999px';
+    document.body.appendChild(container);
 
-    QRCode.toDataURL(qrTarget, { scale: 8 })
-      .then((dataUrl: string) => {
-        newTab.document.title =
-          token.course_id + ' ' + this.roleToGerman(token.role);
-        newTab.document.body.style.margin = '0';
-        // Remove all children from the body
-        while (newTab.document.body.firstChild) {
-          newTab.document.body.removeChild(newTab.document.body.firstChild);
-        }
-        const img = newTab.document.createElement('img');
-        img.setAttribute('src', dataUrl);
-        img.setAttribute('alt', 'QR Code');
-        img.setAttribute('style', 'width:100%;height:100%;object-fit:none;');
-        newTab.document.body.appendChild(img);
-        newTab.opener = null;
-      })
-      .catch((err: unknown) => {
-        newTab.close();
-        this.error.set('Fehler beim Erstellen des QR-Codes: ' + err);
+    // create component
+    const compRef = createComponent(QrPdfViewComponent, {
+      environmentInjector: this.appRef.injector,
+    });
+    container.appendChild(compRef.location.nativeElement);
+    this.appRef.attachView(compRef.hostView);
+    compRef.setInput('link', this.feedbackLink(token));
+    compRef.setInput('courseName', feedback.course_name);
+    compRef.setInput('courseId', feedback.course_id);
+    compRef.setInput('qrCodeType', token.role);
+    compRef.setInput('teamerName', token.teamer_name);
+    await new Promise<void>((resolve) => {
+      compRef.instance.fullyRendered.subscribe(async () => {
+        const doc = new jsPDF({
+          unit: 'pt',
+          compress: true,
+        });
+
+        // Add the form content
+        await doc.html(compRef.location.nativeElement, {
+          autoPaging: true,
+        });
+
+        const fileURL = URL.createObjectURL(
+          new Blob([new Uint8Array(doc.output('arraybuffer'))], {
+            type: MIME_TYPE_PDF,
+          }),
+        );
+        const fileName = `Feedback_QR_${feedback.course_id}_${this.roleToGerman(
+          token.role,
+        ).replace(/ /g, '_')}.pdf`;
+        const link = document.createElement('a');
+        link.href = fileURL;
+        link.download = fileName;
+        link.click();
+        compRef.destroy();
+        container.remove();
+        resolve();
       });
+    });
   }
 }

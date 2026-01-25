@@ -1,0 +1,18 @@
+<div id="jdav-pdf-content" class="pdf-content">
+  <div class="flex flex-col text-center w-full">
+    <img
+      class="mx-auto my-4 h-16"
+      src="logo-jdav-bayern-light-gray.png"
+      (load)="onLogoLoaded()"
+      priority
+      alt="JDAV Bayern logo"
+    />
+    <p class="text-[3em] font-bold">
+      {{ courseName() }}
+    </p>
+    <p class="text-[2em]">
+      {{ courseId() }}
+    </p>
+    <canvas #qrCanvas class="mt-8 mx-auto"></canvas>
+  </div>
+</div>

@@ -190,10 +190,12 @@
                 <span class="material-symbols-outlined">content_copy</span>
                 Kopieren
               </button>
-              <button jdavButton type="button" (click)="openQrCode(token)">
-                <span class="material-symbols-outlined">qr_code</span>
-                QR-Code
-              </button>
+              @if (token.role === 'give_feedback') {
+                <button jdavButton type="button" (click)="downloadPdf(token)">
+                  <span class="material-symbols-outlined">qr_code</span>
+                  QR-Code
+                </button>
+              }
             </div>
           </div>
         }
