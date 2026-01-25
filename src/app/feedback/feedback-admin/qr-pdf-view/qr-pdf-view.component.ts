@@ -1,8 +1,8 @@
 import {
+  AfterViewInit,
   Component,
   ElementRef,
   input,
-  OnInit,
   output,
   ViewChild,
 } from '@angular/core';
@@ -13,7 +13,7 @@ import * as QRCode from 'qrcode';
   templateUrl: './qr-pdf-view.component.html',
   styleUrls: ['./qr-pdf-view.component.css'],
 })
-export class QrPdfViewComponent implements OnInit {
+export class QrPdfViewComponent implements AfterViewInit {
   readonly link = input.required<string>();
   readonly courseName = input.required<string | undefined>();
   readonly courseId = input.required<string | undefined>();
@@ -26,10 +26,7 @@ export class QrPdfViewComponent implements OnInit {
   logoLoaded = false;
   qrCodeLoaded = false;
 
-  async ngOnInit() {
-    while (!this.canvasRef) {
-      await new Promise((resolve) => setTimeout(resolve, 50));
-    }
+  async ngAfterViewInit() {
     const canvas = this.canvasRef.nativeElement;
     await QRCode.toCanvas(canvas, this.link(), { scale: 10 });
     await this.onQrCodeLoaded();
