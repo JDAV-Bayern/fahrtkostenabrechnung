@@ -10,7 +10,6 @@ import {
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import jsPDF from 'jspdf';
-import * as QRCode from 'qrcode';
 import { Button } from 'src/app/shared/ui/button';
 import { environment } from 'src/environments/environment';
 import {
@@ -223,39 +222,11 @@ export class FeedbackAdmin implements OnInit {
     }
   }
 
-  openQrCode(token: FeedbackAccessTokenDTO): void {
-    const qrTarget = this.feedbackLink(token);
-    const newTab = window.open('', '_blank');
-
-    if (!newTab) {
-      this.error.set('QR-Code konnte nicht in neuem Tab geöffnet werden.');
-      return;
-    }
-
-    QRCode.toDataURL(qrTarget, { scale: 8 })
-      .then((dataUrl: string) => {
-        newTab.document.title =
-          token.course_id + ' ' + this.roleToGerman(token.role);
-        newTab.document.body.style.margin = '0';
-        // Remove all children from the body
-        while (newTab.document.body.firstChild) {
-          newTab.document.body.removeChild(newTab.document.body.firstChild);
-        }
-        const img = newTab.document.createElement('img');
-        img.setAttribute('src', dataUrl);
-        img.setAttribute('alt', 'QR Code');
-        img.setAttribute('style', 'width:100%;height:100%;object-fit:none;');
-        newTab.document.body.appendChild(img);
-        newTab.opener = null;
-      })
-      .catch((err: unknown) => {
-        newTab.close();
-        this.error.set('Fehler beim Erstellen des QR-Codes: ' + err);
-      });
-  }
-
   async downloadPdf(token: FeedbackAccessTokenDTO): Promise<void> {
     // create container
+    const feedback = this.selectedFeedback();
+    if (!feedback) return;
+
     const container = document.createElement('div');
     container.id = 'jdav-pdf-container';
     container.style.position = 'absolute';
@@ -269,8 +240,8 @@ export class FeedbackAdmin implements OnInit {
     container.appendChild(compRef.location.nativeElement);
     this.appRef.attachView(compRef.hostView);
     compRef.setInput('link', this.feedbackLink(token));
-    compRef.setInput('courseName', this.selectedFeedback()!.course_name);
-    compRef.setInput('courseId', this.selectedFeedback()!.course_id);
+    compRef.setInput('courseName', feedback.course_name);
+    compRef.setInput('courseId', feedback.course_id);
     compRef.setInput('qrCodeType', token.role);
     compRef.setInput('teamerName', token.teamer_name);
     await new Promise<void>((resolve) => {
@@ -290,7 +261,7 @@ export class FeedbackAdmin implements OnInit {
             type: MIME_TYPE_PDF,
           }),
         );
-        const fileName = `Feedback_QR_${this.selectedFeedback()!.course_id}_${this.roleToGerman(
+        const fileName = `Feedback_QR_${feedback.course_id}_${this.roleToGerman(
           token.role,
         ).replace(/ /g, '_')}.pdf`;
         const link = document.createElement('a');
