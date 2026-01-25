@@ -1,4 +1,11 @@
-import { Component, input, OnInit, output, signal } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  input,
+  OnInit,
+  output,
+  ViewChild,
+} from '@angular/core';
 import * as QRCode from 'qrcode';
 
 @Component({
@@ -14,34 +21,35 @@ export class QrPdfViewComponent implements OnInit {
   readonly teamerName = input<string | undefined>();
   readonly fullyRendered = output<void>();
 
-  imageUrl = signal<string>('');
+  @ViewChild('qrCanvas') canvasRef!: ElementRef<HTMLCanvasElement>;
 
   logoLoaded = false;
   qrCodeLoaded = false;
 
   async ngOnInit() {
-    this.imageUrl.set(await this.qrImage());
+    while (!this.canvasRef) {
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    }
+    const canvas = this.canvasRef.nativeElement;
+    await QRCode.toCanvas(canvas, this.link(), { scale: 10 });
+    await this.onQrCodeLoaded();
   }
 
-  onQrCodeLoaded() {
+  async onQrCodeLoaded() {
     this.qrCodeLoaded = true;
     if (this.logoLoaded) {
-      this.fullyRendered.emit();
+      await this.emitFullyRendered();
     }
   }
-  onLogoLoaded() {
+  async onLogoLoaded() {
     this.logoLoaded = true;
     if (this.qrCodeLoaded) {
-      this.fullyRendered.emit();
+      await this.emitFullyRendered();
     }
   }
 
-  async qrImage(): Promise<string> {
-    return QRCode.toDataURL(this.link(), {
-      scale: 8,
-    }).then((url) => {
-      console.log('Generated QR code URL:', url);
-      return url;
-    });
+  async emitFullyRendered() {
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    this.fullyRendered.emit();
   }
 }

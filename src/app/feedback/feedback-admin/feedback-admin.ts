@@ -24,7 +24,7 @@ const MIME_TYPE_PDF = 'application/pdf';
 @Component({
   selector: 'jdav-feedback-admin',
   standalone: true,
-  imports: [Button, CommonModule, FormsModule, QrPdfViewComponent],
+  imports: [Button, CommonModule, FormsModule],
   templateUrl: './feedback-admin.html',
   styleUrl: './feedback-admin.css',
 })
