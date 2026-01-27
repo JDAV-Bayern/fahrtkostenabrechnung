@@ -39,11 +39,6 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'gremium',
-    redirectTo: 'fahrtkosten-gremium/reisedaten',
-    pathMatch: 'full',
-  },
-  {
     path: 'fahrtkosten/:step',
     title: 'Fahrtkostenabrechnung | JDAV Bayern',
     component: CourseSteps,
@@ -77,6 +72,24 @@ export const routes: Routes = [
       headerTitle: 'Dein Nutzerprofil',
       headerHideRemoveDataButton: true,
     },
+  },
+  /*
+   * Legacy redirects
+   */
+  {
+    path: 'gremium',
+    redirectTo: 'fahrtkosten-gremium/reisedaten',
+    pathMatch: 'full',
+  },
+  {
+    path: 'feedback-ergebnisse',
+    redirectTo: 'feedback/ergebnisse',
+    pathMatch: 'full',
+  },
+  {
+    path: 'feedback-admin',
+    redirectTo: 'feedback/admin',
+    pathMatch: 'full',
   },
   {
     path: '**',
