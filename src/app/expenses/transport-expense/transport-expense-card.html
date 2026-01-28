@@ -1,0 +1,64 @@
+<div jdavCardContent>
+  <!-- origin -->
+  <div class="grid grid-cols-[auto_1fr_auto] items-center gap-2 font-semibold">
+    <span aria-hidden="true" class="material-symbols-outlined text-gray-600"
+      >location_on</span
+    >
+    <span class="overflow-hidden text-nowrap text-ellipsis">{{
+      expense().origin
+    }}</span>
+    <div class="font-semibold">{{ expense() | expenseAmount | currency }}</div>
+  </div>
+
+  <div
+    class="ml-2.75 my-2 pl-6 py-2 flex flex-col gap-4 border-l-2 border-gray-400 grow"
+  >
+    <div>
+      <span jdavBadge class="{{ color() }}">
+        <span aria-hidden="true" class="material-symbols-outlined">{{
+          icon()
+        }}</span>
+        {{ expense() | expenseTitle }}
+      </span>
+    </div>
+
+    <p class="text-sm text-gray-500">
+      <app-expense-details [expense]="expense()" />
+    </p>
+
+    <div class="flex gap-2">
+      <button
+        jdavButton
+        type="button"
+        variant="ghost"
+        size="icon"
+        (click)="editRow.emit()"
+      >
+        <span class="material-symbols-outlined" aria-label="Bearbeiten"
+          >edit</span
+        >
+      </button>
+      <button
+        jdavButton
+        type="button"
+        variant="ghost"
+        size="icon"
+        (click)="deleteRow.emit()"
+      >
+        <span class="material-symbols-outlined" aria-label="Löschen"
+          >delete</span
+        >
+      </button>
+    </div>
+  </div>
+
+  <!-- destination -->
+  <div class="grid grid-cols-[auto_1fr_auto] items-center gap-2 font-semibold">
+    <span aria-hidden="true" class="material-symbols-outlined text-gray-600"
+      >location_on</span
+    >
+    <span class="overflow-hidden text-nowrap text-ellipsis">{{
+      expense().destination
+    }}</span>
+  </div>
+</div>
