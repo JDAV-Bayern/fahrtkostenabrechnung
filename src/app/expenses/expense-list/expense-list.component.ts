@@ -15,12 +15,13 @@ import {
 } from '@angular/forms';
 import { Button } from 'src/app/shared/ui/button';
 import { Expense } from 'src/domain/expense.model';
-import { ExpenseCardComponent } from '../expense-card/expense-card.component';
 import {
   ExpenseDialogData,
   ExpenseExtraData,
   ExpenseModalComponent,
 } from '../expense-modal/expense-modal.component';
+import { MaterialExpenseCard } from '../material-expense/material-expense-card';
+import { TransportExpenseCard } from '../transport-expense/transport-expense-card';
 
 @Component({
   selector: 'app-expense-list',
@@ -32,7 +33,8 @@ import {
     DialogModule,
     CdkDrag,
     CdkDropList,
-    ExpenseCardComponent,
+    TransportExpenseCard,
+    MaterialExpenseCard,
   ],
 })
 export class ExpenseListComponent<T extends Expense> implements OnInit {

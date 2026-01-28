@@ -8,11 +8,22 @@
     <!-- TODO: readd [formArrayName]="form" -->
     @for (control of form().controls; track control) {
       <div cdkDrag [cdkDragData]="control" (cdkDragDropped)="drop($event)">
-        <app-expense-card
-          [expense]="control.value"
-          (editRow)="openEditDialog(control)"
-          (deleteRow)="deleteExpense($index)"
-        />
+        @switch (control.value.type) {
+          @case ('transport') {
+            <jdav-transport-expense-card
+              [expense]="control.value"
+              (editRow)="openEditDialog(control)"
+              (deleteRow)="deleteExpense($index)"
+            />
+          }
+          @case ('material') {
+            <jdav-material-expense-card
+              [expense]="control.value"
+              (editRow)="openEditDialog(control)"
+              (deleteRow)="deleteExpense($index)"
+            />
+          }
+        }
       </div>
     }
   </div>
