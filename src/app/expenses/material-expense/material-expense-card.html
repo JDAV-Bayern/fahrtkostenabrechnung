@@ -1,0 +1,16 @@
+<div jdavCardContent>
+  @let exp = expense();
+  <div class="flex justify-between font-semibold">
+    <p>{{ exp.date | date }}</p>
+    <p>{{ exp | expenseAmount | currency }}</p>
+  </div>
+  <h3 class="py-4">{{ exp | expenseTitle }}</h3>
+  <div class="flex justify-end">
+    <button jdavButton type="button" variant="ghost" (click)="editRow.emit()">
+      <span class="material-symbols-outlined">edit</span>
+    </button>
+    <button jdavButton type="button" variant="ghost" (click)="deleteRow.emit()">
+      <span class="material-symbols-outlined">delete</span>
+    </button>
+  </div>
+</div>

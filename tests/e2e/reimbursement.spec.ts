@@ -97,7 +97,7 @@ test.describe('Reimbursement workflow', () => {
     await expensesStepPage.addTransportExpense('Hinfahrt', CAR_TRIP);
     await expensesStepPage.completeReturnTrip();
 
-    await expect(page.locator('app-expense-card')).toHaveCount(8);
+    await expect(page.locator('jdav-transport-expense-card')).toHaveCount(8);
     await expect(expensesStepPage.subtotal).toContainText('€');
     await expect(expensesStepPage.subtotal).toContainText(
       `${totalExpectedRefund}`,
