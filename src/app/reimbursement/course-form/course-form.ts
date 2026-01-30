@@ -6,30 +6,30 @@ import { PdfService } from 'src/app/shared/pdf-service';
 import { ProgressIndicatorComponent } from 'src/app/shared/progress-indicator/progress-indicator.component';
 import { Button } from 'src/app/shared/ui/button';
 import { JdavStepper } from '../../shared/stepper/stepper';
-import { ExpensesExtraStepComponent } from '../expenses-extra-step/expenses-extra-step.component';
-import { ExpensesStepComponent } from '../expenses-step/expenses-step.component';
-import { MeetingCommitteeStepComponent } from '../meeting-committee-step/meeting-committee-step.component';
-import { OverviewStepComponent } from '../overview-step/overview-step.component';
-import { ParticipantStepComponent } from '../participant-step/participant-step.component';
+import { ExpensesExtraStepComponent } from '../steps/expenses-extra-step/expenses-extra-step.component';
+import { ExpensesStepComponent } from '../steps/expenses-step/expenses-step.component';
+import { MeetingCourseStepComponent } from '../steps/meeting-course-step/meeting-course-step.component';
+import { OverviewStepComponent } from '../steps/overview-step/overview-step.component';
+import { ParticipantStepComponent } from '../steps/participant-step/participant-step.component';
 
 @Component({
-  selector: 'app-committee-steps',
+  selector: 'app-course-form',
   imports: [
     Button,
     CdkStep,
-    ReactiveFormsModule,
     JdavStepper,
+    ReactiveFormsModule,
+    MeetingCourseStepComponent,
     ParticipantStepComponent,
     ExpensesStepComponent,
-    OverviewStepComponent,
-    MeetingCommitteeStepComponent,
     ExpensesExtraStepComponent,
+    OverviewStepComponent,
     ProgressIndicatorComponent,
   ],
-  templateUrl: './committee-steps.html',
+  templateUrl: './course-form.html',
   host: { class: 'block h-full bg-gray-50' },
 })
-export class CommitteeSteps {
+export class CourseForm {
   private readonly controlService = inject(ReimbursementControlService);
   private readonly pdfService = inject(PdfService);
 

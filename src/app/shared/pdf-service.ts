@@ -6,9 +6,9 @@ import {
   inject,
   Injectable,
 } from '@angular/core';
-import { FinishedDialogComponent } from '../reimbursement/overview-step/finished-dialog/finished-dialog.component';
-import { PdfViewComponent } from '../reimbursement/overview-step/pdf-view/pdf-view.component';
+import { PdfViewComponent } from '../reimbursement/pdf-view/pdf-view.component';
 import { ReimbursementControlService } from '../reimbursement/shared/reimbursement-control.service';
+import { FinishedDialogComponent } from '../reimbursement/steps/overview-step/finished-dialog/finished-dialog.component';
 
 @Injectable({
   providedIn: 'root',

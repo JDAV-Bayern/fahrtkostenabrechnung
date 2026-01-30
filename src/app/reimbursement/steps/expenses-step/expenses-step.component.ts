@@ -3,8 +3,6 @@ import { CurrencyPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { ExpenseListComponent } from 'src/app/expenses/expense-list/expense-list.component';
-import { ExpenseExtraData } from 'src/app/expenses/expense-modal/expense-modal.component';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { Button } from 'src/app/shared/ui/button';
 import {
@@ -12,7 +10,9 @@ import {
   TransportExpense,
   TransportMode,
 } from 'src/domain/expense.model';
-import { ReimbursementService } from '../shared/reimbursement.service';
+import { ExpenseListComponent } from '../../expenses/expense-list/expense-list.component';
+import { ExpenseExtraData } from '../../expenses/expense-modal/expense-modal.component';
+import { ReimbursementService } from '../../shared/reimbursement.service';
 
 @Component({
   selector: 'app-expenses-step',

@@ -8,8 +8,6 @@ import {
   startOfDay,
 } from 'date-fns';
 import { SectionService } from 'src/app/core/section.service';
-import { expenseConfig } from 'src/app/expenses/expense.config';
-import { ExpenseService } from 'src/app/expenses/shared/expense.service';
 import {
   Absence,
   Expense,
@@ -20,6 +18,8 @@ import {
 } from 'src/domain/expense.model';
 import { MeetingType } from 'src/domain/meeting.model';
 import { Reimbursement } from 'src/domain/reimbursement.model';
+import { expenseConfig } from '../expenses/expense.config';
+import { ExpenseService } from '../expenses/shared/expense.service';
 
 const createFoodExpense = (date: Date, absence: Absence): FoodExpense => ({
   type: 'food',

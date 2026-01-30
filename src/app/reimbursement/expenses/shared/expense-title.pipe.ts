@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { formatAbsence } from 'src/app/expenses/shared/expense-data.pipe';
 import { Expense } from 'src/domain/expense.model';
+import { formatAbsence } from './expense-data.pipe';
 import { formatTransportMode } from './transport-mode.pipe';
 
 @Pipe({
