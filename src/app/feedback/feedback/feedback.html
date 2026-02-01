@@ -1,11 +1,63 @@
-<div class="feedback-container" id="feedback-container">
-  @if (surveyModel() !== null) {
-    <survey [model]="surveyModel()!"></survey>
-  } @else {
-    @if (error() !== null) {
-      <p class="w-full text-red-600 text-center text-lg">{{ error() }}</p>
+@if (token() || courseId()) {
+  <div class="max-w-6xl mx-auto p-6">
+    @if (surveyModel() !== null) {
+      <survey [model]="surveyModel()!"></survey>
     } @else {
-      <p>Loading survey...</p>
+      @if (error() !== null) {
+        <p class="text-red-600 text-center">{{ error() }}</p>
+      } @else {
+        <p>Loading survey...</p>
+      }
     }
-  }
-</div>
+  </div>
+} @else {
+  <div class="max-w-2xl mx-auto px-6 py-16">
+    <h1 class="text-2xl text-center">
+      Wie kann ich Feedback für einen Kurs geben?
+    </h1>
+  </div>
+
+  <div class="bg-gray-50">
+    <div class="container lg:max-w-screen-lg mx-auto px-6 py-16">
+      <div class="grid md:grid-cols-2 gap-6">
+        <div jdavCard>
+          <div jdavCardHeader>
+            <div jdavCardTitle class="flex items-center gap-2">
+              <span class="material-symbols-outlined">link</span>
+              <h2>Ich habe einen Link oder QR-Code.</h2>
+            </div>
+          </div>
+          <div jdavCardContent>
+            <p>
+              Wenn du für deinen Kurs einen Link bzw. QR-Code erhalten hast,
+              kannst du diesen verwenden, um direkt zum Feedback-Formular zu
+              gelangen. Der Link enthält einen Schlüssel, um dich
+              freizuschalten.
+            </p>
+          </div>
+        </div>
+
+        <div jdavCard>
+          <div jdavCardHeader>
+            <div jdavCardTitle class="flex items-center gap-2">
+              <span class="material-symbols-outlined">account_circle</span>
+              <h2>Ich habe ein Konto.</h2>
+            </div>
+          </div>
+          <div jdavCardContent>
+            <p>
+              Wenn du ein Konto bei uns hast, kannst du dich anmelden, um dich
+              für die von dir besuchten Kurse freizuschalten und Feedback zu
+              geben. Deine Antworten werden nicht mit deinem Konto verknüpft.
+            </p>
+          </div>
+          <div jdavCardFooter>
+            <a jdavButton routerLink="/meine-kurse" class="w-full">
+              Anmelden
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
