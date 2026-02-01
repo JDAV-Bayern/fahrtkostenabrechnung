@@ -1,26 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, Signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { OidcSecurityService, UserDataResult } from 'angular-auth-oidc-client';
 import { Button } from 'src/app/shared/ui/button';
-
-interface ParticipatedTraining {
-  id: number;
-  title: string;
-  code: string;
-  date_from: string;
-}
-
-interface ProfileData {
-  sub: string;
-  name: string;
-  given_name: string;
-  family_name: string;
-  jdav_membership_number: string;
-  email: string;
-  email_verified: boolean;
-  participated_trainings?: ParticipatedTraining[];
-}
+import { ParticipatedTraining } from '../auth-model';
+import { AuthService } from '../auth-service';
 
 @Component({
   selector: 'app-user-profile',
@@ -32,15 +15,10 @@ interface ProfileData {
   },
 })
 export class UserProfileComponent {
-  private readonly oidc = inject(OidcSecurityService);
+  private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
-  readonly authState = this.oidc.authenticated;
-  readonly userData = this.oidc.userData as Signal<UserDataResult>;
-  readonly profile = computed<ProfileData | null>(() => {
-    const data = this.userData().userData as ProfileData | undefined;
-    return data ?? null;
-  });
+  readonly userData = this.authService.userData;
 
   sortTrainingsByDate(
     trainings: ParticipatedTraining[] | undefined,
@@ -80,5 +58,10 @@ export class UserProfileComponent {
         schulungsnummer: training.code,
       },
     });
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/']);
   }
 }

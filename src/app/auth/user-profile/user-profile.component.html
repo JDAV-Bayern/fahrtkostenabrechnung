@@ -1,9 +1,9 @@
 <section class="auth-playground container mx-auto max-w-4xl px-4 py-8">
   <article class="auth-card mt-6">
-    @if (profile(); as data) {
+    @if (userData(); as data) {
       <header class="card-header">
         <h1 class="text-3xl font-semibold text-slate-900">
-          Hey {{ profile()?.given_name }} 👋🏼
+          Hey {{ data.given_name }} 👋🏼
         </h1>
       </header>
       <dl class="profile-grid">
@@ -33,7 +33,7 @@
     <header class="card-header">
       <h2>Deine Schulungen</h2>
     </header>
-    @if (profile(); as data) {
+    @if (userData(); as data) {
       @if (data.participated_trainings?.length) {
         <ul class="training-list">
           @for (
@@ -92,4 +92,9 @@
       </p>
     }
   </article>
+
+  <button jdavButton type="button" class="w-full mt-4" (click)="logout()">
+    <span class="material-symbols-outlined">logout</span>
+    Abmelden
+  </button>
 </section>

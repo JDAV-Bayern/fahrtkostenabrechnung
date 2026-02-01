@@ -14,5 +14,17 @@
       <span class="material-symbols-outlined">delete</span>
       Gespeicherte Daten löschen
     </button>
+  } @else {
+    @if (userData(); as data) {
+      <a jdavButton type="button" variant="ghost" routerLink="meine-kurse">
+        <span class="material-symbols-outlined">account_circle</span>
+        {{ data.given_name }}
+      </a>
+    } @else {
+      <a jdavButton type="button" variant="ghost" routerLink="meine-kurse">
+        <span class="material-symbols-outlined">login</span>
+        Anmelden
+      </a>
+    }
   }
 </div>

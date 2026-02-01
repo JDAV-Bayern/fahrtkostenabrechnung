@@ -6,6 +6,7 @@ import {
   RouterLink,
 } from '@angular/router';
 import { filter } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth-service';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { Button } from 'src/app/shared/ui/button';
 
@@ -20,8 +21,11 @@ import { Button } from 'src/app/shared/ui/button';
 })
 export class HeaderComponent implements OnInit {
   private readonly controlService = inject(ReimbursementControlService);
+  private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+
+  readonly userData = this.authService.userData;
 
   title = signal('Portal');
   hideRemoveDataButton = signal(true);
