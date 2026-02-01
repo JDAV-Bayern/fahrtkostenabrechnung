@@ -1,13 +1,19 @@
 import { provideZonelessChangeDetection } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { provideAuth } from 'angular-auth-oidc-client';
 import { AppComponent } from './app.component';
+import { authConfig } from './auth/auth.config';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
-      providers: [provideZonelessChangeDetection(), provideRouter([])],
+      providers: [
+        provideAuth(authConfig),
+        provideRouter([]),
+        provideZonelessChangeDetection(),
+      ],
     }).compileComponents();
   });
 
