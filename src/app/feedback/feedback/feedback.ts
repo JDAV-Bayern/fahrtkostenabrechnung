@@ -1,5 +1,13 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import {
+  Component,
+  effect,
+  inject,
+  input,
+  OnInit,
+  signal,
+} from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from 'src/app/auth/auth-service';
 import { Button } from 'src/app/shared/ui/button';
 import {
   Card,
@@ -27,7 +35,9 @@ import { FeedbackService } from '../feedback-service';
   templateUrl: './feedback.html',
 })
 export class Feedback implements OnInit {
-  readonly feedbackService: FeedbackService = inject(FeedbackService);
+  readonly router = inject(Router);
+  readonly authService = inject(AuthService);
+  readonly feedbackService = inject(FeedbackService);
 
   readonly token = input<string>();
   readonly courseId = input<string>();
@@ -37,6 +47,18 @@ export class Feedback implements OnInit {
   feedbackId = signal<string>('');
 
   private readonly correlationId = crypto.randomUUID();
+
+  constructor() {
+    effect(() => {
+      if (
+        !this.token() &&
+        !this.courseId() &&
+        this.authService.isAuthenticated()
+      ) {
+        this.router.navigate(['/meine-kurse']);
+      }
+    });
+  }
 
   saveSurveyResults(sender: Model) {
     const token = this.token();
