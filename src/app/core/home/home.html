@@ -1,0 +1,104 @@
+<div class="max-w-2xl mx-auto px-6 py-16 sm:py-24 lg:py-28">
+  <div class="text-center">
+    <h1
+      class="text-5xl sm:text-7xl text-balance text-gray-900 tracking-tight font-semibold"
+    >
+      Servus im Portal der JDAV Bayern!
+    </h1>
+    <p class="mt-8 text-lg sm:text-xl/8 text-pretty text-gray-500">
+      Hier findest du unsere digitalen Formulare rund um unsere Kurse.
+    </p>
+  </div>
+</div>
+
+<div class="bg-gray-50">
+  <div class="container lg:max-w-screen-lg mx-auto px-6 py-16">
+    <div jdavCard>
+      <div jdavCardHeader>
+        <h2 jdavCardTitle class="text-2xl">Meine Kurse & Formulare</h2>
+        <div jdavCardAction>
+          <span jdavBadge>Neu</span>
+        </div>
+      </div>
+      <div jdavCardContent>
+        <p class="md:w-2/3">
+          Melde dich mit deinem Konto bei der JDAV Bayern an, um die von dir
+          besuchten Kurse einzusehen und die zugehörigen Formulare schneller
+          auszufüllen.
+        </p>
+      </div>
+      <div jdavCardFooter>
+        <a
+          jdavButton
+          type="button"
+          routerLink="/meine-kurse"
+          class="w-full md:w-72"
+        >
+          Jetzt anmelden
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-2xl mx-auto px-6 py-16">
+  <div class="text-center">
+    <h2 class="my-4 text-2xl font-semibold">Noch kein Konto?</h2>
+    <p>
+      Kein Problem, du kannst auch weiterhin direkt zum Formular gehen und deine
+      Daten manuell eingeben.
+    </p>
+  </div>
+</div>
+
+<div class="bg-gray-50">
+  <div class="container lg:max-w-screen-lg mx-auto px-6 py-16">
+    <div class="grid md:grid-cols-2 gap-8">
+      <div jdavCard>
+        <div jdavCardHeader>
+          <div jdavCardTitle class="flex items-center gap-2">
+            <span class="material-symbols-outlined">receipt_long</span>
+            <h3>Fahrtkostenabrechnung</h3>
+          </div>
+        </div>
+        <div jdavCardContent>
+          <p>
+            Reiche deine Fahrtkostenabrechnung für von dir besuchte Kurse ein,
+            um eine Erstattung zu erhalten.
+          </p>
+        </div>
+        <div jdavCardFooter>
+          <a jdavButton type="button" routerLink="/fahrtkosten" class="w-full">
+            Abrechnung einreichen
+          </a>
+        </div>
+      </div>
+
+      <div jdavCard>
+        <div jdavCardHeader>
+          <div jdavCardTitle class="flex items-center gap-2">
+            <span class="material-symbols-outlined">comment</span>
+            <h3>Kursfeedback</h3>
+          </div>
+        </div>
+        <div jdavCardContent>
+          <p>
+            Teile uns deine Meinung zu den von dir besuchten Kursen mit und hilf
+            uns, besser zu werden.
+          </p>
+        </div>
+        <div jdavCardFooter>
+          <a
+            jdavButton
+            type="button"
+            disabled
+            routerLink="/feedback"
+            class="w-full"
+          >
+            Feedback geben
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

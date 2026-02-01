@@ -23,8 +23,8 @@ export class HeaderComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
-  title = signal('Reisekostenabrechnung');
-  hideRemoveDataButton = signal(false);
+  title = signal('Portal');
+  hideRemoveDataButton = signal(true);
 
   ngOnInit() {
     this.updateHeaderData();
@@ -37,8 +37,8 @@ export class HeaderComponent implements OnInit {
   }
 
   private updateHeaderData() {
-    this.title.set('Reisekostenabrechnung');
-    this.hideRemoveDataButton.set(false);
+    this.title.set('Portal');
+    this.hideRemoveDataButton.set(true);
 
     let route = this.route;
     while (route.firstChild) {
@@ -46,11 +46,12 @@ export class HeaderComponent implements OnInit {
     }
 
     const data = route.snapshot.data;
-    if (data['headerTitle']) {
-      this.title.set(data['headerTitle']);
+    const title = route.snapshot.title;
+    if (title) {
+      this.title.set(title);
     }
-    if (data['headerHideRemoveDataButton']) {
-      this.hideRemoveDataButton.set(data['headerHideRemoveDataButton']);
+    if (data['showDeleteDataButton']) {
+      this.hideRemoveDataButton.set(!data['showDeleteDataButton']);
     }
   }
 

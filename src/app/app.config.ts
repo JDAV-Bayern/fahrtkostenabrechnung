@@ -9,7 +9,11 @@ import {
 import { provideDateFnsAdapter } from '@angular/material-date-fns-adapter';
 import { MAT_DATE_LOCALE, MatDateFormats } from '@angular/material/core';
 import { MatDatepickerIntl } from '@angular/material/datepicker';
-import { provideRouter } from '@angular/router';
+import {
+  provideRouter,
+  TitleStrategy,
+  withComponentInputBinding,
+} from '@angular/router';
 import {
   authInterceptor,
   provideAuth,
@@ -19,6 +23,7 @@ import { de } from 'date-fns/locale';
 import { routes } from './app.routes';
 import { authConfig } from './auth/auth.config';
 import { JdavDatepickerIntl } from './core/date-time-intl';
+import { JdavTitleStrategy } from './core/title-strategy';
 
 export const DIALOG_CONFIG: DialogConfig = {
   panelClass: 'dialog',
@@ -50,12 +55,13 @@ export const appConfig: ApplicationConfig = {
     provideAuth(authConfig, withAppInitializerAuthCheck()),
     provideBrowserGlobalErrorListeners(),
     provideZonelessChangeDetection(),
-    provideRouter(routes),
+    provideRouter(routes, withComponentInputBinding()),
     provideDateFnsAdapter(DATE_FORMATS),
+    provideHttpClient(withInterceptors([authInterceptor()])),
     { provide: DEFAULT_CURRENCY_CODE, useValue: 'EUR' },
     { provide: DEFAULT_DIALOG_CONFIG, useValue: DIALOG_CONFIG },
     { provide: MAT_DATE_LOCALE, useValue: de },
     { provide: MatDatepickerIntl, useClass: JdavDatepickerIntl },
-    provideHttpClient(withInterceptors([authInterceptor()])),
+    { provide: TitleStrategy, useClass: JdavTitleStrategy },
   ],
 };
