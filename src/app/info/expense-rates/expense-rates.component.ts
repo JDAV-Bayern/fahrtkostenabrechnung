@@ -1,8 +1,8 @@
 import { CurrencyPipe, KeyValuePipe, PercentPipe } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { expenseConfig } from 'src/app/expenses/expense.config';
-import { DiscountPipe } from 'src/app/expenses/shared/expense-data.pipe';
+import { expenseConfig } from 'src/app/reimbursement/expenses/expense.config';
+import { DiscountPipe } from 'src/app/reimbursement/expenses/shared/expense-data.pipe';
 import { MeetingType } from 'src/domain/meeting.model';
 
 @Component({

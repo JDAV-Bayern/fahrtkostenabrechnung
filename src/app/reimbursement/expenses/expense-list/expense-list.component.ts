@@ -20,8 +20,8 @@ import {
   ExpenseExtraData,
   ExpenseModalComponent,
 } from '../expense-modal/expense-modal.component';
-import { MaterialExpenseCard } from '../material-expense/material-expense-card';
-import { TransportExpenseCard } from '../transport-expense/transport-expense-card';
+import { MaterialExpenseCard } from '../material-expense-card/material-expense-card';
+import { TransportExpenseCard } from '../transport-expense-card/transport-expense-card';
 
 @Component({
   selector: 'app-expense-list',

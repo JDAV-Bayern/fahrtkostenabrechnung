@@ -1,18 +1,19 @@
 import { Routes } from '@angular/router';
 import { autoLoginPartialRoutesGuard } from 'angular-auth-oidc-client';
 import { UserProfileComponent } from './auth/user-profile/user-profile.component';
+import { Home } from './core/home/home';
 import { PageNotFound } from './core/page-not-found/page-not-found';
 import { DataProtectionComponent } from './info/data-protection/data-protection.component';
 import { ExpenseRatesComponent } from './info/expense-rates/expense-rates.component';
 import { InfoComponent } from './info/info.component';
-import { CommitteeSteps } from './reimbursement/committee-steps/committee-steps';
-import { CourseSteps } from './reimbursement/course-steps/course-steps';
+import { CommitteeForm } from './reimbursement/committee-form/committee-form';
+import { CourseForm } from './reimbursement/course-form/course-form';
 
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'fahrtkosten/kurs',
-    pathMatch: 'full',
+    title: 'Portal',
+    component: Home,
   },
   {
     path: '',
@@ -29,7 +30,10 @@ export const routes: Routes = [
         path: 'erstattungssaetze',
         title: 'Erstattungssätze',
         component: ExpenseRatesComponent,
-        data: { breadcrumb: 'Erstattungssätze' },
+        data: {
+          breadcrumb: 'Erstattungssätze',
+          showDeleteDataButton: true,
+        },
       },
     ],
   },
@@ -40,8 +44,9 @@ export const routes: Routes = [
   },
   {
     path: 'fahrtkosten/:step',
-    title: 'Fahrtkostenabrechnung | JDAV Bayern',
-    component: CourseSteps,
+    title: 'Fahrtkostenabrechnung',
+    component: CourseForm,
+    data: { showDeleteDataButton: true },
   },
   {
     path: 'fahrtkosten-gremium',
@@ -50,14 +55,14 @@ export const routes: Routes = [
   },
   {
     path: 'fahrtkosten-gremium/:step',
-    title: 'Fahrtkostenabrechnung Gremien | JDAV Bayern',
-    component: CommitteeSteps,
+    title: 'Fahrtkostenabrechnung Gremien',
+    component: CommitteeForm,
+    data: { showDeleteDataButton: true },
   },
   {
     path: 'marken',
-    title: 'Markenbestellung | JDAV Bayern',
+    title: 'Markenbestellung',
     loadComponent: () => import('./badges/badges'),
-    data: { headerTitle: 'Markenbestellung', headerHideRemoveDataButton: true },
   },
   {
     path: 'feedback',
@@ -65,13 +70,9 @@ export const routes: Routes = [
   },
   {
     path: 'meine-kurse',
-    title: 'Meine Kurse | JDAV Bayern',
+    title: 'Meine Kurse',
     component: UserProfileComponent,
     canActivate: [autoLoginPartialRoutesGuard],
-    data: {
-      headerTitle: 'Dein Nutzerprofil',
-      headerHideRemoveDataButton: true,
-    },
   },
   /*
    * Legacy redirects

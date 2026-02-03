@@ -1,31 +1,70 @@
-import { Component, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  effect,
+  inject,
+  input,
+  OnInit,
+  signal,
+} from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from 'src/app/auth/auth-service';
+import { Button } from 'src/app/shared/ui/button';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from 'src/app/shared/ui/card';
 import { SurveyModule } from 'survey-angular-ui';
 import { Model } from 'survey-core';
-
-import { A11yModule } from '@angular/cdk/a11y';
-import { Router } from '@angular/router';
-import { Observer } from 'rxjs';
-import { FeedbackDTO, FeedbackService } from '../feedback-service';
+import { FeedbackService } from '../feedback-service';
 
 @Component({
   selector: 'jdav-feedback',
-  imports: [SurveyModule, A11yModule],
+  imports: [
+    Button,
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+    RouterLink,
+    SurveyModule,
+  ],
   templateUrl: './feedback.html',
-  styleUrl: './feedback.css',
 })
-export class Feedback implements OnInit, OnDestroy {
+export class Feedback implements OnInit {
+  readonly router = inject(Router);
+  readonly authService = inject(AuthService);
+  readonly feedbackService = inject(FeedbackService);
+
+  readonly token = input<string>();
+  readonly courseId = input<string>();
+
   surveyModel = signal<Model | null>(null);
   error = signal<string | null>(null);
   feedbackId = signal<string>('');
-  private correlationId = this.generateCorrelationId();
-  feedbackService: FeedbackService = inject(FeedbackService);
-  router = inject(Router);
-  private resizeListener: (() => void) | null = null;
 
-  saveSurveyResults(sender: { data: unknown }) {
-    const { token, courseId } = this.getUrlParameter();
+  private readonly correlationId = crypto.randomUUID();
+
+  constructor() {
+    effect(() => {
+      if (
+        !this.token() &&
+        !this.courseId() &&
+        this.authService.isAuthenticated()
+      ) {
+        this.router.navigate(['/meine-kurse']);
+      }
+    });
+  }
+
+  saveSurveyResults(sender: Model) {
+    const token = this.token();
+    const courseId = this.courseId();
+
     if (!token && !courseId) {
-      this.error.set('Weder Token noch Schulungsnummer angegeben.');
       return;
     }
     const payload = {
@@ -33,10 +72,12 @@ export class Feedback implements OnInit, OnDestroy {
       feedback: sender.data,
       correlation_id: this.correlationId,
     };
-    (token
+
+    const createFeedback$ = token
       ? this.feedbackService.createFeedbackRecordByToken(payload, token)
-      : this.feedbackService.createFeedbackRecord(payload, courseId!)
-    ).subscribe({
+      : this.feedbackService.createFeedbackRecord(payload, courseId!);
+
+    createFeedback$.subscribe({
       error: (error) => {
         console.error('Fehler beim Speichern der Feedback-Antworten: ', error);
         this.error.set(
@@ -47,13 +88,18 @@ export class Feedback implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const { token, courseId } = this.getUrlParameter();
+    const token = this.token();
+    const courseId = this.courseId();
 
     if (!token && !courseId) {
-      this.error.set('Weder Token noch Schulungsnummer angegeben.');
       return;
     }
-    const feedbackInitializerSubscription: Partial<Observer<FeedbackDTO>> = {
+
+    const feedback$ = token
+      ? this.feedbackService.getFeedbackByToken(token)
+      : this.feedbackService.getFeedbackByCourseId(courseId!);
+
+    feedback$.subscribe({
       next: (feedback) => {
         this.feedbackId.set(feedback.id);
         this.initializeSurvey(feedback.surveyJson);
@@ -70,73 +116,18 @@ export class Feedback implements OnInit, OnDestroy {
           this.error.set('Fehler beim Abrufen des Feedbacks: ' + error.message);
         }
       },
-    };
-
-    if (token) {
-      this.feedbackService
-        .getFeedbackByToken(token)
-        .subscribe(feedbackInitializerSubscription);
-    } else if (courseId) {
-      this.feedbackService
-        .getFeedbackByCourseId(courseId)
-        .subscribe(feedbackInitializerSubscription);
-    }
-  }
-
-  getUrlParameter() {
-    const urlParams = new URLSearchParams(window.location.search);
-    return {
-      token: urlParams.get('token'),
-      courseId: urlParams.get('schulungsnummer'),
-    };
+    });
   }
 
   initializeSurvey(surveyJson: unknown) {
     const survey = new Model(surveyJson);
-    survey.onComplete.add((sender: { data: unknown }) =>
-      this.saveSurveyResults(sender),
-    );
-    survey.onCurrentPageChanged.add((sender: Model, options?: unknown) => {
-      // SurveyJS provides isNextPage on the options object when moving forward
-      const isNextPage =
-        typeof options === 'object' &&
-        options !== null &&
-        'isNextPage' in options &&
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore - runtime check is sufficient here
-        options.isNextPage;
-      if (isNextPage) {
-        this.saveSurveyResults({ data: sender.data });
+    survey.onComplete.add((sender) => this.saveSurveyResults(sender));
+    survey.onCurrentPageChanged.add((sender, options) => {
+      if (options.isNextPage) {
+        this.saveSurveyResults(sender);
       }
     });
-    const setContainerWidth = () => {
-      const container = document.getElementById('feedback-container');
-      if (!container) return;
-      const width = Math.min(window.innerWidth, 1200);
-      container.style.width = `${width}px`;
-      container.style.margin = '0 auto';
-    };
-
-    survey.onAfterRenderSurvey.add(() => {
-      setContainerWidth();
-    });
-    survey.onAfterRenderPage.add(setContainerWidth);
-
-    this.resizeListener = () => setContainerWidth();
-    window.addEventListener('resize', this.resizeListener);
 
     this.surveyModel.set(survey);
-  }
-  ngOnDestroy() {
-    if (this.resizeListener) {
-      window.removeEventListener('resize', this.resizeListener);
-    }
-  }
-
-  private generateCorrelationId(): string {
-    if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
-      return crypto.randomUUID();
-    }
-    return `corr-${Math.random().toString(36).slice(2, 10)}`;
   }
 }

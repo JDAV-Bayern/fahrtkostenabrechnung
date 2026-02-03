@@ -7,28 +7,19 @@ import { Feedback } from './feedback/feedback';
 const routes: Routes = [
   {
     path: '',
-    title: 'Feedback | JDAV Bayern',
+    title: 'Feedback',
     component: Feedback,
-    data: { headerTitle: 'Feedback', headerHideRemoveDataButton: true },
   },
   {
     path: 'ergebnisse',
-    title: 'Feedback Ergebnisse | JDAV Bayern',
+    title: 'Feedback Ergebnisse',
     component: FeedbackResults,
-    data: {
-      headerTitle: 'Feedback Ergebnisse',
-      headerHideRemoveDataButton: true,
-    },
   },
   {
     path: 'admin',
-    title: 'Feedback Admin | JDAV Bayern',
+    title: 'Feedback Admin',
     component: FeedbackAdmin,
     canActivate: [autoLoginPartialRoutesGuard],
-    data: {
-      headerTitle: 'Feedback Admin',
-      headerHideRemoveDataButton: true,
-    },
   },
 ];
 

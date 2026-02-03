@@ -1,46 +1,29 @@
-import { CommonModule } from '@angular/common';
-import { Component, computed, inject, Signal } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { OidcSecurityService, UserDataResult } from 'angular-auth-oidc-client';
 import { Button } from 'src/app/shared/ui/button';
-
-interface ParticipatedTraining {
-  id: number;
-  title: string;
-  code: string;
-  date_from: string;
-}
-
-interface ProfileData {
-  sub: string;
-  name: string;
-  given_name: string;
-  family_name: string;
-  jdav_membership_number: string;
-  email: string;
-  email_verified: boolean;
-  participated_trainings?: ParticipatedTraining[];
-}
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from 'src/app/shared/ui/card';
+import { ParticipatedTraining } from '../auth-model';
+import { AuthService } from '../auth-service';
 
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
-  styleUrls: ['./user-profile.component.css'],
-  imports: [Button, CommonModule],
+  imports: [Button, Card, CardContent, CardHeader, CardTitle, DatePipe],
   host: {
-    class: 'block bg-gray-50',
+    class: 'block h-full bg-gray-50',
   },
 })
 export class UserProfileComponent {
-  private readonly oidc = inject(OidcSecurityService);
+  private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
-  readonly authState = this.oidc.authenticated;
-  readonly userData = this.oidc.userData as Signal<UserDataResult>;
-  readonly profile = computed<ProfileData | null>(() => {
-    const data = this.userData().userData as ProfileData | undefined;
-    return data ?? null;
-  });
+  readonly userData = this.authService.userData;
 
   sortTrainingsByDate(
     trainings: ParticipatedTraining[] | undefined,
@@ -77,8 +60,13 @@ export class UserProfileComponent {
   navigateToFeedback(training: ParticipatedTraining) {
     this.router.navigate(['/feedback'], {
       queryParams: {
-        schulungsnummer: training.code,
+        courseId: training.code,
       },
     });
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/']);
   }
 }

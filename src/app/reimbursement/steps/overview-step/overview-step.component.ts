@@ -8,7 +8,7 @@ import { ReimbursementValidatorService } from 'src/app/reimbursement/shared/reim
 import { ReactiveFormsModule } from '@angular/forms';
 import { Button } from 'src/app/shared/ui/button';
 import { ExpenseTypePipe } from '../../expenses/shared/expense-type.pipe';
-import { ReimbursementService } from '../shared/reimbursement.service';
+import { ReimbursementService } from '../../shared/reimbursement.service';
 
 @Component({
   selector: 'app-overview-step',
