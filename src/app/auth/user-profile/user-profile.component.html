@@ -1,100 +1,108 @@
-<section class="auth-playground container mx-auto max-w-4xl px-4 py-8">
-  <article class="auth-card mt-6">
-    @if (userData(); as data) {
-      <header class="card-header">
-        <h1 class="text-3xl font-semibold text-slate-900">
+<div class="container lg:max-w-screen-lg mx-auto px-6 py-16">
+  @if (userData(); as data) {
+    <div jdavCard>
+      <div jdavCardHeader>
+        <h1 jdavCardTitle class="text-2xl md:text-3xl">
           Hey {{ data.given_name }} 👋🏼
         </h1>
-      </header>
-      <dl class="profile-grid">
-        <div>
-          <dt>Dein Name</dt>
-          <dd>{{ data.name || '–' }}</dd>
+        <div jdavCardAction>
+          <button jdavButton type="button" variant="ghost" (click)="logout()">
+            <span class="material-symbols-outlined">logout</span>
+            Abmelden
+          </button>
         </div>
-        <div>
-          <dt>Deine Mitgliedsnummer</dt>
-          <dd class="font-mono break-all">
-            {{ data.jdav_membership_number || '–' }}
-          </dd>
-        </div>
-        <div>
-          <dt>Deine E-Mail</dt>
-          <dd>{{ data.email || '–' }}</dd>
-        </div>
-      </dl>
-    } @else {
-      <p class="text-sm text-slate-500">
-        Profil wird geladen … die Weiterleitung startet automatisch.
-      </p>
-    }
-  </article>
+      </div>
+      <div jdavCardContent>
+        <dl class="grid md:grid-cols-3 gap-6">
+          <div>
+            <dt class="mb-1 text-sm text-gray-400 tracking-wider uppercase">
+              Dein Name
+            </dt>
+            <dd class="text-lg font-semibold">{{ data.name || '–' }}</dd>
+          </div>
+          <div>
+            <dt class="mb-1 text-sm text-gray-400 tracking-wider uppercase">
+              Deine Mitgliedsnummer
+            </dt>
+            <dd class="text-lg font-semibold font-mono break-all">
+              {{ data.jdav_membership_number || '–' }}
+            </dd>
+          </div>
+          <div>
+            <dt class="mb-1 text-sm text-gray-400 tracking-wider uppercase">
+              Deine E-Mail
+            </dt>
+            <dd class="text-lg font-semibold">{{ data.email || '–' }}</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
 
-  <article class="auth-card mt-4">
-    <header class="card-header">
-      <h2>Deine Schulungen</h2>
-    </header>
-    @if (userData(); as data) {
-      @if (data.participated_trainings?.length) {
-        <ul class="training-list">
-          @for (
-            training of sortTrainingsByDate(data.participated_trainings);
-            track training.id
-          ) {
-            <li class="training-item">
-              @let futureTraining = isTrainingInFuture(training);
-              <div class="flex flex-col md:flex-row justify-between w-full">
-                <div>
-                  <p class="mb-5">
-                    <span class="training-code">{{ training.code }}</span>
-                  </p>
-                  <p class="training-title">
-                    {{ training.title }}
-                  </p>
-                  <p class="training-date">
-                    Start am {{ training.date_from | date: 'dd.MM.yyyy' }}
-                  </p>
+    <div jdavCard class="mt-4">
+      <div jdavCardHeader>
+        <h2 jdavCardTitle class="text-xl">Deine Schulungen</h2>
+      </div>
+      <div jdavCardContent>
+        @if (data.participated_trainings?.length) {
+          <ul class="grid gap-6">
+            @for (
+              training of sortTrainingsByDate(data.participated_trainings);
+              track training.id
+            ) {
+              <li class="p-4 bg-gray-50 border border-gray-200 rounded-lg">
+                @let futureTraining = isTrainingInFuture(training);
+                <div class="flex flex-col md:flex-row justify-between w-full">
+                  <div>
+                    <p class="mb-5">
+                      <span
+                        class="px-2 py-0.5 rounded-full bg-sky-100 text-sm text-sky-700 font-semibold"
+                        >{{ training.code }}</span
+                      >
+                    </p>
+                    <p class="font-semibold">
+                      {{ training.title }}
+                    </p>
+                    <p class="mt-1 text-gray-600">
+                      Start am {{ training.date_from | date }}
+                    </p>
+                  </div>
+                  <div class="flex flex-col justify-end gap-2 mt-4">
+                    <button
+                      jdavButton
+                      type="button"
+                      (click)="navigateToFeedback(training)"
+                      [disabled]="futureTraining"
+                      [title]="
+                        futureTraining
+                          ? 'Feedback kannst du nach dem Kurs abgeben.'
+                          : ''
+                      "
+                    >
+                      Feedback geben
+                    </button>
+                    <button
+                      jdavButton
+                      type="button"
+                      [disabled]="futureTraining"
+                      (click)="navigateToExpenseReport(training)"
+                    >
+                      Fahrtkosten abrechnen
+                    </button>
+                  </div>
                 </div>
-                <div class="flex flex-col justify-end gap-2 mt-4">
-                  <button
-                    jdavButton
-                    type="button"
-                    (click)="navigateToFeedback(training)"
-                    [disabled]="futureTraining"
-                    [title]="
-                      futureTraining
-                        ? 'Feedback kannst du nach dem Kurs abgeben.'
-                        : ''
-                    "
-                  >
-                    Feedback geben
-                  </button>
-                  <button
-                    jdavButton
-                    type="button"
-                    [disabled]="futureTraining"
-                    (click)="navigateToExpenseReport(training)"
-                  >
-                    Fahrtkosten abrechnen
-                  </button>
-                </div>
-              </div>
-            </li>
-          }
-        </ul>
-      } @else {
-        <p class="text-sm text-slate-500">
-          Für dieses Konto liegen aktuell keine Fortbildungen vor.
-        </p>
-      }
-    } @else {
-      <p class="text-sm text-slate-500">
-        Lade Fortbildungsdaten… bitte einen Moment.
-      </p>
-    }
-  </article>
-
-  <button jdavButton type="button" class="w-full mt-4" (click)="logout()">
-    <span class="material-symbols-outlined">logout</span>
-    Abmelden
-  </button>
-</section>
+              </li>
+            }
+          </ul>
+        } @else {
+          <p class="text-sm text-slate-500">
+            Für dieses Konto liegen aktuell keine Fortbildungen vor.
+          </p>
+        }
+      </div>
+    </div>
+  } @else {
+    <p class="text-sm text-slate-500">
+      Profil wird geladen … die Weiterleitung startet automatisch.
+    </p>
+  }
+</div>

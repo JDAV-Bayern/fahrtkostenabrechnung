@@ -1,17 +1,22 @@
-import { CommonModule } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Button } from 'src/app/shared/ui/button';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from 'src/app/shared/ui/card';
 import { ParticipatedTraining } from '../auth-model';
 import { AuthService } from '../auth-service';
 
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
-  styleUrls: ['./user-profile.component.css'],
-  imports: [Button, CommonModule],
+  imports: [Button, Card, CardContent, CardHeader, CardTitle, DatePipe],
   host: {
-    class: 'block bg-gray-50',
+    class: 'block h-full bg-gray-50',
   },
 })
 export class UserProfileComponent {
@@ -55,7 +60,7 @@ export class UserProfileComponent {
   navigateToFeedback(training: ParticipatedTraining) {
     this.router.navigate(['/feedback'], {
       queryParams: {
-        schulungsnummer: training.code,
+        courseId: training.code,
       },
     });
   }
