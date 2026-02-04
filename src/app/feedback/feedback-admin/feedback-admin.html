@@ -71,135 +71,205 @@
   <!-- Feedback List -->
   <div class="feedback-section">
     <h3>Verfügbare Feedbacks</h3>
-    <div class="feedback-list">
+    <div class="feedback-grid">
+      <div class="feedback-grid-header">
+        <div>Kursnummer</div>
+        <div>Kurs</div>
+        <div>Teamer*innen</div>
+        <div>Antworten</div>
+      </div>
       @for (feedback of feedbacks(); track feedback.id) {
-        <button
-          type="button"
-          class="feedback-item"
-          [class.selected]="selectedFeedback()?.id === feedback.id"
-          (click)="selectFeedback(feedback)"
-        >
-          <div class="feedback-header">
-            <h4>{{ feedback.course_name }}</h4>
-            <span class="course-id">{{ feedback.course_id }}</span>
-          </div>
-          <div class="teamers">
-            <strong>Teamer*innen:</strong> {{ feedback.teamers.join(', ') }}
-          </div>
-        </button>
+        <div class="feedback-grid-group">
+          <button
+            type="button"
+            class="feedback-grid-row"
+            [class.selected]="selectedFeedback()?.id === feedback.id"
+            (click)="selectFeedback(feedback)"
+          >
+            <div class="course-id">{{ feedback.course_id }}</div>
+            <div class="course-name">{{ feedback.course_name }}</div>
+            <div class="teamers">{{ feedback.teamers.join(', ') }}</div>
+            <div class="response-count">
+              {{ feedback.feedback_result_count }}
+            </div>
+          </button>
+          @if (selectedFeedback()?.id === feedback.id) {
+            <div class="feedback-grid-expand">
+              <div class="token-section inline">
+                <h4>Tokens</h4>
+
+                <!-- Create Token Form -->
+                <div class="create-token-form">
+                  <h4>Neuen Token erstellen</h4>
+                  <div class="form-group">
+                    <label for="tokenRole">Rolle:</label>
+                    <select
+                      class="form-control"
+                      id="tokenRole"
+                      [(ngModel)]="newTokenRole"
+                      (ngModelChange)="onTokenRoleChange($event)"
+                    >
+                      <option value="give_feedback">Feedback geben</option>
+                      <option value="get_feedback">Feedback einsehen</option>
+                    </select>
+                  </div>
+                  @if (newTokenRole !== 'give_feedback') {
+                    <div class="form-group">
+                      <label for="tokenTeamer">Teamer*in:</label>
+                      <select
+                        class="form-control"
+                        id="tokenTeamer"
+                        [(ngModel)]="newTokenTeamer"
+                      >
+                        <option value="">Alle Teamer*innen</option>
+                        @for (
+                          teamer of selectedFeedback()?.teamers || [];
+                          track teamer
+                        ) {
+                          <option [value]="teamer">{{ teamer }}</option>
+                        }
+                      </select>
+                    </div>
+                  }
+                  <button
+                    jdavButton
+                    type="button"
+                    (click)="createToken()"
+                    [disabled]="loading()"
+                  >
+                    Token erstellen
+                  </button>
+                </div>
+
+                <!-- Token List -->
+                <div class="token-list">
+                  <h4>Vorhandene Tokens</h4>
+
+                  @if (loading()) {
+                    <div class="inline-loading">
+                      <span class="spinner" aria-hidden="true"></span>
+                      Tokens werden geladen...
+                    </div>
+                  } @else if (tokens().length === 0) {
+                    <div class="no-tokens">Keine Tokens vorhanden</div>
+                  }
+                  @for (token of tokens(); track token.id) {
+                    <div class="token-item">
+                      <div class="token-info">
+                        <span
+                          class="token-role"
+                          [class.give]="token.role === 'give_feedback'"
+                          [class.get]="token.role === 'get_feedback'"
+                        >
+                          {{ roleToGerman(token.role) }}
+                        </span>
+                        @if (token.role !== 'give_feedback') {
+                          <span class="token-teamer">
+                            {{ tokenTeamerLabel(token) }}
+                          </span>
+                        }
+                        @if (token.role === 'give_feedback') {
+                          <span class="token-usage">
+                            {{ token.used }} Mal verwendet
+                          </span>
+                        }
+                        <a
+                          class="token-value"
+                          href="{{ feedbackLink(token) }}"
+                          target="_blank"
+                        >
+                          {{ feedbackLink(token) }}
+                        </a>
+                      </div>
+                      <div class="token-actions">
+                        <button
+                          jdavButton
+                          type="button"
+                          variant="outline"
+                          (click)="deleteToken(token.id)"
+                          [disabled]="loading()"
+                        >
+                          <span class="material-symbols-outlined">delete</span>
+                          Löschen
+                        </button>
+                        <button
+                          jdavButton
+                          type="button"
+                          (click)="copyToClipboard(feedbackLink(token))"
+                        >
+                          <span class="material-symbols-outlined"
+                            >content_copy</span
+                          >
+                          Kopieren
+                        </button>
+                        @if (token.role === 'give_feedback') {
+                          <button
+                            jdavButton
+                            type="button"
+                            (click)="downloadPdf(token)"
+                          >
+                            <span class="material-symbols-outlined"
+                              >qr_code</span
+                            >
+                            QR-Code
+                          </button>
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+
+                <div class="teamers-editor">
+                  <div class="teamers-editor-header">
+                    <h4>Teamer*innen</h4>
+                    <button
+                      jdavButton
+                      type="button"
+                      variant="outline"
+                      (click)="toggleTeamersEditor()"
+                    >
+                      {{ showTeamersEditor() ? 'Abbrechen' : 'Bearbeiten' }}
+                    </button>
+                  </div>
+
+                  @if (showTeamersEditor()) {
+                    @if ((selectedFeedback()?.feedback_result_count || 0) > 0) {
+                      <div class="teamers-warning">
+                        Achtung: Wenn du die Teamer*innen änderst, werden
+                        vorhandene Antworten gelöscht und können nicht
+                        wiederhergestellt werden.
+                      </div>
+                    }
+                    <div class="form-group">
+                      <label for="teamersEdit">
+                        Teamer*innen (durch Komma getrennt)
+                      </label>
+                      <input
+                        type="text"
+                        id="teamersEdit"
+                        [(ngModel)]="editTeamersText"
+                        class="form-control"
+                      />
+                    </div>
+                    <button
+                      jdavButton
+                      type="button"
+                      (click)="saveTeamers()"
+                      [disabled]="loading()"
+                    >
+                      Teamer*innen speichern
+                    </button>
+                  } @else {
+                    <div class="teamers-readonly">
+                      {{ selectedFeedback()?.teamers?.join(', ') || '—' }}
+                    </div>
+                  }
+                </div>
+              </div>
+            </div>
+          }
+        </div>
       }
     </div>
   </div>
-
-  <!-- Token Management (only shown when a feedback is selected) -->
-  @if (selectedFeedback()) {
-    <div class="token-section">
-      <h3>Tokens für "{{ selectedFeedback()?.course_name }}"</h3>
-
-      <!-- Create Token Form -->
-      <div class="create-token-form">
-        <h4>Neuen Token erstellen</h4>
-        <div class="form-group">
-          <label for="tokenRole">Rolle:</label>
-          <select
-            class="form-control"
-            id="tokenRole"
-            [(ngModel)]="newTokenRole"
-            (ngModelChange)="onTokenRoleChange($event)"
-          >
-            <option value="give_feedback">Feedback geben</option>
-            <option value="get_feedback">Feedback einsehen</option>
-          </select>
-        </div>
-        @if (newTokenRole !== 'give_feedback') {
-          <div class="form-group">
-            <label for="tokenTeamer">Teamer*in:</label>
-            <select
-              class="form-control"
-              id="tokenTeamer"
-              [(ngModel)]="newTokenTeamer"
-            >
-              <option value="">Alle Teamer*innen</option>
-              @for (teamer of selectedFeedback()?.teamers || []; track teamer) {
-                <option [value]="teamer">{{ teamer }}</option>
-              }
-            </select>
-          </div>
-        }
-        <button
-          jdavButton
-          type="button"
-          (click)="createToken()"
-          [disabled]="loading()"
-        >
-          Token erstellen
-        </button>
-      </div>
-
-      <!-- Token List -->
-      <div class="token-list">
-        <h4>Vorhandene Tokens</h4>
-
-        @if (tokens().length === 0) {
-          <div class="no-tokens">Keine Tokens vorhanden</div>
-        }
-        @for (token of tokens(); track token.id) {
-          <div class="token-item">
-            <div class="token-info">
-              <span
-                class="token-role"
-                [class.give]="token.role === 'give_feedback'"
-                [class.get]="token.role === 'get_feedback'"
-              >
-                {{ roleToGerman(token.role) }}
-              </span>
-              @if (token.role !== 'give_feedback') {
-                <span class="token-teamer">
-                  {{ tokenTeamerLabel(token) }}
-                </span>
-              }
-              @if (token.role === 'give_feedback') {
-                <span class="token-usage">
-                  {{ token.used }} Mal verwendet
-                </span>
-              }
-              <a
-                class="token-value"
-                href="{{ feedbackLink(token) }}"
-                target="_blank"
-              >
-                {{ feedbackLink(token) }}
-              </a>
-            </div>
-            <div class="token-actions">
-              <button
-                jdavButton
-                type="button"
-                variant="outline"
-                (click)="deleteToken(token.id)"
-                [disabled]="loading()"
-              >
-                <span class="material-symbols-outlined">delete</span>
-                Löschen
-              </button>
-              <button
-                jdavButton
-                type="button"
-                (click)="copyToClipboard(feedbackLink(token))"
-              >
-                <span class="material-symbols-outlined">content_copy</span>
-                Kopieren
-              </button>
-              @if (token.role === 'give_feedback') {
-                <button jdavButton type="button" (click)="downloadPdf(token)">
-                  <span class="material-symbols-outlined">qr_code</span>
-                  QR-Code
-                </button>
-              }
-            </div>
-          </div>
-        }
-      </div>
-    </div>
-  }
 </div>

@@ -10,6 +10,7 @@ export interface FeedbackDTO {
   course_name: string;
   teamers: string[];
   surveyJson: Record<string, unknown>;
+  feedback_result_count: number;
 }
 
 export interface FeedbackCreateDTO {
@@ -28,6 +29,10 @@ export interface FeedbackRecordCreateDTO {
   feedback_id: string;
   feedback: unknown;
   correlation_id?: string;
+}
+
+export interface FeedbackTeamersUpdateDTO {
+  teamers: string[];
 }
 
 export interface FeedbackAccessTokenDTO {
@@ -177,5 +182,22 @@ export class FeedbackService {
    */
   deleteFeedbackToken(tokenId: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/feedback/tokens/${tokenId}`);
+  }
+
+  /**
+   * Update teamers for a feedback entry.
+   * @param feedbackId The ID of the feedback to update.
+   * @param teamers List of teamer names.
+   * @returns The updated feedback entry.
+   */
+  updateFeedbackTeamers(
+    feedbackId: string,
+    teamers: string[],
+  ): Observable<FeedbackDTO> {
+    const payload: FeedbackTeamersUpdateDTO = { teamers };
+    return this.http.put<FeedbackDTO>(
+      `${this.baseUrl}/feedback/${feedbackId}/teamers`,
+      payload,
+    );
   }
 }

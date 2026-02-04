@@ -41,6 +41,9 @@ export class FeedbackAdmin implements OnInit {
   newFeedbackCourseName = '';
   newFeedbackTeamers = '';
 
+  showTeamersEditor = signal<boolean>(false);
+  editTeamersText = '';
+
   loading = signal<boolean>(false);
   error = signal<string | null>(null);
   showCreateForm = signal<boolean>(false);
@@ -54,7 +57,10 @@ export class FeedbackAdmin implements OnInit {
     this.error.set(null);
     this.feedbackService.listFeedbacks().subscribe({
       next: (feedbacks) => {
-        this.feedbacks.set(feedbacks);
+        const sortedFeedbacks = [...feedbacks].sort((a, b) =>
+          a.course_id.localeCompare(b.course_id, 'de'),
+        );
+        this.feedbacks.set(sortedFeedbacks);
         this.loading.set(false);
       },
       error: (error) => {
@@ -68,8 +74,18 @@ export class FeedbackAdmin implements OnInit {
   }
 
   selectFeedback(feedback: FeedbackDTO): void {
+    if (this.selectedFeedback()?.id === feedback.id) {
+      this.selectedFeedback.set(null);
+      this.tokens.set([]);
+      this.showTeamersEditor.set(false);
+      this.editTeamersText = '';
+      return;
+    }
+
     this.selectedFeedback.set(feedback);
     this.newTokenTeamer = '';
+    this.showTeamersEditor.set(false);
+    this.editTeamersText = feedback.teamers.join(', ');
     this.loadTokens(feedback.id);
   }
 
@@ -220,6 +236,48 @@ export class FeedbackAdmin implements OnInit {
     if (role === 'give_feedback') {
       this.newTokenTeamer = '';
     }
+  }
+
+  toggleTeamersEditor(): void {
+    const next = !this.showTeamersEditor();
+    this.showTeamersEditor.set(next);
+    if (next && this.selectedFeedback()) {
+      this.editTeamersText = this.selectedFeedback()!.teamers.join(', ');
+    }
+  }
+
+  saveTeamers(): void {
+    const feedback = this.selectedFeedback();
+    if (!feedback) return;
+
+    const teamersArray = this.editTeamersText
+      .split(',')
+      .map((teamer) => teamer.trim())
+      .filter((teamer) => teamer.length > 0);
+
+    this.loading.set(true);
+    this.error.set(null);
+    this.feedbackService
+      .updateFeedbackTeamers(feedback.id, teamersArray)
+      .subscribe({
+        next: (updatedFeedback) => {
+          this.feedbacks.update((feedbacks) =>
+            feedbacks.map((item) =>
+              item.id === updatedFeedback.id ? updatedFeedback : item,
+            ),
+          );
+          this.selectedFeedback.set(updatedFeedback);
+          this.editTeamersText = updatedFeedback.teamers.join(', ');
+          this.showTeamersEditor.set(false);
+          this.loading.set(false);
+        },
+        error: (error) => {
+          this.error.set(
+            'Fehler beim Aktualisieren der Teamer*innen: ' + error.message,
+          );
+          this.loading.set(false);
+        },
+      });
   }
 
   async downloadPdf(token: FeedbackAccessTokenDTO): Promise<void> {
