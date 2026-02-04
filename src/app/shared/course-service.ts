@@ -42,9 +42,9 @@ export class CourseService {
    * Retrieve all courses.
    * @returns List of all courses.
    */
-  allCourses(booking_cycle: string | null = null): Observable<Course[]> {
+  allCourses(bookingCycle: string | null = null): Observable<Course[]> {
     const resolvedBookingCycle =
-      booking_cycle ?? String(new Date().getFullYear());
+      bookingCycle ?? String(new Date().getFullYear());
     const params = new HttpParams().set('booking_cycle', resolvedBookingCycle);
     params.set('page_size', '100');
     const url = `${this.baseUrl}/remote/trainings/`;
