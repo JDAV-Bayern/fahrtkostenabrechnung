@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 export const authConfig: PassedInitialConfig = {
   config: {
     authority: environment.authConfig?.issuer,
-    secureRoutes: [environment.backendUrl ?? ''],
+    secureRoutes: [environment.backendUrl ?? '/api'],
     authWellknownEndpoints: {
       // We need this proxy for now as CORS setup is not working on the identity provider
       userInfoEndpoint: environment.origin + '/auth-proxy/userinfo/',

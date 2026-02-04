@@ -3,7 +3,7 @@ import { Environment } from './environment.interface';
 export const environment: Environment = {
   origin: 'https://stage.portal.jdav-bayern.de',
   environment: 'staging',
-  backendUrl: 'https://api.stage.portal.jdav-bayern.de',
+  backendUrl: 'https://stage.portal.jdav-bayern.de/api',
   authConfig: {
     issuer: 'https://jdav-bayern.de/o',
     /* 
