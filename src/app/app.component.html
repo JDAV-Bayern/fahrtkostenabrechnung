@@ -1,3 +1,13 @@
+@if (showStagingBanner) {
+  <div class="sticky top-0 z-50 text-sm bg-[#ffcc00] w-full py-4 text-center">
+    <b>Achtung!</b> Das ist die Staging-Umgebung. Alle Daten hier werden
+    regelmäßig gelöscht. Produktion findest du hier:
+    <a href="https://portal.jdav-bayern.de" class="text-blue-600 underline"
+      >https://portal.jdav-bayern.de</a
+    >
+  </div>
+}
+
 <header jdav-header></header>
 <main>
   <router-outlet></router-outlet>
