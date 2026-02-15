@@ -14,5 +14,5 @@ import { HeaderComponent } from './core/header/header.component';
   },
 })
 export class AppComponent {
-  showStagingBanner = environment.environment === 'staging';
+  readonly showStagingBanner = environment.environment === 'staging';
 }
