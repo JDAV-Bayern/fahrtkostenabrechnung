@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { environment } from 'src/environments/environment';
 import { FooterComponent } from './core/footer/footer.component';
 import { HeaderComponent } from './core/header/header.component';
 
@@ -12,4 +13,6 @@ import { HeaderComponent } from './core/header/header.component';
       'grid grid-rows-[auto_1fr_auto] min-h-screen font-titillium text-gray-950 antialiased',
   },
 })
-export class AppComponent {}
+export class AppComponent {
+  showStagingBanner = environment.environment === 'staging';
+}
