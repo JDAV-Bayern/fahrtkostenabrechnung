@@ -60,7 +60,7 @@
     "angular-eslint": "21.2.0",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
-    "jsdom": "^27.4.0",
+    "jsdom": "^28.1.0",
     "pdf-parse": "^2.4.5",
     "playwright-ng-schematics": "^21.0.3",
     "prettier": "^3.8.1",
