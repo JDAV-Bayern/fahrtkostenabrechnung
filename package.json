@@ -62,7 +62,7 @@
     "eslint-config-prettier": "^10.1.8",
     "jsdom": "^27.4.0",
     "pdf-parse": "^2.4.5",
-    "playwright-ng-schematics": "^21.0.3",
+    "playwright-ng-schematics": "^21.0.4",
     "prettier": "^3.8.1",
     "prettier-plugin-organize-imports": "^4.3.0",
     "typescript": "~5.9.3",
