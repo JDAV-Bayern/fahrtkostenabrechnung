@@ -117,9 +117,7 @@
           <div class="car-rate-list">
             @for (rate of config.transport.car; track $index) {
               <div class="car-rate-row">
-                <label>
-                  {{ $index + 1 }} Person{{ $index === 0 ? '' : 'en' }}
-                </label>
+                <p>{{ $index + 1 }} Person{{ $index === 0 ? '' : 'en' }}</p>
                 <input
                   type="number"
                   min="0"
