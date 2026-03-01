@@ -88,7 +88,7 @@ export class FoodExpenseCardComponent implements ControlValueAccessor {
   }
 
   getAllowance(absence: Absence) {
-    const foodConfig = this.reimbursementService.config.food;
+    const foodConfig = this.reimbursementService.config?.food;
     return foodConfig ? foodConfig[absence] : 0;
   }
 }
