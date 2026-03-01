@@ -1,173 +1,176 @@
 <h1>Erstattungssätze</h1>
 
-@if (meetingType !== 'committee') {
-  <p>
-    Fahrtkosten zur Schulung werden von der JDAV Bayern nach den auf dieser
-    Seite angegebenen Sätzen erstattet. Der Betrag wird dir nach der Schulung
-    auf dein Konto überwiesen.
-  </p>
-  <p>
-    Die Fahrtkosten zur Landesjugendversammlung werden wie bei Schulungen
-    erstattet.
-  </p>
-} @else {
-  <p>
-    Fahrtkosten für Gremien werden nach den auf dieser Seite angegebenen Sätzen
-    erstattet. Details kannst du dem Leitfaden für Abrechnungen für Gremien
-    entnehmen.
-  </p>
-}
-
-@if (config.maxTotal) {
-  <p class="important">
-    Für nicht-bayerische Teilnehmer*innen werden maximal
-    {{ config.maxTotal | currency }} erstattet.
-  </p>
-}
-
-@if (config.allowed.includes('transport') && config.transport) {
-  <h2>Fahrtkosten</h2>
-
-  <p>
-    Die Erstattung der Fahrtkosten erfolgt abhängig vom Verkehrsmittel nach den
-    folgenden Sätzen.
-  </p>
-
-  <h3>Autofahrt</h3>
-
-  <p>
-    Die Erstattung von Autofahrten erfolgt abhängig von der Anzahl der
-    Mitfahrer*innen.
-  </p>
-  <p>
-    Zur CO2-Bilanzierung erfragen wir zusätzlich, welchen Antrieb euer Fahrzeug
-    hat. Diese Angabe hat keinen Einfluss auf die Erstattung.
-  </p>
-  <table>
-    @for (entry of config.transport.car; track entry) {
-      <tr>
-        <td>{{ $index + 1 }} Personen</td>
-        @if (entry === 0) {
-          <td>keine Erstattung</td>
-        } @else {
-          <td>{{ entry | currency }} pro km</td>
-        }
-      </tr>
-    }
-  </table>
-
-  <h3>Fahrt mit ÖPNV</h3>
-
-  <p>
-    Die Erstattung von Fahrten mit dem ÖPNV erfolgt abhängig vom (ermäßigten)
-    Ticketpreis und der genutzten BahnCard.
-  </p>
-  <p class="important">Bitte eine Kopie der Fahrkarte anhängen!</p>
-
+@if (config(); as config) {
   @if (meetingType !== 'committee') {
-    <table>
-      @for (
-        entry of config.transport.public | keyvalue: null;
-        track entry.key
-      ) {
-        <tr>
-          <td>{{ entry.key | discount }}</td>
-          <td>{{ entry.value | percent }} des Ticketpreis</td>
-        </tr>
-      }
-    </table>
+    <p>
+      Fahrtkosten zur Schulung werden von der JDAV Bayern nach den auf dieser
+      Seite angegebenen Sätzen erstattet. Der Betrag wird dir nach der Schulung
+      auf dein Konto überwiesen.
+    </p>
+    <p>
+      Die Fahrtkosten zur Landesjugendversammlung werden wie bei Schulungen
+      erstattet.
+    </p>
   } @else {
     <p>
-      Bitte beachte, dass die BahnCard für Gremien durch das Formular aktuell
-      nicht berücksichtigt werden kann. Bitte wähle bei der Erfassung der
-      Fahrtkosten trotzdem deine BahnCard aus und füge den Belegen die Rechnung
-      deiner BahnCard an. Der Betrag wird dann durch die LGS entsprechend
-      zusätzlich erstattet.
+      Fahrtkosten für Gremien werden nach den auf dieser Seite angegebenen
+      Sätzen erstattet. Details kannst du dem Leitfaden für Abrechnungen für
+      Gremien entnehmen.
     </p>
   }
 
-  <h3>Fahrt mit ÖPNV-Abo</h3>
+  @if (config.maxTotal) {
+    <p class="important">
+      Für nicht-bayerische Teilnehmer*innen werden maximal
+      {{ config.maxTotal | currency }} erstattet.
+    </p>
+  }
 
-  <p>
-    Für die Nutzung von Abotickets (Deutschlandticket, Semesterticket, o.ä.)
-    wird je Fahrtstrecke (Hin- oder Rückfahrt) eine Pauschale erstattet.
-  </p>
-  <p class="important">Bitte eine Kopie der Fahrkarte anhängen!</p>
+  @if (config.allowed.includes('transport') && config.transport) {
+    <h2>Fahrtkosten</h2>
 
-  <table>
-    <tr>
-      <td>pauschal {{ config.transport.plan | currency }} pro Strecke</td>
-    </tr>
-  </table>
+    <p>
+      Die Erstattung der Fahrtkosten erfolgt abhängig vom Verkehrsmittel nach
+      den folgenden Sätzen.
+    </p>
 
-  <h3>Fahrrad</h3>
+    <h3>Autofahrt</h3>
 
-  <table>
-    <tr>
-      <td>{{ config.transport.bike | currency }} pro km</td>
-    </tr>
-  </table>
-}
+    <p>
+      Die Erstattung von Autofahrten erfolgt abhängig von der Anzahl der
+      Mitfahrer*innen.
+    </p>
+    <p>
+      Zur CO2-Bilanzierung erfragen wir zusätzlich, welchen Antrieb euer
+      Fahrzeug hat. Diese Angabe hat keinen Einfluss auf die Erstattung.
+    </p>
+    <table>
+      @for (entry of config.transport.car; track entry) {
+        <tr>
+          <td>{{ $index + 1 }} Personen</td>
+          @if (entry === 0) {
+            <td>keine Erstattung</td>
+          } @else {
+            <td>{{ entry | currency }} pro km</td>
+          }
+        </tr>
+      }
+    </table>
 
-@if (config.allowed.includes('food') && config.food) {
-  <h2>Tagegeld</h2>
+    <h3>Fahrt mit ÖPNV</h3>
 
-  <p>
-    Bei Geschäftsreisen für die JDAV können Tagegelder für den entstehenden
-    Mehraufwand für Verpflegung nach folgenden Sätzen abgerechnet werden:
-  </p>
-  <table>
-    <tr>
-      <td>Ganztägige Abwesenheit</td>
-      <td>{{ config.food.intermediate | currency }}</td>
-    </tr>
-    <tr>
-      <td>An- und Abreisetag bei mehrtägigen Reisen</td>
-      <td>{{ config.food.arrival | currency }}</td>
-    </tr>
-    <tr>
-      <td>Mehr als 8-stündige Abwesenheit ohne Übernachtung</td>
-      <td>{{ config.food.single | currency }}</td>
-    </tr>
-  </table>
+    <p>
+      Die Erstattung von Fahrten mit dem ÖPNV erfolgt abhängig vom (ermäßigten)
+      Ticketpreis und der genutzten BahnCard.
+    </p>
+    <p class="important">Bitte eine Kopie der Fahrkarte anhängen!</p>
 
-  <p>
-    Bei Gewährung unentgeltlicher Verpflegung werden folgende Beträge abgezogen:
-  </p>
-  <table>
-    <tr>
-      <td>Frühstück</td>
-      <td>{{ config.food.intermediate * 0.2 | currency }}</td>
-    </tr>
-    <tr>
-      <td>Mittagessen</td>
-      <td>{{ config.food.intermediate * 0.4 | currency }}</td>
-    </tr>
-    <tr>
-      <td>Abendessen</td>
-      <td>{{ config.food.intermediate * 0.4 | currency }}</td>
-    </tr>
-  </table>
+    @if (meetingType !== 'committee') {
+      <table>
+        @for (
+          entry of config.transport.public | keyvalue: null;
+          track entry.key
+        ) {
+          <tr>
+            <td>{{ entry.key | discount }}</td>
+            <td>{{ entry.value | percent }} des Ticketpreis</td>
+          </tr>
+        }
+      </table>
+    } @else {
+      <p>
+        Bitte beachte, dass die BahnCard für Gremien durch das Formular aktuell
+        nicht berücksichtigt werden kann. Bitte wähle bei der Erfassung der
+        Fahrtkosten trotzdem deine BahnCard aus und füge den Belegen die
+        Rechnung deiner BahnCard an. Der Betrag wird dann durch die LGS
+        entsprechend zusätzlich erstattet.
+      </p>
+    }
 
-  <p>
-    Bei Reisen ins Ausland gelten abweichende Sätze, die bei Bedarf in der LGS
-    erfragt werden können.
-  </p>
-}
+    <h3>Fahrt mit ÖPNV-Abo</h3>
 
-@if (config.allowed.includes('material')) {
-  <h2>Sachkosten und sonstige Auslagen</h2>
-  <h3>Selbstversorgungsschulungen</h3>
-  <p>
-    Du hast für eine Selbstversorgungsschulung Auslagen für ein gemeinsam
-    gekochtes Essen? Diese bekommst Du natürlich in voller Höhe zurück.
-  </p>
-  <h3>Parkgebühren</h3>
-  <p>
-    Wir erstatten Parkgebühren zu 110% des Betrages, wenn sie angefallen sind,
-    um anschließend mit einer Fahrgemeinschaft oder öffentlichen Verkehrsmitteln
-    zum Kursort zu gelangen.
-  </p>
+    <p>
+      Für die Nutzung von Abotickets (Deutschlandticket, Semesterticket, o.ä.)
+      wird je Fahrtstrecke (Hin- oder Rückfahrt) eine Pauschale erstattet.
+    </p>
+    <p class="important">Bitte eine Kopie der Fahrkarte anhängen!</p>
 
-  <p class="important">Bitte stets eine Kopie der Belege anhängen!</p>
+    <table>
+      <tr>
+        <td>pauschal {{ config.transport.plan | currency }} pro Strecke</td>
+      </tr>
+    </table>
+
+    <h3>Fahrrad</h3>
+
+    <table>
+      <tr>
+        <td>{{ config.transport.bike | currency }} pro km</td>
+      </tr>
+    </table>
+  }
+
+  @if (config.allowed.includes('food') && config.food) {
+    <h2>Tagegeld</h2>
+
+    <p>
+      Bei Geschäftsreisen für die JDAV können Tagegelder für den entstehenden
+      Mehraufwand für Verpflegung nach folgenden Sätzen abgerechnet werden:
+    </p>
+    <table>
+      <tr>
+        <td>Ganztägige Abwesenheit</td>
+        <td>{{ config.food.intermediate | currency }}</td>
+      </tr>
+      <tr>
+        <td>An- und Abreisetag bei mehrtägigen Reisen</td>
+        <td>{{ config.food.arrival | currency }}</td>
+      </tr>
+      <tr>
+        <td>Mehr als 8-stündige Abwesenheit ohne Übernachtung</td>
+        <td>{{ config.food.single | currency }}</td>
+      </tr>
+    </table>
+
+    <p>
+      Bei Gewährung unentgeltlicher Verpflegung werden folgende Beträge
+      abgezogen:
+    </p>
+    <table>
+      <tr>
+        <td>Frühstück</td>
+        <td>{{ config.food.intermediate * 0.2 | currency }}</td>
+      </tr>
+      <tr>
+        <td>Mittagessen</td>
+        <td>{{ config.food.intermediate * 0.4 | currency }}</td>
+      </tr>
+      <tr>
+        <td>Abendessen</td>
+        <td>{{ config.food.intermediate * 0.4 | currency }}</td>
+      </tr>
+    </table>
+
+    <p>
+      Bei Reisen ins Ausland gelten abweichende Sätze, die bei Bedarf in der LGS
+      erfragt werden können.
+    </p>
+  }
+
+  @if (config.allowed.includes('material')) {
+    <h2>Sachkosten und sonstige Auslagen</h2>
+    <h3>Selbstversorgungsschulungen</h3>
+    <p>
+      Du hast für eine Selbstversorgungsschulung Auslagen für ein gemeinsam
+      gekochtes Essen? Diese bekommst Du natürlich in voller Höhe zurück.
+    </p>
+    <h3>Parkgebühren</h3>
+    <p>
+      Wir erstatten Parkgebühren zu 110% des Betrages, wenn sie angefallen sind,
+      um anschließend mit einer Fahrgemeinschaft oder öffentlichen
+      Verkehrsmitteln zum Kursort zu gelangen.
+    </p>
+
+    <p class="important">Bitte stets eine Kopie der Belege anhängen!</p>
+  }
 }

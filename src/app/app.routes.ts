@@ -69,6 +69,10 @@ export const routes: Routes = [
     loadChildren: () => import('./feedback/feedback.routes'),
   },
   {
+    path: 'admin',
+    loadChildren: () => import('./admin/admin.routes'),
+  },
+  {
     path: 'meine-kurse',
     title: 'Meine Kurse',
     component: UserProfileComponent,
@@ -89,7 +93,7 @@ export const routes: Routes = [
   },
   {
     path: 'feedback-admin',
-    redirectTo: 'feedback/admin',
+    redirectTo: 'admin/feedback',
     pathMatch: 'full',
   },
   {

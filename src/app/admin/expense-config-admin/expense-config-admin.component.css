@@ -1,0 +1,156 @@
+.expense-config-admin-container {
+  padding: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.page-header h2 {
+  margin: 0 0 8px;
+}
+
+.page-header p {
+  margin: 0;
+  color: var(--color-body);
+}
+
+.type-switch {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.loading {
+  color: var(--color-primary);
+  font-style: italic;
+}
+
+.success-message {
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  background: #e7f8ed;
+  color: #1c6b38;
+  border: 1px solid #b7e2c5;
+}
+
+.config-form {
+  display: grid;
+  gap: 20px;
+}
+
+.config-section {
+  background: #fff;
+  border: 1px solid #d9dde2;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.config-section h3 {
+  margin: 0 0 16px;
+}
+
+.config-section h4 {
+  margin: 0;
+}
+
+.section-header,
+.subsection-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.section-header p,
+.subsection-header p {
+  margin: 6px 0 0;
+  color: var(--color-body);
+}
+
+.subsection {
+  margin-bottom: 24px;
+}
+
+.form-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.form-grid.two-columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.form-group {
+  display: grid;
+  gap: 6px;
+}
+
+.form-group label {
+  font-weight: 600;
+}
+
+.form-group small {
+  color: var(--color-body);
+}
+
+.form-control {
+  min-height: 42px;
+  border: 1px solid #c8d0d9;
+  border-radius: 6px;
+  padding: 8px 12px;
+  background: #fff;
+}
+
+.toggle-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.toggle-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #d9dde2;
+  border-radius: 8px;
+  padding: 14px 16px;
+  background: #f7f9fb;
+  font-weight: 600;
+}
+
+.car-rate-list {
+  display: grid;
+  gap: 12px;
+}
+
+.car-rate-row {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+@media (max-width: 800px) {
+  .page-header,
+  .section-header,
+  .subsection-header {
+    flex-direction: column;
+  }
+
+  .form-grid.two-columns,
+  .toggle-grid,
+  .car-rate-row {
+    grid-template-columns: 1fr;
+  }
+
+  .actions {
+    justify-content: stretch;
+  }
+}
