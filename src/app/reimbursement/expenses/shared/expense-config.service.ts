@@ -1,35 +1,35 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, Observable, shareReplay } from 'rxjs';
+import { map, Observable, shareReplay, tap } from 'rxjs';
 import { MeetingType } from 'src/domain/meeting.model';
 import { environment } from 'src/environments/environment';
 import { ExpenseConfig } from '../expense.config';
 
-interface PublicTransportExpenseDTO {
+export interface PublicTransportExpenseDTO {
   none: number;
   BC25: number;
   BC50: number;
 }
 
-interface TransportExpenseConfigDTO {
+export interface TransportExpenseConfigDTO {
   car: number[];
   public: PublicTransportExpenseDTO;
   bike: number;
   plan: number;
 }
 
-interface FoodExpenseConfigDTO {
+export interface FoodExpenseConfigDTO {
   arrival: number;
   full: number;
   departure: number;
   single_day: number;
 }
 
-interface ExpenseConfigDTO {
+export interface ExpenseConfigDTO {
   allowed: ExpenseConfig['allowed'];
   valid_from?: string;
-  transport?: TransportExpenseConfigDTO;
-  food?: FoodExpenseConfigDTO;
+  transport: TransportExpenseConfigDTO;
+  food: FoodExpenseConfigDTO;
   maxTotal?: number | null;
 }
 
@@ -70,6 +70,18 @@ export class ExpenseConfigService {
       this.cache.set(type, request);
     }
     return request;
+  }
+
+  getCurrentConfig(type: MeetingType): Observable<ExpenseConfigDTO> {
+    return this.http.get<ExpenseConfigDTO>(
+      `${this.baseUrl}/reimbursement-config/${type}`,
+    );
+  }
+
+  updateConfig(type: MeetingType, config: ExpenseConfigDTO): Observable<void> {
+    return this.http
+      .post<void>(`${this.baseUrl}/reimbursement-config/${type}`, config)
+      .pipe(tap(() => this.cache.delete(type)));
   }
 
   private normalizeConfig(config: ExpenseConfigDTO): ExpenseConfig {
