@@ -1,0 +1,294 @@
+<div class="expense-config-admin-container">
+  <div class="flex flex-col gap-4 pb-10">
+    <div class="typography">
+      <h1>Erstattungssätze verwalten</h1>
+      <p>
+        Pflege hier die aktuellen Sätze für Kurse und Gremien. Die Änderungen
+        werden direkt für die Formulare und die Infoseite verwendet.
+      </p>
+    </div>
+    <div class="type-switch">
+      <button
+        jdavButton
+        type="button"
+        [variant]="selectedType === 'course' ? 'default' : 'outline'"
+        (click)="selectType('course')"
+      >
+        Kurse
+      </button>
+      <button
+        jdavButton
+        type="button"
+        [variant]="selectedType === 'committee' ? 'default' : 'outline'"
+        (click)="selectType('committee')"
+      >
+        Gremien
+      </button>
+    </div>
+  </div>
+
+  @if (error()) {
+    <div class="error-message">
+      {{ error() }}
+    </div>
+  }
+
+  @if (success()) {
+    <div class="success-message">
+      {{ success() }}
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading">Lade Konfiguration...</div>
+  } @else if (config(); as config) {
+    <div class="config-form">
+      <section class="config-section">
+        <h3>Allgemein</h3>
+        <div class="form-group">
+          <label for="max_total">Maximale Gesamterstattung</label>
+          <input
+            id="max_total"
+            type="number"
+            min="0"
+            step="0.01"
+            class="form-control"
+            [ngModel]="config.maxTotal"
+            (ngModelChange)="config.maxTotal = $event"
+          />
+          <small>Leer lassen, wenn kein Limit gelten soll.</small>
+        </div>
+      </section>
+
+      <section class="config-section">
+        <h3>Aktive Kostenarten</h3>
+        <div class="toggle-grid">
+          <label class="toggle-card">
+            <input
+              type="checkbox"
+              [checked]="isAllowed('transport')"
+              (change)="toggleAllowed('transport', $any($event.target).checked)"
+            />
+            <span>Fahrtkosten</span>
+          </label>
+          <label class="toggle-card">
+            <input
+              type="checkbox"
+              [checked]="isAllowed('food')"
+              (change)="toggleAllowed('food', $any($event.target).checked)"
+            />
+            <span>Tagegeld</span>
+          </label>
+          <label class="toggle-card">
+            <input
+              type="checkbox"
+              [checked]="isAllowed('material')"
+              (change)="toggleAllowed('material', $any($event.target).checked)"
+            />
+            <span>Sachkosten</span>
+          </label>
+        </div>
+      </section>
+
+      <section class="config-section">
+        <div class="section-header">
+          <div>
+            <h3>Fahrtkosten</h3>
+            <p>
+              Diese Werte werden für Transportkosten in der Abrechnung genutzt.
+            </p>
+          </div>
+        </div>
+
+        <div class="subsection">
+          <div class="subsection-header">
+            <h4>Auto pro km</h4>
+            <button
+              jdavButton
+              type="button"
+              variant="outline"
+              (click)="addCarRate()"
+            >
+              <span class="material-symbols-outlined">add</span>
+              Satz hinzufügen
+            </button>
+          </div>
+
+          <div class="car-rate-list">
+            @for (rate of config.transport.car; track $index) {
+              <div class="car-rate-row">
+                <label>
+                  {{ $index + 1 }} Person{{ $index === 0 ? '' : 'en' }}
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  class="form-control"
+                  [ngModel]="rate"
+                  (ngModelChange)="updateCarRate($index, $event)"
+                />
+                <button
+                  jdavButton
+                  type="button"
+                  variant="ghost"
+                  [disabled]="config.transport.car.length <= 1"
+                  (click)="removeCarRate($index)"
+                >
+                  <span class="material-symbols-outlined">delete</span>
+                </button>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="form-grid two-columns">
+          <div class="form-group">
+            <label for="public_none">ÖPNV ohne BahnCard</label>
+            <input
+              id="public_none"
+              type="number"
+              min="0"
+              step="0.01"
+              class="form-control"
+              [ngModel]="config.transport.public.none"
+              (ngModelChange)="config.transport.public.none = $event"
+            />
+          </div>
+          <div class="form-group">
+            <label for="public_bc25">ÖPNV mit BahnCard 25</label>
+            <input
+              id="public_bc25"
+              type="number"
+              min="0"
+              step="0.01"
+              class="form-control"
+              [ngModel]="config.transport.public.BC25"
+              (ngModelChange)="config.transport.public.BC25 = $event"
+            />
+          </div>
+          <div class="form-group">
+            <label for="public_bc50">ÖPNV mit BahnCard 50</label>
+            <input
+              id="public_bc50"
+              type="number"
+              min="0"
+              step="0.01"
+              class="form-control"
+              [ngModel]="config.transport.public.BC50"
+              (ngModelChange)="config.transport.public.BC50 = $event"
+            />
+          </div>
+          <div class="form-group">
+            <label for="plan">ÖPNV-Abo pro Strecke</label>
+            <input
+              id="plan"
+              type="number"
+              min="0"
+              step="0.01"
+              class="form-control"
+              [ngModel]="config.transport.plan"
+              (ngModelChange)="config.transport.plan = $event"
+            />
+          </div>
+          <div class="form-group">
+            <label for="bike">Fahrrad pro km</label>
+            <input
+              id="bike"
+              type="number"
+              min="0"
+              step="0.01"
+              class="form-control"
+              [ngModel]="config.transport.bike"
+              (ngModelChange)="config.transport.bike = $event"
+            />
+          </div>
+        </div>
+      </section>
+
+      @if (isAllowed('food')) {
+        <section class="config-section">
+          <div class="section-header">
+            <div>
+              <h3>Tagegeld</h3>
+              <p>
+                Diese Werte werden verwendet, sobald Tagegeld aktiviert ist.
+              </p>
+            </div>
+          </div>
+
+          <div class="form-grid two-columns">
+            <div class="form-group">
+              <label for="food_arrival">Anreisetag</label>
+              <input
+                id="food_arrival"
+                type="number"
+                min="0"
+                step="0.01"
+                class="form-control"
+                [ngModel]="config.food.arrival"
+                (ngModelChange)="config.food.arrival = $event"
+              />
+            </div>
+            <div class="form-group">
+              <label for="food_departure">Abreisetag</label>
+              <input
+                id="food_departure"
+                type="number"
+                min="0"
+                step="0.01"
+                class="form-control"
+                [ngModel]="config.food.departure"
+                (ngModelChange)="config.food.departure = $event"
+              />
+            </div>
+            <div class="form-group">
+              <label for="food_full">Ganztägige Abwesenheit</label>
+              <input
+                id="food_full"
+                type="number"
+                min="0"
+                step="0.01"
+                class="form-control"
+                [ngModel]="config.food.full"
+                (ngModelChange)="config.food.full = $event"
+              />
+            </div>
+            <div class="form-group">
+              <label for="food_single_day">Mehr als 8 Stunden</label>
+              <input
+                id="food_single_day"
+                type="number"
+                min="0"
+                step="0.01"
+                class="form-control"
+                [ngModel]="config.food.single_day"
+                (ngModelChange)="config.food.single_day = $event"
+              />
+            </div>
+          </div>
+        </section>
+      }
+
+      <div class="actions">
+        <button
+          jdavButton
+          type="button"
+          variant="outline"
+          [disabled]="loading() || saving()"
+          (click)="loadConfig(selectedType)"
+        >
+          Neu laden
+        </button>
+        <button
+          jdavButton
+          type="button"
+          [disabled]="loading() || saving()"
+          (click)="saveConfig()"
+        >
+          {{ saving() ? 'Speichert...' : 'Speichern' }}
+        </button>
+      </div>
+    </div>
+  }
+</div>

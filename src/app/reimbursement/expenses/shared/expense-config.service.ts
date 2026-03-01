@@ -79,6 +79,7 @@ export class ExpenseConfigService {
   }
 
   updateConfig(type: MeetingType, config: ExpenseConfigDTO): Observable<void> {
+    config.valid_from = new Date().toISOString();
     return this.http
       .post<void>(`${this.baseUrl}/reimbursement-config/${type}`, config)
       .pipe(tap(() => this.cache.delete(type)));
