@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, Observable, shareReplay, tap } from 'rxjs';
+import { catchError, map, Observable, shareReplay, tap } from 'rxjs';
 import { MeetingType } from 'src/domain/meeting.model';
 import { environment } from 'src/environments/environment';
 import { ExpenseConfig } from '../expense.config';
@@ -64,6 +64,10 @@ export class ExpenseConfigService {
       )
       .pipe(
         map((config) => this.normalizeConfig(config)),
+        catchError((err) => {
+          this.cache.delete(type);
+          throw err;
+        }),
         shareReplay(1),
       );
     if (!date) {
@@ -79,9 +83,12 @@ export class ExpenseConfigService {
   }
 
   updateConfig(type: MeetingType, config: ExpenseConfigDTO): Observable<void> {
-    config.valid_from = new Date().toISOString();
+    const payload: ExpenseConfigDTO = {
+      ...config,
+      valid_from: new Date().toISOString(),
+    };
     return this.http
-      .post<void>(`${this.baseUrl}/reimbursement-config/${type}`, config)
+      .post<void>(`${this.baseUrl}/reimbursement-config/${type}`, payload)
       .pipe(tap(() => this.cache.delete(type)));
   }
 

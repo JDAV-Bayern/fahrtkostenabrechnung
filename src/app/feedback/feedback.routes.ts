@@ -16,7 +16,7 @@ const routes: Routes = [
   // Legacy redirect
   {
     path: 'admin',
-    redirectTo: '/admin/feedback',
+    redirectTo: 'admin/feedback',
   },
 ];
 

@@ -24,7 +24,7 @@ export class ExpenseService {
 
   getAmount(expense: Expense) {
     if (!this.config) {
-      throw new Error('Expense config not loaded');
+      return 0;
     }
 
     if (!this.config.allowed.includes(expense.type)) {
