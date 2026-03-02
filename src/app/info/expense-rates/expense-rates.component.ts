@@ -32,11 +32,9 @@ export class ExpenseRatesComponent implements OnInit {
         const meetingType = param === 'gremium' ? 'committee' : 'course';
 
         this.meetingType = meetingType;
-        this.expenseConfigService
-          .getConfig(meetingType)
-          .subscribe((config) => {
-            this.config.set(config);
-          });
+        this.expenseConfigService.getConfig(meetingType).subscribe((config) => {
+          this.config.set(config);
+        });
       });
   }
 }
