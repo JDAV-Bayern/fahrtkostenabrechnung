@@ -9,7 +9,7 @@
     }
   },
   "/auth-proxy": {
-    "target": "https://staging.jdav-bayern.de/o/",
+    "target": "https://jdav-bayern.de/o/",
     "secure": false,
     "changeOrigin": true,
     "logLevel": "debug",

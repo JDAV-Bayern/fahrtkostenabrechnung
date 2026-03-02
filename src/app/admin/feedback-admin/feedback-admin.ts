@@ -10,13 +10,13 @@ import {
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import jsPDF from 'jspdf';
-import { Button } from 'src/app/shared/ui/button';
-import { environment } from 'src/environments/environment';
 import {
   FeedbackAccessTokenDTO,
   FeedbackDTO,
   FeedbackService,
-} from '../feedback-service';
+} from 'src/app/feedback/feedback-service';
+import { Button } from 'src/app/shared/ui/button';
+import { environment } from 'src/environments/environment';
 import { QrPdfViewComponent } from './qr-pdf-view/qr-pdf-view.component';
 const MIME_TYPE_PDF = 'application/pdf';
 

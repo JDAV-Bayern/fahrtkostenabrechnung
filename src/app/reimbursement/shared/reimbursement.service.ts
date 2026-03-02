@@ -18,7 +18,8 @@ import {
 } from 'src/domain/expense.model';
 import { MeetingType } from 'src/domain/meeting.model';
 import { Reimbursement } from 'src/domain/reimbursement.model';
-import { expenseConfig } from '../expenses/expense.config';
+import { ExpenseConfig } from '../expenses/expense.config';
+import { ExpenseConfigService } from '../expenses/shared/expense-config.service';
 import { ExpenseService } from '../expenses/shared/expense.service';
 
 const createFoodExpense = (date: Date, absence: Absence): FoodExpense => ({
@@ -42,13 +43,24 @@ export interface ReimbursementReport {
 })
 export class ReimbursementService {
   private readonly expenseService = inject(ExpenseService);
+  private readonly expenseConfigService = inject(ExpenseConfigService);
   private readonly sectionService = inject(SectionService);
 
-  config = expenseConfig.course;
+  config?: ExpenseConfig;
+
+  constructor() {
+    this.setMeetingType('course');
+  }
 
   set meetingType(type: MeetingType) {
-    this.config = expenseConfig[type];
-    this.expenseService.config = this.config;
+    this.setMeetingType(type);
+  }
+
+  private setMeetingType(type: MeetingType) {
+    this.expenseConfigService.getConfig(type).subscribe((config) => {
+      this.config = config;
+      this.expenseService.config = config;
+    });
   }
 
   getExpenses(
@@ -106,6 +118,15 @@ export class ReimbursementService {
   }
 
   getReport(reimbursement: Reimbursement): ReimbursementReport {
+    if (!this.config) {
+      return {
+        categories: {},
+        total: 0,
+        totalReduced: false,
+        receiptsRequired: false,
+      };
+    }
+
     const reducer = (sum: number, expense: Expense) =>
       sum + this.expenseService.getAmount(expense);
 

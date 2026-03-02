@@ -5,7 +5,7 @@ export const environment: Environment = {
   environment: 'development',
   backendUrl: 'http://localhost:4200/api',
   authConfig: {
-    issuer: 'https://staging.jdav-bayern.de/o',
+    issuer: 'https://jdav-bayern.de/o',
     /* 
     This client_id is for a public OAuth/OIDC SPA client.
     Public SPAs cannot keep secrets, so the client_id is not sensitive.
@@ -18,7 +18,7 @@ export const environment: Environment = {
 
     This is standard practice and does not expose any sensitive data.
     */
-    clientId: 'kUynptZkdi8hqQSYm0TmSYweE6VY3MHypyYm1Thu',
+    clientId: '6BpyxySs2sY7JBkl9Xi3NnPcbPar38s5t4eYBIi9',
     redirectUri: 'http://localhost:4200/callback',
   },
 };
