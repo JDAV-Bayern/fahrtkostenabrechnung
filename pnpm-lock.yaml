@@ -130,8 +130,8 @@ importers:
         specifier: ^2.4.5
         version: 2.4.5
       playwright-ng-schematics:
-        specifier: ^21.0.7
-        version: 21.0.7(@angular-devkit/architect@0.2102.3(chokidar@5.0.0))(@angular-devkit/core@21.2.3(chokidar@5.0.0))(@angular-devkit/schematics@21.2.3(chokidar@5.0.0))
+        specifier: ^21.0.9
+        version: 21.0.9(@angular-devkit/architect@0.2102.3(chokidar@5.0.0))(@angular-devkit/core@21.2.3(chokidar@5.0.0))(@angular-devkit/schematics@21.2.3(chokidar@5.0.0))
       prettier:
         specifier: ^3.8.1
         version: 3.8.1
@@ -3399,8 +3399,8 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
-  playwright-ng-schematics@21.0.7:
-    resolution: {integrity: sha512-Dgf2StJF2zwxVkcnXEVvqM3yAMaQ4rM9nE76XICTBobyQnca5Old1Fvg8meNiBhHmB/TcQLqi+Lr5CUJJP70vQ==}
+  playwright-ng-schematics@21.0.9:
+    resolution: {integrity: sha512-PlWSk4qcolfqrOpzbTCaHM2a7mjmrdKQLk13qXWJ8H4o++EHEbJmyq7lyBJ2JNi9Ynsw1Po+4+wYMA/6UQl9VA==}
     peerDependencies:
       '@angular-devkit/architect': '>= 0.2100.0 < 0.2200.0'
       '@angular-devkit/core': ^21.0.0
@@ -7592,7 +7592,7 @@ snapshots:
 
   playwright-core@1.58.2: {}
 
-  playwright-ng-schematics@21.0.7(@angular-devkit/architect@0.2102.3(chokidar@5.0.0))(@angular-devkit/core@21.2.3(chokidar@5.0.0))(@angular-devkit/schematics@21.2.3(chokidar@5.0.0)):
+  playwright-ng-schematics@21.0.9(@angular-devkit/architect@0.2102.3(chokidar@5.0.0))(@angular-devkit/core@21.2.3(chokidar@5.0.0))(@angular-devkit/schematics@21.2.3(chokidar@5.0.0)):
     dependencies:
       '@angular-devkit/architect': 0.2102.3(chokidar@5.0.0)
       '@angular-devkit/core': 21.2.3(chokidar@5.0.0)
