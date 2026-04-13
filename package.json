@@ -38,7 +38,7 @@
     "jspdf": "^4.2.1",
     "jszip": "^3.10.1",
     "ngx-file-drop": "^16.0.0",
-    "ngx-iban-validator": "^1.2.3",
+    "ngx-iban-validator": "^1.2.4",
     "pdf-lib": "^1.17.1",
     "postcss": "^8.5.9",
     "qrcode": "^1.5.4",
