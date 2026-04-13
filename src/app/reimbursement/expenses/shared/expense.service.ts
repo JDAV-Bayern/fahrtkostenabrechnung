@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { switchMap } from 'rxjs';
+import { catchError, EMPTY, switchMap } from 'rxjs';
 import { MeetingTypeService } from 'src/app/reimbursement/shared/meeting-type.service';
 import { Expense } from 'src/domain/expense.model';
 import { ExpenseConfig } from '../expense.config';
@@ -16,7 +16,11 @@ export class ExpenseService {
 
   constructor() {
     this.meetingTypeService.meetingType$
-      .pipe(switchMap((type) => this.expenseConfigService.getConfig(type)))
+      .pipe(
+        switchMap((type) =>
+          this.expenseConfigService.getConfig(type).pipe(catchError(() => EMPTY)),
+        ),
+      )
       .subscribe((config) => {
         this.config = config;
       });

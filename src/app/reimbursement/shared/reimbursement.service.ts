@@ -7,7 +7,7 @@ import {
   isValid,
   startOfDay,
 } from 'date-fns';
-import { switchMap } from 'rxjs';
+import { catchError, EMPTY, switchMap } from 'rxjs';
 import { SectionService } from 'src/app/core/section.service';
 import { MeetingTypeService } from './meeting-type.service';
 import {
@@ -52,7 +52,11 @@ export class ReimbursementService {
 
   constructor() {
     this.meetingTypeService.meetingType$
-      .pipe(switchMap((type) => this.expenseConfigService.getConfig(type)))
+      .pipe(
+        switchMap((type) =>
+          this.expenseConfigService.getConfig(type).pipe(catchError(() => EMPTY)),
+        ),
+      )
       .subscribe((config) => {
         this.config = config;
       });
