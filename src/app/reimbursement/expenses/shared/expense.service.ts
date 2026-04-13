@@ -1,6 +1,7 @@
-import { Injectable, inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
+import { catchError, EMPTY, switchMap } from 'rxjs';
+import { MeetingTypeService } from 'src/app/reimbursement/shared/meeting-type.service';
 import { Expense } from 'src/domain/expense.model';
-import { MeetingType } from 'src/domain/meeting.model';
 import { ExpenseConfig } from '../expense.config';
 import { ExpenseConfigService } from './expense-config.service';
 
@@ -8,18 +9,21 @@ import { ExpenseConfigService } from './expense-config.service';
   providedIn: 'root',
 })
 export class ExpenseService {
+  private readonly meetingTypeService = inject(MeetingTypeService);
   private readonly expenseConfigService = inject(ExpenseConfigService);
 
   config?: ExpenseConfig;
 
   constructor() {
-    this.setMeetingType('course');
-  }
-
-  setMeetingType(type: MeetingType) {
-    this.expenseConfigService.getConfig(type).subscribe((config) => {
-      this.config = config;
-    });
+    this.meetingTypeService.meetingType$
+      .pipe(
+        switchMap((type) =>
+          this.expenseConfigService.getConfig(type).pipe(catchError(() => EMPTY)),
+        ),
+      )
+      .subscribe((config) => {
+        this.config = config;
+      });
   }
 
   getAmount(expense: Expense) {
