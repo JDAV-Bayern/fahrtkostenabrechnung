@@ -7,8 +7,9 @@ import {
   isValid,
   startOfDay,
 } from 'date-fns';
-import { BehaviorSubject, switchMap } from 'rxjs';
+import { switchMap } from 'rxjs';
 import { SectionService } from 'src/app/core/section.service';
+import { MeetingTypeService } from './meeting-type.service';
 import {
   Absence,
   Expense,
@@ -17,7 +18,6 @@ import {
   MaterialExpense,
   TransportExpense,
 } from 'src/domain/expense.model';
-import { MeetingType } from 'src/domain/meeting.model';
 import { Reimbursement } from 'src/domain/reimbursement.model';
 import { ExpenseConfig } from '../expenses/expense.config';
 import { ExpenseConfigService } from '../expenses/shared/expense-config.service';
@@ -45,23 +45,17 @@ export interface ReimbursementReport {
 export class ReimbursementService {
   private readonly expenseService = inject(ExpenseService);
   private readonly expenseConfigService = inject(ExpenseConfigService);
+  private readonly meetingTypeService = inject(MeetingTypeService);
   private readonly sectionService = inject(SectionService);
 
   config?: ExpenseConfig;
 
-  private readonly meetingType$ = new BehaviorSubject<MeetingType>('course');
-
   constructor() {
-    this.meetingType$
+    this.meetingTypeService.meetingType$
       .pipe(switchMap((type) => this.expenseConfigService.getConfig(type)))
       .subscribe((config) => {
         this.config = config;
-        this.expenseService.config = config;
       });
-  }
-
-  set meetingType(type: MeetingType) {
-    this.meetingType$.next(type);
   }
 
   getExpenses(

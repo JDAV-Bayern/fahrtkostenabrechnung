@@ -24,6 +24,7 @@ import {
   pastDateRange,
 } from '../../shared/validators/date-range.validator';
 import { MeetingForm } from './meeting-form';
+import { MeetingTypeService } from './meeting-type.service';
 import { ReimbursementService } from './reimbursement.service';
 import {
   allowedTransportModes,
@@ -54,6 +55,7 @@ export interface TransportExpenseCompletion {
 export class ReimbursementControlService {
   private readonly formBuilder = inject(NonNullableFormBuilder);
   private readonly reimbursementService = inject(ReimbursementService);
+  private readonly meetingTypeService = inject(MeetingTypeService);
 
   private courseCodeControl = this.formBuilder.control('', [
     Validators.required,
@@ -133,7 +135,7 @@ export class ReimbursementControlService {
     const meetingType = this.meetingStep.controls.type;
     meetingType.valueChanges.subscribe((value) => {
       this.onMeetingTypeChanged(value);
-      this.reimbursementService.meetingType = value;
+      this.meetingTypeService.meetingType = value;
     });
 
     const meetingTime = this.meetingStep.controls.time;
