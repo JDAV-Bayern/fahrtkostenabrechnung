@@ -63,8 +63,8 @@ importers:
         specifier: ^16.0.0
         version: 16.0.0(@angular/common@21.2.8(@angular/core@21.2.8(@angular/compiler@21.2.8)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.2.8(@angular/compiler@21.2.8)(rxjs@7.8.2))
       ngx-iban-validator:
-        specifier: ^1.2.3
-        version: 1.2.3
+        specifier: ^1.2.4
+        version: 1.2.4
       pdf-lib:
         specifier: ^1.17.1
         version: 1.17.1
@@ -2033,8 +2033,8 @@ packages:
   brace-expansion@1.1.12:
     resolution: {integrity: sha512-9T9UjW3r0UW5c1Q7GTwllptXwhvYmEzFhzMfZ9H7FQWt+uZePjZPjBP/W1ZEyZ1twGWom5/56TF4lPcqjnDHcg==}
 
-  brace-expansion@1.1.13:
-    resolution: {integrity: sha512-9ZLprWS6EENmhEOpjCYW2c8VkmOvckIJZfkr7rBW6dObmfgJ/L1GpSYW5Hpo9lDz4D1+n0Ckz8rU7FwHDQiG/w==}
+  brace-expansion@1.1.14:
+    resolution: {integrity: sha512-MWPGfDxnyzKU7rNOW9SP/c50vi3xrmrua/+6hfPbCS2ABNWfx24vPidzvC7krjU/RTo235sV776ymlsMtGKj8g==}
 
   brace-expansion@2.0.2:
     resolution: {integrity: sha512-Jt0vHyM+jmUBqojB7E1NIYadt0vI0Qxjxd2TErW94wDz+E2LAm5vKMXXwg6ZZBTHPuUlDgQHKXvjGBdfcF1ZDQ==}
@@ -3186,8 +3186,8 @@ packages:
       '@angular/common': '>=14.0.0'
       '@angular/core': '>=14.0.0'
 
-  ngx-iban-validator@1.2.3:
-    resolution: {integrity: sha512-IJtjJv8OIEjQlbrQBkzRlZM8Sii7GGII3IfyxF7yghF0yRqweM+D8IT7oUp+wO075kRxRyyfB9INzRcUNfhWMQ==}
+  ngx-iban-validator@1.2.4:
+    resolution: {integrity: sha512-B3hF727dEkCpAwkzdlzSN1cdkoFZS4DhZzwsTQyN3VtnXKnZj4ygH/QDPnzE+yGnM69XbmL6H2bLUz11fgw/qQ==}
 
   node-addon-api@6.1.0:
     resolution: {integrity: sha512-+eawOlIgy680F0kBzPUNFhMZGtJ1YmqM6l4+Crf4IkImjYrO/mqPwRMh352g23uIaQKFItcQ64I7KMaJxHgAVA==}
@@ -6068,7 +6068,7 @@ snapshots:
       balanced-match: 1.0.2
       concat-map: 0.0.1
 
-  brace-expansion@1.1.13:
+  brace-expansion@1.1.14:
     dependencies:
       balanced-match: 1.0.2
       concat-map: 0.0.1
@@ -7266,7 +7266,7 @@ snapshots:
 
   minimatch@3.1.5:
     dependencies:
-      brace-expansion: 1.1.13
+      brace-expansion: 1.1.14
     optional: true
 
   minimatch@9.0.5:
@@ -7356,7 +7356,7 @@ snapshots:
       '@angular/core': 21.2.8(@angular/compiler@21.2.8)(rxjs@7.8.2)
       tslib: 2.8.1
 
-  ngx-iban-validator@1.2.3: {}
+  ngx-iban-validator@1.2.4: {}
 
   node-addon-api@6.1.0:
     optional: true
