@@ -1,26 +1,12 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Expense } from 'src/domain/expense.model';
-import { MeetingType } from 'src/domain/meeting.model';
 import { ExpenseConfig } from '../expense.config';
-import { ExpenseConfigService } from './expense-config.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ExpenseService {
-  private readonly expenseConfigService = inject(ExpenseConfigService);
-
   config?: ExpenseConfig;
-
-  constructor() {
-    this.setMeetingType('course');
-  }
-
-  setMeetingType(type: MeetingType) {
-    this.expenseConfigService.getConfig(type).subscribe((config) => {
-      this.config = config;
-    });
-  }
 
   getAmount(expense: Expense) {
     if (!this.config) {

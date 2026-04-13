@@ -7,6 +7,7 @@ import {
   isValid,
   startOfDay,
 } from 'date-fns';
+import { BehaviorSubject, switchMap } from 'rxjs';
 import { SectionService } from 'src/app/core/section.service';
 import {
   Absence,
@@ -48,19 +49,19 @@ export class ReimbursementService {
 
   config?: ExpenseConfig;
 
+  private readonly meetingType$ = new BehaviorSubject<MeetingType>('course');
+
   constructor() {
-    this.setMeetingType('course');
+    this.meetingType$
+      .pipe(switchMap((type) => this.expenseConfigService.getConfig(type)))
+      .subscribe((config) => {
+        this.config = config;
+        this.expenseService.config = config;
+      });
   }
 
   set meetingType(type: MeetingType) {
-    this.setMeetingType(type);
-  }
-
-  private setMeetingType(type: MeetingType) {
-    this.expenseConfigService.getConfig(type).subscribe((config) => {
-      this.config = config;
-      this.expenseService.config = config;
-    });
+    this.meetingType$.next(type);
   }
 
   getExpenses(
