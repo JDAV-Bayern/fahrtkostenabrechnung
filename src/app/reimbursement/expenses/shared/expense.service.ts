@@ -18,7 +18,9 @@ export class ExpenseService {
     this.meetingTypeService.meetingType$
       .pipe(
         switchMap((type) =>
-          this.expenseConfigService.getConfig(type).pipe(catchError(() => EMPTY)),
+          this.expenseConfigService
+            .getConfig(type)
+            .pipe(catchError(() => EMPTY)),
         ),
       )
       .subscribe((config) => {

@@ -9,7 +9,6 @@ import {
 } from 'date-fns';
 import { catchError, EMPTY, switchMap } from 'rxjs';
 import { SectionService } from 'src/app/core/section.service';
-import { MeetingTypeService } from './meeting-type.service';
 import {
   Absence,
   Expense,
@@ -22,6 +21,7 @@ import { Reimbursement } from 'src/domain/reimbursement.model';
 import { ExpenseConfig } from '../expenses/expense.config';
 import { ExpenseConfigService } from '../expenses/shared/expense-config.service';
 import { ExpenseService } from '../expenses/shared/expense.service';
+import { MeetingTypeService } from './meeting-type.service';
 
 const createFoodExpense = (date: Date, absence: Absence): FoodExpense => ({
   type: 'food',
@@ -54,7 +54,9 @@ export class ReimbursementService {
     this.meetingTypeService.meetingType$
       .pipe(
         switchMap((type) =>
-          this.expenseConfigService.getConfig(type).pipe(catchError(() => EMPTY)),
+          this.expenseConfigService
+            .getConfig(type)
+            .pipe(catchError(() => EMPTY)),
         ),
       )
       .subscribe((config) => {
