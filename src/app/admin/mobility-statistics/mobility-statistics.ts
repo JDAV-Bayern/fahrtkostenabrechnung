@@ -29,7 +29,7 @@ const TRANSPORT_LABELS: Record<string, string> = {
   'pkw (elektro)': 'PKW (Elektro)',
   'pkw (hybrid)': 'PKW (Hybrid)',
   'pkw (verbrenner)': 'PKW (Verbrenner)',
-  'pkw-fahrg': 'Mitfahrer*in in  Fahrgemeinschaft',
+  'pkw-fahrg': 'Mitfahrer*in in Fahrgemeinschaft',
 };
 
 function labelFor(mode: string): string {
@@ -65,6 +65,7 @@ interface BarEntry {
   imports: [Button, Card, CardContent, CardHeader, CardTitle, DecimalPipe],
   templateUrl: './mobility-statistics.html',
   styleUrl: './mobility-statistics.css',
+  standalone: true,
 })
 export class MobilityStatistics {
   feedbackService = inject(FeedbackService);
@@ -213,24 +214,24 @@ export class MobilityStatistics {
     const data = this.mobilityData();
     if (!data) return [];
     return [...data.courses].sort((a, b) => {
-      return a.course_id.localeCompare(b.course_id, 'zz');
+      return a.course_id.localeCompare(b.course_id, 'de');
     });
   });
 
   allModes = computed(() => {
     const data = this.mobilityData();
     if (!data) return [];
-    const availableModes = Object.entries(data.total_per_mean_of_transport)
-      .filter(([, value]) => value > 0)
-      .map(([mode]) => mode);
+    const allKnownModes = Object.keys(TRANSPORT_LABELS);
 
-    const preferredOrder = Object.keys(TRANSPORT_LABELS);
+    const allReportedNodes = Object.entries(
+      data.total_per_mean_of_transport,
+    ).map(([mode]) => mode);
 
-    const unknownModes = availableModes
-      .filter((mode) => !preferredOrder.includes(mode))
+    const unknownModes = allReportedNodes
+      .filter((mode) => !allKnownModes.includes(mode))
       .sort((a, b) => a.localeCompare(b, 'de'));
 
-    return [...preferredOrder, ...unknownModes];
+    return [...allKnownModes, ...unknownModes];
   });
 
   labelFor(mode: string): string {
@@ -294,7 +295,10 @@ export class MobilityStatistics {
       ...data.courses.map((c) => [
         c.course_id,
         c.course_name,
-        c.total_mobility_records,
+        Object.values(c.total_per_mean_of_transport).reduce(
+          (sum, value) => sum + (value ?? 0),
+          0,
+        ),
         ...modes.map((m) => c.total_per_mean_of_transport[m] ?? 0),
       ]),
     ]);
@@ -319,6 +323,6 @@ export class MobilityStatistics {
     a.href = url;
     a.download = 'Mobilitaetsstatistik.xlsx';
     a.click();
-    URL.revokeObjectURL(url);
+    setTimeout(() => URL.revokeObjectURL(url), 0);
   }
 }
