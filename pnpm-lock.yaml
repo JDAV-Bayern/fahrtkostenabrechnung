@@ -98,7 +98,7 @@ importers:
         version: 21.3.1(@angular/cli@21.2.8(@types/node@24.10.1)(chokidar@5.0.0))(chokidar@5.0.0)(eslint@10.2.1(jiti@2.6.1))(typescript@5.9.3)
       '@angular/build':
         specifier: ^21.2.8
-        version: 21.2.8(@angular/compiler-cli@21.2.10(@angular/compiler@21.2.10)(typescript@5.9.3))(@angular/compiler@21.2.10)(@angular/core@21.2.10(@angular/compiler@21.2.10)(rxjs@7.8.2))(@angular/localize@21.2.10(@angular/compiler-cli@21.2.10(@angular/compiler@21.2.10)(typescript@5.9.3))(@angular/compiler@21.2.10))(@angular/platform-browser@21.2.10(@angular/common@21.2.10(@angular/core@21.2.10(@angular/compiler@21.2.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.2.10(@angular/compiler@21.2.10)(rxjs@7.8.2)))(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(@types/node@24.10.1)(chokidar@5.0.0)(jiti@2.6.1)(karma@6.4.4)(lightningcss@1.32.0)(postcss@8.5.10)(tailwindcss@4.2.4)(tslib@2.8.1)(typescript@5.9.3)(vitest@4.1.5(@types/node@24.10.1)(jsdom@29.0.2)(vite@7.3.2(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)))
+        version: 21.2.8(@angular/compiler-cli@21.2.10(@angular/compiler@21.2.10)(typescript@5.9.3))(@angular/compiler@21.2.10)(@angular/core@21.2.10(@angular/compiler@21.2.10)(rxjs@7.8.2))(@angular/localize@21.2.10(@angular/compiler-cli@21.2.10(@angular/compiler@21.2.10)(typescript@5.9.3))(@angular/compiler@21.2.10))(@angular/platform-browser@21.2.10(@angular/common@21.2.10(@angular/core@21.2.10(@angular/compiler@21.2.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.2.10(@angular/compiler@21.2.10)(rxjs@7.8.2)))(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(@types/node@24.10.1)(chokidar@5.0.0)(jiti@2.6.1)(karma@6.4.4)(lightningcss@1.32.0)(postcss@8.5.10)(tailwindcss@4.2.4)(tslib@2.8.1)(typescript@5.9.3)(vitest@4.1.5(@types/node@24.10.1)(jsdom@29.1.0)(vite@7.3.2(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)))
       '@angular/cli':
         specifier: ^21.2.8
         version: 21.2.8(@types/node@24.10.1)(chokidar@5.0.0)
@@ -124,8 +124,8 @@ importers:
         specifier: ^10.1.8
         version: 10.1.8(eslint@10.2.1(jiti@2.6.1))
       jsdom:
-        specifier: ^29.0.2
-        version: 29.0.2
+        specifier: ^29.1.0
+        version: 29.1.0
       pdf-parse:
         specifier: ^2.4.5
         version: 2.4.5
@@ -146,7 +146,7 @@ importers:
         version: 8.59.0(eslint@10.2.1(jiti@2.6.1))(typescript@5.9.3)
       vitest:
         specifier: ^4.1.5
-        version: 4.1.5(@types/node@24.10.1)(jsdom@29.0.2)(vite@7.3.2(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3))
+        version: 4.1.5(@types/node@24.10.1)(jsdom@29.1.0)(vite@7.3.2(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3))
 
 packages:
 
@@ -1994,8 +1994,8 @@ packages:
     resolution: {integrity: sha512-Ceh+7ox5qe7LJuLHoY0feh3pHuUDHAcRUeyL2VYghZwfpkNIy/+8Ocg0a3UuSoYzavmylwuLWQOf3hl0jjMMIw==}
     engines: {node: '>=8'}
 
-  body-parser@1.20.4:
-    resolution: {integrity: sha512-ZTgYYLMOXY9qKU/57FAo8F+HA2dGX7bqGc71txDRC1rS4frdFI5R7NhluHxH6M0YItAP0sHB4uqAOcYKxO6uGA==}
+  body-parser@1.20.5:
+    resolution: {integrity: sha512-3grm+/2tUOvu2cjJkvsIxrv/wVpfXQW4PsQHYm7yk4vfpu7Ekl6nEsYBoJUL6qDwZUx8wUhQ8tR2qz+ad9c9OA==}
     engines: {node: '>= 0.8', npm: 1.2.8000 || >= 1.4.16}
 
   body-parser@2.2.2:
@@ -2792,8 +2792,8 @@ packages:
     resolution: {integrity: sha512-/kmVISmrwVwtyYU40iQUOp3SUPk2dhNCMsZBQX0R1/jZ8maaXJ/oZIzUOiyOqcgtLnETFKYChbJ5iDC/eWmFHg==}
     engines: {node: '>=0.1.90'}
 
-  jsdom@29.0.2:
-    resolution: {integrity: sha512-9VnGEBosc/ZpwyOsJBCQ/3I5p7Q5ngOY14a9bf5btenAORmZfDse1ZEheMiWcJ3h81+Fv7HmJFdS0szo/waF2w==}
+  jsdom@29.1.0:
+    resolution: {integrity: sha512-YNUc7fB9QuvSSQWfrH0xF+TyABkxUwx8sswgIDaCrw4Hol8BghdZDkITtZheRJeMtzWlnTfsM3bBBusRvpO1wg==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24.0.0}
     peerDependencies:
       canvas: ^3.0.0
@@ -3404,10 +3404,6 @@ packages:
     resolution: {integrity: sha512-1ca71Zgiu6ORjHqFBDpnSMTR2ReToX4l1Au1VFLyVeBTFavzQnv5JxMFr3ukHVKpSrSA2MCk0lNJSykjUfz7Zg==}
     engines: {node: '>=10.13.0'}
     hasBin: true
-
-  qs@6.14.2:
-    resolution: {integrity: sha512-V/yCWTTF7VJ9hIh18Ugr2zhJMP01MY7c5kh4J870L7imm6/DIzBsNLTXzMwUA3yZ5b/KBqLx8Kp3uRvd7xSe3Q==}
-    engines: {node: '>=0.6'}
 
   qs@6.15.1:
     resolution: {integrity: sha512-6YHEFRL9mfgcAvql/XhwTvf5jKcOiiupt2FiJxHkiX1z4j7WL8J/jRHYLluORvc1XxB5rV20KoeK00gVJamspg==}
@@ -4313,7 +4309,7 @@ snapshots:
       eslint: 10.2.1(jiti@2.6.1)
       typescript: 5.9.3
 
-  '@angular/build@21.2.8(@angular/compiler-cli@21.2.10(@angular/compiler@21.2.10)(typescript@5.9.3))(@angular/compiler@21.2.10)(@angular/core@21.2.10(@angular/compiler@21.2.10)(rxjs@7.8.2))(@angular/localize@21.2.10(@angular/compiler-cli@21.2.10(@angular/compiler@21.2.10)(typescript@5.9.3))(@angular/compiler@21.2.10))(@angular/platform-browser@21.2.10(@angular/common@21.2.10(@angular/core@21.2.10(@angular/compiler@21.2.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.2.10(@angular/compiler@21.2.10)(rxjs@7.8.2)))(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(@types/node@24.10.1)(chokidar@5.0.0)(jiti@2.6.1)(karma@6.4.4)(lightningcss@1.32.0)(postcss@8.5.10)(tailwindcss@4.2.4)(tslib@2.8.1)(typescript@5.9.3)(vitest@4.1.5(@types/node@24.10.1)(jsdom@29.0.2)(vite@7.3.2(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)))':
+  '@angular/build@21.2.8(@angular/compiler-cli@21.2.10(@angular/compiler@21.2.10)(typescript@5.9.3))(@angular/compiler@21.2.10)(@angular/core@21.2.10(@angular/compiler@21.2.10)(rxjs@7.8.2))(@angular/localize@21.2.10(@angular/compiler-cli@21.2.10(@angular/compiler@21.2.10)(typescript@5.9.3))(@angular/compiler@21.2.10))(@angular/platform-browser@21.2.10(@angular/common@21.2.10(@angular/core@21.2.10(@angular/compiler@21.2.10)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.2.10(@angular/compiler@21.2.10)(rxjs@7.8.2)))(@emnapi/core@1.9.1)(@emnapi/runtime@1.9.1)(@types/node@24.10.1)(chokidar@5.0.0)(jiti@2.6.1)(karma@6.4.4)(lightningcss@1.32.0)(postcss@8.5.10)(tailwindcss@4.2.4)(tslib@2.8.1)(typescript@5.9.3)(vitest@4.1.5(@types/node@24.10.1)(jsdom@29.1.0)(vite@7.3.2(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)))':
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@angular-devkit/architect': 0.2102.8(chokidar@5.0.0)
@@ -4354,7 +4350,7 @@ snapshots:
       lmdb: 3.5.1
       postcss: 8.5.10
       tailwindcss: 4.2.4
-      vitest: 4.1.5(@types/node@24.10.1)(jsdom@29.0.2)(vite@7.3.2(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3))
+      vitest: 4.1.5(@types/node@24.10.1)(jsdom@29.1.0)(vite@7.3.2(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3))
     transitivePeerDependencies:
       - '@emnapi/core'
       - '@emnapi/runtime'
@@ -5877,7 +5873,7 @@ snapshots:
   binary-extensions@2.3.0:
     optional: true
 
-  body-parser@1.20.4:
+  body-parser@1.20.5:
     dependencies:
       bytes: 3.1.2
       content-type: 1.0.5
@@ -5887,7 +5883,7 @@ snapshots:
       http-errors: 2.0.1
       iconv-lite: 0.4.24
       on-finished: 2.4.1
-      qs: 6.14.2
+      qs: 6.15.1
       raw-body: 2.5.3
       type-is: 1.6.18
       unpipe: 1.0.0
@@ -6773,7 +6769,7 @@ snapshots:
 
   jschardet@3.1.4: {}
 
-  jsdom@29.0.2:
+  jsdom@29.1.0:
     dependencies:
       '@asamuzakjp/css-color': 5.1.11
       '@asamuzakjp/dom-selector': 7.1.1
@@ -6845,7 +6841,7 @@ snapshots:
   karma@6.4.4:
     dependencies:
       '@colors/colors': 1.5.0
-      body-parser: 1.20.4
+      body-parser: 1.20.5
       braces: 3.0.3
       chokidar: 3.6.0
       connect: 3.7.0
@@ -7454,11 +7450,6 @@ snapshots:
       pngjs: 5.0.0
       yargs: 15.4.1
 
-  qs@6.14.2:
-    dependencies:
-      side-channel: 1.1.0
-    optional: true
-
   qs@6.15.1:
     dependencies:
       side-channel: 1.1.0
@@ -8023,7 +8014,7 @@ snapshots:
       lightningcss: 1.32.0
       sass: 1.97.3
 
-  vitest@4.1.5(@types/node@24.10.1)(jsdom@29.0.2)(vite@7.3.2(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)):
+  vitest@4.1.5(@types/node@24.10.1)(jsdom@29.1.0)(vite@7.3.2(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3)):
     dependencies:
       '@vitest/expect': 4.1.5
       '@vitest/mocker': 4.1.5(vite@7.3.2(@types/node@24.10.1)(jiti@2.6.1)(lightningcss@1.32.0)(sass@1.97.3))
@@ -8047,7 +8038,7 @@ snapshots:
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@types/node': 24.10.1
-      jsdom: 29.0.2
+      jsdom: 29.1.0
     transitivePeerDependencies:
       - msw
 
