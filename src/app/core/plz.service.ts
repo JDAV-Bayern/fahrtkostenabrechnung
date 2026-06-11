@@ -1,5 +1,5 @@
+import { plzs } from '@/data/plzs';
 import { Injectable } from '@angular/core';
-import { plzs } from 'src/data/plzs';
 
 @Injectable({
   providedIn: 'root',

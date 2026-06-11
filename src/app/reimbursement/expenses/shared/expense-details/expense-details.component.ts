@@ -1,7 +1,7 @@
+import { JoinPipe } from '@/app/shared/join.pipe';
+import { Expense } from '@/domain/expense.model';
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
 import { Component, inject, input, OnInit } from '@angular/core';
-import { JoinPipe } from 'src/app/shared/join.pipe';
-import { Expense } from 'src/domain/expense.model';
 import { ExpenseConfigService } from '../expense-config.service';
 import { DiscountPipe, EngineTypePipe, MealsPipe } from '../expense-data.pipe';
 

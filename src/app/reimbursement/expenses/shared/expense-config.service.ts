@@ -1,8 +1,8 @@
+import { MeetingType } from '@/domain/meeting.model';
+import { environment } from '@/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { catchError, map, Observable, shareReplay, tap } from 'rxjs';
-import { MeetingType } from 'src/domain/meeting.model';
-import { environment } from 'src/environments/environment';
 import { ExpenseConfig } from '../expense.config';
 
 export interface PublicTransportExpenseDTO {

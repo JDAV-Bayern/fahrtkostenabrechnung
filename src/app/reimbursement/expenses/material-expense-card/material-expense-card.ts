@@ -1,8 +1,8 @@
+import { Button } from '@/app/shared/ui/button';
+import { Card, CardContent } from '@/app/shared/ui/card';
+import { MaterialExpense } from '@/domain/expense.model';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, input, output } from '@angular/core';
-import { Button } from 'src/app/shared/ui/button';
-import { Card, CardContent } from 'src/app/shared/ui/card';
-import { MaterialExpense } from 'src/domain/expense.model';
 import { ExpenseAmountPipe } from '../shared/expense-amount.pipe';
 import { ExpenseTitlePipe } from '../shared/expense-title.pipe';
 

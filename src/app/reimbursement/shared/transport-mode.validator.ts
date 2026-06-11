@@ -1,5 +1,5 @@
+import { TransportMode } from '@/domain/expense.model';
 import { FormArray, ValidatorFn } from '@angular/forms';
-import { TransportMode } from 'src/domain/expense.model';
 
 export function allowedTransportModes(allowed: TransportMode[]): ValidatorFn {
   return (control) => {

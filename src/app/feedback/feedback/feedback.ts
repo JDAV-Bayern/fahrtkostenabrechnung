@@ -1,3 +1,12 @@
+import { AuthService } from '@/app/auth/auth-service';
+import { Button } from '@/app/shared/ui/button';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/app/shared/ui/card';
 import {
   Component,
   effect,
@@ -7,15 +16,6 @@ import {
   signal,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from 'src/app/auth/auth-service';
-import { Button } from 'src/app/shared/ui/button';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from 'src/app/shared/ui/card';
 import { SurveyModule } from 'survey-angular-ui';
 import { Model } from 'survey-core';
 import { FeedbackService } from '../feedback-service';

@@ -1,9 +1,9 @@
+import { Badge } from '@/app/shared/ui/badge';
+import { Button } from '@/app/shared/ui/button';
+import { Card, CardContent } from '@/app/shared/ui/card';
+import { TransportExpense, TransportMode } from '@/domain/expense.model';
 import { CurrencyPipe } from '@angular/common';
 import { Component, computed, input, output } from '@angular/core';
-import { Badge } from 'src/app/shared/ui/badge';
-import { Button } from 'src/app/shared/ui/button';
-import { Card, CardContent } from 'src/app/shared/ui/card';
-import { TransportExpense, TransportMode } from 'src/domain/expense.model';
 import { ExpenseAmountPipe } from '../shared/expense-amount.pipe';
 import { ExpenseDetailsComponent } from '../shared/expense-details/expense-details.component';
 import { ExpenseTitlePipe } from '../shared/expense-title.pipe';

@@ -1,5 +1,5 @@
+import { Direction } from '@/domain/expense.model';
 import { Pipe, PipeTransform } from '@angular/core';
-import { Direction } from 'src/domain/expense.model';
 
 @Pipe({
   name: 'direction',

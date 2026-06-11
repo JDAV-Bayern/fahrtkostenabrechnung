@@ -1,12 +1,12 @@
-import { DIALOG_DATA } from '@angular/cdk/dialog';
-import { Component, inject } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { TransportExpenseCompletion } from 'src/app/reimbursement/shared/reimbursement-control.service';
+import { TransportExpenseCompletion } from '@/app/reimbursement/shared/reimbursement-control.service';
 import {
   Expense,
   TransportExpense,
   TransportMode,
-} from 'src/domain/expense.model';
+} from '@/domain/expense.model';
+import { DIALOG_DATA } from '@angular/cdk/dialog';
+import { Component, inject } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MaterialExpenseModalComponent } from '../material-expense-modal/material-expense-modal.component';
 import { TransportExpenseModalComponent } from '../transport-expense-modal/transport-expense-modal.component';
 

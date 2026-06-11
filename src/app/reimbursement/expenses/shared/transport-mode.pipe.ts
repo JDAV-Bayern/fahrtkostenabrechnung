@@ -1,5 +1,5 @@
+import { TransportMode } from '@/domain/expense.model';
 import { Pipe, PipeTransform } from '@angular/core';
-import { TransportMode } from 'src/domain/expense.model';
 
 export function formatTransportMode(value: TransportMode) {
   switch (value) {

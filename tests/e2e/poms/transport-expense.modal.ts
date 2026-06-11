@@ -1,5 +1,5 @@
+import { Discount, EngineType, TransportMode } from '@/domain/expense.model';
 import { Locator, Page } from '@playwright/test';
-import { Discount, EngineType, TransportMode } from 'src/domain/expense.model';
 
 export interface BaseTransportExpenseInput {
   origin: string;

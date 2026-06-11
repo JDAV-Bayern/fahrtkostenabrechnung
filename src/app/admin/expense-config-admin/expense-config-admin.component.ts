@@ -1,13 +1,13 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import {
   ExpenseConfigDTO,
   ExpenseConfigService,
-} from 'src/app/reimbursement/expenses/shared/expense-config.service';
-import { Button } from 'src/app/shared/ui/button';
-import { ExpenseType } from 'src/domain/expense.model';
-import { MeetingType } from 'src/domain/meeting.model';
+} from '@/app/reimbursement/expenses/shared/expense-config.service';
+import { Button } from '@/app/shared/ui/button';
+import { ExpenseType } from '@/domain/expense.model';
+import { MeetingType } from '@/domain/meeting.model';
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'jdav-expense-config-admin',

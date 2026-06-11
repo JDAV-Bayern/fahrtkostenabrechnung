@@ -1,6 +1,6 @@
+import { Button } from '@/app/shared/ui/button';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Button } from 'src/app/shared/ui/button';
 
 @Component({
   selector: 'app-page-not-found',

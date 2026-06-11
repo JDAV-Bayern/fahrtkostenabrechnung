@@ -1,5 +1,5 @@
+import { Expense } from '@/domain/expense.model';
 import { Pipe, PipeTransform, inject } from '@angular/core';
-import { Expense } from 'src/domain/expense.model';
 import { ExpenseService } from './expense.service';
 
 @Pipe({

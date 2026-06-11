@@ -1,6 +1,6 @@
+import { Expense } from '@/domain/expense.model';
+import { MeetingType } from '@/domain/meeting.model';
 import { Injectable, inject } from '@angular/core';
-import { Expense } from 'src/domain/expense.model';
-import { MeetingType } from 'src/domain/meeting.model';
 import { ExpenseConfig } from '../expense.config';
 import { ExpenseConfigService } from './expense-config.service';
 

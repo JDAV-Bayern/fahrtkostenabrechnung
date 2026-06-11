@@ -1,13 +1,8 @@
+import { Button } from '@/app/shared/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/app/shared/ui/card';
 import { DatePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { Button } from 'src/app/shared/ui/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from 'src/app/shared/ui/card';
 import { ParticipatedTraining } from '../auth-model';
 import { AuthService } from '../auth-service';
 

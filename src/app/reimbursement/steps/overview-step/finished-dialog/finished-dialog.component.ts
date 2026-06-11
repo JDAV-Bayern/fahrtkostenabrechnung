@@ -1,6 +1,6 @@
+import { Meeting } from '@/domain/meeting.model';
 import { DIALOG_DATA } from '@angular/cdk/dialog';
 import { Component, inject } from '@angular/core';
-import { Meeting } from 'src/domain/meeting.model';
 
 @Component({
   selector: 'app-finished-dialog',

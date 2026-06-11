@@ -1,5 +1,5 @@
+import { Meal } from '@/domain/expense.model';
 import { Locator, Page } from '@playwright/test';
-import { Meal } from 'src/domain/expense.model';
 import {
   MaterialExpenseInput,
   MaterialExpenseModal,

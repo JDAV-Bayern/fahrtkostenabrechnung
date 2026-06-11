@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
-import { jdavRegions, jdavStates, sections } from 'src/data/sections';
+import { jdavRegions, jdavStates, sections } from '@/data/sections';
 import {
   JdavOrganisation,
   JdavState,
   Section,
   SectionData,
-} from 'src/domain/section.model';
+} from '@/domain/section.model';
+import { Injectable } from '@angular/core';
 
 function matchId(id: number) {
   return (o: { id: number }) => o.id === id;

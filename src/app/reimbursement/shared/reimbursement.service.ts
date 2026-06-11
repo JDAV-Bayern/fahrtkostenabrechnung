@@ -1,3 +1,14 @@
+import { SectionService } from '@/app/core/section.service';
+import {
+  Absence,
+  Expense,
+  ExpenseType,
+  FoodExpense,
+  MaterialExpense,
+  TransportExpense,
+} from '@/domain/expense.model';
+import { MeetingType } from '@/domain/meeting.model';
+import { Reimbursement } from '@/domain/reimbursement.model';
 import { inject, Injectable } from '@angular/core';
 import {
   closestIndexTo,
@@ -7,17 +18,6 @@ import {
   isValid,
   startOfDay,
 } from 'date-fns';
-import { SectionService } from 'src/app/core/section.service';
-import {
-  Absence,
-  Expense,
-  ExpenseType,
-  FoodExpense,
-  MaterialExpense,
-  TransportExpense,
-} from 'src/domain/expense.model';
-import { MeetingType } from 'src/domain/meeting.model';
-import { Reimbursement } from 'src/domain/reimbursement.model';
 import { ExpenseConfig } from '../expenses/expense.config';
 import { ExpenseConfigService } from '../expenses/shared/expense-config.service';
 import { ExpenseService } from '../expenses/shared/expense.service';

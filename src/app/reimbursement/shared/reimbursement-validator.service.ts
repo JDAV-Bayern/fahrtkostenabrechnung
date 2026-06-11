@@ -1,7 +1,7 @@
+import { PlzService } from '@/app/core/plz.service';
+import { TransportExpense } from '@/domain/expense.model';
+import { Reimbursement } from '@/domain/reimbursement.model';
 import { Injectable, inject } from '@angular/core';
-import { PlzService } from 'src/app/core/plz.service';
-import { TransportExpense } from 'src/domain/expense.model';
-import { Reimbursement } from 'src/domain/reimbursement.model';
 
 @Injectable({
   providedIn: 'root',

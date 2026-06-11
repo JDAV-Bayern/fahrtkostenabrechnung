@@ -1,8 +1,6 @@
-import { Component, effect, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { AuthService } from 'src/app/auth/auth-service';
-import { Badge } from 'src/app/shared/ui/badge';
-import { Button } from 'src/app/shared/ui/button';
+import { AuthService } from '@/app/auth/auth-service';
+import { Badge } from '@/app/shared/ui/badge';
+import { Button } from '@/app/shared/ui/button';
 import {
   Card,
   CardAction,
@@ -10,7 +8,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from 'src/app/shared/ui/card';
+} from '@/app/shared/ui/card';
+import { Component, effect, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'jdav-home',

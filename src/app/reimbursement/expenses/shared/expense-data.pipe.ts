@@ -1,5 +1,5 @@
+import { FoodExpense } from '@/domain/expense.model';
 import { Pipe, PipeTransform } from '@angular/core';
-import { FoodExpense } from 'src/domain/expense.model';
 
 export function formatAbsence(value: string | null | undefined): string | null {
   switch (value) {

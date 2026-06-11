@@ -1,3 +1,6 @@
+import { PlzService } from '@/app/core/plz.service';
+import { SectionService } from '@/app/core/section.service';
+import { ReimbursementControlService } from '@/app/reimbursement/shared/reimbursement-control.service';
 import {
   Component,
   ElementRef,
@@ -7,12 +10,9 @@ import {
 } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { PlzService } from 'src/app/core/plz.service';
-import { SectionService } from 'src/app/core/section.service';
-import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 
+import { JdavState } from '@/domain/section.model';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { JdavState } from 'src/domain/section.model';
 
 @Component({
   selector: 'app-participant-step',

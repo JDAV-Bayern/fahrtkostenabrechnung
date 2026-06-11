@@ -1,11 +1,11 @@
+import { ExpenseConfig } from '@/app/reimbursement/expenses/expense.config';
+import { ExpenseConfigService } from '@/app/reimbursement/expenses/shared/expense-config.service';
+import { DiscountPipe } from '@/app/reimbursement/expenses/shared/expense-data.pipe';
+import { MeetingType } from '@/domain/meeting.model';
 import { CurrencyPipe, KeyValuePipe, PercentPipe } from '@angular/common';
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute } from '@angular/router';
-import { ExpenseConfig } from 'src/app/reimbursement/expenses/expense.config';
-import { ExpenseConfigService } from 'src/app/reimbursement/expenses/shared/expense-config.service';
-import { DiscountPipe } from 'src/app/reimbursement/expenses/shared/expense-data.pipe';
-import { MeetingType } from 'src/domain/meeting.model';
 
 @Component({
   selector: 'app-expense-rates',

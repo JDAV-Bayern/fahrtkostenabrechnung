@@ -1,6 +1,6 @@
+import { fitImage, preprocessImage } from '@/app/shared/image-processing';
 import jsPDF from 'jspdf';
 import { degrees, PDFDocument } from 'pdf-lib';
-import { fitImage, preprocessImage } from 'src/app/shared/image-processing';
 
 const MIME_TYPE_IMAGE = /^image\/.+$/;
 const MIME_TYPE_PDF = 'application/pdf';

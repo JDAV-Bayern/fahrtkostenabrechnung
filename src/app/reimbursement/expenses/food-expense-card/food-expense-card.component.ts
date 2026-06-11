@@ -1,3 +1,5 @@
+import { ReimbursementService } from '@/app/reimbursement/shared/reimbursement.service';
+import { Absence, FoodExpense } from '@/domain/expense.model';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import {
@@ -7,8 +9,6 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { map, Subscription } from 'rxjs';
-import { ReimbursementService } from 'src/app/reimbursement/shared/reimbursement.service';
-import { Absence, FoodExpense } from 'src/domain/expense.model';
 import { ExpenseAmountPipe } from '../shared/expense-amount.pipe';
 import { AbsencePipe } from '../shared/expense-data.pipe';
 

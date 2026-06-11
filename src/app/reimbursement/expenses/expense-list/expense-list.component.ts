@@ -1,3 +1,5 @@
+import { Button } from '@/app/shared/ui/button';
+import { Expense } from '@/domain/expense.model';
 import { Dialog, DialogModule, DialogRef } from '@angular/cdk/dialog';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import {
@@ -13,8 +15,6 @@ import {
   FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { Button } from 'src/app/shared/ui/button';
-import { Expense } from 'src/domain/expense.model';
 import {
   ExpenseDialogData,
   ExpenseExtraData,

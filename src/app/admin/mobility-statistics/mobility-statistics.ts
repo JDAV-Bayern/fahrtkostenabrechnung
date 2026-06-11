@@ -1,17 +1,12 @@
-import { DecimalPipe } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
 import {
   CourseMobilityStatisticsDTO,
   FeedbackService,
   MobilityStatisticsDTO,
-} from 'src/app/feedback/feedback-service';
-import { Button } from 'src/app/shared/ui/button';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from 'src/app/shared/ui/card';
+} from '@/app/feedback/feedback-service';
+import { Button } from '@/app/shared/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/app/shared/ui/card';
+import { DecimalPipe } from '@angular/common';
+import { Component, computed, inject, signal } from '@angular/core';
 import * as XLSX from 'xlsx-js-style';
 
 const TRANSPORT_COLORS: Record<string, string> = {

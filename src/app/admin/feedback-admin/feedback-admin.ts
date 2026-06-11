@@ -1,3 +1,10 @@
+import {
+  FeedbackAccessTokenDTO,
+  FeedbackDTO,
+  FeedbackService,
+} from '@/app/feedback/feedback-service';
+import { Button } from '@/app/shared/ui/button';
+import { environment } from '@/environments/environment';
 import { CommonModule } from '@angular/common';
 import {
   ApplicationRef,
@@ -10,13 +17,6 @@ import {
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import jsPDF from 'jspdf';
-import {
-  FeedbackAccessTokenDTO,
-  FeedbackDTO,
-  FeedbackService,
-} from 'src/app/feedback/feedback-service';
-import { Button } from 'src/app/shared/ui/button';
-import { environment } from 'src/environments/environment';
 import { QrPdfViewComponent } from './qr-pdf-view/qr-pdf-view.component';
 const MIME_TYPE_PDF = 'application/pdf';
 

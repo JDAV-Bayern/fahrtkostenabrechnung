@@ -1,5 +1,5 @@
+import { Expense } from '@/domain/expense.model';
 import { Pipe, PipeTransform } from '@angular/core';
-import { Expense } from 'src/domain/expense.model';
 import { formatAbsence } from './expense-data.pipe';
 import { formatTransportMode } from './transport-mode.pipe';
 

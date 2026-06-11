@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { environment as importedEnv } from 'src/environments/environment';
+import { environment as importedEnv } from '@/environments/environment';
 import { version } from '../../../../package.json';
 @Component({
   selector: 'app-data-protection',

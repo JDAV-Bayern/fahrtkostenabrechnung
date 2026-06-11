@@ -1,3 +1,5 @@
+import { Button } from '@/app/shared/ui/button';
+import { MaterialExpense } from '@/domain/expense.model';
 import { DialogRef } from '@angular/cdk/dialog';
 import { Component, inject } from '@angular/core';
 import {
@@ -12,8 +14,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { Button } from 'src/app/shared/ui/button';
-import { MaterialExpense } from 'src/domain/expense.model';
 
 @Component({
   selector: 'app-material-expense-modal',

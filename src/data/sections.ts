@@ -1,4 +1,4 @@
-import { JdavOrganisation, SectionData } from 'src/domain/section.model';
+import { JdavOrganisation, SectionData } from '@/domain/section.model';
 
 export const jdavStates: JdavOrganisation[] = [
   { id: 1, name: 'Baden-Württemberg' },

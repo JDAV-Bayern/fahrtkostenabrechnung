@@ -1,5 +1,5 @@
-import { Absence, Discount, ExpenseType } from 'src/domain/expense.model';
-import { MeetingType } from 'src/domain/meeting.model';
+import { Absence, Discount, ExpenseType } from '@/domain/expense.model';
+import { MeetingType } from '@/domain/meeting.model';
 
 export interface ExpenseConfig {
   allowed: ExpenseType[];

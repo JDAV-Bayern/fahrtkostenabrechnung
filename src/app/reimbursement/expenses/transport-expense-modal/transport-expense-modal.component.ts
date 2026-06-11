@@ -1,3 +1,11 @@
+import { TransportExpenseCompletion } from '@/app/reimbursement/shared/reimbursement-control.service';
+import { Button } from '@/app/shared/ui/button';
+import {
+  Discount,
+  EngineType,
+  TransportExpense,
+  TransportMode,
+} from '@/domain/expense.model';
 import { DialogRef } from '@angular/cdk/dialog';
 import {
   Component,
@@ -18,14 +26,6 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { TransportExpenseCompletion } from 'src/app/reimbursement/shared/reimbursement-control.service';
-import { Button } from 'src/app/shared/ui/button';
-import {
-  Discount,
-  EngineType,
-  TransportExpense,
-  TransportMode,
-} from 'src/domain/expense.model';
 import { TransportModePipe } from '../shared/transport-mode.pipe';
 
 @Component({

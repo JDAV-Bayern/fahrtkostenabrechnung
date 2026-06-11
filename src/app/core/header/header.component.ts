@@ -1,3 +1,6 @@
+import { AuthService } from '@/app/auth/auth-service';
+import { ReimbursementControlService } from '@/app/reimbursement/shared/reimbursement-control.service';
+import { Button } from '@/app/shared/ui/button';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import {
   ActivatedRoute,
@@ -6,9 +9,6 @@ import {
   RouterLink,
 } from '@angular/router';
 import { filter } from 'rxjs';
-import { AuthService } from 'src/app/auth/auth-service';
-import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
-import { Button } from 'src/app/shared/ui/button';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
