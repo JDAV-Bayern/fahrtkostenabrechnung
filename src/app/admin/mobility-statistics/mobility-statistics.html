@@ -1,0 +1,247 @@
+<div class="mobility-statistics-container">
+  <div class="page-header">
+    <div>
+      <h1>Mobilitätsstatistik</h1>
+      <p>
+        Auswertung der angegebenen Verkehrsmittel und Distanzen aus allen
+        verfügbaren Feedbacks.
+      </p>
+    </div>
+    <button
+      jdavButton
+      type="button"
+      variant="outline"
+      (click)="downloadExcel()"
+      [disabled]="loading() || !mobilityData()"
+    >
+      <span class="material-symbols-outlined">download</span>
+      Excel exportieren
+    </button>
+  </div>
+
+  @if (error()) {
+    <div class="error-message">
+      {{ error() }}
+    </div>
+  }
+
+  @if (loading()) {
+    <div class="loading-state">
+      <span class="spinner" aria-hidden="true"></span>
+      Daten werden geladen...
+    </div>
+  } @else if (mobilityData(); as data) {
+    @if (data.total_mobility_records === 0) {
+      <div jdavCard>
+        <div jdavCardHeader>
+          <h2 jdavCardTitle>Noch keine Mobilitätsdaten</h2>
+        </div>
+        <div jdavCardContent>
+          <p>
+            Es wurden bisher keine Datensätze mit Verkehrsmittel und Distanz
+            erfasst.
+          </p>
+        </div>
+      </div>
+    } @else {
+      <section class="kpi-grid">
+        <div jdavCard>
+          <div jdavCardHeader>
+            <h2 jdavCardTitle>Gesamtfahrten</h2>
+          </div>
+          <div jdavCardContent>
+            <p class="kpi-value">{{ data.total_mobility_records }}</p>
+            <p class="kpi-caption">Erfasste Mobilitätsangaben</p>
+          </div>
+        </div>
+
+        <div jdavCard>
+          <div jdavCardHeader>
+            <h2 jdavCardTitle>Gesamtdistanz</h2>
+          </div>
+          <div jdavCardContent>
+            <p class="kpi-value">{{ totalDistance() | number: '1.0-0' }} km</p>
+            <p class="kpi-caption">Auf Basis aller Datensätze</p>
+          </div>
+        </div>
+
+        <div jdavCard>
+          <div jdavCardHeader>
+            <h2 jdavCardTitle>Meiste Kilometer</h2>
+          </div>
+          <div jdavCardContent>
+            <p class="kpi-value kpi-value-small">
+              {{ topTransport()?.label || '—' }}
+            </p>
+            <p class="kpi-caption">
+              {{ topTransport()?.count ?? 0 | number: '1.0-0' }} km
+            </p>
+          </div>
+        </div>
+
+        <div jdavCard>
+          <div jdavCardHeader>
+            <h2 jdavCardTitle>Anzahl Kurse</h2>
+          </div>
+          <div jdavCardContent>
+            <p class="kpi-value">{{ data.courses.length }}</p>
+            <p class="kpi-caption">Mit Mobilitätsrückmeldungen</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="charts-grid">
+        <div jdavCard>
+          <div jdavCardHeader>
+            <h2 jdavCardTitle>Anteil Verkehrsmittel</h2>
+          </div>
+          <div jdavCardContent>
+            <div class="pie-layout">
+              <div
+                class="donut-wrap"
+                aria-label="Donut-Diagramm Verkehrsmittel"
+              >
+                <svg viewBox="0 0 240 240" role="img">
+                  @for (segment of pieSegments(); track segment.mode) {
+                    @if (segment.isFullCircle) {
+                      <circle
+                        cx="120"
+                        cy="120"
+                        r="79"
+                        stroke-width="42"
+                        fill="none"
+                        [attr.stroke]="segment.color"
+                      />
+                    } @else {
+                      <path
+                        [attr.d]="segment.path"
+                        [attr.fill]="segment.color"
+                        [attr.aria-label]="
+                          segment.label + ': ' + segment.percentage + '%'
+                        "
+                      ></path>
+                    }
+                  }
+                </svg>
+                <div class="donut-center">
+                  <strong>{{ totalTransportKm() | number: '1.0-0' }}</strong>
+                  <span>km</span>
+                </div>
+              </div>
+
+              <ul class="legend-list">
+                @for (segment of pieSegments(); track segment.mode) {
+                  <li>
+                    <span
+                      class="legend-color"
+                      [style.background-color]="segment.color"
+                    ></span>
+                    <span class="legend-label">{{ segment.label }}</span>
+                    <span class="legend-value">
+                      {{ segment.count | number: '1.0-0' }} km ({{
+                        segment.percentage
+                      }}%)
+                    </span>
+                  </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div jdavCard>
+          <div jdavCardHeader>
+            <h2 jdavCardTitle>Verteilung in km</h2>
+          </div>
+          <div jdavCardContent>
+            <div class="bar-chart">
+              @for (entry of barEntries(); track entry.mode) {
+                <div class="bar-row">
+                  <div class="bar-head">
+                    <span class="bar-label">{{ entry.label }}</span>
+                    <span class="bar-count"
+                      >{{ entry.count | number: '1.0-0' }} km</span
+                    >
+                  </div>
+                  <div class="bar-track">
+                    <div
+                      class="bar-fill"
+                      [style.width.%]="entry.widthPct"
+                      [style.background-color]="entry.color"
+                    ></div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div jdavCard>
+          <div jdavCardHeader>
+            <h2 jdavCardTitle>Kursübersicht</h2>
+          </div>
+          <div jdavCardContent>
+            <div class="course-list">
+              <div class="course-list-header">
+                <span class="course-col course-id">Kurs-ID</span>
+                <span class="course-col course-name">Kursname</span>
+                <span class="course-col course-total-km">Kilometer</span>
+                <span class="course-col course-number-data"
+                  >Anzahl Rückmeldungen</span
+                >
+                <span class="course-col course-breakdown">Verkehrsmittel</span>
+              </div>
+
+              @for (course of sortedCourses(); track course.course_id) {
+                <div class="course-row">
+                  <div class="course-col course-id" data-label="Kurs-ID">
+                    {{ course.course_id }}
+                  </div>
+                  <div class="course-col course-name" data-label="Kursname">
+                    {{ course.course_name }}
+                  </div>
+                  <div
+                    class="course-col course-total-km"
+                    data-label="Kilometer"
+                  >
+                    {{ courseDistance(course) | number: '1.0-0' }} km
+                  </div>
+                  <div
+                    class="course-col course-number-data"
+                    data-label="Anzahl Rückmeldungen"
+                  >
+                    {{ course.total_mobility_records | number: '1.0-0' }}
+                  </div>
+                  <div
+                    class="course-col course-breakdown"
+                    data-label="Verkehrsmittel"
+                  >
+                    <div class="course-stacked-track">
+                      @for (mode of allModes(); track mode) {
+                        @if (courseCount(course, mode) > 0) {
+                          <span
+                            class="course-stacked-segment"
+                            [style.width.%]="courseModeShare(course, mode)"
+                            [style.background-color]="colorForMode(mode)"
+                            [attr.title]="
+                              labelFor(mode) +
+                              ': ' +
+                              (courseCount(course, mode) | number: '1.0-0') +
+                              ' km'
+                            "
+                          ></span>
+                        }
+                      }
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </section>
+    }
+  }
+</div>

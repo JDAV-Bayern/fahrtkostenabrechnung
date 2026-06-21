@@ -44,6 +44,26 @@ export interface FeedbackAccessTokenDTO {
   teamer_name: string | undefined;
 }
 
+export interface SingleMobilityRecordDTO {
+  course_id: string;
+  mean_of_transport: string;
+  distance: number;
+}
+
+export interface CourseMobilityStatisticsDTO {
+  course_id: string;
+  course_name: string;
+  total_mobility_records: number;
+  total_per_mean_of_transport: Record<string, number>;
+}
+
+export interface MobilityStatisticsDTO {
+  total_mobility_records: number;
+  total_per_mean_of_transport: Record<string, number>;
+  courses: CourseMobilityStatisticsDTO[];
+  all_records: SingleMobilityRecordDTO[];
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -198,6 +218,17 @@ export class FeedbackService {
     return this.http.put<FeedbackDTO>(
       `${this.baseUrl}/feedback/${feedbackId}/teamers`,
       payload,
+    );
+  }
+
+  /**
+   * Retrieve aggregated mobility statistics from all feedback records.
+   * Requires admin permission.
+   * @returns Aggregated mobility statistics including totals per transport mode and per course.
+   */
+  getMobilityStatistics(): Observable<MobilityStatisticsDTO> {
+    return this.http.get<MobilityStatisticsDTO>(
+      `${this.baseUrl}/feedback/mobility-statistics`,
     );
   }
 }
