@@ -1,8 +1,14 @@
 import { CdkStep, CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, contentChild, inject, signal, TemplateRef } from '@angular/core';
+import {
+  Component,
+  contentChild,
+  inject,
+  signal,
+  TemplateRef,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { merge, of, startWith, switchMap, map, takeUntil } from 'rxjs';
+import { map, merge, of, startWith, switchMap, takeUntil } from 'rxjs';
 import { Button } from '../ui/button';
 
 @Component({

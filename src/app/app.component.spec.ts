@@ -4,6 +4,7 @@ import { provideRouter } from '@angular/router';
 import { provideAuth } from 'angular-auth-oidc-client';
 import { AppComponent } from './app.component';
 import { authConfig } from './auth/auth.config';
+import { ReimbursementControlService } from './reimbursement/shared/reimbursement-control.service';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -13,6 +14,7 @@ describe('AppComponent', () => {
         provideAuth(authConfig),
         provideRouter([]),
         provideZonelessChangeDetection(),
+        { provide: ReimbursementControlService, useValue: {} },
       ],
     }).compileComponents();
   });
