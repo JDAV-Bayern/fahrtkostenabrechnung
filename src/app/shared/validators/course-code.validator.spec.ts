@@ -18,6 +18,10 @@ describe('validateCourseCode', () => {
     expect(validateCourseCode(new FormControl('LJV'))).toBeNull();
   });
 
+  it('should accept VERANSTALTUNG as special code', () => {
+    expect(validateCourseCode(new FormControl('VERANSTALTUNG'))).toBeNull();
+  });
+
   it('should accept empty values', () => {
     expect(validateCourseCode(new FormControl(''))).toBeNull();
     expect(validateCourseCode(new FormControl(null))).toBeNull();
