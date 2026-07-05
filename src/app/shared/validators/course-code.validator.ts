@@ -5,7 +5,13 @@ const COURSE_CODE_DE = /^J[0-9]{3}$/;
 
 export const validateCourseCode: ValidatorFn = (control) => {
   const v = control.value;
-  if (v === null || v.length === 0 || v === 'LJV' || v === 'VERANSTALTUNG' || v.match(COURSE_CODE_BY)) {
+  if (
+    v === null ||
+    v.length === 0 ||
+    v === 'LJV' ||
+    v === 'VERANSTALTUNG' ||
+    v.match(COURSE_CODE_BY)
+  ) {
     return null;
   }
   if (v.match(COURSE_CODE_DE)) {
