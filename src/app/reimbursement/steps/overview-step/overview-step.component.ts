@@ -1,6 +1,7 @@
 import { DialogModule } from '@angular/cdk/dialog';
 import { CurrencyPipe, KeyValuePipe } from '@angular/common';
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
 import { ReimbursementValidatorService } from 'src/app/reimbursement/shared/reimbursement-validator.service';
@@ -34,25 +35,31 @@ export class OverviewStepComponent {
 
   readonly originalOrder = () => 0;
 
-  get reimbursement() {
+  // The whole reimbursement form is built on other steps and this component is
+  // rendered eagerly by the stepper. Under zoneless change detection, plain
+  // getters reading the form would only be evaluated once (while the form is
+  // still empty), so the summary must derive from a signal that follows the
+  // form's value changes.
+  private readonly formValue = toSignal(this.controlService.form.valueChanges, {
+    initialValue: null,
+  });
+
+  readonly reimbursement = computed(() => {
+    this.formValue();
     return this.controlService.getReimbursement();
-  }
+  });
 
-  get meeting() {
-    return this.reimbursement.meeting;
-  }
+  readonly meeting = computed(() => this.reimbursement().meeting);
 
-  get participant() {
-    return this.reimbursement.participant;
-  }
+  readonly participant = computed(() => this.reimbursement().participant);
 
-  get report() {
-    return this.reimbursementService.getReport(this.reimbursement);
-  }
+  readonly report = computed(() =>
+    this.reimbursementService.getReport(this.reimbursement()),
+  );
 
-  getWarnings(): string[] {
-    return this.validationService.validateReimbursement(this.reimbursement);
-  }
+  readonly warnings = computed(() =>
+    this.validationService.validateReimbursement(this.reimbursement()),
+  );
 
   fileDropped(files: NgxFileDropEntry[]) {
     for (const droppedFile of files) {
