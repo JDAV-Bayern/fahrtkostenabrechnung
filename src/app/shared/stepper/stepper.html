@@ -26,7 +26,7 @@
   <button
     jdavButton
     type="button"
-    [disabled]="selected?.stepControl?.invalid"
+    [disabled]="selectedStepInvalid()"
     cdkStepperNext
   >
     Weiter
@@ -34,7 +34,7 @@
 </ng-template>
 
 <ng-template #defaultSubmitButton>
-  <button jdavButton type="submit" [disabled]="selected?.stepControl?.invalid">
+  <button jdavButton type="submit" [disabled]="selectedStepInvalid()">
     Absenden
   </button>
 </ng-template>

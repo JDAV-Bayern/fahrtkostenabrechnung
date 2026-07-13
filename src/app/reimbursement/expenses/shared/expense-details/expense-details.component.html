@@ -19,7 +19,7 @@
       }
 
       @case ('plan') {
-        pauschal {{ planFixedReimbursementAmount | currency }}
+        pauschal {{ planFixedReimbursementAmount() | currency }}
       }
 
       @case ('bike') {

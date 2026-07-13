@@ -1,5 +1,5 @@
 import { CurrencyPipe, DecimalPipe } from '@angular/common';
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { JoinPipe } from 'src/app/shared/join.pipe';
 import { Expense } from 'src/domain/expense.model';
 import { ExpenseConfigService } from '../expense-config.service';
@@ -22,12 +22,14 @@ export class ExpenseDetailsComponent implements OnInit {
 
   readonly expenseConfigService = inject(ExpenseConfigService);
 
-  planFixedReimbursementAmount: number | null = null;
+  // Written from an async HTTP response; must be a signal so it triggers
+  // change detection under the app's zoneless setup.
+  readonly planFixedReimbursementAmount = signal<number | null>(null);
 
   ngOnInit() {
     if (this.expense().type === 'transport') {
       this.expenseConfigService.getConfig('course').subscribe((config) => {
-        this.planFixedReimbursementAmount = config.transport?.plan ?? null;
+        this.planFixedReimbursementAmount.set(config.transport?.plan ?? null);
       });
     }
   }
