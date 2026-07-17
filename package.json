@@ -30,7 +30,7 @@
     "@angular/material-date-fns-adapter": "^22.0.5",
     "@angular/platform-browser": "^22.0.7",
     "@angular/router": "^22.0.7",
-    "@tailwindcss/postcss": "^4.3.2",
+    "@tailwindcss/postcss": "^4.3.3",
     "angular-auth-oidc-client": "^21.0.2",
     "date-fns": "^4.4.0",
     "jschardet": "^3.1.4",
@@ -44,7 +44,7 @@
     "rxjs": "~7.8.2",
     "survey-angular-ui": "^2.5.32",
     "survey-core": "^2.5.32",
-    "tailwindcss": "^4.3.2",
+    "tailwindcss": "^4.3.3",
     "tslib": "^2.8.1",
     "xlsx-js-style": "1.2.0"
   },
