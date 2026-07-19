@@ -1,7 +1,14 @@
 import { CdkStep, CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, contentChild, inject, TemplateRef } from '@angular/core';
+import {
+  Component,
+  contentChild,
+  inject,
+  signal,
+  TemplateRef,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Button } from '../ui/button';
 
 @Component({
@@ -16,13 +23,22 @@ export class JdavStepper extends CdkStepper {
 
   readonly submitButton = contentChild<TemplateRef<unknown>>('submitButton');
 
+  // Signal mirror of the selected step's control validity. The app runs
+  // zoneless, so programmatic form changes (e.g. disabling controls in a
+  // valueChanges subscription) don't trigger change detection. Reading the
+  // validity through a signal that follows the control's statusChanges keeps
+  // the Weiter/submit button's disabled state in sync.
+  readonly selectedStepInvalid = signal(false);
+  private stepStatusSub?: Subscription;
+
   constructor() {
     super();
 
     // update route param when the selected step changes
-    this.selectionChange.subscribe((event) =>
-      this.navigateToStep(event.selectedStep),
-    );
+    this.selectionChange.subscribe((event) => {
+      this.navigateToStep(event.selectedStep);
+      this.watchSelectedStep(event.selectedStep);
+    });
   }
 
   override ngAfterContentInit() {
@@ -49,7 +65,21 @@ export class JdavStepper extends CdkStepper {
       }
 
       this.selectedIndex = selected.index();
+      this.watchSelectedStep(this.selected);
     });
+  }
+
+  // Track the selected step's control validity in a signal so the button's
+  // disabled binding updates under zoneless change detection.
+  private watchSelectedStep(step: CdkStep | undefined) {
+    this.stepStatusSub?.unsubscribe();
+
+    const control = step?.stepControl;
+    this.selectedStepInvalid.set(control?.invalid ?? false);
+
+    this.stepStatusSub = control?.statusChanges.subscribe(() =>
+      this.selectedStepInvalid.set(control.invalid),
+    );
   }
 
   private navigateToStep(step: CdkStep) {
