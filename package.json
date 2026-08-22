@@ -31,7 +31,7 @@
     "@angular/platform-browser": "^22.1.2",
     "@angular/router": "^22.1.2",
     "@tailwindcss/postcss": "^4.3.3",
-    "angular-auth-oidc-client": "^21.0.3",
+    "angular-auth-oidc-client": "^22.0.0",
     "date-fns": "^4.4.0",
     "jschardet": "^3.1.4",
     "jspdf": "^4.2.1",
