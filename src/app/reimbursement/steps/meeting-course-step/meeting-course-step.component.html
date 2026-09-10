@@ -9,10 +9,10 @@
       class="form-control"
       required
     />
-    @if (code?.hasError('required') && code?.touched) {
+    @if (code?.hasError('required') && code.touched) {
       <div class="error-message">Bitte gib die Kursnummer ein.</div>
     }
-    @if (code?.hasError('unknownCourse') && code?.touched) {
+    @if (code?.hasError('unknownCourse') && code.touched) {
       <div class="error-message">
         <p>Bitte gib eine gültige Kursnummer an.</p>
         <p>
