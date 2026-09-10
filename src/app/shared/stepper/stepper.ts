@@ -7,6 +7,7 @@ import {
   signal,
   TemplateRef,
 } from '@angular/core';
+import { AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Button } from '../ui/button';
@@ -75,10 +76,13 @@ export class JdavStepper extends CdkStepper {
     this.stepStatusSub?.unsubscribe();
 
     const control = step?.stepControl;
-    this.selectedStepInvalid.set(control?.invalid ?? false);
+    const abstractControl =
+      control instanceof AbstractControl ? control : undefined;
 
-    this.stepStatusSub = control?.statusChanges.subscribe(() =>
-      this.selectedStepInvalid.set(control.invalid),
+    this.selectedStepInvalid.set(abstractControl?.invalid ?? false);
+
+    this.stepStatusSub = abstractControl?.statusChanges.subscribe(() =>
+      this.selectedStepInvalid.set(abstractControl.invalid),
     );
   }
 
@@ -91,9 +95,10 @@ export class JdavStepper extends CdkStepper {
   private anyControlsInvalidOrPending(step: CdkStep): boolean {
     if (this.linear) {
       const control = step.stepControl;
-      const isIncomplete = control
-        ? control.invalid || control.pending
-        : !step.completed;
+      const isIncomplete =
+        control instanceof AbstractControl
+          ? control.invalid || control.pending
+          : !step.completed;
       return isIncomplete && !step.optional && !step._completedOverride();
     }
 
