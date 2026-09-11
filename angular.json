@@ -25,7 +25,18 @@
               }
             ],
             "styles": ["src/styles.scss"],
-            "polyfills": ["@angular/localize/init"]
+            "polyfills": ["@angular/localize/init"],
+            "allowedCommonJsDependencies": [
+              "core-js",
+              "raf",
+              "rgbcolor",
+              "jszip",
+              "xlsx-js-style",
+              "html2canvas",
+              "jschardet",
+              "qrcode",
+              "pako"
+            ]
           },
           "configurations": {
             "production": {
