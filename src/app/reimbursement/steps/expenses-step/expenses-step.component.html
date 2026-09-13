@@ -62,6 +62,20 @@
   </div>
 
   <p class="subtotal">
+    Fahrkosten:
+    <span>{{ transportTotal | currency }}</span>
+  </p>
+  @if (foodEnabled) {
+    <p class="subtotal">
+      Tagegelder:
+      <span>{{ foodTotal | currency }}</span>
+    </p>
+  }
+  <p class="subtotal">
+    Sachkosten:
+    <span>{{ materialTotal | currency }}</span>
+  </p>
+  <p class="subtotal total">
     Summe:
     <span>{{ total | currency }}</span>
   </p>

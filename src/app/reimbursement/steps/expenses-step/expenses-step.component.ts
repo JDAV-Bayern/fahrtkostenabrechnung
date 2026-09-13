@@ -57,10 +57,33 @@ export class ExpensesStepComponent {
     };
   }
 
-  get total() {
+  private get report() {
     const reimbursement = this.reimbursementControlService.getReimbursement();
-    const report = this.reimbursementService.getReport(reimbursement);
-    return report.categories.transport;
+    return this.reimbursementService.getReport(reimbursement);
+  }
+
+  get transportTotal() {
+    return this.report.categories.transport ?? 0;
+  }
+
+  get materialTotal() {
+    return this.report.categories.material ?? 0;
+  }
+
+  get foodEnabled() {
+    return this.reimbursementControlService.foodExpenses.enabled;
+  }
+
+  get foodTotal() {
+    return this.report.categories.food ?? 0;
+  }
+
+  get total() {
+    return (
+      this.transportTotal +
+      this.materialTotal +
+      (this.foodEnabled ? this.foodTotal : 0)
+    );
   }
 
   getAllowedModes(direction: Direction) {

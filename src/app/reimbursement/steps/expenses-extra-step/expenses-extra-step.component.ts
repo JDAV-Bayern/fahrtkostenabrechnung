@@ -37,4 +37,28 @@ export class ExpensesExtraStepComponent {
   get isFoodEnabled() {
     return this.controlService.foodSettings.controls.isEnabled;
   }
+
+  get transportTotal() {
+    return this.report.categories.transport ?? 0;
+  }
+
+  get foodEnabled() {
+    return this.foodForm.enabled;
+  }
+
+  get foodTotal() {
+    return this.report.categories.food ?? 0;
+  }
+
+  get materialTotal() {
+    return this.report.categories.material ?? 0;
+  }
+
+  get total() {
+    return (
+      this.transportTotal +
+      this.materialTotal +
+      (this.foodEnabled ? this.foodTotal : 0)
+    );
+  }
 }
