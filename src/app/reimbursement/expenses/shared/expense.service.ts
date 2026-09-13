@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { Expense } from 'src/domain/expense.model';
 import { MeetingType } from 'src/domain/meeting.model';
 import { ExpenseConfig } from '../expense.config';
@@ -10,7 +10,7 @@ import { ExpenseConfigService } from './expense-config.service';
 export class ExpenseService {
   private readonly expenseConfigService = inject(ExpenseConfigService);
 
-  config?: ExpenseConfig;
+  config = signal<ExpenseConfig | undefined>(undefined);
 
   constructor() {
     this.setMeetingType('course');
@@ -18,44 +18,46 @@ export class ExpenseService {
 
   setMeetingType(type: MeetingType) {
     this.expenseConfigService.getConfig(type).subscribe((config) => {
-      this.config = config;
+      this.config.set(config);
     });
   }
 
   getAmount(expense: Expense) {
-    if (!this.config) {
+    const config = this.config();
+
+    if (!config) {
       return 0;
     }
 
-    if (!this.config.allowed.includes(expense.type)) {
+    if (!config.allowed.includes(expense.type)) {
       return 0;
     }
 
     switch (expense.type) {
       case 'transport': {
-        if (!this.config.transport) {
+        if (!config.transport) {
           return 0;
         }
 
         switch (expense.mode) {
           case 'car': {
             const nPax = expense.carTrip.passengers.length;
-            const maxPax = this.config.transport.car.length - 1;
+            const maxPax = config.transport.car.length - 1;
             const index = nPax < maxPax ? nPax : maxPax;
-            const distanceFactor = this.config.transport.car[index];
+            const distanceFactor = config.transport.car[index];
             return expense.distance * distanceFactor;
           }
           case 'public': {
             const discountFactor =
-              this.config.transport.public[expense.ticket.discount];
+              config.transport.public[expense.ticket.discount];
             return expense.ticket.price * discountFactor;
           }
           case 'bike': {
-            const bikeFactor = this.config.transport.bike;
+            const bikeFactor = config.transport.bike;
             return expense.distance * bikeFactor;
           }
           case 'plan': {
-            return this.config.transport.plan;
+            return config.transport.plan;
           }
           default: {
             return 0;
@@ -63,12 +65,12 @@ export class ExpenseService {
         }
       }
       case 'food': {
-        if (!this.config.food) {
+        if (!config.food) {
           return 0;
         }
 
-        let amount = this.config.food[expense.absence];
-        const full = this.config.food.intermediate;
+        let amount = config.food[expense.absence];
+        const full = config.food.intermediate;
 
         amount -= expense.breakfast ? full * 0.2 : 0;
         amount -= expense.lunch ? full * 0.4 : 0;
