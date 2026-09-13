@@ -80,7 +80,10 @@
     <span>{{ total | currency }}</span>
   </p>
 
-  @if (parentForm.hasError('anyRequired')) {
-    <div class="error-message">Bitte gib mindestens eine Auslage an.</div>
+  @if (stepGuard.hasError('totalRequired')) {
+    <div class="error-message">
+      Der Erstattungsbetrag darf nicht 0 € betragen. Bitte gib mindestens eine
+      Auslage mit einem Betrag größer als 0 € an.
+    </div>
   }
 </fieldset>

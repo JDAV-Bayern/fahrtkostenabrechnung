@@ -26,6 +26,7 @@ export class ExpensesExtraStepComponent {
   readonly showFood = input(true);
 
   parentForm = this.controlService.expensesStep;
+  stepGuard = this.controlService.expensesExtraStepGuard;
   foodForm = this.controlService.foodExpenses;
   materialForm = this.controlService.materialExpenses;
 
