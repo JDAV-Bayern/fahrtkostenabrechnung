@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { effect, Injectable, inject } from '@angular/core';
 import {
   FormControl,
   NonNullableFormBuilder,
@@ -135,6 +135,11 @@ export class ReimbursementControlService {
     this.expensesStep.statusChanges.subscribe(() =>
       this.expensesExtraStepGuard.updateValueAndValidity(),
     );
+
+    effect(() => {
+      this.reimbursementService.config();
+      this.expensesExtraStepGuard.updateValueAndValidity();
+    });
 
     const iban = this.participantStep.controls.iban;
     iban.valueChanges.subscribe((value) => this.onIbanChanged(value));
