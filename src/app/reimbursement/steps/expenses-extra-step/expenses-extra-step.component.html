@@ -65,7 +65,7 @@
     Fahrkosten:
     <span>{{ transportTotal() | currency }}</span>
   </p>
-  @if (foodEnabled()) {
+  @if (showFood() && foodEnabled()) {
     <p class="subtotal">
       Tagegelder:
       <span>{{ foodTotal() | currency }}</span>
