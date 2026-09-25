@@ -62,11 +62,21 @@
   </div>
 
   <p class="subtotal">
-    Summe:
-    <span>{{ total | currency }}</span>
+    Fahrkosten:
+    <span>{{ transportTotal() | currency }}</span>
   </p>
-
-  @if (form.hasError('anyRequired')) {
-    <div class="error-message">Bitte gib mindestens eine Auslage an.</div>
+  @if (foodEnabled()) {
+    <p class="subtotal">
+      Tagegelder:
+      <span>{{ foodTotal() | currency }}</span>
+    </p>
   }
+  <p class="subtotal">
+    Sachkosten:
+    <span>{{ materialTotal() | currency }}</span>
+  </p>
+  <p class="subtotal total">
+    Summe:
+    <span>{{ total() | currency }}</span>
+  </p>
 </fieldset>
