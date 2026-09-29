@@ -57,6 +57,11 @@ export class OverviewStepComponent {
     this.reimbursementService.getReport(this.reimbursement()),
   );
 
+  readonly foodEnabled = computed(() => {
+    this.formValue();
+    return this.controlService.foodExpenses.enabled;
+  });
+
   readonly warnings = computed(() =>
     this.validationService.validateReimbursement(this.reimbursement()),
   );

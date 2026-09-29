@@ -32,7 +32,6 @@ export const routes: Routes = [
         component: ExpenseRatesComponent,
         data: {
           breadcrumb: 'Erstattungssätze',
-          showDeleteDataButton: true,
         },
       },
     ],
