@@ -1,12 +1,20 @@
 .subtotal {
-  font-weight: bold;
+  margin: 4px 0;
   text-align: right;
 }
 
 .subtotal span {
   margin: 0 8px;
-  border-top: 3px double var(--color-body);
   padding: 4px 8px 0px;
+}
+
+.subtotal.total {
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+.subtotal.total span {
+  border-top: 3px double var(--color-body);
 }
 
 .heading {

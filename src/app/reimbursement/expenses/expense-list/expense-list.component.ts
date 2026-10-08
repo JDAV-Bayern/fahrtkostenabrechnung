@@ -1,18 +1,21 @@
 import { Dialog, DialogModule, DialogRef } from '@angular/cdk/dialog';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
 import {
-  ChangeDetectorRef,
   Component,
+  DestroyRef,
   inject,
   input,
   OnInit,
+  signal,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormArray,
   FormControl,
   FormGroup,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { startWith } from 'rxjs';
 import { Button } from 'src/app/shared/ui/button';
 import { Expense } from 'src/domain/expense.model';
 import {
@@ -39,7 +42,7 @@ import { TransportExpenseCard } from '../transport-expense-card/transport-expens
 })
 export class ExpenseListComponent<T extends Expense> implements OnInit {
   private readonly dialog = inject(Dialog);
-  private readonly changeDetector = inject(ChangeDetectorRef);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly type = input.required<T['type']>();
   readonly form = input.required<FormArray<FormControl<T>>>();
@@ -48,10 +51,15 @@ export class ExpenseListComponent<T extends Expense> implements OnInit {
     (drag: CdkDrag, drop: CdkDropList) => boolean
   >(() => true);
 
+  readonly controls = signal<FormControl<T>[]>([]);
+
   parent!: FormGroup;
 
   ngOnInit() {
     this.parent = this.form().parent as FormGroup;
+    this.form()
+      .valueChanges.pipe(startWith(null), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => this.controls.set([...this.form().controls]));
   }
 
   openCreateDialog() {
@@ -64,7 +72,7 @@ export class ExpenseListComponent<T extends Expense> implements OnInit {
   }
 
   openEditDialog(control: FormControl<T>): DialogRef<never> {
-    const dialog = this.dialog.open<never, ExpenseDialogData<T>>(
+    return this.dialog.open<never, ExpenseDialogData<T>>(
       ExpenseModalComponent<T>,
       {
         data: {
@@ -74,10 +82,6 @@ export class ExpenseListComponent<T extends Expense> implements OnInit {
         },
       },
     );
-
-    dialog.closed.subscribe(() => this.changeDetector.markForCheck());
-
-    return dialog;
   }
 
   deleteExpense(index: number) {
