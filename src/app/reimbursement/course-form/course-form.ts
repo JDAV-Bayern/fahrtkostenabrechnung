@@ -34,6 +34,7 @@ export class CourseForm {
   private readonly pdfService = inject(PdfService);
 
   form = this.controlService.form;
+  expensesExtraStepGuard = this.controlService.expensesExtraStepGuard;
   isRenderingPdf = signal(false);
 
   async onSubmit() {

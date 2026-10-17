@@ -1,6 +1,7 @@
 import { CdkDrag, CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { CurrencyPipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
@@ -35,6 +36,20 @@ export class ExpensesStepComponent {
 
   form = this.reimbursementControlService.transportExpensesStep;
 
+  // expenses form changes (push/removeAt/enable/disable) go through Reactive
+  // Forms, not signals, so mirror them into a signal — otherwise the totals
+  // below wouldn't refresh under zoneless change detection
+  private readonly expensesChanged = toSignal(
+    this.reimbursementControlService.expensesStep.valueChanges,
+    { initialValue: null },
+  );
+
+  private readonly report = computed(() => {
+    this.expensesChanged();
+    const reimbursement = this.reimbursementControlService.getReimbursement();
+    return this.reimbursementService.getReport(reimbursement);
+  });
+
   get meetingType() {
     return this.reimbursementControlService.meetingStep.controls.type.value;
   }
@@ -57,11 +72,27 @@ export class ExpensesStepComponent {
     };
   }
 
-  get total() {
-    const reimbursement = this.reimbursementControlService.getReimbursement();
-    const report = this.reimbursementService.getReport(reimbursement);
-    return report.categories.transport;
-  }
+  readonly transportTotal = computed(
+    () => this.report().categories.transport ?? 0,
+  );
+
+  readonly materialTotal = computed(
+    () => this.report().categories.material ?? 0,
+  );
+
+  readonly foodEnabled = computed(() => {
+    this.expensesChanged();
+    return this.reimbursementControlService.foodExpenses.enabled;
+  });
+
+  readonly foodTotal = computed(() => this.report().categories.food ?? 0);
+
+  readonly total = computed(
+    () =>
+      this.transportTotal() +
+      this.materialTotal() +
+      (this.foodEnabled() ? this.foodTotal() : 0),
+  );
 
   getAllowedModes(direction: Direction) {
     const allowedModes: TransportMode[] = ['car', 'public'];
