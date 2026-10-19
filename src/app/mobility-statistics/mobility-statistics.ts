@@ -75,7 +75,7 @@ export class MobilityStatistics {
   error = signal<string | null>(null);
 
   // The backend only returns individual records (and excuses) for admins;
-  // non-admin/anonymous callers get k-anonymized data with an empty all_records.
+  // non-admin/anonymous callers only get the overall totals (no courses, no records).
   hasIndividualRecords = computed(
     () => (this.mobilityData()?.all_records.length ?? 0) > 0,
   );
@@ -201,12 +201,6 @@ export class MobilityStatistics {
       (sum, value) => sum + value,
       0,
     );
-  });
-
-  totalDistance = computed(() => {
-    const data = this.mobilityData();
-    if (!data) return 0;
-    return Math.round(data.all_records.reduce((sum, r) => sum + r.distance, 0));
   });
 
   courseDistanceMap = computed(() => {

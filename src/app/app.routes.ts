@@ -8,7 +8,6 @@ import { ExpenseRatesComponent } from './info/expense-rates/expense-rates.compon
 import { InfoComponent } from './info/info.component';
 import { CommitteeForm } from './reimbursement/committee-form/committee-form';
 import { CourseForm } from './reimbursement/course-form/course-form';
-import { MobilityStatistics } from './mobility-statistics/mobility-statistics';
 
 export const routes: Routes = [
   {
@@ -76,7 +75,10 @@ export const routes: Routes = [
   {
     path: 'mobilität',
     title: 'Mobilitätsstatistik',
-    component: MobilityStatistics,
+    loadComponent: () =>
+      import('./mobility-statistics/mobility-statistics').then(
+        (m) => m.MobilityStatistics,
+      ),
   },
   {
     path: 'mobilitaet',
@@ -89,7 +91,7 @@ export const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: 'mobilitaetsstatstik',
+    path: 'mobilitaetsstatistik',
     redirectTo: 'mobilität',
     pathMatch: 'full',
   },

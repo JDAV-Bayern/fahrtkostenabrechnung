@@ -62,7 +62,9 @@
             <h2 jdavCardTitle>Gesamtdistanz</h2>
           </div>
           <div jdavCardContent>
-            <p class="kpi-value">{{ totalDistance() | number: '1.0-0' }} km</p>
+            <p class="kpi-value">
+              {{ totalTransportKm() | number: '1.0-0' }} km
+            </p>
             <p class="kpi-caption">Auf Basis aller Datensätze</p>
           </div>
         </div>
@@ -81,15 +83,17 @@
           </div>
         </div>
 
-        <div jdavCard>
-          <div jdavCardHeader>
-            <h2 jdavCardTitle>Anzahl Kurse</h2>
+        @if (hasIndividualRecords()) {
+          <div jdavCard>
+            <div jdavCardHeader>
+              <h2 jdavCardTitle>Anzahl Kurse</h2>
+            </div>
+            <div jdavCardContent>
+              <p class="kpi-value">{{ data.courses.length }}</p>
+              <p class="kpi-caption">Mit Mobilitätsrückmeldungen</p>
+            </div>
           </div>
-          <div jdavCardContent>
-            <p class="kpi-value">{{ data.courses.length }}</p>
-            <p class="kpi-caption">Mit Mobilitätsrückmeldungen</p>
-          </div>
-        </div>
+        }
       </section>
 
       <section class="charts-grid">
