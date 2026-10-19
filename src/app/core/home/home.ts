@@ -11,6 +11,8 @@ import {
   CardHeader,
   CardTitle,
 } from 'src/app/shared/ui/card';
+// LJV banner (temporary, remove after November 2026 – see ljv-banner.ts)
+import { LjvBanner } from './ljv-banner';
 
 @Component({
   selector: 'jdav-home',
@@ -23,6 +25,7 @@ import {
     CardFooter,
     CardHeader,
     CardTitle,
+    LjvBanner, // LJV banner (temporary)
     RouterLink,
   ],
   templateUrl: './home.html',
