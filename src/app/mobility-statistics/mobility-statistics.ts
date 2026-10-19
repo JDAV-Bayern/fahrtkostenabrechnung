@@ -74,6 +74,19 @@ export class MobilityStatistics {
   loading = signal(true);
   error = signal<string | null>(null);
 
+  // The backend only returns individual records (and excuses) for admins;
+  // non-admin/anonymous callers get k-anonymized data with an empty all_records.
+  hasIndividualRecords = computed(
+    () => (this.mobilityData()?.all_records.length ?? 0) > 0,
+  );
+
+  mobilityExcuses = computed(
+    () =>
+      this.mobilityData()
+        ?.all_records.map((record) => record.excuse)
+        .filter((excuse): excuse is string => !!excuse) ?? [],
+  );
+
   constructor() {
     this.feedbackService.getMobilityStatistics().subscribe({
       next: (data) => {

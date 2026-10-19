@@ -48,6 +48,7 @@ export interface SingleMobilityRecordDTO {
   course_id: string;
   mean_of_transport: string;
   distance: number;
+  excuse: string | null;
 }
 
 export interface CourseMobilityStatisticsDTO {
@@ -223,7 +224,8 @@ export class FeedbackService {
 
   /**
    * Retrieve aggregated mobility statistics from all feedback records.
-   * Requires admin permission.
+   * Admins receive the full per-course breakdown and individual records
+   * (including excuses); other callers receive k-anonymized data.
    * @returns Aggregated mobility statistics including totals per transport mode and per course.
    */
   getMobilityStatistics(): Observable<MobilityStatisticsDTO> {

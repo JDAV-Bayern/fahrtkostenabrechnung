@@ -8,6 +8,7 @@ import { ExpenseRatesComponent } from './info/expense-rates/expense-rates.compon
 import { InfoComponent } from './info/info.component';
 import { CommitteeForm } from './reimbursement/committee-form/committee-form';
 import { CourseForm } from './reimbursement/course-form/course-form';
+import { MobilityStatistics } from './mobility-statistics/mobility-statistics';
 
 export const routes: Routes = [
   {
@@ -73,6 +74,26 @@ export const routes: Routes = [
     loadChildren: () => import('./admin/admin.routes'),
   },
   {
+    path: 'mobilität',
+    title: 'Mobilitätsstatistik',
+    component: MobilityStatistics,
+  },
+  {
+    path: 'mobilitaet',
+    redirectTo: 'mobilität',
+    pathMatch: 'full',
+  },
+  {
+    path: 'mobilitätsstatistik',
+    redirectTo: 'mobilität',
+    pathMatch: 'full',
+  },
+  {
+    path: 'mobilitaetsstatstik',
+    redirectTo: 'mobilität',
+    pathMatch: 'full',
+  },
+  {
     path: 'meine-kurse',
     title: 'Meine Kurse',
     component: UserProfileComponent,
@@ -94,6 +115,11 @@ export const routes: Routes = [
   {
     path: 'feedback-admin',
     redirectTo: 'admin/feedback',
+    pathMatch: 'full',
+  },
+  {
+    path: 'admin/mobilitaetsstatistik',
+    redirectTo: 'mobilität',
     pathMatch: 'full',
   },
   {
