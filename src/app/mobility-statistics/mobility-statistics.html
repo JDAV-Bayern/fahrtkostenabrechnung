@@ -83,17 +83,15 @@
           </div>
         </div>
 
-        @if (hasIndividualRecords()) {
-          <div jdavCard>
-            <div jdavCardHeader>
-              <h2 jdavCardTitle>Anzahl Kurse</h2>
-            </div>
-            <div jdavCardContent>
-              <p class="kpi-value">{{ data.courses.length }}</p>
-              <p class="kpi-caption">Mit Mobilitätsrückmeldungen</p>
-            </div>
+        <div jdavCard>
+          <div jdavCardHeader>
+            <h2 jdavCardTitle>Anzahl Kurse</h2>
           </div>
-        }
+          <div jdavCardContent>
+            <p class="kpi-value">{{ data.total_courses }}</p>
+            <p class="kpi-caption">Mit Mobilitätsrückmeldungen</p>
+          </div>
+        </div>
       </section>
 
       <section class="charts-grid">

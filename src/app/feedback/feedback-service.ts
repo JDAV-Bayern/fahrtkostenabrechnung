@@ -60,6 +60,7 @@ export interface CourseMobilityStatisticsDTO {
 
 export interface MobilityStatisticsDTO {
   total_mobility_records: number;
+  total_courses: number;
   total_per_mean_of_transport: Record<string, number>;
   courses: CourseMobilityStatisticsDTO[];
   all_records: SingleMobilityRecordDTO[];
