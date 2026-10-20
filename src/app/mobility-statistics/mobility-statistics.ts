@@ -74,6 +74,19 @@ export class MobilityStatistics {
   loading = signal(true);
   error = signal<string | null>(null);
 
+  // The backend only returns individual records (and excuses) for admins;
+  // non-admin/anonymous callers only get the overall totals (no courses, no records).
+  hasIndividualRecords = computed(
+    () => (this.mobilityData()?.all_records.length ?? 0) > 0,
+  );
+
+  mobilityExcuses = computed(
+    () =>
+      this.mobilityData()
+        ?.all_records.map((record) => record.excuse)
+        .filter((excuse): excuse is string => !!excuse) ?? [],
+  );
+
   constructor() {
     this.feedbackService.getMobilityStatistics().subscribe({
       next: (data) => {
@@ -188,12 +201,6 @@ export class MobilityStatistics {
       (sum, value) => sum + value,
       0,
     );
-  });
-
-  totalDistance = computed(() => {
-    const data = this.mobilityData();
-    if (!data) return 0;
-    return Math.round(data.all_records.reduce((sum, r) => sum + r.distance, 0));
   });
 
   courseDistanceMap = computed(() => {

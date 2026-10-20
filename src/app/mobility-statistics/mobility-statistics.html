@@ -7,16 +7,18 @@
         verfügbaren Feedbacks.
       </p>
     </div>
-    <button
-      jdavButton
-      type="button"
-      variant="outline"
-      (click)="downloadExcel()"
-      [disabled]="loading() || !mobilityData()"
-    >
-      <span class="material-symbols-outlined">download</span>
-      Excel exportieren
-    </button>
+    @if (hasIndividualRecords()) {
+      <button
+        jdavButton
+        type="button"
+        variant="outline"
+        (click)="downloadExcel()"
+        [disabled]="loading() || !mobilityData()"
+      >
+        <span class="material-symbols-outlined">download</span>
+        Excel exportieren
+      </button>
+    }
   </div>
 
   @if (error()) {
@@ -60,7 +62,9 @@
             <h2 jdavCardTitle>Gesamtdistanz</h2>
           </div>
           <div jdavCardContent>
-            <p class="kpi-value">{{ totalDistance() | number: '1.0-0' }} km</p>
+            <p class="kpi-value">
+              {{ totalTransportKm() | number: '1.0-0' }} km
+            </p>
             <p class="kpi-caption">Auf Basis aller Datensätze</p>
           </div>
         </div>
@@ -84,7 +88,7 @@
             <h2 jdavCardTitle>Anzahl Kurse</h2>
           </div>
           <div jdavCardContent>
-            <p class="kpi-value">{{ data.courses.length }}</p>
+            <p class="kpi-value">{{ data.total_courses }}</p>
             <p class="kpi-caption">Mit Mobilitätsrückmeldungen</p>
           </div>
         </div>
@@ -177,71 +181,94 @@
         </div>
       </section>
 
-      <section>
-        <div jdavCard>
-          <div jdavCardHeader>
-            <h2 jdavCardTitle>Kursübersicht</h2>
-          </div>
-          <div jdavCardContent>
-            <div class="course-list">
-              <div class="course-list-header">
-                <span class="course-col course-id">Kurs-ID</span>
-                <span class="course-col course-name">Kursname</span>
-                <span class="course-col course-total-km">Kilometer</span>
-                <span class="course-col course-number-data"
-                  >Anzahl Rückmeldungen</span
-                >
-                <span class="course-col course-breakdown">Verkehrsmittel</span>
-              </div>
+      @if (hasIndividualRecords()) {
+        <section>
+          <div jdavCard>
+            <div jdavCardHeader>
+              <h2 jdavCardTitle>Kursübersicht</h2>
+            </div>
+            <div jdavCardContent>
+              <div class="course-list">
+                <div class="course-list-header">
+                  <span class="course-col course-id">Kurs-ID</span>
+                  <span class="course-col course-name">Kursname</span>
+                  <span class="course-col course-total-km">Kilometer</span>
+                  <span class="course-col course-number-data"
+                    >Anzahl Rückmeldungen</span
+                  >
+                  <span class="course-col course-breakdown"
+                    >Verkehrsmittel</span
+                  >
+                </div>
 
-              @for (course of sortedCourses(); track course.course_id) {
-                <div class="course-row">
-                  <div class="course-col course-id" data-label="Kurs-ID">
-                    {{ course.course_id }}
-                  </div>
-                  <div class="course-col course-name" data-label="Kursname">
-                    {{ course.course_name }}
-                  </div>
-                  <div
-                    class="course-col course-total-km"
-                    data-label="Kilometer"
-                  >
-                    {{ courseDistance(course) | number: '1.0-0' }} km
-                  </div>
-                  <div
-                    class="course-col course-number-data"
-                    data-label="Anzahl Rückmeldungen"
-                  >
-                    {{ course.total_mobility_records | number: '1.0-0' }}
-                  </div>
-                  <div
-                    class="course-col course-breakdown"
-                    data-label="Verkehrsmittel"
-                  >
-                    <div class="course-stacked-track">
-                      @for (mode of allModes(); track mode) {
-                        @if (courseCount(course, mode) > 0) {
-                          <span
-                            class="course-stacked-segment"
-                            [style.width.%]="courseModeShare(course, mode)"
-                            [style.background-color]="colorForMode(mode)"
-                            [attr.title]="
-                              labelFor(mode) +
-                              ': ' +
-                              (courseCount(course, mode) | number: '1.0-0') +
-                              ' km'
-                            "
-                          ></span>
+                @for (course of sortedCourses(); track course.course_id) {
+                  <div class="course-row">
+                    <div class="course-col course-id" data-label="Kurs-ID">
+                      {{ course.course_id }}
+                    </div>
+                    <div class="course-col course-name" data-label="Kursname">
+                      {{ course.course_name }}
+                    </div>
+                    <div
+                      class="course-col course-total-km"
+                      data-label="Kilometer"
+                    >
+                      {{ courseDistance(course) | number: '1.0-0' }} km
+                    </div>
+                    <div
+                      class="course-col course-number-data"
+                      data-label="Anzahl Rückmeldungen"
+                    >
+                      {{ course.total_mobility_records | number: '1.0-0' }}
+                    </div>
+                    <div
+                      class="course-col course-breakdown"
+                      data-label="Verkehrsmittel"
+                    >
+                      <div class="course-stacked-track">
+                        @for (mode of allModes(); track mode) {
+                          @if (courseCount(course, mode) > 0) {
+                            <span
+                              class="course-stacked-segment"
+                              [style.width.%]="courseModeShare(course, mode)"
+                              [style.background-color]="colorForMode(mode)"
+                              [attr.title]="
+                                labelFor(mode) +
+                                ': ' +
+                                (courseCount(course, mode) | number: '1.0-0') +
+                                ' km'
+                              "
+                            ></span>
+                          }
                         }
-                      }
+                      </div>
                     </div>
                   </div>
-                </div>
+                }
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div jdavCard class="excuses-card">
+            <div jdavCardHeader>
+              <h2 jdavCardTitle>Begründungen für Autofahrt</h2>
+            </div>
+            <div jdavCardContent>
+              @if (mobilityExcuses().length === 0) {
+                <p class="excuses-empty">Keine Begründungen vorhanden.</p>
+              } @else {
+                <ul class="excuses-list">
+                  @for (excuse of mobilityExcuses(); track $index) {
+                    <li class="excuse-item">{{ excuse }}</li>
+                  }
+                </ul>
               }
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      }
     }
   }
 </div>

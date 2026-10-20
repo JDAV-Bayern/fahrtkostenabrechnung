@@ -72,6 +72,29 @@ export const routes: Routes = [
     loadChildren: () => import('./admin/admin.routes'),
   },
   {
+    path: 'mobilität',
+    title: 'Mobilitätsstatistik',
+    loadComponent: () =>
+      import('./mobility-statistics/mobility-statistics').then(
+        (m) => m.MobilityStatistics,
+      ),
+  },
+  {
+    path: 'mobilitaet',
+    redirectTo: 'mobilität',
+    pathMatch: 'full',
+  },
+  {
+    path: 'mobilitätsstatistik',
+    redirectTo: 'mobilität',
+    pathMatch: 'full',
+  },
+  {
+    path: 'mobilitaetsstatistik',
+    redirectTo: 'mobilität',
+    pathMatch: 'full',
+  },
+  {
     path: 'meine-kurse',
     title: 'Meine Kurse',
     component: UserProfileComponent,
@@ -93,6 +116,11 @@ export const routes: Routes = [
   {
     path: 'feedback-admin',
     redirectTo: 'admin/feedback',
+    pathMatch: 'full',
+  },
+  {
+    path: 'admin/mobilitaetsstatistik',
+    redirectTo: 'mobilität',
     pathMatch: 'full',
   },
   {
