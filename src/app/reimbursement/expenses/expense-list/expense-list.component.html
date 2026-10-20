@@ -6,7 +6,7 @@
     [cdkDropListEnterPredicate]="enterPredicate()"
   >
     <!-- TODO: readd [formArrayName]="form" -->
-    @for (control of form().controls; track control) {
+    @for (control of controls(); track control) {
       <div cdkDrag [cdkDragData]="control" (cdkDragDropped)="drop($event)">
         @switch (control.value.type) {
           @case ('transport') {

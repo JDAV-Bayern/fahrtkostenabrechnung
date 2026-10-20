@@ -5,7 +5,7 @@ export function formatExpenseType(value: string): string | null {
     case 'transport':
       return 'Fahrtkosten';
     case 'food':
-      return 'Verpflegung';
+      return 'Tagegeld';
     case 'material':
       return 'Sachkosten';
     default:

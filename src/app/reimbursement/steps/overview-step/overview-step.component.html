@@ -26,10 +26,12 @@
     entry of report().categories | keyvalue: originalOrder;
     track entry.key
   ) {
-    <tr>
-      <td>{{ entry.key | expenseType }}:</td>
-      <td>{{ entry.value | currency }}</td>
-    </tr>
+    @if (entry.key !== 'food' || foodEnabled()) {
+      <tr>
+        <td>{{ entry.key | expenseType }}:</td>
+        <td>{{ entry.value | currency }}</td>
+      </tr>
+    }
   }
   <tr>
     <td>Erstattungsbetrag:</td>

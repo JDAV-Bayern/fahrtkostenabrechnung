@@ -1,13 +1,13 @@
-import { Injectable, inject } from '@angular/core';
+import { effect, inject, Injectable } from '@angular/core';
 import {
   FormControl,
   NonNullableFormBuilder,
+  ValidatorFn,
   Validators,
 } from '@angular/forms';
 import { eachDayOfInterval } from 'date-fns';
 import { validateIBAN } from 'ngx-iban-validator';
 import { deepMarkAsDirty, reviveFormArrays } from 'src/app/shared/form-util';
-import { anyRequired } from 'src/app/shared/validators/any-required.validator';
 import {
   Direction,
   Discount,
@@ -59,6 +59,13 @@ export class ReimbursementControlService {
     Validators.required,
     validateCourseCode,
   ]);
+
+  private readonly totalRequiredValidator: ValidatorFn = () =>
+    this.form &&
+    this.reimbursementService.getReport(this.getReimbursement()).total === 0
+      ? { totalRequired: true }
+      : null;
+
   form = this.formBuilder.group({
     meeting: this.formBuilder.group<MeetingForm>({
       type: this.formBuilder.control<MeetingType>(
@@ -88,35 +95,33 @@ export class ReimbursementControlService {
         [Validators.required, Validators.pattern(BIC_PATTERN)],
       ],
     }),
-    expenses: this.formBuilder.group(
-      {
-        transport: this.formBuilder.group(
-          {
-            inbound: this.formBuilder.array<TransportExpense>(
-              [],
-              limitedTransportMode('plan', 1),
-            ),
-            onsite: this.formBuilder.array<TransportExpense>(
-              [],
-              allowedTransportModes(['car', 'public']),
-            ),
-            outbound: this.formBuilder.array<TransportExpense>(
-              [],
-              limitedTransportMode('plan', 1),
-            ),
-          },
-          { validators: anyRequired },
+    expenses: this.formBuilder.group({
+      transport: this.formBuilder.group({
+        inbound: this.formBuilder.array<TransportExpense>(
+          [],
+          limitedTransportMode('plan', 1),
         ),
-        food: this.formBuilder.array<FoodExpense>([]),
-        material: this.formBuilder.array<MaterialExpense>([]),
-      },
-      { validators: anyRequired },
-    ),
+        onsite: this.formBuilder.array<TransportExpense>(
+          [],
+          allowedTransportModes(['car', 'public']),
+        ),
+        outbound: this.formBuilder.array<TransportExpense>(
+          [],
+          limitedTransportMode('plan', 1),
+        ),
+      }),
+      food: this.formBuilder.array<FoodExpense>([]),
+      material: this.formBuilder.array<MaterialExpense>([]),
+    }),
     overview: this.formBuilder.group({
       note: [''],
       files: this.formBuilder.control<File[]>([]),
     }),
   });
+
+  readonly expensesExtraStepGuard = this.formBuilder.control(null, () =>
+    this.totalRequiredValidator(this.expensesStep),
+  );
 
   // local state not included in the final data
   foodSettings = this.formBuilder.group({
@@ -126,6 +131,15 @@ export class ReimbursementControlService {
 
   constructor() {
     this.form.valueChanges.subscribe(() => this.saveForm());
+
+    this.expensesStep.statusChanges.subscribe(() =>
+      this.expensesExtraStepGuard.updateValueAndValidity(),
+    );
+
+    effect(() => {
+      this.reimbursementService.config();
+      this.expensesExtraStepGuard.updateValueAndValidity();
+    });
 
     const iban = this.participantStep.controls.iban;
     iban.valueChanges.subscribe((value) => this.onIbanChanged(value));
@@ -317,20 +331,17 @@ export class ReimbursementControlService {
 
   private onMeetingTypeChanged(value: MeetingType) {
     const form = this.meetingStep;
-    const transport = this.transportExpensesStep;
     switch (value) {
       case 'course':
         form.addControl('code', this.courseCodeControl);
         form.controls.location.disable();
         form.controls.time.disable();
-        transport.setValidators(anyRequired);
         this.disableFoodReimbursement();
         break;
       case 'committee':
         form.removeControl('code');
         form.controls.location.enable();
         form.controls.time.enable();
-        transport.clearValidators();
         if (this.foodSettings.controls.isEnabled.value) {
           this.foodExpenses.enable({ emitEvent: false });
         } else {
@@ -339,7 +350,6 @@ export class ReimbursementControlService {
         break;
     }
 
-    transport.updateValueAndValidity();
     this.expensesStep.updateValueAndValidity();
   }
 

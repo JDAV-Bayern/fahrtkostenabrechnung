@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import {
   closestIndexTo,
   differenceInHours,
@@ -46,7 +46,7 @@ export class ReimbursementService {
   private readonly expenseConfigService = inject(ExpenseConfigService);
   private readonly sectionService = inject(SectionService);
 
-  config?: ExpenseConfig;
+  config = signal<ExpenseConfig | undefined>(undefined);
 
   constructor() {
     this.setMeetingType('course');
@@ -58,8 +58,8 @@ export class ReimbursementService {
 
   private setMeetingType(type: MeetingType) {
     this.expenseConfigService.getConfig(type).subscribe((config) => {
-      this.config = config;
-      this.expenseService.config = config;
+      this.config.set(config);
+      this.expenseService.config.set(config);
     });
   }
 
@@ -118,7 +118,9 @@ export class ReimbursementService {
   }
 
   getReport(reimbursement: Reimbursement): ReimbursementReport {
-    if (!this.config) {
+    const config = this.config();
+
+    if (!config) {
       return {
         categories: {},
         total: 0,
@@ -131,7 +133,7 @@ export class ReimbursementService {
       sum + this.expenseService.getAmount(expense);
 
     const categories: ReimbursementReport['categories'] = {};
-    for (const type of this.config.allowed) {
+    for (const type of config.allowed) {
       categories[type] = this.getExpenses(type, reimbursement).reduce(
         reducer,
         0,
@@ -142,7 +144,7 @@ export class ReimbursementService {
     let total = Object.values(categories).reduce((sum, item) => sum + item, 0);
     let totalReduced = false;
 
-    if (this.config.maxTotal && total > this.config.maxTotal) {
+    if (config.maxTotal && total > config.maxTotal) {
       const sectionId = reimbursement.participant.sectionId;
       const section = this.sectionService.getSection(sectionId);
       const isBavarian = section
@@ -150,7 +152,7 @@ export class ReimbursementService {
         : false;
 
       if (!isBavarian) {
-        total = this.config.maxTotal;
+        total = config.maxTotal;
         totalReduced = true;
       }
     }
