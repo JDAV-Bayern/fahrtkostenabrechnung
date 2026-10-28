@@ -128,7 +128,7 @@ Für das Staging-Environment gibt es zusätzlich `pnpm build:staging`.
 
 Die App wird als [Docker](https://www.docker.com/)-Image (nginx, siehe [Dockerfile](Dockerfile) und [nginx.conf](nginx.conf)) ausgeliefert und auf der GitHub Container Registry veröffentlicht.
 
-Wenn auf den `main`-Branch gepusht wird, z.B. weil deine Pull Request gemerged wird, wird ein Image mit dem Tag `dev` und der Staging-Konfiguration gebaut. Wenn ein Release-Tag (`v*.*.*`) gepusht wird, wird ein Image mit dem Tag `latest` und der Production-Konfiguration gebaut. Die Images werden mit cosign signiert. Anschließend wird das Deployment auf dem Server angestoßen.
+Wenn auf den `main`-Branch gepusht wird, z.B. weil deine Pull Request gemerged wird, wird ein Image mit dem Tag `dev` und der Staging-Konfiguration gebaut. Wenn ein Release-Tag (`v*.*.*`) gepusht wird, wird ein Image mit dem Tag `latest` und der Production-Konfiguration gebaut. Die Images werden mit cosign signiert. Anschließend wird das Deployment auf unserem Server bei [Hetzner](https://www.hetzner.com/) angestoßen, auf dem die App per Docker betrieben wird.
 
 Um ein neues Release zu erstellen, einfach folgenden Befehl ausführen:
 
