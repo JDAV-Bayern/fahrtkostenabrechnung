@@ -200,6 +200,13 @@ export class ReimbursementControlService {
     const storedData = localStorage.getItem(LOCAL_STORAGE_KEY_REIMBURSEMENT);
     const settingsData = localStorage.getItem(LOCAL_STORAGE_KEY_SETTINGS);
 
+    // restore the settings first: changing them regenerates the food expenses,
+    // which would otherwise discard the stored meals
+    if (settingsData) {
+      const settingsValue = JSON.parse(settingsData);
+      this.foodSettings.patchValue(settingsValue);
+    }
+
     if (storedData) {
       // parse JSON from local storage
       const storedValue = JSON.parse(storedData, (key, value) =>
@@ -216,11 +223,6 @@ export class ReimbursementControlService {
 
       // mark controls with values as touched
       deepMarkAsDirty(this.form);
-    }
-
-    if (settingsData) {
-      const settingsValue = JSON.parse(settingsData);
-      this.foodSettings.patchValue(settingsValue);
     }
   }
 
