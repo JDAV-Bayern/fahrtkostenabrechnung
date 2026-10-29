@@ -24,9 +24,10 @@ updates:
           - '@angular/material-*'
       testing:
         patterns:
-          - 'jasmine*'
-          - 'karma*'
-          - '@types/jasmine'
+          - 'vitest'
+          - 'jsdom'
+          - '@playwright/*'
+          - 'playwright-*'
       eslint:
         patterns:
           - 'eslint'
