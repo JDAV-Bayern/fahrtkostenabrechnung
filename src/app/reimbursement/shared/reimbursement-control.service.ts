@@ -408,6 +408,10 @@ export class ReimbursementControlService {
       return;
     }
 
+    // TODO: Every emission of the meeting time or the food settings rebuilds
+    // the food expenses and resets the selected meals. After a reload the date
+    // inputs emit the restored meeting time again, so the meals are lost.
+    // This should be solved when the form is migrated to signals.
     const expenses = this.reimbursementService.getFoodExpenses(
       { start: time.start, end: time.end },
       isOvernight || false,

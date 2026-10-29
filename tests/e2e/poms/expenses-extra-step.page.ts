@@ -33,6 +33,18 @@ export class ExpensesExtraStepPage extends ReimbursementStepPage {
     return this.page.locator('app-food-expense-card');
   }
 
+  get totalRequiredError(): Locator {
+    return this.page.getByText('Der Erstattungsbetrag darf nicht 0 € betragen');
+  }
+
+  subtotal(label: 'Fahrkosten' | 'Tagegelder' | 'Sachkosten' | 'Summe') {
+    return this.page.locator('p.subtotal').filter({ hasText: label });
+  }
+
+  mealCheckbox(cardIndex: number, meal: Meal): Locator {
+    return this.foodCards.nth(cardIndex).getByLabel(MEAL_LABEL[meal]);
+  }
+
   private materialSection(): Locator {
     return this.page
       .locator('app-expense-list')
@@ -43,15 +55,11 @@ export class ExpensesExtraStepPage extends ReimbursementStepPage {
   }
 
   async enablePerDiem(): Promise<void> {
-    if (await this.enablePerDiemButton.isVisible()) {
-      await this.enablePerDiemButton.click();
-    }
+    await this.enablePerDiemButton.click();
   }
 
   async disablePerDiem(): Promise<void> {
-    if (await this.disablePerDiemButton.isVisible()) {
-      await this.disablePerDiemButton.click();
-    }
+    await this.disablePerDiemButton.click();
   }
 
   async toggleMealAllowance(cardIndex: number, meal: Meal): Promise<void> {
