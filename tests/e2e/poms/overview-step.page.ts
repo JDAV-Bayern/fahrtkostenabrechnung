@@ -26,6 +26,10 @@ export class OverviewStepPage extends ReimbursementStepPage {
     return this.page.locator('.files-list .file-list-entry');
   }
 
+  summaryRow(label: string): Locator {
+    return this.page.locator('table.expenses tr').filter({ hasText: label });
+  }
+
   async downloadPdf(): Promise<Download> {
     const [download] = await Promise.all([
       this.page.waitForEvent('download'),

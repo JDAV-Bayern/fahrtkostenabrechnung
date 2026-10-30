@@ -29,7 +29,7 @@ export class CommitteeStepPage extends ReimbursementStepPage {
   }
 
   async goto(): Promise<void> {
-    await super.goto('/gremium');
+    await super.goto('/fahrtkosten-gremium/reisedaten');
   }
 
   async fillMeetingDetails(details: MeetingDetails): Promise<void> {

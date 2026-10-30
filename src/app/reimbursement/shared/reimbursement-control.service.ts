@@ -200,6 +200,14 @@ export class ReimbursementControlService {
     const storedData = localStorage.getItem(LOCAL_STORAGE_KEY_REIMBURSEMENT);
     const settingsData = localStorage.getItem(LOCAL_STORAGE_KEY_SETTINGS);
 
+    // restore the settings first and without events: the change handler
+    // regenerates the food expenses, which would discard the stored meals, and
+    // saves the form, which would overwrite the stored data before it is read
+    if (settingsData) {
+      const settingsValue = JSON.parse(settingsData);
+      this.foodSettings.patchValue(settingsValue, { emitEvent: false });
+    }
+
     if (storedData) {
       // parse JSON from local storage
       const storedValue = JSON.parse(storedData, (key, value) =>
@@ -216,11 +224,6 @@ export class ReimbursementControlService {
 
       // mark controls with values as touched
       deepMarkAsDirty(this.form);
-    }
-
-    if (settingsData) {
-      const settingsValue = JSON.parse(settingsData);
-      this.foodSettings.patchValue(settingsValue);
     }
   }
 
@@ -406,6 +409,10 @@ export class ReimbursementControlService {
       return;
     }
 
+    // TODO: Every emission of the meeting time or the food settings rebuilds
+    // the food expenses and resets the selected meals. After a reload the date
+    // inputs emit the restored meeting time again, so the meals are lost.
+    // This should be solved when the form is migrated to signals.
     const expenses = this.reimbursementService.getFoodExpenses(
       { start: time.start, end: time.end },
       isOvernight || false,
