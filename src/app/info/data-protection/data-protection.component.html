@@ -1,17 +1,25 @@
 <h1>Datenschutzerklärung</h1>
 <p>
-  Was Du vor Dir siehst ist eine statische Website, die keine personenbezogenen
-  Daten aus den folgenden Eingabefeldern an irgendweche Server übermittelt. Das
-  Erstellen der Abrechnung und der resultierenden PDF passiert vollstänig lokal
-  auf deinem Rechner. Es werden nicht einmal Cookies verwendet, sondern
-  lediglich der Local Storage, der nicht mit jedem Request an den Server
-  geschickt wird.
+  Was Du vor Dir siehst ist eine Website, bei der die Fahrtkostenformulare keine
+  personenbezogenen Daten aus den Eingabefeldern an irgendwelche Server
+  übermitteln. Das Erstellen der Abrechnung und der resultierenden PDF passiert
+  vollständig lokal auf deinem Rechner. Es werden nicht einmal Cookies
+  verwendet, sondern lediglich der Local Storage, der nicht mit jedem Request an
+  den Server geschickt wird.
+</p>
+<p>
+  Anders ist es, wenn Du dich optional mit deinem Konto der JDAV Bayern
+  anmeldest (z.B. für "Meine Kurse", Feedback oder den Adminbereich). Dann
+  werden die dafür nötigen Daten (Anmeldung, E-Mail-Adresse, Profildaten und
+  deine Kursteilnahmen) zwischen deinem Browser, unserem Backend und dem
+  Login-Dienst der JDAV Bayern ausgetauscht. Beide werden bei unserem Hoster
+  (Hetzner) betrieben.
 </p>
 <p>
   Natürlich werden trotzdem die berühmt-berüchtigten Telemetriedaten
-  (Stichwörter "IP-Adresse", "Logfiles", etc.) bei unserem Hosting Provider
-  (GitHub Pages) erhoben, deshalb folgt hier eine Datenschutzerklärung die diese
-  Fälle abdeckt.
+  (Stichwörter "IP-Adresse", "Logfiles", etc.) beim Betrieb der Website
+  verarbeitet, deshalb folgt hier eine Datenschutzerklärung die diese Fälle
+  abdeckt.
 </p>
 <p>
   Siehe auch
@@ -24,21 +32,17 @@
 
 <h2>Hosting</h2>
 <p>
-  Unser Hoster erhebt in sog. Logfiles folgende Daten, die Ihr Browser
-  übermittelt:
+  Beim Aufruf unserer Website erfasst unser Reverse Proxy (Traefik) in sog.
+  Zugriffslogs folgende Daten, die Ihr Browser übermittelt:
 </p>
 <ul class="pl-8 list-disc">
   <li>IP-Adresse</li>
-  <li>Die Adresse der vorher besuchten Website (Referer Anfrage-Header)</li>
   <li>Datum und Uhrzeit der Anfrage</li>
-  <li>Zeitzonendifferenz zur Greenwich Mean Time</li>
-  <li>Inhalt der Anforderung</li>
+  <li>Angeforderte Adresse (URL) und HTTP-Methode</li>
   <li>HTTP-Statuscode</li>
   <li>Übertragene Datenmenge</li>
-  <li>
-    Website, von der die Anforderung kommt und Informationen zu Browser und
-    Betriebssystem
-  </li>
+  <li>Informationen zu Browser und Betriebssystem (User-Agent)</li>
+  <li>Die Adresse der vorher besuchten Website (Referer Anfrage-Header)</li>
 </ul>
 <p>
   Das ist erforderlich, um unsere Website anzuzeigen und die Stabilität und
@@ -46,35 +50,43 @@
   Sinne des Art. 6 Abs. 1 S. 1 lit. f DSGVO.
 </p>
 <p>
-  Es erfolgt kein Tracking und wir haben auf diese Daten keinen direkten
-  Zugriff, sondern erhalten lediglich eine anonymisierte, statistische
-  Zusammenfassung. Diese beinhaltet die Adresse der vorher besuchten Seite, die
-  Häufigkeit der jeweils aufgerufenen Seiten und die Anzahl eindeutiger
-  Besucher. Diese Daten führen wir nicht mit anderen Daten zusammen.
+  Es erfolgt kein Tracking und wir führen diese Daten nicht mit anderen Daten
+  zusammen.
 </p>
 <p>
-  Wir setzen für die Zurverfügungstellung unserer Website folgenden Hoster ein:
+  Die Website und das Backend werden auf von uns betriebenen virtuellen Servern
+  in Rechenzentren in Deutschland betrieben. Wir setzen dafür folgenden Hoster
+  ein:
 </p>
 <p style="padding-left: 2rem">
-  GitHub Inc.<br />
-  88 Colin P Kelly Jr St<br />
-  San Francisco, CA 94107<br />
-  United States<br />
+  Hetzner Online GmbH<br />
+  Industriestr. 25<br />
+  91710 Gunzenhausen<br />
+  Deutschland<br />
 </p>
 <p>
-  Dieser ist Empfänger Ihrer personenbezogenen Daten. Dies entspricht unserem
-  berechtigten Interesse im Sinne des Art. 6 Abs. 1 S. 1 lit. f DSGVO, selbst
-  keinen Server in unseren Räumlichkeiten vorhalten zu müssen. Serverstandort
-  ist USA.
+  Mit dem Hoster besteht ein Vertrag zur Auftragsverarbeitung nach Art. 28
+  DSGVO. Die Nutzung eines Hosters entspricht unserem berechtigten Interesse im
+  Sinne des Art. 6 Abs. 1 S. 1 lit. f DSGVO, selbst keinen Server in unseren
+  Räumlichkeiten vorhalten zu müssen. Von der JDAV Bayern erstellte
+  Datenbank-Sicherungen werden zusätzlich im Hetzner Object Storage gespeichert.
 </p>
 <p>
-  Weitere Informationen zu Widerspruchs- und Beseitigungsmöglichkeiten gegenüber
-  GitHub finden Sie unter:
-  <a
-    href="https://docs.github.com/en/free-pro-team@latest/github/site-policy/github-privacy-statement#github-pages"
-    target="_blank"
-  >
-    https://docs.github.com/en/free-pro-team&#64;latest/github/site-policy/github-privacy-statement#github-pages
+  Weitere Informationen zum Datenschutz beim Hoster finden Sie unter:
+  <a href="https://www.hetzner.com/legal/privacy-policy/" target="_blank">
+    https://www.hetzner.com/legal/privacy-policy/
+  </a>
+</p>
+
+<h2>Monitoring</h2>
+<p>
+  Zur Überwachung der Stabilität und Sicherheit leiten wir die Logs unserer
+  Anwendungen (inkl. der oben genannten Zugriffslogs) sowie technische
+  Kennzahlen der Server an Grafana Cloud (Grafana Labs) weiter. Dies entspricht
+  unserem berechtigten Interesse im Sinne des Art. 6 Abs. 1 S. 1 lit. f DSGVO,
+  Störungen und Missbrauch zu erkennen. Weitere Informationen finden Sie unter:
+  <a href="https://grafana.com/legal/privacy-policy/" target="_blank">
+    https://grafana.com/legal/privacy-policy/
   </a>
 </p>
 <p>
@@ -86,18 +98,5 @@
   Die Verarbeitung der unter diesem Abschnitt angegebenen Daten ist weder
   gesetzlich noch vertraglich vorgeschrieben. Die Funktionsfähigkeit der Website
   ist ohne die Verarbeitung nicht gewährleistet.
-</p>
-<p>
-  GitHub hat Compliance-Maßnahmen für internationale Datenübermittlungen
-  umgesetzt. Diese gelten für alle weltweiten Aktivitäten, bei denen GitHub
-  personenbezogene Daten von natürlichen Personen in der EU verarbeitet. Diese
-  Maßnahmen basieren auf den EU-Standardvertragsklauseln (SCCs). Weitere
-  Informationen finden Sie unter:
-  <a
-    href="https://docs.github.com/en/free-pro-team@latest/github/site-policy/github-data-protection-addendum#attachment-1–the-standard-contractual-clauses-processors"
-    target="_blank"
-  >
-    https://docs.github.com/en/free-pro-team&#64;latest/github/site-policy/github-data-protection-addendum#attachment-1–the-standard-contractual-clauses-processors
-  </a>
 </p>
 <p>Die aktuell laufende Version ist v{{ version }} - {{ environment }}.</p>
