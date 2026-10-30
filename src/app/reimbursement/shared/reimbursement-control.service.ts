@@ -200,11 +200,12 @@ export class ReimbursementControlService {
     const storedData = localStorage.getItem(LOCAL_STORAGE_KEY_REIMBURSEMENT);
     const settingsData = localStorage.getItem(LOCAL_STORAGE_KEY_SETTINGS);
 
-    // restore the settings first: changing them regenerates the food expenses,
-    // which would otherwise discard the stored meals
+    // restore the settings first and without events: the change handler
+    // regenerates the food expenses, which would discard the stored meals, and
+    // saves the form, which would overwrite the stored data before it is read
     if (settingsData) {
       const settingsValue = JSON.parse(settingsData);
-      this.foodSettings.patchValue(settingsValue);
+      this.foodSettings.patchValue(settingsValue, { emitEvent: false });
     }
 
     if (storedData) {

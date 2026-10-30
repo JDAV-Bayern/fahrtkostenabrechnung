@@ -557,6 +557,15 @@ describe('ReimbursementControlService', () => {
       expect(restored.participantStep.controls.givenName.touched).toBe(true);
     });
 
+    it('should not overwrite the stored form before restoring it', () => {
+      localStorage.setItem(STORAGE_KEY, '{invalid');
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify({ isEnabled: true }));
+
+      TestBed.resetTestingModule();
+      expect(() => createService()).toThrow();
+      expect(localStorage.getItem(STORAGE_KEY)).toBe('{invalid');
+    });
+
     it('should not restore attached files', () => {
       service.participantStep.controls.givenName.setValue('Max');
       service.overviewStep.controls.files.setValue([new File(['x'], 'a.pdf')]);
