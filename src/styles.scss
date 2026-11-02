@@ -31,6 +31,13 @@
   --bg-gray: #f3f4f6;
 }
 
+// SurveyJS: use the JDAV brand color and font instead of the default teal theme
+.sd-root-modern {
+  --sjs2-color-project-brand-600: var(--color-primary);
+  --sjs2-color-utility-surface-survey: transparent;
+  --sjs2-typography-font-family-text: 'Titillium Web';
+}
+
 html {
   @include mat.theme(
     (
