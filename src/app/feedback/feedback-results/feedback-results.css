@@ -39,21 +39,23 @@
   width: calc(50% - 6px);
   height: calc(100% - 8px);
   border-radius: 999px;
-  background: #ffffff;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  background: #2563eb;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
   transition: transform 0.2s ease;
 }
 .chart-toggle-thumb.right {
   transform: translateX(calc(100% + 8px));
 }
 .chart-toggle-icon {
+  position: relative;
+  z-index: 1;
   font-size: 20px;
   color: #6b7280;
   transition: color 0.2s ease;
   text-align: center;
 }
 .chart-toggle-icon.active {
-  color: #2563eb;
+  color: #ffffff;
 }
 .histogram-bar {
   min-height: 4px;
