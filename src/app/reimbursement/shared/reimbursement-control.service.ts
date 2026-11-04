@@ -409,25 +409,39 @@ export class ReimbursementControlService {
       return;
     }
 
-    // TODO: Every emission of the meeting time or the food settings rebuilds
-    // the food expenses and resets the selected meals. After a reload the date
-    // inputs emit the restored meeting time again, so the meals are lost.
-    // This should be solved when the form is migrated to signals.
     const expenses = this.reimbursementService.getFoodExpenses(
       { start: time.start, end: time.end },
       isOvernight || false,
     );
-    const controls = expenses.map((expense) =>
-      this.formBuilder.control(expense),
-    );
 
-    this.foodExpenses.clear();
-    this.foodExpenses.push(controls);
+    // the date inputs re-emit an unchanged meeting time (e.g. after the stored
+    // form was restored), so keep the selected meals if nothing changed
+    if (!this.foodExpensesMatch(expenses)) {
+      const controls = expenses.map((expense) =>
+        this.formBuilder.control(expense),
+      );
+
+      this.foodExpenses.clear();
+      this.foodExpenses.push(controls);
+    }
 
     if (this.foodSettings.controls.isEnabled.value) {
       this.foodExpenses.enable();
     } else {
       this.foodExpenses.disable();
     }
+  }
+
+  private foodExpensesMatch(expenses: FoodExpense[]): boolean {
+    const current = this.foodExpenses.getRawValue();
+
+    return (
+      current.length === expenses.length &&
+      current.every(
+        (value, i) =>
+          new Date(value.date).getTime() === expenses[i].date.getTime() &&
+          value.absence === expenses[i].absence,
+      )
+    );
   }
 }

@@ -230,10 +230,6 @@ test.describe('Committee reimbursement workflow', () => {
     await expect(committeeStepPage.nextButton).toBeDisabled();
   });
 
-  // Known bug: the date inputs emit the restored meeting time again after a
-  // reload, which rebuilds the food expenses and resets the selected meals
-  // (see ReimbursementControlService.updateFoodExpenses).
-  // Remove `test.fail()` once fixed.
   test('keeps the selected meals after a reload', async ({
     page,
     committeeStepPage,
@@ -241,8 +237,6 @@ test.describe('Committee reimbursement workflow', () => {
     expensesStepPage,
     expensesExtraStepPage,
   }) => {
-    test.fail();
-
     await fillMeetingStep(committeeStepPage);
     await committeeStepPage.continue();
     await fillParticipantStep(participantStepPage);
@@ -265,18 +259,12 @@ test.describe('Committee reimbursement workflow', () => {
     );
   });
 
-  // Known bug: the expenses extra step is OnPush and reads the food form
-  // without signals, so it is only re-rendered when a total changes. Without
-  // transport costs it keeps showing "unter 8 Stunden" and offers no per diem,
-  // and the participant cannot continue. Remove `test.fail()` once fixed.
   test('offers per diem without any transport expenses', async ({
     committeeStepPage,
     participantStepPage,
     expensesStepPage,
     expensesExtraStepPage,
   }) => {
-    test.fail();
-
     await fillMeetingStep(committeeStepPage);
     await committeeStepPage.continue();
     await fillParticipantStep(participantStepPage);

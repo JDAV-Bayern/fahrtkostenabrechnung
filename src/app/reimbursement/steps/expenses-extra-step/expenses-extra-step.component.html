@@ -3,8 +3,8 @@
     <div>
       <div class="heading">
         <h2 class="typography">Tagegelder</h2>
-        @if (foodForm.length > 0) {
-          @if (foodForm.disabled) {
+        @if (foodControls().length > 0) {
+          @if (!foodEnabled()) {
             <button
               jdavButton
               type="button"
@@ -27,19 +27,19 @@
           }
         }
       </div>
-      @if (foodForm.length === 0) {
+      @if (foodControls().length === 0) {
         <p class="typography">
           Für diese Reise können keine Tagegelder beantragt werden, da die Dauer
           der Abwesenheit unter 8 Stunden betrug.
         </p>
-      } @else if (foodForm.enabled) {
+      } @else if (foodEnabled()) {
         <p class="typography">
           Bitte wähle aus, welche Mahlzeiten du kostenlos erhalten hast. Die
           angegebene Verpflegungspauschale wird um diese gekürzt.
         </p>
         <fieldset formArrayName="food">
           <div>
-            @for (control of foodForm.controls; track control) {
+            @for (control of foodControls(); track control) {
               <app-food-expense-card
                 [formControl]="control"
               ></app-food-expense-card>

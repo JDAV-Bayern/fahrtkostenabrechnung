@@ -57,6 +57,13 @@ export class ExpensesExtraStepComponent {
     return this.foodForm.enabled;
   });
 
+  // the food form is read through signals as well, since the component is
+  // only re-rendered when a signal changes
+  readonly foodControls = computed(() => {
+    this.expensesChanged();
+    return [...this.foodForm.controls];
+  });
+
   readonly foodTotal = computed(() => this.report().categories.food ?? 0);
 
   readonly materialTotal = computed(
