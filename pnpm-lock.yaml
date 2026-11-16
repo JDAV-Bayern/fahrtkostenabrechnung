@@ -133,11 +133,11 @@ importers:
         specifier: ^22.1.4
         version: 22.1.4(@angular-devkit/architect@0.2202.7(chokidar@5.0.0))(@angular-devkit/core@22.2.7(chokidar@5.0.0))(@angular-devkit/schematics@22.2.7(chokidar@5.0.0))
       prettier:
-        specifier: ^3.9.10
-        version: 3.9.10
+        specifier: ^3.10.1
+        version: 3.10.1
       prettier-plugin-organize-imports:
         specifier: ^4.3.0
-        version: 4.3.0(prettier@3.9.10)(typescript@6.0.3)
+        version: 4.3.0(prettier@3.10.1)(typescript@6.0.3)
       typescript:
         specifier: ~6.0.3
         version: 6.0.3
@@ -3299,8 +3299,8 @@ packages:
       vue-tsc:
         optional: true
 
-  prettier@3.9.10:
-    resolution: {integrity: sha512-skGHTH1Yb9QvaTC4hWnRTzEYtCpApF0UMBPz+t/0ZPzP8ihefo/btKd+QA7pUE0fEwA1SbS/NmhyEcstdXOIdA==}
+  prettier@3.10.1:
+    resolution: {integrity: sha512-70vp3ZUYoPlFbF9uiTdXHUUCGEIp7d4+6p+8DYbkm2jP7x/3i/paXVF6dopSI3zd/CEitrZN1rc4i85xWmmXlg==}
     engines: {node: '>=14'}
     hasBin: true
 
@@ -7168,12 +7168,12 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-organize-imports@4.3.0(prettier@3.9.10)(typescript@6.0.3):
+  prettier-plugin-organize-imports@4.3.0(prettier@3.10.1)(typescript@6.0.3):
     dependencies:
-      prettier: 3.9.10
+      prettier: 3.10.1
       typescript: 6.0.3
 
-  prettier@3.9.10: {}
+  prettier@3.10.1: {}
 
   printj@1.1.2: {}
 
