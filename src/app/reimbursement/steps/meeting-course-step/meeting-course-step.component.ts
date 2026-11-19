@@ -1,55 +1,45 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ReactiveFormsModule } from '@angular/forms';
+import { Component, effect, inject, OnInit, untracked } from '@angular/core';
+import { FormField } from '@angular/forms/signals';
 import { ActivatedRoute } from '@angular/router';
-import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
+import { ReimbursementFormService } from 'src/app/reimbursement/shared/reimbursement-form.service';
 
 @Component({
   selector: 'app-meeting-course-step',
   templateUrl: './meeting-course-step.component.html',
-  imports: [ReactiveFormsModule],
+  imports: [FormField],
 })
 export class MeetingCourseStepComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
-  private readonly controlService = inject(ReimbursementControlService);
+  private readonly formService = inject(ReimbursementFormService);
 
-  form = this.controlService.meetingStep;
+  form = this.formService.form.meeting;
 
   constructor() {
-    this.code?.valueChanges
-      .pipe(takeUntilDestroyed())
-      .subscribe((value) => this.onCodeInput(value));
-  }
-
-  ngOnInit() {
-    this.form.controls.type.setValue('course');
-
-    this.route.queryParamMap.subscribe((params) => {
-      if (params.has('nummer') || params.has('name')) {
-        this.form.patchValue({
-          code: params.get('nummer') || '',
-          name: params.get('name') || '',
-        });
-      }
+    effect(() => {
+      const code = this.form.code().value();
+      untracked(() => this.onCodeInput(code));
     });
   }
 
-  get code() {
-    return this.form.controls.code;
-  }
+  ngOnInit() {
+    this.form.type().value.set('course');
 
-  get name() {
-    return this.form.controls.name;
+    this.route.queryParamMap.subscribe((params) => {
+      if (params.has('nummer') || params.has('name')) {
+        this.form.code().value.set(params.get('nummer') || '');
+        this.form.name().value.set(params.get('name') || '');
+      }
+    });
   }
 
   onCodeInput(value: string) {
     const upperCase = value.toUpperCase();
     if (value !== upperCase) {
-      this.code?.setValue(upperCase);
+      this.form.code().value.set(upperCase);
     }
 
     if (value === 'LJV') {
-      this.name?.setValue('Landesjugendversammlung');
+      this.form.name().value.set('Landesjugendversammlung');
     }
   }
 }

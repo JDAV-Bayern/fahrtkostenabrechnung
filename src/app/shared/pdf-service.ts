@@ -7,19 +7,19 @@ import {
   Injectable,
 } from '@angular/core';
 import { PdfViewComponent } from '../reimbursement/pdf-view/pdf-view.component';
-import { ReimbursementControlService } from '../reimbursement/shared/reimbursement-control.service';
+import { ReimbursementFormService } from '../reimbursement/shared/reimbursement-form.service';
 import { FinishedDialogComponent } from '../reimbursement/steps/overview-step/finished-dialog/finished-dialog.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PdfService {
-  private readonly controlService = inject(ReimbursementControlService);
+  private readonly formService = inject(ReimbursementFormService);
   private readonly dialog = inject(Dialog);
   private readonly appRef = inject(ApplicationRef);
 
   private get reimbursement() {
-    return this.controlService.getReimbursement();
+    return this.formService.reimbursement();
   }
 
   async renderPdf() {
@@ -49,7 +49,7 @@ export class PdfService {
   }
 
   private async processPdf(): Promise<void> {
-    const files = this.controlService.overviewStep.controls.files.value;
+    const files = this.formService.files();
     const htmlElement = document.getElementById('jdav-pdf-content');
 
     if (!htmlElement) {

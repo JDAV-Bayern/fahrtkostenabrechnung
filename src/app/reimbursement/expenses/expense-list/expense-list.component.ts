@@ -1,21 +1,7 @@
 import { Dialog, DialogModule, DialogRef } from '@angular/cdk/dialog';
 import { CdkDrag, CdkDragDrop, CdkDropList } from '@angular/cdk/drag-drop';
-import {
-  Component,
-  DestroyRef,
-  inject,
-  input,
-  OnInit,
-  signal,
-} from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {
-  FormArray,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { startWith } from 'rxjs';
+import { Component, computed, inject, input } from '@angular/core';
+import { FieldTree } from '@angular/forms/signals';
 import { Button } from 'src/app/shared/ui/button';
 import { Expense } from 'src/domain/expense.model';
 import {
@@ -32,7 +18,6 @@ import { TransportExpenseCard } from '../transport-expense-card/transport-expens
   styleUrls: ['./expense-list.component.css'],
   imports: [
     Button,
-    ReactiveFormsModule,
     DialogModule,
     CdkDrag,
     CdkDropList,
@@ -40,57 +25,75 @@ import { TransportExpenseCard } from '../transport-expense-card/transport-expens
     MaterialExpenseCard,
   ],
 })
-export class ExpenseListComponent<T extends Expense> implements OnInit {
+export class ExpenseListComponent<T extends Expense> {
   private readonly dialog = inject(Dialog);
-  private readonly destroyRef = inject(DestroyRef);
 
   readonly type = input.required<T['type']>();
-  readonly form = input.required<FormArray<FormControl<T>>>();
+  readonly field = input.required<FieldTree<T[]>>();
   readonly dialogData = input<ExpenseExtraData<T>>();
   readonly enterPredicate = input<
     (drag: CdkDrag, drop: CdkDropList) => boolean
   >(() => true);
 
-  readonly controls = signal<FormControl<T>[]>([]);
-
-  parent!: FormGroup;
-
-  ngOnInit() {
-    this.parent = this.form().parent as FormGroup;
-    this.form()
-      .valueChanges.pipe(startWith(null), takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.controls.set([...this.form().controls]));
-  }
+  readonly expenses = computed(() => this.field()().value());
 
   openCreateDialog() {
-    const control = new FormControl({} as T, { nonNullable: true });
-    this.openEditDialog(control).closed.subscribe(() => {
-      if (control?.valid) {
-        this.form().push(control);
+    this.openDialog().closed.subscribe((expense) => {
+      if (expense) {
+        this.field()().value.update((list) => [...list, expense]);
       }
     });
   }
 
-  openEditDialog(control: FormControl<T>): DialogRef<never> {
-    return this.dialog.open<never, ExpenseDialogData<T>>(
-      ExpenseModalComponent<T>,
-      {
-        data: {
-          type: this.type(),
-          control: control,
-          extra: this.dialogData(),
-        },
-      },
+  openEditDialog(original: T) {
+    this.openDialog(original).closed.subscribe((expense) => {
+      if (expense) {
+        this.field()().value.update((list) =>
+          list.map((item) => (item === original ? expense : item)),
+        );
+      }
+    });
+  }
+
+  deleteExpense(expense: T) {
+    this.field()().value.update((list) =>
+      list.filter((item) => item !== expense),
     );
   }
 
-  deleteExpense(index: number) {
-    this.form().removeAt(index);
+  drop(event: CdkDragDrop<FieldTree<T[]>>) {
+    const source = event.previousContainer.data;
+    const target = event.container.data;
+    const expense = source().value()[event.previousIndex];
+
+    if (event.previousContainer === event.container) {
+      target().value.update((list) => {
+        const moved = list.filter((_, i) => i !== event.previousIndex);
+        moved.splice(event.currentIndex, 0, expense);
+        return moved;
+      });
+      return;
+    }
+
+    source().value.update((list) =>
+      list.filter((_, i) => i !== event.previousIndex),
+    );
+    target().value.update((list) => {
+      const inserted = [...list];
+      inserted.splice(event.currentIndex, 0, expense);
+      return inserted;
+    });
   }
 
-  drop(event: CdkDragDrop<FormArray<FormControl<T>>>) {
-    const target = event.previousContainer.data.at(event.previousIndex);
-    event.previousContainer.data.removeAt(event.previousIndex);
-    event.container.data.insert(event.currentIndex, target);
+  private openDialog(expense?: T): DialogRef<T> {
+    const data = {
+      type: this.type(),
+      expense,
+      extra: this.dialogData(),
+    } as ExpenseDialogData;
+
+    return this.dialog.open<T, ExpenseDialogData>(ExpenseModalComponent, {
+      data,
+    });
   }
 }

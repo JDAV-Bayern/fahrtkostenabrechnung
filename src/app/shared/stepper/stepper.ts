@@ -2,14 +2,14 @@ import { CdkStep, CdkStepper, CdkStepperModule } from '@angular/cdk/stepper';
 import { NgTemplateOutlet } from '@angular/common';
 import {
   Component,
+  computed,
   contentChild,
   inject,
   signal,
   TemplateRef,
 } from '@angular/core';
-import { AbstractControl } from '@angular/forms';
+import { isFieldTree } from '@angular/forms/signals';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { Button } from '../ui/button';
 
 @Component({
@@ -24,13 +24,14 @@ export class JdavStepper extends CdkStepper {
 
   readonly submitButton = contentChild<TemplateRef<unknown>>('submitButton');
 
-  // Signal mirror of the selected step's control validity. The app runs
-  // zoneless, so programmatic form changes (e.g. disabling controls in a
-  // valueChanges subscription) don't trigger change detection. Reading the
-  // validity through a signal that follows the control's statusChanges keeps
-  // the Weiter/submit button's disabled state in sync.
-  readonly selectedStepInvalid = signal(false);
-  private stepStatusSub?: Subscription;
+  // The selected step as a signal, so the validity of its control (a signal
+  // forms field) can be read in computations and templates.
+  private readonly selectedStep = signal<CdkStep | undefined>(undefined);
+
+  readonly selectedStepInvalid = computed(() => {
+    const control = this.selectedStep()?.stepControl;
+    return isFieldTree(control) ? control().invalid() : false;
+  });
 
   constructor() {
     super();
@@ -38,7 +39,7 @@ export class JdavStepper extends CdkStepper {
     // update route param when the selected step changes
     this.selectionChange.subscribe((event) => {
       this.navigateToStep(event.selectedStep);
-      this.watchSelectedStep(event.selectedStep);
+      this.selectedStep.set(event.selectedStep);
     });
   }
 
@@ -66,24 +67,8 @@ export class JdavStepper extends CdkStepper {
       }
 
       this.selectedIndex = selected.index();
-      this.watchSelectedStep(this.selected);
+      this.selectedStep.set(this.selected);
     });
-  }
-
-  // Track the selected step's control validity in a signal so the button's
-  // disabled binding updates under zoneless change detection.
-  private watchSelectedStep(step: CdkStep | undefined) {
-    this.stepStatusSub?.unsubscribe();
-
-    const control = step?.stepControl;
-    const abstractControl =
-      control instanceof AbstractControl ? control : undefined;
-
-    this.selectedStepInvalid.set(abstractControl?.invalid ?? false);
-
-    this.stepStatusSub = abstractControl?.statusChanges.subscribe(() =>
-      this.selectedStepInvalid.set(abstractControl.invalid),
-    );
   }
 
   private navigateToStep(step: CdkStep) {
@@ -95,10 +80,9 @@ export class JdavStepper extends CdkStepper {
   private anyControlsInvalidOrPending(step: CdkStep): boolean {
     if (this.linear) {
       const control = step.stepControl;
-      const isIncomplete =
-        control instanceof AbstractControl
-          ? control.invalid || control.pending
-          : !step.completed;
+      const isIncomplete = isFieldTree(control)
+        ? control().invalid() || control().pending()
+        : !step.completed;
       return isIncomplete && !step.optional && !step._completedOverride();
     }
 

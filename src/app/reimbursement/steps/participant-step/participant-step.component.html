@@ -1,4 +1,4 @@
-<fieldset [formGroup]="form">
+<fieldset>
   <div class="typography">
     <h1>Angaben zu Dir</h1>
 
@@ -14,11 +14,10 @@
     <input
       type="text"
       id="givenName"
-      formControlName="givenName"
+      [formField]="form.givenName"
       class="form-control"
-      required
     />
-    @if (givenName.hasError('required') && givenName.touched) {
+    @if (form.givenName().getError('required') && form.givenName().touched()) {
       <div class="error-message">Bitte gib deinen Vornamen ein.</div>
     }
   </div>
@@ -27,11 +26,12 @@
     <input
       type="text"
       id="familyName"
-      formControlName="familyName"
+      [formField]="form.familyName"
       class="form-control"
-      required
     />
-    @if (familyName.hasError('required') && familyName.touched) {
+    @if (
+      form.familyName().getError('required') && form.familyName().touched()
+    ) {
       <div class="error-message">Bitte gib deinen Nachnamen ein.</div>
     }
   </div>
@@ -42,8 +42,7 @@
       type="text"
       id="section"
       class="form-control"
-      formControlName="sectionId"
-      required
+      [formField]="form.sectionId"
       [matAutocomplete]="auto"
       (input)="filter()"
       (focus)="filter()"
@@ -63,7 +62,7 @@
         </mat-optgroup>
       }
     </mat-autocomplete>
-    @if (sectionId.hasError('required') && sectionId.touched) {
+    @if (form.sectionId().getError('required') && form.sectionId().touched()) {
       <div class="error-message">Bitte gib deine Sektion ein.</div>
     }
   </div>
@@ -75,27 +74,20 @@
       type="text"
       id="zipCode"
       (change)="plzChanged()"
-      formControlName="zipCode"
+      [formField]="form.zipCode"
       class="form-control"
-      required
     />
-    @if (zipCode.hasError('required') && zipCode.touched) {
+    @if (form.zipCode().getError('required') && form.zipCode().touched()) {
       <div class="error-message">Bitte gib deine Postleitzahl ein.</div>
     }
-    @if (zipCode.hasError('pattern') && zipCode.touched) {
+    @if (form.zipCode().getError('pattern') && form.zipCode().touched()) {
       <div class="error-message">Bitte gib eine gültige Postleitzahl ein.</div>
     }
   </div>
   <div class="form-group">
     <label for="city">Ort</label>
-    <input
-      type="text"
-      id="city"
-      formControlName="city"
-      class="form-control"
-      required
-    />
-    @if (city.hasError('required') && city.touched) {
+    <input type="text" id="city" [formField]="form.city" class="form-control" />
+    @if (form.city().getError('required') && form.city().touched()) {
       <div class="error-message">Bitte gib deinen Wohnort ein.</div>
     }
   </div>
@@ -103,36 +95,28 @@
   <h2 class="typography">Kontodaten</h2>
   <div class="form-group">
     <label for="iban">IBAN</label>
-    <input
-      type="text"
-      class="form-control"
-      formControlName="iban"
-      id="iban"
-      (input)="ibanChanged()"
-      required
-    />
-    @if (iban.hasError('required') && iban.touched) {
+    <input type="text" class="form-control" [formField]="form.iban" id="iban" />
+    @if (form.iban().getError('required') && form.iban().touched()) {
       <div class="error-message">Bitte gib deine IBAN ein.</div>
     }
-    @if (iban.hasError('ibanInvalid') && iban.touched) {
+    @if (form.iban().getError('ibanInvalid') && form.iban().touched()) {
       <div class="error-message">Bitte gib eine gültige IBAN ein.</div>
     }
   </div>
-  @if (bic.enabled) {
+  @if (!form.bic().hidden()) {
     <div class="form-group">
       <label for="bic">BIC</label>
       <input
         type="text"
         class="form-control"
-        formControlName="bic"
+        [formField]="form.bic"
         id="bic"
         onchange="this.value = this.value.toUpperCase()"
-        required
       />
-      @if (bic.hasError('required') && bic.touched) {
+      @if (form.bic().getError('required') && form.bic().touched()) {
         <div class="error-message">Bitte gib deine BIC ein.</div>
       }
-      @if (bic.hasError('pattern') && bic.touched) {
+      @if (form.bic().getError('pattern') && form.bic().touched()) {
         <div class="error-message">Bitte gib eine gültige BIC ein.</div>
       }
     </div>

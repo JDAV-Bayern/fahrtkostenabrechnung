@@ -1,9 +1,10 @@
-<form [formGroup]="form" (ngSubmit)="submitForm()" class="model-content">
+<form [formRoot]="form" (submit)="submitForm()" class="model-content">
+  @let mode = form.mode().value();
   <h2 class="typography">
-    {{ mode.value ? (mode.value | transportMode) : 'Fahrtkosten' }} erfassen
+    {{ mode ? (mode | transportMode) : 'Fahrtkosten' }} erfassen
   </h2>
 
-  @if (mode.invalid) {
+  @if (form.mode().invalid()) {
     <div class="means-of-travel-buttons-container">
       @for (modeOption of allowedModes(); track modeOption) {
         <button
@@ -38,11 +39,10 @@
       <input
         type="text"
         id="origin"
-        formControlName="origin"
+        [formField]="form.origin"
         class="form-control"
-        required
       />
-      @if (origin.hasError('required') && origin.touched) {
+      @if (form.origin().getError('required') && form.origin().touched()) {
         <div class="error-message">Bitte gib einen Startort ein.</div>
       }
     </div>
@@ -52,54 +52,56 @@
       <input
         type="text"
         id="destination"
-        formControlName="destination"
+        [formField]="form.destination"
         class="form-control"
-        required
       />
-      @if (destination.hasError('required') && destination.touched) {
+      @if (
+        form.destination().getError('required') && form.destination().touched()
+      ) {
         <div class="error-message">Bitte gib einen Zielort ein.</div>
       }
     </div>
 
     <!-- car and bike expenses -->
-    @if (distance.enabled) {
+    @if (!form.distance().hidden()) {
       <div class="form-group">
         <label for="distance">Strecke (km)</label>
         <input
           type="number"
           class="form-control"
-          formControlName="distance"
+          [formField]="form.distance"
           id="distance"
           placeholder="Strecke in Kilometern"
         />
-        @if (distance.hasError('required') && distance.touched) {
+        @if (
+          form.distance().getError('required') && form.distance().touched()
+        ) {
           <div class="error-message">Bitte gib die Distanz ein.</div>
         }
-        @if (distance.hasError('min')) {
+        @if (form.distance().getError('min')) {
           <div class="error-message">Bitte gib eine gültige Distanz ein.</div>
         }
       </div>
     }
 
     <!-- public transport expenses -->
-    @if (ticket.enabled) {
-      <fieldset [formGroup]="ticket">
+    @if (!form.ticket().hidden()) {
+      <fieldset>
         <div class="form-group">
           <label for="price">Ticketpreis (ermäßigt)</label>
           <input
             type="number"
             id="price"
-            formControlName="price"
+            [formField]="form.ticket.price"
             class="form-control"
-            required
           />
           @if (
-            ticket.controls.price.hasError('required') &&
-            ticket.controls.price.touched
+            form.ticket.price().getError('required') &&
+            form.ticket.price().touched()
           ) {
             <div class="error-message">Bitte gib einen Preis ein.</div>
           }
-          @if (ticket.controls.price.hasError('min')) {
+          @if (form.ticket.price().getError('min')) {
             <div class="error-message">Bitte gib einen gültigen Preis ein.</div>
           }
         </div>
@@ -108,17 +110,16 @@
           <label for="discount">BahnCard</label>
           <select
             id="discount"
-            formControlName="discount"
+            [formField]="form.ticket.discount"
             class="form-control"
-            required
           >
             <option value="none">Keine BahnCard</option>
             <option value="BC25">BahnCard 25</option>
             <option value="BC50">BahnCard 50</option>
           </select>
           @if (
-            ticket.controls.discount.hasError('required') &&
-            ticket.controls.discount.touched
+            form.ticket.discount().getError('required') &&
+            form.ticket.discount().touched()
           ) {
             <div class="error-message">Bitte wähle deine BahnCard aus.</div>
           }
@@ -127,23 +128,22 @@
     }
 
     <!-- car expenses -->
-    @if (carTrip.enabled) {
-      <fieldset [formGroup]="carTrip">
+    @if (!form.carTrip().hidden()) {
+      <fieldset>
         <div class="form-group">
           <label for="engineType">Auto Typ</label>
           <select
             id="engineType"
-            formControlName="engineType"
+            [formField]="form.carTrip.engineType"
             class="form-control"
-            required
           >
             <option value="combustion">Verbrenner</option>
             <option value="plug-in-hybrid">Plug-in Hybrid</option>
             <option value="electric">Elektro</option>
           </select>
           @if (
-            carTrip.controls.engineType.hasError('required') &&
-            carTrip.controls.engineType.touched
+            form.carTrip.engineType().getError('required') &&
+            form.carTrip.engineType().touched()
           ) {
             <div class="error-message">
               Bitte wähle den Typ deines Autos aus.
@@ -160,11 +160,8 @@
               Teilstrecke als einzelne Auslage an.
             </p>
 
-            @for (
-              passenger of carTrip.controls.passengers.controls;
-              track passenger
-            ) {
-              <div class="passengers-item" formArrayName="passengers">
+            @for (passenger of form.carTrip.passengers; track $index) {
+              <div class="passengers-item">
                 <button
                   jdavButton
                   type="button"
@@ -177,9 +174,11 @@
                   #passengerInput
                   aria-label="Mitfahrer*in"
                   class="form-control not-filled"
-                  [formControl]="passenger"
+                  [formField]="passenger"
                 />
-                @if (passenger.hasError('required') && passenger.touched) {
+                @if (
+                  passenger().getError('required') && passenger().touched()
+                ) {
                   <span class="error-message">
                     Bitte gib einen Namen für deine*n Mitfahrer*in an
                   </span>
@@ -202,7 +201,7 @@
     }
 
     <div class="button-container">
-      <button jdavButton type="submit" [disabled]="!form.valid">
+      <button jdavButton type="submit" [disabled]="form().invalid()">
         Speichern
       </button>
     </div>

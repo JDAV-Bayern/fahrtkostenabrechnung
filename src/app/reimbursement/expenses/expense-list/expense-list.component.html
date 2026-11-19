@@ -1,26 +1,25 @@
-<fieldset [formGroup]="parent">
+<fieldset>
   <ng-content></ng-content>
   <div
     cdkDropList
-    [cdkDropListData]="form()"
+    [cdkDropListData]="field()"
     [cdkDropListEnterPredicate]="enterPredicate()"
   >
-    <!-- TODO: readd [formArrayName]="form" -->
-    @for (control of controls(); track control) {
-      <div cdkDrag [cdkDragData]="control" (cdkDragDropped)="drop($event)">
-        @switch (control.value.type) {
+    @for (expense of expenses(); track expense) {
+      <div cdkDrag [cdkDragData]="expense" (cdkDragDropped)="drop($event)">
+        @switch (expense.type) {
           @case ('transport') {
             <jdav-transport-expense-card
-              [expense]="control.value"
-              (editRow)="openEditDialog(control)"
-              (deleteRow)="deleteExpense($index)"
+              [expense]="expense"
+              (editRow)="openEditDialog(expense)"
+              (deleteRow)="deleteExpense(expense)"
             />
           }
           @case ('material') {
             <jdav-material-expense-card
-              [expense]="control.value"
-              (editRow)="openEditDialog(control)"
-              (deleteRow)="deleteExpense($index)"
+              [expense]="expense"
+              (editRow)="openEditDialog(expense)"
+              (deleteRow)="deleteExpense(expense)"
             />
           }
         }

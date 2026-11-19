@@ -1,15 +1,17 @@
 import {
   Component,
+  effect,
   ElementRef,
   inject,
   OnInit,
+  untracked,
   viewChild,
 } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormField } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
 import { PlzService } from 'src/app/core/plz.service';
 import { SectionService } from 'src/app/core/section.service';
-import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
+import { ReimbursementFormService } from 'src/app/reimbursement/shared/reimbursement-form.service';
 
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { JdavState } from 'src/domain/section.model';
@@ -18,19 +20,32 @@ import { JdavState } from 'src/domain/section.model';
   selector: 'app-participant-step',
   templateUrl: './participant-step.component.html',
   styleUrls: ['./participant-step.component.css'],
-  imports: [RouterLink, ReactiveFormsModule, MatAutocompleteModule],
+  imports: [RouterLink, FormField, MatAutocompleteModule],
 })
 export class ParticipantStepComponent implements OnInit {
   private readonly plzService = inject(PlzService);
   private readonly sectionService = inject(SectionService);
-  private readonly controlService = inject(ReimbursementControlService);
+  private readonly formService = inject(ReimbursementFormService);
 
   readonly sectionInput =
     viewChild.required<ElementRef<HTMLInputElement>>('sectionInput');
 
-  form = this.controlService.participantStep;
+  form = this.formService.form.participant;
   states: JdavState[] = [];
   filteredStates: JdavState[] = [];
+
+  constructor() {
+    // Format the IBAN as it is typed. This is not done in an input handler:
+    // the form field updates its value in its own input listener, which may run
+    // after the one of the template.
+    effect(() => {
+      const iban = this.form.iban().value();
+      const formatted = this.formatIban(iban);
+      if (formatted !== iban) {
+        untracked(() => this.form.iban().value.set(formatted));
+      }
+    });
+  }
 
   ngOnInit() {
     // load section autocompletions
@@ -55,34 +70,6 @@ export class ParticipantStepComponent implements OnInit {
     this.filteredStates = this.states.slice();
   }
 
-  get givenName() {
-    return this.form.controls.givenName;
-  }
-
-  get familyName() {
-    return this.form.controls.familyName;
-  }
-
-  get sectionId() {
-    return this.form.controls.sectionId;
-  }
-
-  get zipCode() {
-    return this.form.controls.zipCode;
-  }
-
-  get city() {
-    return this.form.controls.city;
-  }
-
-  get iban() {
-    return this.form.controls.iban;
-  }
-
-  get bic() {
-    return this.form.controls.bic;
-  }
-
   filter() {
     const filterValue = this.sectionInput().nativeElement.value.toLowerCase();
     const filteredStates = this.states.map((state) => ({
@@ -102,21 +89,20 @@ export class ParticipantStepComponent implements OnInit {
   }
 
   plzChanged() {
-    const plz = this.zipCode.value;
+    const plz = this.form.zipCode().value();
     const results = this.plzService.search(plz);
     if (results.length === 1) {
-      const city = results[0].city;
-      this.form.patchValue({ city });
+      this.form.city().value.set(results[0].city);
     }
   }
-  ibanChanged() {
-    const iban = this.iban.value;
-    const formatted =
+
+  private formatIban(iban: string) {
+    return (
       iban
         .toUpperCase()
         .replace(/\s/g, '')
         .match(/.{1,4}/g)
-        ?.join(' ') || '';
-    this.form.patchValue({ iban: formatted });
+        ?.join(' ') || ''
+    );
   }
 }

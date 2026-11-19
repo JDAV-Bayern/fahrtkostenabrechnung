@@ -1,14 +1,14 @@
 @switch (data.type) {
   @case ('transport') {
     <app-transport-expense-modal
-      [formControl]="data.control"
+      [expense]="data.expense"
       [allowedModes]="data.extra?.allowedModes"
       [completion]="data.extra?.completion"
     ></app-transport-expense-modal>
   }
   @case ('material') {
     <app-material-expense-modal
-      [formControl]="data.control"
+      [expense]="data.expense"
     ></app-material-expense-modal>
   }
 }
