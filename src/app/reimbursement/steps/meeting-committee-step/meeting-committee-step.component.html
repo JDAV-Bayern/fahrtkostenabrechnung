@@ -42,15 +42,15 @@
     <app-form-datetime
       legend="Beginn der Reise"
       [formControl]="start"
-      [max]="end.value || now"
+      [maxDate]="end.value || now"
       [comparisonStart]="start.value"
       [comparisonEnd]="end.value"
     ></app-form-datetime>
     <app-form-datetime
       legend="Ende der Reise"
       [formControl]="end"
-      [min]="start.value"
-      [max]="now"
+      [minDate]="start.value"
+      [maxDate]="now"
       [comparisonStart]="start.value"
       [comparisonEnd]="end.value"
     ></app-form-datetime>

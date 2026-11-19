@@ -50,8 +50,9 @@ export class FormDatetimeComponent
 {
   private readonly platform = inject(Platform);
 
-  readonly min = input<Date | null>(null);
-  readonly max = input<Date | null>(null);
+  // not named min/max: signal forms reserve those names for control bindings
+  readonly minDate = input<Date | null>(null);
+  readonly maxDate = input<Date | null>(null);
   readonly comparisonStart = input<Date | null>(null);
   readonly comparisonEnd = input<Date | null>(null);
   readonly legend = input<string>();
