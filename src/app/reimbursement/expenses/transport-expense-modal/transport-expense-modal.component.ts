@@ -1,201 +1,116 @@
 import { DialogRef } from '@angular/cdk/dialog';
 import {
+  afterNextRender,
   Component,
   ElementRef,
   inject,
+  Injector,
   input,
   OnInit,
+  signal,
   viewChildren,
 } from '@angular/core';
 import {
-  ControlValueAccessor,
-  FormControl,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  NonNullableFormBuilder,
-  ReactiveFormsModule,
-  Validator,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
-import { TransportExpenseCompletion } from 'src/app/reimbursement/shared/reimbursement-control.service';
-import { Button } from 'src/app/shared/ui/button';
+  applyEach,
+  form,
+  FormField,
+  FormRoot,
+  hidden,
+  min,
+  required,
+} from '@angular/forms/signals';
 import {
-  Discount,
-  EngineType,
-  TransportExpense,
-  TransportMode,
-} from 'src/domain/expense.model';
+  buildTransportExpense,
+  draftFromTransportExpense,
+  emptyTransportDraft,
+} from 'src/app/reimbursement/shared/expense-draft';
+import { TransportExpenseCompletion } from 'src/app/reimbursement/shared/reimbursement-form.service';
+import { Button } from 'src/app/shared/ui/button';
+import { TransportExpense, TransportMode } from 'src/domain/expense.model';
 import { TransportModePipe } from '../shared/transport-mode.pipe';
 
 @Component({
   selector: 'app-transport-expense-modal',
   templateUrl: './transport-expense-modal.component.html',
   styleUrls: ['./transport-expense-modal.component.css'],
-  imports: [Button, ReactiveFormsModule, TransportModePipe],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: TransportExpenseModalComponent,
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: TransportExpenseModalComponent,
-      multi: true,
-    },
-  ],
+  imports: [Button, FormField, FormRoot, TransportModePipe],
 })
-export class TransportExpenseModalComponent
-  implements ControlValueAccessor, Validator, OnInit
-{
-  private readonly formBuilder = inject(NonNullableFormBuilder);
-  private readonly dialogRef = inject(DialogRef);
+export class TransportExpenseModalComponent implements OnInit {
+  private readonly dialogRef = inject<DialogRef<TransportExpense>>(DialogRef);
+  private readonly injector = inject(Injector);
 
-  allowedModes = input<TransportMode[]>();
-  completion = input<TransportExpenseCompletion>();
+  /** The expense to edit, a new expense is created without it. */
+  readonly expense = input<TransportExpense>();
+  readonly allowedModes = input<TransportMode[]>();
+  readonly completion = input<TransportExpenseCompletion>();
 
   passengerInputs =
     viewChildren<ElementRef<HTMLInputElement>>('passengerInput');
 
-  form = this.formBuilder.group({
-    mode: new FormControl<TransportMode | null>(null, Validators.required),
-    origin: ['', Validators.required],
-    destination: ['', Validators.required],
-    distance: [0, [Validators.required, Validators.min(0)]],
-    carTrip: this.formBuilder.group({
-      engineType: ['combustion' as EngineType, Validators.required],
-      passengers: this.formBuilder.array<string>([]),
-    }),
-    ticket: this.formBuilder.group({
-      price: [0, [Validators.required, Validators.min(0)]],
-      discount: ['none' as Discount, Validators.required],
-    }),
+  private readonly draft = signal(emptyTransportDraft());
+
+  // Only the fields of the selected mode are part of the form.
+  form = form(this.draft, (p) => {
+    required(p.mode);
+    required(p.origin);
+    required(p.destination);
+
+    hidden(p.distance, {
+      when: ({ valueOf }) => !['car', 'bike'].includes(valueOf(p.mode) ?? ''),
+    });
+    required(p.distance);
+    min(p.distance, 0);
+
+    hidden(p.ticket, { when: ({ valueOf }) => valueOf(p.mode) !== 'public' });
+    required(p.ticket.price);
+    min(p.ticket.price, 0);
+    required(p.ticket.discount);
+
+    hidden(p.carTrip, { when: ({ valueOf }) => valueOf(p.mode) !== 'car' });
+    required(p.carTrip.engineType);
+    applyEach(p.carTrip.passengers, (passenger) => required(passenger));
   });
 
-  onChange: (val: TransportExpense) => void = () => {};
-  onTouched: () => void = () => {};
-
   ngOnInit() {
-    this.form.controls.mode.valueChanges.subscribe((val) =>
-      this.onTransportModeChanged(val),
-    );
-  }
-
-  get mode() {
-    return this.form.controls.mode;
-  }
-
-  get origin() {
-    return this.form.controls.origin;
-  }
-
-  get destination() {
-    return this.form.controls.destination;
-  }
-
-  get distance() {
-    return this.form.controls.distance;
-  }
-
-  get ticket() {
-    return this.form.controls.ticket;
-  }
-
-  get carTrip() {
-    return this.form.controls.carTrip;
-  }
-
-  writeValue(val: Partial<TransportExpense>): void {
-    if (val) {
-      if ('carTrip' in val) {
-        val.carTrip?.passengers?.forEach(() => this.addPassenger());
-      }
-      this.form.patchValue(val, { emitEvent: false });
+    const expense = this.expense();
+    if (expense) {
+      this.draft.set(draftFromTransportExpense(expense));
     }
   }
-
-  registerOnChange(fn: (val: TransportExpense) => void): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    if (isDisabled) {
-      this.form.disable({ emitEvent: false });
-    } else {
-      this.enableControls(this.mode.value);
-    }
-  }
-
-  validate: ValidatorFn = () => {
-    return this.form.valid ? null : { transportExpense: true };
-  };
 
   chooseExpense(mode: TransportMode) {
-    this.mode.setValue(mode);
+    this.form.mode().value.set(mode);
+
+    const completion = this.completion();
+    if (!completion) return;
+
+    if (completion.origin) this.form.origin().value.set(completion.origin);
+    if (completion.engineType)
+      this.form.carTrip.engineType().value.set(completion.engineType);
+    if (completion.discount)
+      this.form.ticket.discount().value.set(completion.discount);
   }
 
   addPassenger() {
-    const control = this.formBuilder.control('', Validators.required);
-    this.carTrip.controls.passengers.push(control);
+    this.form.carTrip.passengers().value.update((list) => [...list, '']);
 
-    setTimeout(() => {
-      const inputs = this.passengerInputs();
-      inputs[inputs.length - 1].nativeElement.focus();
-    });
+    // focus the new input once it is rendered
+    afterNextRender(
+      () => {
+        const inputs = this.passengerInputs();
+        inputs[inputs.length - 1]?.nativeElement.focus();
+      },
+      { injector: this.injector },
+    );
   }
 
   removePassenger(index: number) {
-    this.carTrip.controls.passengers.removeAt(index);
+    this.form.carTrip
+      .passengers()
+      .value.update((list) => list.filter((_, i) => i !== index));
   }
 
   submitForm() {
-    this.onChange({
-      type: 'transport',
-      ...this.form.value,
-    } as TransportExpense);
-    this.dialogRef.close();
-  }
-
-  private enableControls(mode: TransportMode | null) {
-    // TODO: Is it fine to avoid emitting events here?
-    // It might break the form state, but if we emit events other things break
-    this.form.enable({ emitEvent: false });
-
-    switch (mode) {
-      case 'car':
-        this.form.controls.ticket.disable();
-        break;
-      case 'public':
-        this.form.controls.distance.disable();
-        this.form.controls.carTrip.disable();
-        break;
-      case 'plan':
-        this.form.controls.distance.disable();
-        this.form.controls.carTrip.disable();
-        this.form.controls.ticket.disable();
-        break;
-      case 'bike':
-        this.form.controls.carTrip.disable();
-        this.form.controls.ticket.disable();
-        break;
-    }
-  }
-
-  private onTransportModeChanged(value: TransportMode | null) {
-    this.enableControls(value);
-    const completion = this.completion();
-
-    if (!completion) return;
-
-    if (completion.origin) this.origin.setValue(completion.origin);
-    if (completion.engineType)
-      this.carTrip.controls.engineType.setValue(completion.engineType);
-    if (completion.discount)
-      this.ticket.controls.discount.setValue(completion.discount);
+    this.dialogRef.close(buildTransportExpense(this.draft()));
   }
 }

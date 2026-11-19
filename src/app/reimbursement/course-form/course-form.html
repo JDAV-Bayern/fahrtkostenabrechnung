@@ -1,18 +1,15 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<form [formRoot]="form" (submit)="onSubmit()">
   <jdav-stepper linear>
-    <cdk-step label="kurs" [stepControl]="form.controls.meeting">
+    <cdk-step label="kurs" [stepControl]="form.meeting">
       <app-meeting-course-step></app-meeting-course-step>
     </cdk-step>
-    <cdk-step label="teilnehmer_in" [stepControl]="form.controls.participant">
+    <cdk-step label="teilnehmer_in" [stepControl]="form.participant">
       <app-participant-step></app-participant-step>
     </cdk-step>
-    <cdk-step
-      label="auslagen"
-      [stepControl]="form.controls.expenses.controls.transport"
-    >
+    <cdk-step label="auslagen" [stepControl]="form.expenses.transport">
       <app-expenses-step></app-expenses-step>
     </cdk-step>
-    <cdk-step label="auslagen-sonstiges" [stepControl]="expensesExtraStepGuard">
+    <cdk-step label="auslagen-sonstiges" [stepControl]="form.expenses">
       <app-expenses-extra-step [showFood]="false">
         <div materialDescription class="typography">
           <h3>Parkgebühren</h3>
@@ -47,7 +44,7 @@
       <button
         jdavButton
         type="submit"
-        [disabled]="isRenderingPdf() || form.invalid"
+        [disabled]="isRenderingPdf() || form().invalid()"
       >
         @if (isRenderingPdf()) {
           <app-progress-indicator></app-progress-indicator>

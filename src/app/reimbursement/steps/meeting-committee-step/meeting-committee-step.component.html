@@ -1,4 +1,4 @@
-<fieldset [formGroup]="form">
+<fieldset>
   <div class="typography">
     <h1>Angaben zur Reise</h1>
     <p>
@@ -15,11 +15,10 @@
     <input
       type="text"
       id="purpose"
-      formControlName="name"
+      [formField]="form.name"
       class="form-control"
-      required
     />
-    @if (name.hasError('required') && name.touched) {
+    @if (form.name().getError('required') && form.name().touched()) {
       <div class="error-message">Bitte gib den Zweck deiner Reise an.</div>
     }
   </div>
@@ -29,46 +28,45 @@
     <input
       type="text"
       id="location"
-      formControlName="location"
+      [formField]="form.location"
       class="form-control"
-      required
     />
-    @if (location.hasError('required') && location.touched) {
+    @if (form.location().getError('required') && form.location().touched()) {
       <div class="error-message">Bitte gib den Zielort deiner Reise an.</div>
     }
   </div>
 
-  <fieldset [formGroup]="time">
+  <fieldset>
     <app-form-datetime
       legend="Beginn der Reise"
-      [formControl]="start"
-      [max]="end.value || now"
-      [comparisonStart]="start.value"
-      [comparisonEnd]="end.value"
+      [formField]="form.time.start"
+      [maxDate]="form.time.end().value() || now"
+      [comparisonStart]="form.time.start().value()"
+      [comparisonEnd]="form.time.end().value()"
     ></app-form-datetime>
     <app-form-datetime
       legend="Ende der Reise"
-      [formControl]="end"
-      [min]="start.value"
-      [max]="now"
-      [comparisonStart]="start.value"
-      [comparisonEnd]="end.value"
+      [formField]="form.time.end"
+      [minDate]="form.time.start().value()"
+      [maxDate]="now"
+      [comparisonStart]="form.time.start().value()"
+      [comparisonEnd]="form.time.end().value()"
     ></app-form-datetime>
 
-    @if (time.hasError('dateRangeOrder')) {
+    @if (form.time().getError('dateRangeOrder')) {
       <div class="error-message">
         Das Ende der Reise darf nicht vor dem Start liegen.
       </div>
     }
-    @if (time.hasError('dateRangePast')) {
+    @if (form.time().getError('dateRangePast')) {
       <div class="error-message">
         Die Reise muss bereits vollständig abgeschlossen sein.
       </div>
     }
 
-    @if (overnight.enabled) {
+    @if (!overnight().hidden()) {
       <div class="form-checkbox">
-        <input type="checkbox" id="overnight" [formControl]="overnight" />
+        <input type="checkbox" id="overnight" [formField]="overnight" />
         <label for="overnight">Mit Übernachtung</label>
       </div>
     }

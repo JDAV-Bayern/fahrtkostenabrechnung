@@ -1,15 +1,15 @@
-<fieldset [formGroup]="parentForm">
+<fieldset>
   @if (showFood()) {
     <div>
       <div class="heading">
         <h2 class="typography">Tagegelder</h2>
-        @if (foodControls().length > 0) {
+        @if (foodCount() > 0) {
           @if (!foodEnabled()) {
             <button
               jdavButton
               type="button"
               class="jdav-btn icon"
-              (click)="isFoodEnabled.setValue(true)"
+              (click)="foodSettings.isEnabled().value.set(true)"
             >
               <span class="material-symbols-outlined">restaurant</span>
               Tagegelder abrechnen
@@ -19,7 +19,7 @@
               jdavButton
               type="button"
               variant="outline"
-              (click)="isFoodEnabled.setValue(false)"
+              (click)="foodSettings.isEnabled().value.set(false)"
             >
               <span class="material-symbols-outlined">delete</span>
               Tagegelder entfernen
@@ -27,7 +27,7 @@
           }
         }
       </div>
-      @if (foodControls().length === 0) {
+      @if (foodCount() === 0) {
         <p class="typography">
           Für diese Reise können keine Tagegelder beantragt werden, da die Dauer
           der Abwesenheit unter 8 Stunden betrug.
@@ -37,12 +37,10 @@
           Bitte wähle aus, welche Mahlzeiten du kostenlos erhalten hast. Die
           angegebene Verpflegungspauschale wird um diese gekürzt.
         </p>
-        <fieldset formArrayName="food">
+        <fieldset>
           <div>
-            @for (control of foodControls(); track control) {
-              <app-food-expense-card
-                [formControl]="control"
-              ></app-food-expense-card>
+            @for (food of form.food; track food) {
+              <app-food-expense-card [field]="food"></app-food-expense-card>
             }
           </div>
         </fieldset>
@@ -51,11 +49,7 @@
   }
 
   <div>
-    <app-expense-list
-      type="material"
-      [form]="materialForm"
-      formArrayName="material"
-    >
+    <app-expense-list type="material" [field]="form.material">
       <h2 class="typography">Sonstige Auslagen</h2>
       <ng-content select="[materialDescription]"></ng-content>
     </app-expense-list>
@@ -80,7 +74,7 @@
     <span>{{ total() | currency }}</span>
   </p>
 
-  @if (stepGuard.hasError('totalRequired')) {
+  @if (form().getError('totalRequired')) {
     <div class="error-message">
       Der Erstattungsbetrag darf nicht 0 € betragen. Bitte gib mindestens eine
       Auslage mit einem Betrag größer als 0 € an.
