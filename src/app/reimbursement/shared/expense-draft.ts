@@ -63,18 +63,17 @@ export function draftFromTransportExpense(
 export function buildTransportExpense(
   draft: TransportExpenseDraft,
 ): TransportExpense {
-  const base = {
-    type: 'transport',
-    origin: draft.origin,
-    destination: draft.destination,
-  } as const;
+  // the order of the keys ends up in the generated PDF, keep it stable
+  const { origin, destination } = draft;
   const distance = draft.distance ?? 0;
 
   switch (draft.mode) {
     case 'car':
       return {
-        ...base,
+        type: 'transport',
         mode: 'car',
+        origin,
+        destination,
         distance,
         carTrip: {
           engineType: draft.carTrip.engineType,
@@ -82,18 +81,20 @@ export function buildTransportExpense(
         },
       };
     case 'bike':
-      return { ...base, mode: 'bike', distance };
+      return { type: 'transport', mode: 'bike', origin, destination, distance };
     case 'public':
       return {
-        ...base,
+        type: 'transport',
         mode: 'public',
+        origin,
+        destination,
         ticket: {
-          discount: draft.ticket.discount,
           price: draft.ticket.price ?? 0,
+          discount: draft.ticket.discount,
         },
       };
     case 'plan':
-      return { ...base, mode: 'plan' };
+      return { type: 'transport', mode: 'plan', origin, destination };
     default:
       throw new Error('A transport expense needs a mode');
   }
