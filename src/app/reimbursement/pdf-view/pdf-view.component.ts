@@ -60,6 +60,7 @@ export class PdfViewComponent implements OnInit {
 
   onLogoLoaded() {
     // the logo loads after the view, so we can render the PDF only after that
+    // (also if loading fails, so the PDF is created without the logo)
     this.fullyRendered.emit();
   }
 }

@@ -1,4 +1,4 @@
-import { fitImage } from './image-processing';
+import { fitImage, preprocessImage } from './image-processing';
 
 describe('fitImage', () => {
   it('should not scale or rotate an image that already fits', () => {
@@ -51,5 +51,27 @@ describe('fitImage', () => {
     expect(
       fitImage({ width: 1000, height: 1000 }, { width: 500, height: 800 }),
     ).toEqual({ scale: 0.5, rotate: false });
+  });
+});
+
+describe('preprocessImage', () => {
+  it('should reject if the image cannot be loaded', async () => {
+    const img = {} as HTMLImageElement;
+    const createElement = document.createElement.bind(document);
+    vi.spyOn(document, 'createElement').mockImplementation((tag: string) =>
+      tag === 'img' ? img : createElement(tag),
+    );
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:test');
+    const revoke = vi
+      .spyOn(URL, 'revokeObjectURL')
+      .mockImplementation(() => {});
+
+    const result = preprocessImage(new Blob(['not an image']), 1920);
+    img.onerror?.(new Event('error'));
+
+    await expect(result).rejects.toThrow('Failed to load image');
+    expect(revoke).toHaveBeenCalledWith('blob:test');
+
+    vi.restoreAllMocks();
   });
 });

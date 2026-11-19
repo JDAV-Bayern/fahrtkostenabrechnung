@@ -13,10 +13,17 @@ export interface ImageSize {
  */
 export function preprocessImage(image: Blob, maxSize: number): Promise<Blob> {
   const img = document.createElement('img');
-  img.src = URL.createObjectURL(image);
+  const url = URL.createObjectURL(image);
 
   return new Promise((resolve, reject) => {
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error('Failed to load image'));
+    };
+
     img.onload = () => {
+      URL.revokeObjectURL(url);
+
       const scale = Math.min(maxSize / img.width, maxSize / img.height, 1);
 
       const canvas = document.createElement('canvas');
@@ -25,17 +32,21 @@ export function preprocessImage(image: Blob, maxSize: number): Promise<Blob> {
 
       const ctx = canvas.getContext('2d');
       if (!ctx) {
-        throw new Error('Failed to get canvas context');
+        reject(new Error('Failed to get canvas context'));
+        return;
       }
 
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
       canvas.toBlob(
-        (blob) => (blob ? resolve(blob) : reject('Failed to resize image')),
+        (blob) =>
+          blob ? resolve(blob) : reject(new Error('Failed to resize image')),
         'image/jpeg',
         0.95,
       );
     };
+
+    img.src = url;
   });
 }
 
