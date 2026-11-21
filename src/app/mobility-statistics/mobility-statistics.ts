@@ -32,6 +32,9 @@ const TRANSPORT_LABELS: Record<string, string> = {
   'pkw-fahrg': 'Mitfahrer*in in Fahrgemeinschaft',
 };
 
+// Car-pool passengers add no km (the driver reports them), so they only appear in the car occupancy.
+const CARPOOL_PASSENGER = 'pkw-fahrg';
+
 function labelFor(mode: string): string {
   const key = mode.toLowerCase();
   return TRANSPORT_LABELS[key] ?? mode.charAt(0).toUpperCase() + mode.slice(1);
@@ -104,7 +107,7 @@ export class MobilityStatistics {
     const data = this.mobilityData();
     if (!data) return [];
 
-    const entries = this.allModes().map((mode) => [
+    const entries = this.kmModes().map((mode) => [
       mode,
       data.total_per_mean_of_transport[mode] ?? 0,
     ]) as [string, number][];
@@ -170,7 +173,7 @@ export class MobilityStatistics {
     const data = this.mobilityData();
     if (!data) return [];
 
-    const entries = this.allModes().map((mode) => [
+    const entries = this.kmModes().map((mode) => [
       mode,
       data.total_per_mean_of_transport[mode] ?? 0,
     ]) as [string, number][];
@@ -183,15 +186,6 @@ export class MobilityStatistics {
       widthPct: (count / max) * 100,
       color: this.colorForMode(mode),
     }));
-  });
-
-  topTransport = computed(() => {
-    const data = this.mobilityData();
-    if (!data) return null;
-    const entries = Object.entries(data.total_per_mean_of_transport);
-    if (!entries.length) return null;
-    const [mode, count] = entries.sort(([, a], [, b]) => b - a)[0];
-    return { label: labelFor(mode), count };
   });
 
   totalTransportKm = computed(() => {
@@ -241,6 +235,10 @@ export class MobilityStatistics {
     return [...allKnownModes, ...unknownModes];
   });
 
+  kmModes = computed(() =>
+    this.allModes().filter((mode) => mode !== CARPOOL_PASSENGER),
+  );
+
   labelFor(mode: string): string {
     return labelFor(mode);
   }
@@ -260,7 +258,7 @@ export class MobilityStatistics {
   }
 
   courseModesTotal(course: CourseMobilityStatisticsDTO): number {
-    return this.allModes().reduce(
+    return this.kmModes().reduce(
       (sum, mode) => sum + this.courseCount(course, mode),
       0,
     );
@@ -286,7 +284,7 @@ export class MobilityStatistics {
       ...data.all_records.map((r) => [
         r.course_id,
         labelFor(r.mean_of_transport),
-        r.distance,
+        r.distance ?? '',
       ]),
     ]);
     ws1['!cols'] = [{ wch: 24 }, { wch: 22 }, { wch: 14 }];
@@ -296,9 +294,15 @@ export class MobilityStatistics {
     XLSX.utils.book_append_sheet(wb, ws1, 'Alle Fahrten');
 
     // Sheet 2: Per-course summary
-    const modes = this.allModes();
+    const modes = this.kmModes();
     const ws2 = XLSX.utils.aoa_to_sheet([
-      ['Kurs-ID', 'Kursname', 'Gesamt', ...modes.map(labelFor)],
+      [
+        'Kurs-ID',
+        'Kursname',
+        'Gesamt (km)',
+        'Ø Personen pro Auto',
+        ...modes.map((m) => `${labelFor(m)} (km)`),
+      ],
       ...data.courses.map((c) => [
         c.course_id,
         c.course_name,
@@ -306,16 +310,18 @@ export class MobilityStatistics {
           (sum, value) => sum + (value ?? 0),
           0,
         ),
+        c.average_car_occupancy ?? '',
         ...modes.map((m) => c.total_per_mean_of_transport[m] ?? 0),
       ]),
     ]);
     ws2['!cols'] = [
       { wch: 24 },
       { wch: 36 },
-      { wch: 10 },
-      ...modes.map(() => ({ wch: 16 })),
+      { wch: 12 },
+      { wch: 20 },
+      ...modes.map(() => ({ wch: 20 })),
     ];
-    for (let c = 0; c < 3 + modes.length; c++) {
+    for (let c = 0; c < 4 + modes.length; c++) {
       const addr = XLSX.utils.encode_cell({ r: 0, c });
       if (ws2[addr]) ws2[addr].s = headerStyle;
     }

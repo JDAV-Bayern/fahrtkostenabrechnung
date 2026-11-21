@@ -47,7 +47,8 @@ export interface FeedbackAccessTokenDTO {
 export interface SingleMobilityRecordDTO {
   course_id: string;
   mean_of_transport: string;
-  distance: number;
+  /** null for car-pool passengers, whose km are reported by the driver */
+  distance: number | null;
   excuse: string | null;
 }
 
@@ -55,13 +56,21 @@ export interface CourseMobilityStatisticsDTO {
   course_id: string;
   course_name: string;
   total_mobility_records: number;
+  /** km per mean of transport, without car-pool passengers */
   total_per_mean_of_transport: Record<string, number>;
+  count_per_mean_of_transport: Record<string, number>;
+  /** estimated people per car, null if no driver responded */
+  average_car_occupancy: number | null;
 }
 
 export interface MobilityStatisticsDTO {
   total_mobility_records: number;
   total_courses: number;
+  /** km per mean of transport, without car-pool passengers */
   total_per_mean_of_transport: Record<string, number>;
+  count_per_mean_of_transport: Record<string, number>;
+  /** estimated people per car, null if no driver responded */
+  average_car_occupancy: number | null;
   courses: CourseMobilityStatisticsDTO[];
   all_records: SingleMobilityRecordDTO[];
 }
