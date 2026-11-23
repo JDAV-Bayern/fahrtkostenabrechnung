@@ -49,6 +49,9 @@ export class MaterialExpenseModalComponent implements OnInit {
   }
 
   submitForm() {
+    // implicit submission (e.g. Enter key) can bypass the disabled button
+    if (this.form().invalid()) return;
+
     this.dialogRef.close(buildMaterialExpense(this.draft()));
   }
 }
