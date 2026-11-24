@@ -6,6 +6,11 @@
         Auswertung der angegebenen Verkehrsmittel und Distanzen aus allen
         verfügbaren Feedbacks.
       </p>
+      <p class="page-note">
+        Alle Werte beruhen auf freiwilligen Selbstauskünften. Sie sind nur so
+        vollständig und genau, wie Teilnehmende das Feedback ausfüllen und
+        ehrlich antworten.
+      </p>
     </div>
     @if (hasIndividualRecords()) {
       <button
@@ -39,21 +44,17 @@
           <h2 jdavCardTitle>Noch keine Mobilitätsdaten</h2>
         </div>
         <div jdavCardContent>
-          <p>
-            Es wurden bisher keine Datensätze mit Verkehrsmittel und Distanz
-            erfasst.
-          </p>
+          <p>Es wurden bisher keine Datensätze mit Verkehrsmittel erfasst.</p>
         </div>
       </div>
     } @else {
       <section class="kpi-grid">
         <div jdavCard>
           <div jdavCardHeader>
-            <h2 jdavCardTitle>Gesamtfahrten</h2>
+            <h2 jdavCardTitle>Rückmeldungen</h2>
           </div>
           <div jdavCardContent>
             <p class="kpi-value">{{ data.total_mobility_records }}</p>
-            <p class="kpi-caption">Erfasste Mobilitätsangaben</p>
           </div>
         </div>
 
@@ -65,21 +66,6 @@
             <p class="kpi-value">
               {{ totalTransportKm() | number: '1.0-0' }} km
             </p>
-            <p class="kpi-caption">Auf Basis aller Datensätze</p>
-          </div>
-        </div>
-
-        <div jdavCard>
-          <div jdavCardHeader>
-            <h2 jdavCardTitle>Meiste Kilometer</h2>
-          </div>
-          <div jdavCardContent>
-            <p class="kpi-value kpi-value-small">
-              {{ topTransport()?.label || '—' }}
-            </p>
-            <p class="kpi-caption">
-              {{ topTransport()?.count ?? 0 | number: '1.0-0' }} km
-            </p>
           </div>
         </div>
 
@@ -89,7 +75,21 @@
           </div>
           <div jdavCardContent>
             <p class="kpi-value">{{ data.total_courses }}</p>
-            <p class="kpi-caption">Mit Mobilitätsrückmeldungen</p>
+          </div>
+        </div>
+
+        <div jdavCard>
+          <div jdavCardHeader>
+            <h2 jdavCardTitle>Ø Personen pro Auto</h2>
+          </div>
+          <div jdavCardContent>
+            <p class="kpi-value">
+              @if (data.average_car_occupancy !== null) {
+                {{ data.average_car_occupancy | number: '1.2-2' }}
+              } @else {
+                —
+              }
+            </p>
           </div>
         </div>
       </section>
@@ -196,6 +196,11 @@
                   <span class="course-col course-number-data"
                     >Anzahl Rückmeldungen</span
                   >
+                  <span
+                    class="course-col course-occupancy"
+                    title="Geschätzt: (Fahrer*innen + Mitfahrende) / Fahrer*innen"
+                    >Ø pro Auto</span
+                  >
                   <span class="course-col course-breakdown"
                     >Verkehrsmittel</span
                   >
@@ -222,11 +227,21 @@
                       {{ course.total_mobility_records | number: '1.0-0' }}
                     </div>
                     <div
+                      class="course-col course-occupancy"
+                      data-label="Ø Personen pro Auto"
+                    >
+                      @if (course.average_car_occupancy !== null) {
+                        {{ course.average_car_occupancy | number: '1.2-2' }}
+                      } @else {
+                        —
+                      }
+                    </div>
+                    <div
                       class="course-col course-breakdown"
                       data-label="Verkehrsmittel"
                     >
                       <div class="course-stacked-track">
-                        @for (mode of allModes(); track mode) {
+                        @for (mode of kmModes(); track mode) {
                           @if (courseCount(course, mode) > 0) {
                             <span
                               class="course-stacked-segment"
@@ -253,7 +268,7 @@
         <section>
           <div jdavCard class="excuses-card">
             <div jdavCardHeader>
-              <h2 jdavCardTitle>Begründungen für Autofahrt</h2>
+              <h2 jdavCardTitle>Begründungen gegen ÖPNV</h2>
             </div>
             <div jdavCardContent>
               @if (mobilityExcuses().length === 0) {

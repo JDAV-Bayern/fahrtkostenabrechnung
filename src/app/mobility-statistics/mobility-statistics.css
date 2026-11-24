@@ -62,15 +62,12 @@
   color: var(--color-body);
 }
 
-.kpi-value-small {
-  font-size: 1.45rem;
-}
-
+.page-header .page-note,
 .kpi-caption {
   margin: 6px 0 0;
   color: var(--color-body);
   opacity: 0.75;
-  font-size: 0.92rem;
+  font-size: 0.85rem;
 }
 
 .charts-grid {
@@ -203,7 +200,10 @@
 .course-list-header,
 .course-row {
   display: grid;
-  grid-template-columns: 120px minmax(220px, 2fr) 140px 140px minmax(320px, 2fr);
+  grid-template-columns: 120px minmax(220px, 2fr) 120px 120px 110px minmax(
+      280px,
+      2fr
+    );
   gap: 12px;
   align-items: center;
 }
@@ -225,19 +225,10 @@
   color: var(--color-body);
 }
 
-.course-total {
-  font-variant-numeric: tabular-nums;
-  color: var(--color-body);
-  font-weight: 600;
-}
-
-.course-total-km {
-  font-variant-numeric: tabular-nums;
-  color: var(--color-body);
-  font-weight: 600;
-}
-
-.course-number-data {
+.course-total,
+.course-total-km,
+.course-number-data,
+.course-occupancy {
   font-variant-numeric: tabular-nums;
   color: var(--color-body);
   font-weight: 600;
@@ -295,7 +286,10 @@
 
   .course-list-header,
   .course-row {
-    grid-template-columns: 100px minmax(160px, 2fr) 120px minmax(260px, 2fr);
+    grid-template-columns: 100px minmax(140px, 2fr) 100px 100px 90px minmax(
+        200px,
+        2fr
+      );
   }
 }
 
