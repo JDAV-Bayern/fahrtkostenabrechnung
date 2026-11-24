@@ -50,8 +50,9 @@ export class FormDatetimeComponent
 {
   private readonly platform = inject(Platform);
 
-  readonly min = input<Date | null>(null);
-  readonly max = input<Date | null>(null);
+  // not named min/max: signal forms reserve those names for control bindings
+  readonly minDate = input<Date | null>(null);
+  readonly maxDate = input<Date | null>(null);
   readonly comparisonStart = input<Date | null>(null);
   readonly comparisonEnd = input<Date | null>(null);
   readonly legend = input<string>();
@@ -69,7 +70,9 @@ export class FormDatetimeComponent
 
   onDateChangeSub?: Subscription;
   onTimeChangeSub?: Subscription;
+  onStatusChangeSub?: Subscription;
   onTouched: () => void = () => {};
+  onValidatorChange: () => void = () => {};
 
   get date() {
     return this.form.controls.date;
@@ -80,6 +83,13 @@ export class FormDatetimeComponent
   }
 
   ngOnInit() {
+    // The validity depends on the inner controls, not on the value that is
+    // passed on. Tell the form whenever it changes, otherwise signal forms keep
+    // the validity of the first evaluation.
+    this.onStatusChangeSub = this.form.statusChanges.subscribe(() =>
+      this.onValidatorChange(),
+    );
+
     this.onDateChangeSub = this.date.valueChanges.subscribe((date) => {
       let time = this.time.value;
       if (date && time) {
@@ -98,12 +108,14 @@ export class FormDatetimeComponent
   ngOnDestroy() {
     this.onDateChangeSub?.unsubscribe();
     this.onTimeChangeSub?.unsubscribe();
+    this.onStatusChangeSub?.unsubscribe();
   }
 
   writeValue(val: Date | null): void {
     const date = val ? startOfDay(val) : null;
     this.date.setValue(date, { emitEvent: false });
     this.time.setValue(val, { emitEvent: false });
+    this.onValidatorChange();
   }
 
   registerOnChange(fn: (val: Date | null) => void): void {
@@ -115,12 +127,17 @@ export class FormDatetimeComponent
     this.onTouched = fn;
   }
 
+  registerOnValidatorChange(fn: () => void): void {
+    this.onValidatorChange = fn;
+  }
+
   setDisabledState(isDisabled: boolean): void {
     if (isDisabled) {
       this.form.disable({ emitEvent: false });
     } else {
       this.form.enable({ emitEvent: false });
     }
+    this.onValidatorChange();
   }
 
   validate: ValidatorFn = () => {

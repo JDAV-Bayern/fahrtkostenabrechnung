@@ -1,4 +1,4 @@
-<form [formGroup]="form" (ngSubmit)="submitForm()" class="model-content">
+<form [formRoot]="form" (submit)="submitForm()" class="model-content">
   <h2 class="typography">Sachkosten erfassen</h2>
 
   <div class="form-group">
@@ -6,25 +6,24 @@
     <input
       type="text"
       id="date"
-      formControlName="date"
+      [formField]="form.date"
       class="form-control"
-      required
       [max]="now"
       [matDatepicker]="picker"
       (click)="picker.open()"
     />
     <mat-datepicker touchUi #picker></mat-datepicker>
     @if (
-      date.hasError('required') &&
-      !date.hasError('matDatepickerParse') &&
-      date.touched
+      form.date().getError('required') &&
+      !form.date().getError('matDatepickerParse') &&
+      form.date().touched()
     ) {
       <div class="error-message">Bitte gib das Datum dieser Auslage an.</div>
     }
-    @if (date.hasError('matDatepickerParse') && date.touched) {
+    @if (form.date().getError('matDatepickerParse') && form.date().touched()) {
       <div class="error-message">Bitte gib ein gültiges Datum an.</div>
     }
-    @if (date.hasError('matDatepickerMax')) {
+    @if (form.date().getError('matDatepickerMax')) {
       <div class="error-message">
         Das Datum darf nicht in der Zukunft liegen.
       </div>
@@ -36,11 +35,10 @@
     <input
       type="text"
       id="purpose"
-      formControlName="purpose"
+      [formField]="form.purpose"
       class="form-control"
-      required
     />
-    @if (purpose.hasError('required') && purpose.touched) {
+    @if (form.purpose().getError('required') && form.purpose().touched()) {
       <div class="error-message">Bitte gib den Zweck dieser Ausgabe an.</div>
     }
   </div>
@@ -50,19 +48,20 @@
     <input
       type="number"
       id="amount"
-      formControlName="amount"
+      [formField]="form.amount"
       class="form-control"
-      required
     />
-    @if (amount.hasError('required') && amount.touched) {
+    @if (form.amount().getError('required') && form.amount().touched()) {
       <div class="error-message">Bitte gib einen Betrag ein.</div>
     }
-    @if (amount.hasError('min')) {
+    @if (form.amount().getError('min')) {
       <div class="error-message">Bitte gib eine gültigen Betrag ein.</div>
     }
   </div>
 
   <div class="button-container">
-    <button jdavButton type="submit" [disabled]="!form.valid">Speichern</button>
+    <button jdavButton type="submit" [disabled]="form().invalid()">
+      Speichern
+    </button>
   </div>
 </form>

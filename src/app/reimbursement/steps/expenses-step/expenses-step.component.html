@@ -1,24 +1,23 @@
-<fieldset [formGroup]="form">
+<fieldset>
   <div class="typography">
     <h1>Auslagen für Fahrtkosten</h1>
     <p>
       Bitte beachte die richtige Reihenfolge. Du kannst sie per Drag-and-Drop
       anpassen. Informationen zu den Erstattungssätzen findest du
-      <a routerLink="/erstattungssaetze" [queryParams]="queryParams">hier.</a>
+      <a routerLink="/erstattungssaetze" [queryParams]="queryParams()">hier.</a>
     </p>
   </div>
 
   <div cdkDropListGroup>
     <app-expense-list
       type="transport"
-      [form]="inbound"
-      formArrayName="inbound"
-      [dialogData]="getDialogData('inbound')"
-      [enterPredicate]="getPredicateFn('inbound')"
+      [field]="form.inbound"
+      [dialogData]="dialogData.inbound()"
+      [enterPredicate]="enterPredicates.inbound"
     >
       <h3 class="typography">Hinfahrt</h3>
     </app-expense-list>
-    @if (inbound.hasError('transportModeLimited')) {
+    @if (form.inbound().getError('transportModeLimited')) {
       <div class="error-message">
         Du kannst pro Fahrtrichtung maximal eine Auslage für Abotickets angeben.
       </div>
@@ -26,14 +25,13 @@
 
     <app-expense-list
       type="transport"
-      [form]="onsite"
-      formArrayName="onsite"
-      [dialogData]="getDialogData('onsite')"
-      [enterPredicate]="getPredicateFn('onsite')"
+      [field]="form.onsite"
+      [dialogData]="dialogData.onsite()"
+      [enterPredicate]="enterPredicates.onsite"
     >
       <h3 class="typography">Vor Ort</h3>
     </app-expense-list>
-    @if (onsite.hasError('transportModesAllowed')) {
+    @if (form.onsite().getError('transportModesAllowed')) {
       <div class="error-message">
         Vor Ort können keine Fahrradfahrten oder Abotickets abgerechnet werden.
       </div>
@@ -41,10 +39,9 @@
 
     <app-expense-list
       type="transport"
-      [form]="form.controls.outbound"
-      formArrayName="outbound"
-      [dialogData]="getDialogData('outbound')"
-      [enterPredicate]="getPredicateFn('outbound')"
+      [field]="form.outbound"
+      [dialogData]="dialogData.outbound()"
+      [enterPredicate]="enterPredicates.outbound"
     >
       <div class="heading">
         <h3 class="typography">Rückfahrt</h3>
@@ -54,7 +51,7 @@
         </button>
       </div>
     </app-expense-list>
-    @if (outbound.hasError('transportModeLimited')) {
+    @if (form.outbound().getError('transportModeLimited')) {
       <div class="error-message">
         Du kannst pro Fahrtrichtung maximal eine Auslage für Abotickets angeben.
       </div>

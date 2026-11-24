@@ -1,50 +1,22 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { FormField } from '@angular/forms/signals';
 import { RouterLink } from '@angular/router';
-import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
+import { ReimbursementFormService } from 'src/app/reimbursement/shared/reimbursement-form.service';
 import { FormDatetimeComponent } from 'src/app/shared/form-datetime/form-datetime.component';
 
 @Component({
   selector: 'app-meeting-committee-step',
   templateUrl: './meeting-committee-step.component.html',
-  imports: [
-    RouterLink,
-    ReactiveFormsModule,
-    MatAutocompleteModule,
-    FormDatetimeComponent,
-  ],
+  imports: [RouterLink, FormField, FormDatetimeComponent],
 })
 export class MeetingCommitteeStepComponent implements OnInit {
-  private readonly controlService = inject(ReimbursementControlService);
-  form = this.controlService.meetingStep;
+  private readonly formService = inject(ReimbursementFormService);
+
+  form = this.formService.form.meeting;
+  overnight = this.formService.foodSettingsForm.isOvernight;
 
   ngOnInit() {
-    this.form.controls.type.setValue('committee');
-  }
-
-  get name() {
-    return this.form.controls.name;
-  }
-
-  get location() {
-    return this.form.controls.location;
-  }
-
-  get time() {
-    return this.form.controls.time;
-  }
-
-  get start() {
-    return this.time.controls.start;
-  }
-
-  get end() {
-    return this.time.controls.end;
-  }
-
-  get overnight() {
-    return this.controlService.foodSettings.controls.isOvernight;
+    this.form.type().value.set('committee');
   }
 
   get now() {

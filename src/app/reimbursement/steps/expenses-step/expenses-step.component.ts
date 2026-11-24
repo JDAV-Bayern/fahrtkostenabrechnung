@@ -1,10 +1,8 @@
 import { CdkDrag, CdkDropListGroup } from '@angular/cdk/drag-drop';
 import { CurrencyPipe } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
+import { ReimbursementFormService } from 'src/app/reimbursement/shared/reimbursement-form.service';
 import { Button } from 'src/app/shared/ui/button';
 import {
   Direction,
@@ -13,7 +11,6 @@ import {
 } from 'src/domain/expense.model';
 import { ExpenseListComponent } from '../../expenses/expense-list/expense-list.component';
 import { ExpenseExtraData } from '../../expenses/expense-modal/expense-modal.component';
-import { ReimbursementService } from '../../shared/reimbursement.service';
 
 @Component({
   selector: 'app-expenses-step',
@@ -22,70 +19,48 @@ import { ReimbursementService } from '../../shared/reimbursement.service';
   imports: [
     Button,
     RouterLink,
-    ReactiveFormsModule,
     CurrencyPipe,
     CdkDropListGroup,
     ExpenseListComponent,
   ],
 })
 export class ExpensesStepComponent {
-  private readonly reimbursementService = inject(ReimbursementService);
-  private readonly reimbursementControlService = inject(
-    ReimbursementControlService,
-  );
+  private readonly formService = inject(ReimbursementFormService);
 
-  form = this.reimbursementControlService.transportExpensesStep;
+  readonly form = this.formService.form.expenses.transport;
 
-  // expenses form changes (push/removeAt/enable/disable) go through Reactive
-  // Forms, not signals, so mirror them into a signal — otherwise the totals
-  // below wouldn't refresh under zoneless change detection
-  private readonly expensesChanged = toSignal(
-    this.reimbursementControlService.expensesStep.valueChanges,
-    { initialValue: null },
-  );
+  readonly queryParams = computed(() => ({
+    veranstaltung:
+      this.formService.model().meeting.type === 'committee'
+        ? 'gremium'
+        : 'kurs',
+  }));
 
-  private readonly report = computed(() => {
-    this.expensesChanged();
-    const reimbursement = this.reimbursementControlService.getReimbursement();
-    return this.reimbursementService.getReport(reimbursement);
-  });
+  readonly dialogData = {
+    inbound: computed(() => this.getDialogData('inbound')),
+    onsite: computed(() => this.getDialogData('onsite')),
+    outbound: computed(() => this.getDialogData('outbound')),
+  };
 
-  get meetingType() {
-    return this.reimbursementControlService.meetingStep.controls.type.value;
-  }
-
-  get inbound() {
-    return this.form.controls.inbound;
-  }
-
-  get onsite() {
-    return this.form.controls.onsite;
-  }
-
-  get outbound() {
-    return this.form.controls.outbound;
-  }
-
-  get queryParams() {
-    return {
-      veranstaltung: this.meetingType === 'committee' ? 'gremium' : 'kurs',
-    };
-  }
+  readonly enterPredicates = {
+    inbound: this.getPredicateFn('inbound'),
+    onsite: this.getPredicateFn('onsite'),
+    outbound: this.getPredicateFn('outbound'),
+  };
 
   readonly transportTotal = computed(
-    () => this.report().categories.transport ?? 0,
+    () => this.formService.report().categories.transport ?? 0,
   );
 
   readonly materialTotal = computed(
-    () => this.report().categories.material ?? 0,
+    () => this.formService.report().categories.material ?? 0,
   );
 
-  readonly foodEnabled = computed(() => {
-    this.expensesChanged();
-    return this.reimbursementControlService.foodExpenses.enabled;
-  });
+  readonly foodEnabled = this.formService.foodEnabled;
 
-  readonly foodTotal = computed(() => this.report().categories.food ?? 0);
+  readonly foodTotal = computed(
+    () => this.formService.report().categories.food ?? 0,
+  );
 
   readonly total = computed(
     () =>
@@ -94,17 +69,14 @@ export class ExpensesStepComponent {
       (this.foodEnabled() ? this.foodTotal() : 0),
   );
 
-  getAllowedModes(direction: Direction) {
+  private getAllowedModes(direction: Direction) {
     const allowedModes: TransportMode[] = ['car', 'public'];
 
     if (direction !== 'onsite') {
       allowedModes.push('bike');
 
-      const expenses =
-        this.reimbursementControlService.getTransportExpenses(direction);
-      const planExists = expenses.value.some(
-        (expense) => expense.mode === 'plan',
-      );
+      const expenses = this.formService.model().expenses.transport[direction];
+      const planExists = expenses.some((expense) => expense.mode === 'plan');
 
       if (!planExists) {
         allowedModes.push('plan');
@@ -114,21 +86,20 @@ export class ExpensesStepComponent {
     return allowedModes;
   }
 
-  getDialogData(direction: Direction): ExpenseExtraData<TransportExpense> {
+  private getDialogData(
+    direction: Direction,
+  ): ExpenseExtraData<TransportExpense> {
     const allowedModes = this.getAllowedModes(direction);
-    const completion =
-      this.reimbursementControlService.completeTransportExpense(direction);
+    const completion = this.formService.completeTransportExpense(direction);
     return { allowedModes, completion };
   }
 
-  getPredicateFn(direction: Direction) {
-    return (item: CdkDrag<FormGroup>) => {
-      const modes = this.getAllowedModes(direction);
-      return modes.includes(item.data.value.mode);
-    };
+  private getPredicateFn(direction: Direction) {
+    return (item: CdkDrag<TransportExpense>) =>
+      this.getAllowedModes(direction).includes(item.data.mode);
   }
 
   completeReturnTrip() {
-    this.reimbursementControlService.completeReturnTrip();
+    this.formService.completeReturnTrip();
   }
 }

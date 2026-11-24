@@ -1,17 +1,18 @@
 import { DialogRef } from '@angular/cdk/dialog';
-import { Component, inject } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import {
-  ControlValueAccessor,
-  FormControl,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  NonNullableFormBuilder,
-  ReactiveFormsModule,
-  Validator,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+  form,
+  FormField,
+  FormRoot,
+  min,
+  required,
+} from '@angular/forms/signals';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import {
+  buildMaterialExpense,
+  draftFromMaterialExpense,
+  emptyMaterialDraft,
+} from 'src/app/reimbursement/shared/expense-draft';
 import { Button } from 'src/app/shared/ui/button';
 import { MaterialExpense } from 'src/domain/expense.model';
 
@@ -19,84 +20,38 @@ import { MaterialExpense } from 'src/domain/expense.model';
   selector: 'app-material-expense-modal',
   templateUrl: './material-expense-modal.component.html',
   styleUrls: ['./material-expense-modal.component.css'],
-  imports: [Button, ReactiveFormsModule, MatDatepickerModule],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: MaterialExpenseModalComponent,
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: MaterialExpenseModalComponent,
-      multi: true,
-    },
-  ],
+  imports: [Button, FormField, FormRoot, MatDatepickerModule],
 })
-export class MaterialExpenseModalComponent
-  implements ControlValueAccessor, Validator
-{
-  private readonly formBuilder = inject(NonNullableFormBuilder);
-  private readonly dialogRef = inject(DialogRef);
+export class MaterialExpenseModalComponent implements OnInit {
+  private readonly dialogRef = inject<DialogRef<MaterialExpense>>(DialogRef);
 
-  form = this.formBuilder.group({
-    date: new FormControl<Date | null>(null, Validators.required),
-    purpose: ['', Validators.required],
-    amount: [0, [Validators.required, Validators.min(0)]],
+  /** The expense to edit, a new expense is created without it. */
+  readonly expense = input<MaterialExpense>();
+
+  private readonly draft = signal(emptyMaterialDraft());
+
+  form = form(this.draft, (p) => {
+    required(p.date);
+    required(p.purpose);
+    required(p.amount);
+    min(p.amount, 0);
   });
-
-  onChange: (val: MaterialExpense) => void = () => {};
-  onTouched: () => void = () => {};
-
-  get date() {
-    return this.form.controls.date;
-  }
-
-  get purpose() {
-    return this.form.controls.purpose;
-  }
-
-  get amount() {
-    return this.form.controls.amount;
-  }
 
   get now() {
     return new Date();
   }
 
-  writeValue(val: Partial<MaterialExpense>): void {
-    if (val) {
-      this.form.patchValue(val, { emitEvent: false });
+  ngOnInit() {
+    const expense = this.expense();
+    if (expense) {
+      this.draft.set(draftFromMaterialExpense(expense));
     }
   }
-
-  registerOnChange(fn: (val: MaterialExpense) => void): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    if (isDisabled) {
-      this.form.disable();
-    } else {
-      this.form.enable();
-    }
-  }
-
-  validate: ValidatorFn = () => {
-    return this.form.valid ? null : { materialExpense: true };
-  };
 
   submitForm() {
-    const date = this.form.controls.date.value || new Date(NaN);
-    this.onChange({
-      type: 'material',
-      ...this.form.value,
-      date,
-    } as MaterialExpense);
-    this.dialogRef.close();
+    // implicit submission (e.g. Enter key) can bypass the disabled button
+    if (this.form().invalid()) return;
+
+    this.dialogRef.close(buildMaterialExpense(this.draft()));
   }
 }

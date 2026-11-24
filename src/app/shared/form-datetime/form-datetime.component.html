@@ -6,8 +6,8 @@
     class="form-control"
     aria-label="Datum"
     required
-    [min]="min()"
-    [max]="max()"
+    [min]="minDate()"
+    [max]="maxDate()"
     [formControl]="date"
     [matDatepicker]="datepicker"
     (blur)="onTouched()"

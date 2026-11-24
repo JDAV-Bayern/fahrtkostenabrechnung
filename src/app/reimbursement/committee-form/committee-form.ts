@@ -1,7 +1,7 @@
 import { CdkStep } from '@angular/cdk/stepper';
 import { Component, inject, signal } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
-import { ReimbursementControlService } from 'src/app/reimbursement/shared/reimbursement-control.service';
+import { FormRoot } from '@angular/forms/signals';
+import { ReimbursementFormService } from 'src/app/reimbursement/shared/reimbursement-form.service';
 import { PdfService } from 'src/app/shared/pdf-service';
 import { ProgressIndicatorComponent } from 'src/app/shared/progress-indicator/progress-indicator.component';
 import { Button } from 'src/app/shared/ui/button';
@@ -17,7 +17,7 @@ import { ParticipantStepComponent } from '../steps/participant-step/participant-
   imports: [
     Button,
     CdkStep,
-    ReactiveFormsModule,
+    FormRoot,
     JdavStepper,
     ParticipantStepComponent,
     ExpensesStepComponent,
@@ -30,11 +30,10 @@ import { ParticipantStepComponent } from '../steps/participant-step/participant-
   host: { class: 'block h-full bg-gray-50' },
 })
 export class CommitteeForm {
-  private readonly controlService = inject(ReimbursementControlService);
+  private readonly formService = inject(ReimbursementFormService);
   private readonly pdfService = inject(PdfService);
 
-  form = this.controlService.form;
-  expensesExtraStepGuard = this.controlService.expensesExtraStepGuard;
+  form = this.formService.form;
   isRenderingPdf = signal(false);
 
   async onSubmit() {

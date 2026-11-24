@@ -6,8 +6,6 @@ import { PageNotFound } from './core/page-not-found/page-not-found';
 import { DataProtectionComponent } from './info/data-protection/data-protection.component';
 import { ExpenseRatesComponent } from './info/expense-rates/expense-rates.component';
 import { InfoComponent } from './info/info.component';
-import { CommitteeForm } from './reimbursement/committee-form/committee-form';
-import { CourseForm } from './reimbursement/course-form/course-form';
 
 export const routes: Routes = [
   {
@@ -44,7 +42,10 @@ export const routes: Routes = [
   {
     path: 'fahrtkosten/:step',
     title: 'Fahrtkostenabrechnung',
-    component: CourseForm,
+    loadComponent: () =>
+      import('./reimbursement/course-form/course-form').then(
+        (m) => m.CourseForm,
+      ),
     data: { showDeleteDataButton: true },
   },
   {
@@ -55,7 +56,10 @@ export const routes: Routes = [
   {
     path: 'fahrtkosten-gremium/:step',
     title: 'Fahrtkostenabrechnung Gremien',
-    component: CommitteeForm,
+    loadComponent: () =>
+      import('./reimbursement/committee-form/committee-form').then(
+        (m) => m.CommitteeForm,
+      ),
     data: { showDeleteDataButton: true },
   },
   {
