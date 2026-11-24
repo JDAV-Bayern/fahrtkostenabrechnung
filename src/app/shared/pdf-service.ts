@@ -58,11 +58,13 @@ export class PdfService {
 
     const subject = JSON.stringify(this.reimbursement);
 
+    let pdfFile: File;
     try {
       const { createPdf, combinePdf } = await import('./pdf-creation');
       const pdfData = await createPdf(htmlElement);
       const blob = await combinePdf(pdfData, files, subject);
-      this.downloadPdf(blob);
+      pdfFile = new File([blob], this.fileName(), { type: blob.type });
+      this.downloadPdf(pdfFile);
     } catch (error) {
       console.error('Error generating PDF:', error);
       return;
@@ -72,26 +74,27 @@ export class PdfService {
       data: {
         givenName: this.reimbursement.participant.givenName,
         meeting: this.reimbursement.meeting,
+        pdfFile,
       },
     });
   }
 
-  downloadPdf(blob: Blob) {
-    let fileName;
+  private fileName(): string {
     const meeting = this.reimbursement.meeting;
     const lastName = this.reimbursement.participant.familyName;
 
     if (meeting.type === 'course') {
-      fileName = `Fahrtkostenabrechnung_${meeting.code}_${lastName}.pdf`;
-    } else {
-      const timestamp = formatDate(meeting.time.start, 'yyyyMMdd', 'de-DE');
-      fileName = `Fahrtkostenabrechnung_${lastName}_${timestamp}.pdf`;
+      return `Fahrtkostenabrechnung_${meeting.code}_${lastName}.pdf`;
     }
+    const timestamp = formatDate(meeting.time.start, 'yyyyMMdd', 'de-DE');
+    return `Fahrtkostenabrechnung_${lastName}_${timestamp}.pdf`;
+  }
 
-    const fileURL = URL.createObjectURL(blob);
+  downloadPdf(file: File) {
+    const fileURL = URL.createObjectURL(file);
     const link = document.createElement('a');
     link.href = fileURL;
-    link.download = fileName;
+    link.download = file.name;
     link.click();
   }
 }
