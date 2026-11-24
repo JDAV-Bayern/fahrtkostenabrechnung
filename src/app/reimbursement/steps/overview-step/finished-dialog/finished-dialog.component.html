@@ -9,4 +9,40 @@
     <a [href]="emailHref"><strong>lgs&#64;jdav-bayern.de</strong></a
     >.
   </p>
+  <p class="tip">
+    <strong>Tipp:</strong> Ein Klick auf die Adresse öffnet dein E-Mail-Programm
+    mit Empfänger, Betreff und Text bereits ausgefüllt. Du musst nur noch die
+    heruntergeladene PDF-Datei anhängen.
+  </p>
+
+  @if (canShare) {
+    <p class="share-label">
+      Oder lass die PDF-Datei direkt mit anhängen. Wähle dazu dein
+      E-Mail-Programm aus und trage lgs&#64;jdav-bayern.de als Empfänger ein:
+    </p>
+    <button jdavButton type="button" (click)="share()">
+      E-Mail mit PDF-Datei erstellen
+    </button>
+  }
+
+  <p class="copy-label">
+    Öffnet sich kein E-Mail-Programm? Dann kopiere die Angaben und füge sie in
+    eine neue E-Mail ein:
+  </p>
+  <div class="copy-buttons">
+    <button jdavButton type="button" variant="outline" (click)="copy('to')">
+      {{ copied() === 'to' ? 'Kopiert ✓' : 'Adresse kopieren' }}
+    </button>
+    <button
+      jdavButton
+      type="button"
+      variant="outline"
+      (click)="copy('subject')"
+    >
+      {{ copied() === 'subject' ? 'Kopiert ✓' : 'Betreff kopieren' }}
+    </button>
+    <button jdavButton type="button" variant="outline" (click)="copy('body')">
+      {{ copied() === 'body' ? 'Kopiert ✓' : 'Text kopieren' }}
+    </button>
+  </div>
 </div>

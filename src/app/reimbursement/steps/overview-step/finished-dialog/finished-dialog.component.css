@@ -13,6 +13,28 @@
   margin-bottom: 10px;
 }
 
+.dialog-content .tip {
+  align-self: stretch;
+  padding: 10px 14px;
+  border-left: 4px solid #007bff;
+  border-radius: 4px;
+  background: #e7f1ff;
+  color: #1f2d3d;
+}
+
+.dialog-content .share-label,
+.dialog-content .copy-label {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.dialog-content .copy-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
 .dialog-content a {
   color: #007bff;
   text-decoration: none;
